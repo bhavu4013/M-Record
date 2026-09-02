@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matka Record System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold mb-4 text-center text-gray-800">મટકા રેકોર્ડ એન્ટ્રી ફોર્મ</h2>
+        <form id="matkaForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700">તારીખ (Date)</label>
+                <input type="date" id="recordDate" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">વાર (Day)</label>
+                <input type="text" id="day" readonly class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md p-2">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">માર્કેટ (Market)</label>
+                <input type="text" id="marketName" value="Sridevi" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">ઓપન પાના (Open Pana)</label>
+                <input type="text" id="openPana" maxlength="3" placeholder="દા.ત. 126" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">ઓપન અંક (Open Ank)</label>
+                <input type="text" id="openAnk" readonly class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md p-2">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">ક્લોઝ પાના (Close Pana)</label>
+                <input type="text" id="closePana" maxlength="3" placeholder="દા.ત. 180" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">ક્લોઝ અંક (Close Ank)</label>
+                <input type="text" id="closeAnk" readonly class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md p-2">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">જોડી (Jodi)</label>
+                <input type="text" id="jodi" readonly class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md p-2">
+            </div>
+
+            <div class="sm:col-span-2">
+                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 font-semibold">ડેટા સેવ કરો</button>
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // તમારી ફાયરબેઝ કી
+        const firebaseConfig = {
+          apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
+          authDomain: "m-record-f9c51.firebaseapp.com",
+          projectId: "m-record-f9c51",
+          storageBucket: "m-record-f9c51.firebasestorage.app",
+          messagingSenderId: "479303152172",
+          appId: "1:479303152172:web:3cc53dcecc9e8ce1ebd789"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // તારીખ અને વાર સેટ કરવા માટે
+        const dateInput = document.getElementById('recordDate');
+        const dayInput = document.getElementById('day');
+        
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+        updateDay(today);
+
+        dateInput.addEventListener('change', (e) => {
+            updateDay(e.target.value);
+        });
+
+        function updateDay(dateStr) {
+            const days = ['રવિવાર', 'સોમવાર', 'મંગળવાર', 'બુધવાર', 'ગુરુવાર', 'શુક્રવાર', 'શનિવાર'];
+            const d = new Date(dateStr);
+            dayInput.value = days[d.getDay()];
+        }
+
+        // ઓપન પાના પરથી સિંગલ અંક ઓટો-કેલ્ક્યુલેટ
+        document.getElementById('openPana').addEventListener('input', function(e) {
+            let val = e.target.value;
+            if (val.length === 3 && !isNaN(val)) {
+                let sum = parseInt(val[0]) + parseInt(val[1]) + parseInt(val[2]);
+                document.getElementById('openAnk').value = sum % 10;
+                calcJodi();
+            } else {
+                document.getElementById('openAnk').value = '';
+            }
+        });
+
+        // ક્લોઝ પાના પરથી ક્લોઝ અંક ઓટો-કેલ્ક્યુલેટ
+        document.getElementById('closePana').addEventListener('input', function(e) {
+            let val = e.target.value;
+            if (val.length === 3 && !isNaN(val)) {
+                let sum = parseInt(val[0]) + parseInt(val[1]) + parseInt(val[2]);
+                document.getElementById('closeAnk').value = sum % 10;
+                calcJodi();
+            } else {
+                document.getElementById('closeAnk').value = '';
+            }
+        });
+
+        function calcJodi() {
+            let open = document.getElementById('openAnk').value;
+            let close = document.getElementById('closeAnk').value;
+            if (open !== '' && close !== '') {
+                document.getElementById('jodi').value = open + close;
+            }
+        }
+
+        // ફાયરબેઝમાં ડેટા સેવ કરવાનું લોજિક
+        document.getElementById('matkaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                await addDoc(collection(db, "matka_records"), {
+                    date: document.getElementById('recordDate').value,
+                    day: document.getElementById('day').value,
+                    marketName: document.getElementById('marketName').value,
+                    openPana: document.getElementById('openPana').value,
+                    openAnk: document.getElementById('openAnk').value,
+                    closePana: document.getElementById('closePana').value,
+                    closeAnk: document.getElementById('closeAnk').value,
+                    jodi: document.getElementById('jodi').value,
+                    timestamp: serverTimestamp()
+                });
+                alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો છે!");
+                document.getElementById('matkaForm').reset();
+                dateInput.value = today;
+                updateDay(today);
+            } catch (error) {
+                alert("ભૂલ આવી છે: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
