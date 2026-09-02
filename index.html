@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matka Record Entry Form</title>
+    <title>Daily Data Logger Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md space-y-4">
-        <h2 class="text-xl font-bold text-center text-gray-800">મટકા રેકોર્ડ એન્ટ્રી ફોર્મ</h2>
+<body class="bg-slate-100 p-4 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-5">
+        <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
-        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું સેક્શન -->
-        <div id="lastEntryBox" class="bg-yellow-50 border border-yellow-200 p-3 rounded-md text-sm text-yellow-800">
-            <p class="font-bold">છેલ્લી એન્ટ્રી (Last Entry):</p>
-            <p id="lastEntryDetails">લોડ થઈ રહ્યું છે...</p>
+        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ (Perfect Alignment) -->
+        <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-sm text-sm text-amber-900 space-y-1">
+            <p class="font-bold text-amber-950 flex items-center gap-1">📌 છેલ્લી એન્ટ્રી (Last Entry):</p>
+            <p id="lastEntryDetails" class="leading-relaxed">લોડ થઈ રહ્યું છે...</p>
         </div>
 
         <form id="matkaForm" class="space-y-4">
@@ -21,93 +21,87 @@
 
             <!-- તારીખ -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">તારીખ (Date)</label>
-                <input type="date" id="recordDate" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">તારીખ (Date)</label>
+                <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- માર્કેટ સિલેક્ટ ડ્રોપડાઉન અને 'Add Market' બટન -->
+            <!-- માર્કેટ અને 'Add' બટન -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">માર્કેટ (Market)</label>
-                <div class="flex gap-2 mt-1">
-                    <select id="marketDropdown" class="flex-1 border border-gray-300 rounded-md p-2" required>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">માર્કેટ (Market)</label>
+                <div class="flex gap-2">
+                    <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                         <option value="">માર્કેટ પસંદ કરો</option>
                     </select>
-                    <button type="button" id="openModalBtn" class="bg-green-600 text-white px-3 py-2 rounded-md hover:bg-green-700 text-sm font-semibold">+ Add Market</button>
+                    <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm font-medium shadow-sm transition">Add</button>
                 </div>
             </div>
 
-            <!-- સેશન માટે ટોગલ સ્વીચ -->
+            <!-- સેશન ટોગલ સ્વીચ -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">સેશન (Session)</label>
-                <div class="flex items-center bg-gray-200 p-1 rounded-md">
-                    <label class="flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold" id="openLabel">
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">સેશન (Session)</label>
+                <div class="flex items-center bg-slate-200 p-1 rounded-lg">
+                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel">
                         <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open
                     </label>
-                    <label class="flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold" id="closeLabel">
+                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel">
                         <input type="radio" name="sessionToggle" value="Close" class="hidden"> Close
                     </label>
                 </div>
             </div>
 
-            <!-- ૩ ડિજિટનો પન્નો -->
+            <!-- પન્ના ઇનપુટ -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">પન્ના (3-Digit Panna)</label>
-                <input type="text" id="pannaInput" maxlength="3" placeholder="દા.ત. 126" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">પન્ના (3-Digit Panna)</label>
+                <input type="text" id="pannaInput" maxlength="3" placeholder="દા.ત. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- પ્રીવ્યુ -->
-            <div class="bg-gray-50 p-3 rounded-md text-sm text-gray-600 space-y-1">
-                <p>ઓટો સિંગલ અંક: <span id="previewAnk" class="font-bold text-black">-</span></p>
-                <p>પેનલ ગ્રુપ / પટ્ટી: <span id="previewGroup" class="font-bold text-black">-</span></p>
-                <p>પેનલ ટાઈપ: <span id="previewPanelType" class="font-bold text-blue-600">-</span></p>
+            <!-- ઓટો કેલ્ક્યુલેશન પ્રીવ્યુ (શોર્ટ અને ક્લીન નામો સાથે વ્યવસ્થિત અલાઈન કરેલું) -->
+            <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500 text-xs font-medium uppercase">અંક (Ank):</span>
+                    <span id="previewAnk" class="font-bold text-slate-900">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500 text-xs font-medium uppercase">ગ્રુપ (Group):</span>
+                    <span id="previewGroup" class="font-bold text-slate-900">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500 text-xs font-medium uppercase">ટાઇપ (Type):</span>
+                    <span id="previewPanelType" class="font-bold text-blue-600">-</span>
+                </div>
             </div>
 
-            <!-- સબમિટ અને અપડેટ બટન -->
-            <div class="flex gap-2">
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 font-semibold">ડેટા સેવ કરો</button>
-                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-gray-400 text-white p-2 rounded-md hover:bg-gray-500 font-semibold">રદ કરો</button>
+            <!-- સબમિટ અને કેન્સલ બટન -->
+            <div class="flex gap-2 pt-1">
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">ડેટા સેવ કરો</button>
+                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-slate-400 text-white py-2.5 rounded-lg hover:bg-slate-500 font-semibold text-sm transition">રદ કરો</button>
             </div>
         </form>
     </div>
 
-    <!-- Add Market Modal (પોપઅપ વિન્ડો) -->
-    <div id="marketModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-lg max-w-sm w-full space-y-3 max-h-[90vh] overflow-y-auto">
-            <h3 class="text-lg font-bold text-gray-800">નવી માર્કેટ ઉમેરો</h3>
+    <!-- Add Market Modal (માર્કેટ ઉમેરવા માટેનું પોપઅપ - ફક્ત માર્કેટ નામ અને ઓપન/ક્લોઝ ટાઈમ સાથે) -->
+    <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
+        <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl">
+            <h3 class="text-lg font-bold text-slate-800">નવી માર્કેટ ઉમેરો</h3>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700">માર્કેટનું નામ</label>
-                <input type="text" id="newMarketName" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="દા.ત. Kalyan">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">માર્કેટનું નામ</label>
+                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="દા.ત. Kalyan">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">ઓપન ટાઈમ (Open Time)</label>
-                <input type="time" id="openTime" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ઓપન ટાઈમ (Open Time)</label>
+                <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">ઓપન રિઝલ્ટ ટાઈમ (Open Result Time)</label>
-                <input type="time" id="openResultTime" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">ક્લોઝ ટાઈમ (Close Time)</label>
-                <input type="time" id="closeTime" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">ક્લોઝ રિઝલ્ટ ટાઈમ (Close Result Time)</label>
-                <input type="time" id="closeResultTime" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">રિઝલ્ટ ટાઈમ (Final Result Time)</label>
-                <input type="time" id="resultTime" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ક્લોઝ ટાઈમ (Close Time)</label>
+                <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button type="button" id="saveMarketBtn" class="flex-1 bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700">સેવ કરો</button>
-                <button type="button" id="closeModalBtn" class="flex-1 bg-gray-400 text-white py-2 rounded-md font-semibold hover:bg-gray-500">બંધ કરો</button>
+                <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">સેવ કરો</button>
+                <button type="button" id="closeModalBtn" class="flex-1 bg-slate-400 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-slate-500 transition">બંધ કરો</button>
             </div>
         </div>
     </div>
@@ -131,12 +125,10 @@
         const dateInput = document.getElementById('recordDate');
         dateInput.value = new Date().toISOString().split('T')[0];
 
-        // માર્કેટ પોપઅપ મોડલ કંટ્રોલ
         const modal = document.getElementById('marketModal');
         document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
 
-        // ફાયરબેઝમાંથી માર્કેટ લિસ્ટ લોડ કરવા
         async function loadMarkets() {
             const marketDropdown = document.getElementById('marketDropdown');
             try {
@@ -146,7 +138,7 @@
                     let mData = docSnap.data();
                     let opt = document.createElement('option');
                     opt.value = mData.name;
-                    opt.textContent = `${mData.name} (Open: ${mData.openTime || '-'}, Close: ${mData.closeTime || '-'})`;
+                    opt.textContent = `${mData.name} (${mData.openTime || '-'} / ${mData.closeTime || '-'})`;
                     marketDropdown.appendChild(opt);
                 });
             } catch (e) {
@@ -155,14 +147,10 @@
         }
         loadMarkets();
 
-        // નવી માર્કેટ સેવ કરવાનું લોજિક
         document.getElementById('saveMarketBtn').addEventListener('click', async () => {
             let name = document.getElementById('newMarketName').value.trim();
             let openTime = document.getElementById('openTime').value;
-            let openResultTime = document.getElementById('openResultTime').value;
             let closeTime = document.getElementById('closeTime').value;
-            let closeResultTime = document.getElementById('closeResultTime').value;
-            let resultTime = document.getElementById('resultTime').value;
 
             if(!name) {
                 alert("કૃપા કરીને માર્કેટનું નામ લખો!");
@@ -173,10 +161,7 @@
                 await addDoc(collection(db, "markets"), {
                     name: name,
                     openTime: openTime,
-                    openResultTime: openResultTime,
                     closeTime: closeTime,
-                    closeResultTime: closeResultTime,
-                    resultTime: resultTime,
                     timestamp: serverTimestamp()
                 });
                 alert("માર્કેટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!");
@@ -184,10 +169,7 @@
                 
                 document.getElementById('newMarketName').value = '';
                 document.getElementById('openTime').value = '';
-                document.getElementById('openResultTime').value = '';
                 document.getElementById('closeTime').value = '';
-                document.getElementById('closeResultTime').value = '';
-                document.getElementById('resultTime').value = '';
                 
                 loadMarkets();
             } catch (error) {
@@ -195,18 +177,17 @@
             }
         });
 
-        // ટોગલ સ્વીચ યુઆઈ મેનેજમેન્ટ
         const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');
         const openLabel = document.getElementById('openLabel');
         const closeLabel = document.getElementById('closeLabel');
 
         function updateToggleUI() {
             if(document.querySelector('input[name="sessionToggle"]:checked').value === 'Open') {
-                openLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold bg-blue-600 text-white";
-                closeLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold text-gray-700";
+                openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm";
+                closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
             } else {
-                closeLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold bg-blue-600 text-white";
-                openLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold text-gray-700";
+                closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm";
+                openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
             }
         }
         updateToggleUI();
@@ -215,7 +196,6 @@
             radio.addEventListener('change', updateToggleUI);
         });
 
-        // છેલ્લી એન્ટ્રી ફેચ કરવાનું ફંક્શન
         async function fetchLastEntry() {
             try {
                 const q = query(collection(db, "matka_records"), orderBy("timestamp", "desc"), limit(1));
@@ -231,7 +211,7 @@
                         
                         detailsBox.innerHTML = `
                             તારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${sessionVal} | પન્નો: ${pannaVal} (અંક: ${ankVal})
-                            <br><button id="editLastBtn" data-id="${docSnap.id}" class="mt-2 bg-yellow-600 text-white px-2 py-1 rounded text-xs hover:bg-yellow-700">આ એન્ટ્રી સુધારો (Edit)</button>
+                            <br><button id="editLastBtn" data-id="${docSnap.id}" class="mt-2 bg-amber-600 text-white px-2.5 py-1 rounded-md text-xs font-semibold hover:bg-amber-700 transition shadow-sm">આ એન્ટ્રી સુધારો (Edit)</button>
                         `;
 
                         document.getElementById('editLastBtn').addEventListener('click', function() {
@@ -263,7 +243,7 @@
             document.getElementById('pannaInput').dispatchEvent(new Event('input'));
 
             document.getElementById('submitBtn').innerText = "ડેટા અપડેટ કરો";
-            document.getElementById('submitBtn').classList.replace('bg-blue-600', 'bg-green-600');
+            document.getElementById('submitBtn').classList.replace('bg-blue-600', 'bg-emerald-600');
             document.getElementById('cancelEditBtn').classList.remove('hidden');
         }
 
@@ -271,7 +251,7 @@
             document.getElementById('matkaForm').reset();
             document.getElementById('recordId').value = '';
             document.getElementById('submitBtn').innerText = "ડેટા સેવ કરો";
-            document.getElementById('submitBtn').classList.replace('bg-green-600', 'bg-blue-600');
+            document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
             this.classList.add('hidden');
             dateInput.value = new Date().toISOString().split('T')[0];
             document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
@@ -360,7 +340,7 @@
                 document.getElementById('matkaForm').reset();
                 document.getElementById('recordId').value = '';
                 document.getElementById('submitBtn').innerText = "ડેટા સેવ કરો";
-                document.getElementById('submitBtn').classList.replace('bg-green-600', 'bg-blue-600');
+                document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
                 document.getElementById('cancelEditBtn').classList.add('hidden');
                 dateInput.value = new Date().toISOString().split('T')[0];
                 
