@@ -32,13 +32,17 @@
                 <input type="text" id="marketName" value="Sridevi" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
             </div>
 
-            <!-- સેશન (Open અથવા Close) -->
+            <!-- સેશન માટે ટોગલ સ્વીચ (Toggle Switch for Session) -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">સેશન (Session)</label>
-                <select id="sessionType" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
-                    <option value="Open">Open</option>
-                    <option value="Close">Close</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700 mb-1">સેશન (Session)</label>
+                <div class="flex items-center bg-gray-200 p-1 rounded-md">
+                    <label class="flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold" id="openLabel">
+                        <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open
+                    </label>
+                    <label class="flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold" id="closeLabel">
+                        <input type="radio" name="sessionToggle" value="Close" class="hidden"> Close
+                    </label>
+                </div>
             </div>
 
             <!-- ૩ ડિજિટનો પન્નો -->
@@ -47,10 +51,11 @@
                 <input type="text" id="pannaInput" maxlength="3" placeholder="દા.ત. 126" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
             </div>
 
-            <!-- પ્રીવ્યુ -->
+            <!-- પ્રીવ્યુ (સિંગલ અંક, પટ્ટી ગ્રુપ અને પેનલ ટાઈપ SP/DP/TP) -->
             <div class="bg-gray-50 p-3 rounded-md text-sm text-gray-600 space-y-1">
                 <p>ઓટો સિંગલ અંક: <span id="previewAnk" class="font-bold text-black">-</span></p>
                 <p>પેનલ ગ્રુપ / પટ્ટી: <span id="previewGroup" class="font-bold text-black">-</span></p>
+                <p>પેનલ ટાઈપ (Panel Type): <span id="previewPanelType" class="font-bold text-blue-600">-</span></p>
             </div>
 
             <!-- સબમિટ અને અપડેટ બટન -->
@@ -80,6 +85,26 @@
         const dateInput = document.getElementById('recordDate');
         dateInput.value = new Date().toISOString().split('T')[0];
 
+        // ટોગલ સ્વીચ યુઆઈ મેનેજમેન્ટ
+        const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');
+        const openLabel = document.getElementById('openLabel');
+        const closeLabel = document.getElementById('closeLabel');
+
+        function updateToggleUI() {
+            if(document.querySelector('input[name="sessionToggle"]:checked').value === 'Open') {
+                openLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold bg-blue-600 text-white";
+                closeLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold text-gray-700";
+            } else {
+                closeLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold bg-blue-600 text-white";
+                openLabel.className = "flex-1 text-center cursor-pointer py-1 rounded-md transition-all font-semibold text-gray-700";
+            }
+        }
+        updateToggleUI();
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', updateToggleUI);
+        });
+
         // છેલ્લી એન્ટ્રી ફેચ કરીને હોમ સ્ક્રીન પર બતાવવાનું ફંક્શન
         async function fetchLastEntry() {
             try {
@@ -90,15 +115,15 @@
                 if (!querySnapshot.empty) {
                     querySnapshot.forEach((docSnap) => {
                         let data = docSnap.data();
-                        let pannaVal = data.session === 'Open' ? data.openPana : data.closePana;
-                        let ankVal = data.session === 'Open' ? data.openAnk : data.closeAnk;
+                        let sessionVal = data.session || (data.openPana ? 'Open' : 'Close');
+                        let pannaVal = sessionVal === 'Open' ? data.openPana : data.closePana;
+                        let ankVal = sessionVal === 'Open' ? data.openAnk : data.closeAnk;
                         
                         detailsBox.innerHTML = `
-                            ਤારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${data.session} | પન્નો: ${pannaVal} (અંક: ${ankVal})
+                            તારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${sessionVal} | પન્નો: ${pannaVal} (અંક: ${ankVal})
                             <br><button id="editLastBtn" data-id="${docSnap.id}" class="mt-2 bg-yellow-600 text-white px-2 py-1 rounded text-xs hover:bg-yellow-700">આ એન્ટ્રી સુધારો (Edit)</button>
                         `;
 
-                        // સુધારવા માટે બટન પર ક્લિક ઇવેન્ટ
                         document.getElementById('editLastBtn').addEventListener('click', function() {
                             let id = this.getAttribute('data-id');
                             loadDataForEdit(id, data);
@@ -114,14 +139,16 @@
 
         fetchLastEntry();
 
-        // એડિટ કરવા માટે ફોર્મમાં ડેટા લોડ કરવો
         function loadDataForEdit(id, data) {
             document.getElementById('recordId').value = id;
             document.getElementById('recordDate').value = data.date;
             document.getElementById('marketName').value = data.marketName;
-            document.getElementById('sessionType').value = data.session;
             
-            let panna = data.session === 'Open' ? data.openPana : data.closePana;
+            let sessionVal = data.session || (data.openPana ? 'Open' : 'Close');
+            document.querySelector(`input[name="sessionToggle"][value="${sessionVal}"]`).checked = true;
+            updateToggleUI();
+            
+            let panna = sessionVal === 'Open' ? data.openPana : data.closePana;
             document.getElementById('pannaInput').value = panna;
             document.getElementById('pannaInput').dispatchEvent(new Event('input'));
 
@@ -130,7 +157,6 @@
             document.getElementById('cancelEditBtn').classList.remove('hidden');
         }
 
-        // કેન્સલ એડિટ બટન
         document.getElementById('cancelEditBtn').addEventListener('click', function() {
             document.getElementById('matkaForm').reset();
             document.getElementById('recordId').value = '';
@@ -138,21 +164,41 @@
             document.getElementById('submitBtn').classList.replace('bg-green-600', 'bg-blue-600');
             this.classList.add('hidden');
             dateInput.value = new Date().toISOString().split('T')[0];
+            document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
+            updateToggleUI();
+            document.getElementById('previewAnk').innerText = '-';
+            document.getElementById('previewGroup').innerText = '-';
+            document.getElementById('previewPanelType').innerText = '-';
         });
 
         let calculatedAnk = '';
+        let detectedPanelType = '';
 
+        // પન્ના ટાઈપ થતાં જ અંક, પટ્ટી અને પેનલ ટાઈપ (SP/DP/TP) કેલ્ક્યુલેટ કરવું
         document.getElementById('pannaInput').addEventListener('input', function(e) {
             let panna = e.target.value;
             if (panna.length === 3 && !isNaN(panna)) {
                 let sum = parseInt(panna[0]) + parseInt(panna[1]) + parseInt(panna[2]);
                 calculatedAnk = sum % 10; 
+                
+                // પેનલ ટાઈપ લોજિક (SP / DP / TP)
+                if (panna[0] === panna[1] && panna[1] === panna[2]) {
+                    detectedPanelType = "TP (Triple Panna)";
+                } else if (panna[0] === panna[1] || panna[1] === panna[2] || panna[0] === panna[2]) {
+                    detectedPanelType = "DP (Double Panna)";
+                } else {
+                    detectedPanelType = "SP (Single Panna)";
+                }
+
                 document.getElementById('previewAnk').innerText = calculatedAnk;
                 document.getElementById('previewGroup').innerText = panna; 
+                document.getElementById('previewPanelType').innerText = detectedPanelType;
             } else {
                 calculatedAnk = '';
+                detectedPanelType = '';
                 document.getElementById('previewAnk').innerText = '-';
                 document.getElementById('previewGroup').innerText = '-';
+                document.getElementById('previewPanelType').innerText = '-';
             }
         });
 
@@ -161,7 +207,7 @@
             e.preventDefault();
             
             let recordId = document.getElementById('recordId').value;
-            let session = document.getElementById('sessionType').value;
+            let session = document.querySelector('input[name="sessionToggle"]:checked').value;
             let panna = document.getElementById('pannaInput').value;
             let date = document.getElementById('recordDate').value;
             let marketName = document.getElementById('marketName').value;
@@ -182,19 +228,19 @@
                 recordData.openPana = panna;
                 recordData.openAnk = calculatedAnk;
                 recordData.openGroup = panna; 
+                recordData.openType = detectedPanelType;
             } else {
                 recordData.closePana = panna;
                 recordData.closeAnk = calculatedAnk;
                 recordData.closeGroup = panna; 
+                recordData.closeType = detectedPanelType;
             }
 
             try {
                 if (recordId) {
-                    // જો રેકોર્ડ આઈડી હોય તો અપડેટ કરો
                     await updateDoc(doc(db, "matka_records", recordId), recordData);
                     alert("ડેટા સફળતાપૂર્વક અપડેટ થઈ ગયો છે!");
                 } else {
-                    // નવો રેકોર્ડ ઉમેરો
                     await addDoc(collection(db, "matka_records"), recordData);
                     alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો છે!");
                 }
@@ -206,7 +252,19 @@
                 document.getElementById('cancelEditBtn').classList.add('hidden');
                 dateInput.value = new Date().toISOString().split('T')[0];
                 
-                fetchLastEntry(); // લિસ્ટ રિફ્રેશ કરો
+                // જો ઓપનની એન્ટ્રી કરી હોય તો ઓટોમેટિક ક્લોઝ સેટ કરી દો
+                if (session === "Open" && !recordId) {
+                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
+                } else {
+                    document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
+                }
+                updateToggleUI();
+
+                document.getElementById('previewAnk').innerText = '-';
+                document.getElementById('previewGroup').innerText = '-';
+                document.getElementById('previewPanelType').innerText = '-';
+                
+                fetchLastEntry();
             } catch (error) {
                 alert("ભૂલ આવી છે: " + error.message);
             }
