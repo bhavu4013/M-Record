@@ -10,7 +10,7 @@
     <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-5">
         <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
-        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ (Edit બટન વગર વ્યવસ્થિત અલાઈન કરેલું) -->
+        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ (Edit બટન વગર) -->
         <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-sm text-sm text-amber-900 space-y-1">
             <p class="font-bold text-amber-950 flex items-center gap-1">📌 છેલ્લી એન્ટ્રી (Last Entry):</p>
             <p id="lastEntryDetails" class="leading-relaxed">લોડ થઈ રહ્યું છે...</p>
@@ -18,7 +18,7 @@
 
         <!-- એન્ટ્રી ફાઉન્ડ એલર્ટ મેસેજ માટે -->
         <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
-            ⚠️ આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે! (Open entry found)
+            ⚠️ આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે!
         </div>
 
         <form id="matkaForm" class="space-y-4">
@@ -198,10 +198,35 @@
             });
         });
 
-        document.getElementById('marketDropdown').addEventListener('change', checkExistingEntry);
-        document.getElementById('recordDate').addEventListener('change', checkExistingEntry);
+        document.getElementById('marketDropdown').addEventListener('change', checkOpenStatusAndAutoSwitch);
+        document.getElementById('recordDate').addEventListener('change', checkOpenStatusAndAutoSwitch);
 
-        // ચકાસણી કરો કે પસંદ કરેલ તારીખ અને માર્કેટ માટે ઓપન/ક્લોઝ એન્ટ્રી પહેલેથી હાજર છે કે નહીં
+        async function checkOpenStatusAndAutoSwitch() {
+            let market = document.getElementById('marketDropdown').value;
+            let date = document.getElementById('recordDate').value;
+            if (!market || !date) return;
+
+            try {
+                const q = query(
+                    collection(db, "matka_records"),
+                    where("date", "==", date),
+                    where("marketName", "==", market),
+                    where("session", "==", "Open")
+                );
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
+                } else {
+                    document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
+                }
+                updateToggleUI();
+                checkExistingEntry();
+            } catch (err) {
+                console.log("Auto switch error:", err);
+            }
+        }
+
         async function checkExistingEntry() {
             let market = document.getElementById('marketDropdown').value;
             let date = document.getElementById('recordDate').value;
@@ -215,64 +240,40 @@
                 const q = query(
                     collection(db, "matka_records"),
                     where("date", "==", date),
-                    where("marketName", "==", market)
+                    where("marketName", "==", market),
+                    where("session", "==", session)
                 );
                 const querySnapshot = await getDocs(q);
 
-                let openDocId = null;
-                let closeDocId = null;
-                let openPanaVal = '';
-                let closePanaVal = '';
+                if (!querySnapshot.empty) {
+                    let docId = "";
+                    let panaVal = "";
+                    querySnapshot.forEach((docSnap) => {
+                        docId = docSnap.id;
+                        panaVal = session === 'Open' ? docSnap.data().openPana : docSnap.data().closePana;
+                    });
 
-                querySnapshot.forEach((docSnap) => {
-                    let d = docSnap.data();
-                    if (d.session === 'Open') {
-                        openDocId = docSnap.id;
-                        openPanaVal = d.openPana;
-                    }
-                    if (d.session === 'Close') {
-                        closeDocId = docSnap.id;
-                        closePanaVal = d.closePana;
-                    }
-                });
-
-                // જો પહેલીવાર માર્કેટ સિલેક્ટ કરો અને ઓપન એન્ટ્રી પહેલેથી થયેલી હોય તો બાય ડિફોલ્ટ સેશન Close પર જતું રહેશે
-                if (openDocId && !closeDocId && session === 'Open') {
-                    // જો યુઝરે તાજેતરમાં જ સેશન મેન્યુઅલ ચેન્જ ન કર્યું હોય તો Close પર સ્વિચ કરો
-                }
-
-                // જો હાલના સિલેક્ટેડ સેશનની એન્ટ્રી પહેલેથી હાજર હોય
-                let currentSessionDocId = (session === 'Open') ? openDocId : closeDocId;
-
-                if (currentSessionDocId) {
                     alertBox.classList.remove('hidden');
-                    document.getElementById('recordId').value = currentSessionDocId;
+                    document.getElementById('recordId').value = docId;
                     submitBtn.innerText = "ડેટા અપડેટ કરો";
                     submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
                     document.getElementById('cancelEditBtn').classList.remove('hidden');
 
-                    // જો પન્નું ખાલી હોય તો જૂનો પન્નો લોડ કરો
-                    let existingPana = (session === 'Open') ? openPanaVal : closePanaVal;
-                    if (existingPana && document.getElementById('pannaInput').value === '') {
-                        document.getElementById('pannaInput').value = existingPana;
+                    if (panaVal && document.getElementById('pannaInput').value === '') {
+                        document.getElementById('pannaInput').value = panaVal;
                         document.getElementById('pannaInput').dispatchEvent(new Event('input'));
                     }
                 } else {
                     alertBox.classList.add('hidden');
-                    // જો એડિટ મોડ પર ન હોય તો જ રીસેટ કરો
-                    if(!document.getElementById('cancelEditBtn').classList.contains('hidden') === false) {
-                        document.getElementById('recordId').value = '';
-                        submitBtn.innerText = "ડેટા સેવ કરો";
-                        submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
-                    }
+                    document.getElementById('recordId').value = '';
+                    submitBtn.innerText = "ડેટા સેવ કરો";
+                    submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
+                    document.getElementById('cancelEditBtn').classList.add('hidden');
+                    document.getElementById('pannaInput').value = '';
+                    document.getElementById('previewAnk').innerText = '-';
+                    document.getElementById('previewGroup').innerText = '-';
+                    document.getElementById('previewPanelType').innerText = '-';
                 }
-
-                // ઓટોમેટિક ડિફોલ્ટ લોજિક: જો ઓપન એન્ટ્રી થઈ ગઈ હોય અને યુઝર નવેસરથી ટેબ ખોલે તો Close પર સેટ કરવું
-                if (openDocId && !closeDocId && document.getElementById('recordId').value === '') {
-                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
-                    updateToggleUI();
-                }
-
             } catch (err) {
                 console.log("Check entry error:", err);
             }
@@ -291,7 +292,6 @@
                         let pannaVal = sessionVal === 'Open' ? data.openPana : data.closePana;
                         let ankVal = sessionVal === 'Open' ? data.openAnk : data.closeAnk;
                         
-                        // Edit બટન હટાવીને ફક્ત માહિતી પ્રદર્શિત કરવામાં આવી છે
                         detailsBox.innerHTML = `તારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${sessionVal} | પન્નો: ${pannaVal} (અંક: ${ankVal})`;
                     });
                 } else {
