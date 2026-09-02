@@ -10,10 +10,15 @@
     <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-5">
         <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
-        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ (Perfect Alignment) -->
+        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ (Edit બટન વગર વ્યવસ્થિત અલાઈન કરેલું) -->
         <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-sm text-sm text-amber-900 space-y-1">
             <p class="font-bold text-amber-950 flex items-center gap-1">📌 છેલ્લી એન્ટ્રી (Last Entry):</p>
             <p id="lastEntryDetails" class="leading-relaxed">લોડ થઈ રહ્યું છે...</p>
+        </div>
+
+        <!-- એન્ટ્રી ફાઉન્ડ એલર્ટ મેસેજ માટે -->
+        <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
+            ⚠️ આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે! (Open entry found)
         </div>
 
         <form id="matkaForm" class="space-y-4">
@@ -55,7 +60,7 @@
                 <input type="text" id="pannaInput" maxlength="3" placeholder="દા.ત. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- ઓટો કેલ્ક્યુલેશન પ્રીવ્યુ (શોર્ટ અને ક્લીન નામો સાથે વ્યવસ્થિત અલાઈન કરેલું) -->
+            <!-- ઓટો કેલ્ક્યુલેશન પ્રીવ્યુ -->
             <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner">
                 <div class="flex justify-between items-center">
                     <span class="text-slate-500 text-xs font-medium uppercase">અંક (Ank):</span>
@@ -79,26 +84,22 @@
         </form>
     </div>
 
-    <!-- Add Market Modal (માર્કેટ ઉમેરવા માટેનું પોપઅપ - ફક્ત માર્કેટ નામ અને ઓપન/ક્લોઝ ટાઈમ સાથે) -->
+    <!-- Add Market Modal -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl">
             <h3 class="text-lg font-bold text-slate-800">નવી માર્કેટ ઉમેરો</h3>
-            
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">માર્કેટનું નામ</label>
-                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="દા.ત. Kalyan">
+                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="દા.ત. Kalyan">
             </div>
-
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ઓપન ટાઈમ (Open Time)</label>
-                <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ઓપન ટાઈમ</label>
+                <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
-
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ક્લોઝ ટાઈમ (Close Time)</label>
-                <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ક્લોઝ ટાઈમ</label>
+                <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
-
             <div class="flex gap-2 pt-2">
                 <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">સેવ કરો</button>
                 <button type="button" id="closeModalBtn" class="flex-1 bg-slate-400 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-slate-500 transition">બંધ કરો</button>
@@ -108,7 +109,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
@@ -166,11 +167,9 @@
                 });
                 alert("માર્કેટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!");
                 modal.classList.add('hidden');
-                
                 document.getElementById('newMarketName').value = '';
                 document.getElementById('openTime').value = '';
                 document.getElementById('closeTime').value = '';
-                
                 loadMarkets();
             } catch (error) {
                 alert("ભૂલ આવી છે: " + error.message);
@@ -193,15 +192,98 @@
         updateToggleUI();
 
         radioButtons.forEach(radio => {
-            radio.addEventListener('change', updateToggleUI);
+            radio.addEventListener('change', () => {
+                updateToggleUI();
+                checkExistingEntry();
+            });
         });
+
+        document.getElementById('marketDropdown').addEventListener('change', checkExistingEntry);
+        document.getElementById('recordDate').addEventListener('change', checkExistingEntry);
+
+        // ચકાસણી કરો કે પસંદ કરેલ તારીખ અને માર્કેટ માટે ઓપન/ક્લોઝ એન્ટ્રી પહેલેથી હાજર છે કે નહીં
+        async function checkExistingEntry() {
+            let market = document.getElementById('marketDropdown').value;
+            let date = document.getElementById('recordDate').value;
+            let session = document.querySelector('input[name="sessionToggle"]:checked').value;
+            let alertBox = document.getElementById('entryAlertBox');
+            let submitBtn = document.getElementById('submitBtn');
+
+            if (!market || !date) return;
+
+            try {
+                const q = query(
+                    collection(db, "matka_records"),
+                    where("date", "==", date),
+                    where("marketName", "==", market)
+                );
+                const querySnapshot = await getDocs(q);
+
+                let openDocId = null;
+                let closeDocId = null;
+                let openPanaVal = '';
+                let closePanaVal = '';
+
+                querySnapshot.forEach((docSnap) => {
+                    let d = docSnap.data();
+                    if (d.session === 'Open') {
+                        openDocId = docSnap.id;
+                        openPanaVal = d.openPana;
+                    }
+                    if (d.session === 'Close') {
+                        closeDocId = docSnap.id;
+                        closePanaVal = d.closePana;
+                    }
+                });
+
+                // જો પહેલીવાર માર્કેટ સિલેક્ટ કરો અને ઓપન એન્ટ્રી પહેલેથી થયેલી હોય તો બાય ડિફોલ્ટ સેશન Close પર જતું રહેશે
+                if (openDocId && !closeDocId && session === 'Open') {
+                    // જો યુઝરે તાજેતરમાં જ સેશન મેન્યુઅલ ચેન્જ ન કર્યું હોય તો Close પર સ્વિચ કરો
+                }
+
+                // જો હાલના સિલેક્ટેડ સેશનની એન્ટ્રી પહેલેથી હાજર હોય
+                let currentSessionDocId = (session === 'Open') ? openDocId : closeDocId;
+
+                if (currentSessionDocId) {
+                    alertBox.classList.remove('hidden');
+                    document.getElementById('recordId').value = currentSessionDocId;
+                    submitBtn.innerText = "ડેટા અપડેટ કરો";
+                    submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
+                    document.getElementById('cancelEditBtn').classList.remove('hidden');
+
+                    // જો પન્નું ખાલી હોય તો જૂનો પન્નો લોડ કરો
+                    let existingPana = (session === 'Open') ? openPanaVal : closePanaVal;
+                    if (existingPana && document.getElementById('pannaInput').value === '') {
+                        document.getElementById('pannaInput').value = existingPana;
+                        document.getElementById('pannaInput').dispatchEvent(new Event('input'));
+                    }
+                } else {
+                    alertBox.classList.add('hidden');
+                    // જો એડિટ મોડ પર ન હોય તો જ રીસેટ કરો
+                    if(!document.getElementById('cancelEditBtn').classList.contains('hidden') === false) {
+                        document.getElementById('recordId').value = '';
+                        submitBtn.innerText = "ડેટા સેવ કરો";
+                        submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
+                    }
+                }
+
+                // ઓટોમેટિક ડિફોલ્ટ લોજિક: જો ઓપન એન્ટ્રી થઈ ગઈ હોય અને યુઝર નવેસરથી ટેબ ખોલે તો Close પર સેટ કરવું
+                if (openDocId && !closeDocId && document.getElementById('recordId').value === '') {
+                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
+                    updateToggleUI();
+                }
+
+            } catch (err) {
+                console.log("Check entry error:", err);
+            }
+        }
 
         async function fetchLastEntry() {
             try {
                 const q = query(collection(db, "matka_records"), orderBy("timestamp", "desc"), limit(1));
                 const querySnapshot = await getDocs(q);
-                
                 const detailsBox = document.getElementById('lastEntryDetails');
+                
                 if (!querySnapshot.empty) {
                     querySnapshot.forEach((docSnap) => {
                         let data = docSnap.data();
@@ -209,15 +291,8 @@
                         let pannaVal = sessionVal === 'Open' ? data.openPana : data.closePana;
                         let ankVal = sessionVal === 'Open' ? data.openAnk : data.closeAnk;
                         
-                        detailsBox.innerHTML = `
-                            તારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${sessionVal} | પન્નો: ${pannaVal} (અંક: ${ankVal})
-                            <br><button id="editLastBtn" data-id="${docSnap.id}" class="mt-2 bg-amber-600 text-white px-2.5 py-1 rounded-md text-xs font-semibold hover:bg-amber-700 transition shadow-sm">આ એન્ટ્રી સુધારો (Edit)</button>
-                        `;
-
-                        document.getElementById('editLastBtn').addEventListener('click', function() {
-                            let id = this.getAttribute('data-id');
-                            loadDataForEdit(id, data);
-                        });
+                        // Edit બટન હટાવીને ફક્ત માહિતી પ્રદર્શિત કરવામાં આવી છે
+                        detailsBox.innerHTML = `તારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${sessionVal} | પન્નો: ${pannaVal} (અંક: ${ankVal})`;
                     });
                 } else {
                     detailsBox.innerText = "કોઈ જૂની એન્ટ્રી મળી નથી.";
@@ -229,30 +304,13 @@
 
         fetchLastEntry();
 
-        function loadDataForEdit(id, data) {
-            document.getElementById('recordId').value = id;
-            document.getElementById('recordDate').value = data.date;
-            document.getElementById('marketDropdown').value = data.marketName;
-            
-            let sessionVal = data.session || (data.openPana ? 'Open' : 'Close');
-            document.querySelector(`input[name="sessionToggle"][value="${sessionVal}"]`).checked = true;
-            updateToggleUI();
-            
-            let panna = sessionVal === 'Open' ? data.openPana : data.closePana;
-            document.getElementById('pannaInput').value = panna;
-            document.getElementById('pannaInput').dispatchEvent(new Event('input'));
-
-            document.getElementById('submitBtn').innerText = "ડેટા અપડેટ કરો";
-            document.getElementById('submitBtn').classList.replace('bg-blue-600', 'bg-emerald-600');
-            document.getElementById('cancelEditBtn').classList.remove('hidden');
-        }
-
         document.getElementById('cancelEditBtn').addEventListener('click', function() {
             document.getElementById('matkaForm').reset();
             document.getElementById('recordId').value = '';
             document.getElementById('submitBtn').innerText = "ડેટા સેવ કરો";
             document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
             this.classList.add('hidden');
+            document.getElementById('entryAlertBox').classList.add('hidden');
             dateInput.value = new Date().toISOString().split('T')[0];
             document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
             updateToggleUI();
@@ -342,6 +400,7 @@
                 document.getElementById('submitBtn').innerText = "ડેટા સેવ કરો";
                 document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
                 document.getElementById('cancelEditBtn').classList.add('hidden');
+                document.getElementById('entryAlertBox').classList.add('hidden');
                 dateInput.value = new Date().toISOString().split('T')[0];
                 
                 if (session === "Open" && !recordId) {
