@@ -10,15 +10,15 @@
     <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-5">
         <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
-        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ (Edit બટન વગર) -->
+        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ -->
         <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-sm text-sm text-amber-900 space-y-1">
             <p class="font-bold text-amber-950 flex items-center gap-1">📌 છેલ્લી એન્ટ્રી (Last Entry):</p>
             <p id="lastEntryDetails" class="leading-relaxed">લોડ થઈ રહ્યું છે...</p>
         </div>
 
-        <!-- એન્ટ્રી ફાઉન્ડ એલર્ટ મેસેજ માટે -->
+        <!-- એલર્ટ મેસેજ (Holiday અથવા Entry Found માટે) -->
         <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
-            ⚠️ આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે!
+            ⚠️ <span id="alertMessageText">આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે!</span>
         </div>
 
         <form id="matkaForm" class="space-y-4">
@@ -84,22 +84,33 @@
         </form>
     </div>
 
-    <!-- Add Market Modal -->
+    <!-- Add Market Modal (વર્કિંગ ડેઝ અને હોલિડે ઓપ્શન સાથે) -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl">
-            <h3 class="text-lg font-bold text-slate-800">નવી માર્કેટ ઉમેરો</h3>
+        <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 class="text-lg font-bold text-slate-800">નવી માર્કેટ અથવા હોલિડે ઉમેરો</h3>
+            
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">માર્કેટનું નામ</label>
                 <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="દા.ત. Kalyan">
             </div>
+
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ઓપન ટાઈમ</label>
                 <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
+
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ક્લોઝ ટાઈમ</label>
                 <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
+
+            <!-- હોલિડે તારીખ ઉમેરવાનું ઓપ્શન -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">હોલિડે તારીખ (Holiday Date)</label>
+                <input type="date" id="holidayDateInput" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                <p class="text-[11px] text-slate-500 mt-1">જો આ માર્કેટમાં કોઈ રજા હોય તો તારીખ સિલેક્ટ કરો.</p>
+            </div>
+
             <div class="flex gap-2 pt-2">
                 <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">સેવ કરો</button>
                 <button type="button" id="closeModalBtn" class="flex-1 bg-slate-400 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-slate-500 transition">બંધ કરો</button>
@@ -109,7 +120,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
@@ -126,6 +137,8 @@
         const dateInput = document.getElementById('recordDate');
         dateInput.value = new Date().toISOString().split('T')[0];
 
+        let marketsList = []; // માર્કેટ અને હોલિડે સ્ટોર કરવા માટે
+
         const modal = document.getElementById('marketModal');
         document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
@@ -135,23 +148,30 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "markets"));
                 marketDropdown.innerHTML = '<option value="">માર્કેટ પસંદ કરો</option>';
+                marketsList = [];
+                
                 querySnapshot.forEach((docSnap) => {
                     let mData = docSnap.data();
+                    marketsList.push({ id: docSnap.id, ...mData });
+                    
                     let opt = document.createElement('option');
                     opt.value = mData.name;
                     opt.textContent = `${mData.name} (${mData.openTime || '-'} / ${mData.closeTime || '-'})`;
                     marketDropdown.appendChild(opt);
                 });
+                checkHolidayAndExistingEntry();
             } catch (e) {
                 console.log("Markets load error:", e);
             }
         }
         loadMarkets();
 
+        // માર્કેટ અથવા હોલિડે સેવ કરવું
         document.getElementById('saveMarketBtn').addEventListener('click', async () => {
             let name = document.getElementById('newMarketName').value.trim();
             let openTime = document.getElementById('openTime').value;
             let closeTime = document.getElementById('closeTime').value;
+            let holidayDate = document.getElementById('holidayDateInput').value;
 
             if(!name) {
                 alert("કૃપા કરીને માર્કેટનું નામ લખો!");
@@ -159,17 +179,41 @@
             }
 
             try {
-                await addDoc(collection(db, "markets"), {
-                    name: name,
-                    openTime: openTime,
-                    closeTime: closeTime,
-                    timestamp: serverTimestamp()
-                });
-                alert("માર્કેટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!");
+                // ચેક કરો કે માર્કેટ પહેલેથી છે કે નહીં, જો હોય તો હોલિડે ઉમેરો અથવા નવી માર્કેટ બનાવો
+                let existingMarket = marketsList.find(m => m.name.toLowerCase() === name.toLowerCase());
+                
+                if (existingMarket) {
+                    // જો માર્કેટ પહેલેથી હોય અને હોલિડે તારીખ નાખી હોય તો તેમાં ઉમેરો
+                    if (holidayDate) {
+                        let holidays = existingMarket.holidays || [];
+                        if (!holidays.includes(holidayDate)) {
+                            holidays.push(holidayDate);
+                            await updateDoc(doc(db, "markets", existingMarket.id), { holidays: holidays });
+                            alert("આ માર્કેટ માટે હોલિડે સફળતાપૂર્વક ઉમેરાઈ ગયો!");
+                        } else {
+                            alert("આ તારીખની રજા પહેલેથી જ ઉમેરેલી છે.");
+                        }
+                    } else {
+                        alert("આ નામની માર્કેટ પહેલેથી જ ઉપલબ્ધ છે.");
+                    }
+                } else {
+                    // નવી માર્કેટ સેવ કરો
+                    let holidaysArray = holidayDate ? [holidayDate] : [];
+                    await addDoc(collection(db, "markets"), {
+                        name: name,
+                        openTime: openTime,
+                        closeTime: closeTime,
+                        holidays: holidaysArray,
+                        timestamp: serverTimestamp()
+                    });
+                    alert("માર્કેટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!");
+                }
+
                 modal.classList.add('hidden');
                 document.getElementById('newMarketName').value = '';
                 document.getElementById('openTime').value = '';
                 document.getElementById('closeTime').value = '';
+                document.getElementById('holidayDateInput').value = '';
                 loadMarkets();
             } catch (error) {
                 alert("ભૂલ આવી છે: " + error.message);
@@ -194,53 +238,53 @@
         radioButtons.forEach(radio => {
             radio.addEventListener('change', () => {
                 updateToggleUI();
-                checkExistingEntry();
+                checkHolidayAndExistingEntry();
             });
         });
 
-        document.getElementById('marketDropdown').addEventListener('change', checkOpenStatusAndAutoSwitch);
-        document.getElementById('recordDate').addEventListener('change', checkOpenStatusAndAutoSwitch);
+        document.getElementById('marketDropdown').addEventListener('change', checkHolidayAndExistingEntry);
+        document.getElementById('recordDate').addEventListener('change', checkHolidayAndExistingEntry);
 
-        async function checkOpenStatusAndAutoSwitch() {
-            let market = document.getElementById('marketDropdown').value;
-            let date = document.getElementById('recordDate').value;
-            if (!market || !date) return;
-
-            try {
-                const q = query(
-                    collection(db, "matka_records"),
-                    where("date", "==", date),
-                    where("marketName", "==", market),
-                    where("session", "==", "Open")
-                );
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
-                } else {
-                    document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
-                }
-                updateToggleUI();
-                checkExistingEntry();
-            } catch (err) {
-                console.log("Auto switch error:", err);
-            }
-        }
-
-        async function checkExistingEntry() {
-            let market = document.getElementById('marketDropdown').value;
+        // હોલિડે અને એન્ટ્રી ચેક કરવાનું મુખ્ય ફંક્શન
+        async function checkHolidayAndExistingEntry() {
+            let marketName = document.getElementById('marketDropdown').value;
             let date = document.getElementById('recordDate').value;
             let session = document.querySelector('input[name="sessionToggle"]:checked').value;
             let alertBox = document.getElementById('entryAlertBox');
+            let alertText = document.getElementById('alertMessageText');
             let submitBtn = document.getElementById('submitBtn');
+            let pannaInput = document.getElementById('pannaInput');
 
-            if (!market || !date) return;
+            if (!marketName || !date) return;
 
+            // ૧. હોલિડે ચેક કરો
+            let selectedMarketObj = marketsList.find(m => m.name === marketName);
+            let isHoliday = false;
+            if (selectedMarketObj && selectedMarketObj.holidays) {
+                if (selectedMarketObj.holidays.includes(date)) {
+                    isHoliday = true;
+                }
+            }
+
+            if (isHoliday) {
+                alertBox.classList.remove('hidden');
+                alertText.innerText = "આ તારીખે આ માર્કેટમાં હોલિડે (રજા) છે! એન્ટ્રી શક્ય નથી.";
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                pannaInput.disabled = true;
+                return;
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                pannaInput.disabled = false;
+            }
+
+            // ૨. જો હોલિડે ન હોય તો ઓપન સ્ટેટસ અને એન્ટ્રી ચેક કરો
             try {
                 const q = query(
                     collection(db, "matka_records"),
                     where("date", "==", date),
-                    where("marketName", "==", market),
+                    where("marketName", "==", marketName),
                     where("session", "==", session)
                 );
                 const querySnapshot = await getDocs(q);
@@ -254,14 +298,15 @@
                     });
 
                     alertBox.classList.remove('hidden');
+                    alertText.innerText = "આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે!";
                     document.getElementById('recordId').value = docId;
                     submitBtn.innerText = "ડેટા અપડેટ કરો";
                     submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
                     document.getElementById('cancelEditBtn').classList.remove('hidden');
 
-                    if (panaVal && document.getElementById('pannaInput').value === '') {
-                        document.getElementById('pannaInput').value = panaVal;
-                        document.getElementById('pannaInput').dispatchEvent(new Event('input'));
+                    if (panaVal && pannaInput.value === '') {
+                        pannaInput.value = panaVal;
+                        pannaInput.dispatchEvent(new Event('input'));
                     }
                 } else {
                     alertBox.classList.add('hidden');
@@ -269,13 +314,13 @@
                     submitBtn.innerText = "ડેટા સેવ કરો";
                     submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
                     document.getElementById('cancelEditBtn').classList.add('hidden');
-                    document.getElementById('pannaInput').value = '';
+                    pannaInput.value = '';
                     document.getElementById('previewAnk').innerText = '-';
                     document.getElementById('previewGroup').innerText = '-';
                     document.getElementById('previewPanelType').innerText = '-';
                 }
             } catch (err) {
-                console.log("Check entry error:", err);
+                console.log("Check error:", err);
             }
         }
 
