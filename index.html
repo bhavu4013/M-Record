@@ -108,15 +108,13 @@
                     </select>
                 </div>
 
-                <!-- Sub-Navigation Filters -->
-                <div class="flex gap-1 overflow-x-auto py-1 text-xs font-bold">
-                    <button class="bg-blue-600 text-white px-3 py-1.5 rounded-lg shrink-0 shadow">OPN</button>
-                    <button class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shrink-0 hover:bg-slate-300">CLS</button>
-                    <button class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shrink-0 hover:bg-slate-300">TOT</button>
-                    <button class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shrink-0 hover:bg-slate-300">DIF</button>
-                    <button class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shrink-0 hover:bg-slate-300">F-JODI</button>
-                    <button class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shrink-0 hover:bg-slate-300">F-PANA</button>
-                    <button class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shrink-0 hover:bg-slate-300">O/E</button>
+                <!-- Minimal Segmented Pill Filters (Open, Close, Total, Diff, More) -->
+                <div class="grid grid-cols-5 gap-1 text-xs font-bold">
+                    <button class="bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center">Open</button>
+                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Close</button>
+                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Total</button>
+                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Diff</button>
+                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">More ▾</button>
                 </div>
 
                 <!-- Header Info Bar -->
@@ -125,7 +123,7 @@
                     <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span>
                 </div>
 
-                <!-- Three Segment Cards (TOP, MID, RECENT) -->
+                <!-- Three Segment Cards (TOP, MID, RECENT) - Dots Removed -->
                 <div class="grid grid-cols-3 gap-2 text-center">
                     <!-- TOP CARD -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
@@ -579,7 +577,6 @@
                     selectDefaultMarketByTime();
                 }
 
-                // Set default selected market for analysis dropdown if available
                 if (marketsList.length > 0 && analysisMarketSelect.value === "") {
                     analysisMarketSelect.value = marketsList[0].name;
                 }
@@ -591,7 +588,6 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Accurate Maximum Delay Calculation
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -685,29 +681,24 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                // Sort by current delay descending (Most delayed first)
                 ankList.sort((a, b) => b.currentDelay - a.currentDelay);
 
                 let top4 = ankList.slice(0, 4);
                 let recentList = ankList.slice(4, 8);
                 let midList = ankList.slice(8);
 
-                // Populate TOP Card
                 topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;
                 topMaxVal.innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;
                 topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`;
 
-                // Populate MID Card
                 midAnkVal.innerText = midList[0] ? midList[0].currentDelay : 0;
                 midMaxVal.innerText = `Max: ${midList[0] ? midList[0].maxDelay : 0}`;
                 midListContainer.innerText = `[${midList.map(i => i.ank).join(',')}]`;
 
-                // Populate RECENT Card
                 recentAnkVal.innerText = recentList[0] ? recentList[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recentList[0] ? recentList[0].maxDelay : 0}`;
                 recentListContainer.innerText = `[${recentList.map(i => i.ank).join(',')}]`;
 
-                // Render Gap Grid (0 to 9 numbers)
                 gapGridContainer.innerHTML = '';
                 for (let i = 0; i <= 9; i++) {
                     let found = ankList.find(item => item.ank === i);
