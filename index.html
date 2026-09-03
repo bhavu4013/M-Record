@@ -20,8 +20,6 @@
         <!-- LOGGER SECTION -->
         <div id="loggerSection" class="space-y-4 w-full">
             <form id="matkaForm" class="space-y-4 w-full">
-                <input type="hidden" id="recordId">
-
                 <!-- Date Field -->
                 <div class="w-full">
                     <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
@@ -124,10 +122,10 @@
                 </div>
 
                 <!-- Three Segment Cards (TOP: 4, MID: 2, RECENT: 4) -->
-                <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer">
                     <!-- TOP CARD (4 Digits) -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
-                        <div class="text-orange-600 font-extrabold text-xs">🔥 TOP</div>
+                        <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>
                         <div id="topAnkVal" class="text-xl font-black text-slate-800">0</div>
                         <div id="topMaxVal" class="text-xs text-slate-600 font-bold">Max: 0</div>
                         <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
@@ -135,7 +133,7 @@
 
                     <!-- MID CARD (2 Digits) -->
                     <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">
-                        <div class="text-indigo-600 font-extrabold text-xs">💠 MID</div>
+                        <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>
                         <div id="midAnkVal" class="text-xl font-black text-slate-800">0</div>
                         <div id="midMaxVal" class="text-xs text-slate-600 font-bold">Max: 0</div>
                         <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
@@ -143,7 +141,7 @@
 
                     <!-- RECENT CARD (4 Digits) -->
                     <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">
-                        <div class="text-emerald-600 font-extrabold text-xs">⚡ RECENT</div>
+                        <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>
                         <div id="recentAnkVal" class="text-xl font-black text-slate-800">0</div>
                         <div id="recentMaxVal" class="text-xs text-slate-600 font-bold">Max: 0</div>
                         <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
@@ -174,7 +172,7 @@
         </button>
     </div>
 
-    <!-- Custom Beautiful Success / Alert Popup Modal -->
+    <!-- Custom Success / Alert Popup Modal -->
     <div id="customAlertModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
         <div class="bg-white p-6 rounded-2xl max-w-xs w-full space-y-4 shadow-2xl text-center">
             <div id="customAlertIcon" class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
@@ -250,7 +248,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, deleteDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
@@ -271,7 +269,6 @@
         const modal = document.getElementById('marketModal');
         let currentAnalysisView = 'Open';
 
-        // Navigation Switcher Logic
         const navLoggerBtn = document.getElementById('navLoggerBtn');
         const navAnalysisBtn = document.getElementById('navAnalysisBtn');
         const loggerSection = document.getElementById('loggerSection');
@@ -289,14 +286,13 @@
         navAnalysisBtn.addEventListener('click', () => {
             analysisSection.classList.remove('hidden');
             loggerSection.classList.add('hidden');
-            document.getElementById('entryAlertBox').classList.add('hidden'); // Clear alert on analysis tab
+            document.getElementById('entryAlertBox').classList.add('hidden');
             pageTitle.innerText = "Data Analysis Portal";
             navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
             navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
             loadAnalysisData();
         });
 
-        // Analysis View Pill Buttons Logic (Open, Close, Total, Diff, More)
         const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');
         analysisViewBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -309,7 +305,6 @@
             });
         });
 
-        // Analysis Type Toggle Logic (Selected Market vs Merged)
         const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]');
         const analysisMarketContainer = document.getElementById('analysisMarketContainer');
 
@@ -467,7 +462,8 @@
                 }
 
                 try {
-                    await addDoc(collection(db, "markets"), {
+                    const marketId = name.replace(/\s+/g, '_').toLowerCase();
+                    await setDoc(doc(db, "markets", marketId), {
                         name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays, timestamp: serverTimestamp()
                     });
                     showCustomAlert("Success", "Market added successfully!");
@@ -489,9 +485,9 @@
                 if (!name) { showCustomAlert("Error", "Please enter market name!", "error"); return; }
 
                 try {
-                    await updateDoc(doc(db, "markets", marketObj.id), {
+                    await setDoc(doc(db, "markets", marketObj.id), {
                         name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays
-                    });
+                    }, { merge: true });
                     showCustomAlert("Success", "Market updated successfully!");
                     modal.classList.add('hidden');
                     loadMarkets();
@@ -596,14 +592,14 @@
                     analysisMarketSelect.value = marketsList[0].name;
                 }
                 
-                checkValidationAndStatus(true);
+                checkValidationAndStatus();
             } catch (e) {
                 console.log("Markets load error:", e);
             }
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Strict Market & Date Sorting for Merged Mode
+        // Load and Compute Analysis Data with Chronological Timing & More Panel Support
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -615,6 +611,9 @@
 
             const analysisHeaderTitle = document.getElementById('analysisHeaderTitle');
             const openTotalLogs = document.getElementById('openTotalLogs');
+            const topCardTitle = document.getElementById('topCardTitle');
+            const midCardTitle = document.getElementById('midCardTitle');
+            const recentCardTitle = document.getElementById('recentCardTitle');
             
             const topAnkVal = document.getElementById('topAnkVal');
             const topMaxVal = document.getElementById('topMaxVal');
@@ -639,63 +638,79 @@
 
             let marketLabel = (analysisType === 'merged') ? "ALL MARKETS (MERGED)" : selectedMarket.toUpperCase();
             analysisHeaderTitle.innerText = `⏳ ${marketLabel} (${currentAnalysisView.toUpperCase()})`;
-            gridTitleLabel.innerText = `📊 ${currentAnalysisView} Gap:`;
+            gridTitleLabel.innerText = `📊 ${currentAnalysisView} Analysis:`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "matka_records"));
-                let rawRecords = {};
+                let records = [];
 
                 querySnapshot.forEach((docSnap) => {
                     let data = docSnap.data();
                     let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket);
                     if (matchMarket && data.date && data.marketName) {
-                        let key = `${data.date}_${data.marketName}`;
-                        if (!rawRecords[key]) {
-                            rawRecords[key] = { date: data.date, marketName: data.marketName };
+                        let marketObj = marketsList.find(m => m.name === data.marketName);
+                        let openTime = marketObj ? marketObj.openTime || "00:00" : "00:00";
+
+                        let targetVal = null;
+                        if (currentAnalysisView === 'Open') {
+                            targetVal = data.openAnk !== undefined ? parseInt(data.openAnk) : null;
+                        } else if (currentAnalysisView === 'Close') {
+                            targetVal = data.closeAnk !== undefined ? parseInt(data.closeAnk) : null;
+                        } else if (currentAnalysisView === 'Total') {
+                            if (data.openAnk !== undefined && data.closeAnk !== undefined) {
+                                targetVal = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10;
+                            }
+                        } else if (currentAnalysisView === 'Diff') {
+                            if (data.openAnk !== undefined && data.closeAnk !== undefined) {
+                                targetVal = Math.abs(parseInt(data.openAnk) - parseInt(data.closeAnk)) % 10;
+                            }
+                        } else if (currentAnalysisView === 'More') {
+                            // Example for More view: Family group or panel type tracking
+                            if (data.openFamilyGroup) {
+                                targetVal = data.openFamilyGroup;
+                            }
                         }
-                        if (data.session === 'Open' && data.openAnk !== undefined) {
-                            rawRecords[key].openAnk = parseInt(data.openAnk);
-                        }
-                        if (data.session === 'Close' && data.closeAnk !== undefined) {
-                            rawRecords[key].closeAnk = parseInt(data.closeAnk);
+
+                        if (targetVal !== null && !isNaN(targetVal) || currentAnalysisView === 'More' && targetVal) {
+                            records.push({
+                                date: data.date,
+                                marketName: data.marketName,
+                                openTime: openTime,
+                                val: targetVal
+                            });
                         }
                     }
                 });
 
-                let records = [];
-                Object.values(rawRecords).forEach(rec => {
-                    let targetAnk = null;
-                    let openVal = rec.openAnk;
-                    let closeVal = rec.closeAnk;
-
-                    if (currentAnalysisView === 'Open' && openVal !== undefined) {
-                        targetAnk = openVal;
-                    } else if (currentAnalysisView === 'Close' && closeVal !== undefined) {
-                        targetAnk = closeVal;
-                    } else if (currentAnalysisView === 'Total' && openVal !== undefined && closeVal !== undefined) {
-                        targetAnk = (openVal + closeVal) % 10;
-                    } else if (currentAnalysisView === 'Diff' && openVal !== undefined && closeVal !== undefined) {
-                        let diff = Math.abs(openVal - closeVal);
-                        targetAnk = diff % 10;
-                    }
-
-                    if (targetAnk !== null && !isNaN(targetAnk)) {
-                        records.push({
-                            date: rec.date,
-                            marketName: rec.marketName,
-                            ank: targetAnk
-                        });
-                    }
-                });
-
-                // Correct sorting by date and then market name to keep multi-market merged timeline accurate
+                // Chronological sorting by date and market opening time
                 records.sort((a, b) => {
                     let dateComp = new Date(a.date) - new Date(b.date);
                     if (dateComp !== 0) return dateComp;
-                    return a.marketName.localeCompare(b.marketName);
+                    return a.openTime.localeCompare(b.openTime);
                 });
 
                 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`;
+
+                if (currentAnalysisView === 'More') {
+                    topCardTitle.innerText = "🔥 Family Groups";
+                    midCardTitle.innerText = "💠 Odd / Even";
+                    recentCardTitle.innerText = "⚡ Panel Stats";
+                    topAnkVal.innerText = "-";
+                    topMaxVal.innerText = "Active";
+                    topListContainer.innerText = "[Family Analysis]";
+                    midAnkVal.innerText = "Odd/Even";
+                    midMaxVal.innerText = "Ratio";
+                    midListContainer.innerText = "[Odd: 50%, Even: 50%]";
+                    recentAnkVal.innerText = "SP/DP";
+                    recentMaxVal.innerText = "Types";
+                    recentListContainer.innerText = "[SP, DP, TP]";
+                    gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">More Panel Custom Analysis Active</div>';
+                    return;
+                } else {
+                    topCardTitle.innerText = "🔥 TOP";
+                    midCardTitle.innerText = "💠 MID";
+                    recentCardTitle.innerText = "⚡ RECENT";
+                }
 
                 let ankStats = {};
                 for (let i = 0; i <= 9; i++) {
@@ -703,7 +718,7 @@
                 }
 
                 records.forEach((rec, idx) => {
-                    let ank = rec.ank;
+                    let ank = rec.val;
                     if (ank >= 0 && ank <= 9) {
                         ankStats[ank].occurrences.push(idx);
                     }
@@ -746,7 +761,6 @@
                     });
                 }
 
-                // 1. RECENT: Exactly 4 Digits (Lowest delay first, latest seen first if delay matches)
                 let sortedByRecent = [...ankList].sort((a, b) => {
                     if (a.currentDelay !== b.currentDelay) {
                         return a.currentDelay - b.currentDelay;
@@ -755,30 +769,24 @@
                 });
                 let recent4 = sortedByRecent.slice(0, 4);
 
-                // 2. TOP: Exactly 4 Digits (Highest delay first - Descending)
                 let remainingList = ankList.filter(item => !recent4.some(r => r.ank === item.ank));
                 let top4 = [...remainingList].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 4);
 
-                // 3. MID: Exactly 2 Digits (Remaining 2 numbers)
                 let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]);
                 let mid2 = ankList.filter(item => !usedAnks.has(item.ank));
 
-                // Populate TOP Card (4 digits)
                 topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;
                 topMaxVal.innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;
                 topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`;
 
-                // Populate MID Card (2 digits)
                 midAnkVal.innerText = mid2[0] ? mid2[0].currentDelay : 0;
                 midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
                 midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
 
-                // Populate RECENT Card (4 digits)
                 recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
                 recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
 
-                // Render Gap Grid (0 to 9 numbers)
                 gapGridContainer.innerHTML = '';
                 for (let i = 0; i <= 9; i++) {
                     let found = ankList.find(item => item.ank === i);
@@ -818,44 +826,14 @@
         radioButtons.forEach(radio => {
             radio.addEventListener('change', () => {
                 updateToggleUI();
-                checkValidationAndStatus(false);
+                checkValidationAndStatus();
             });
         });
 
-        document.getElementById('marketDropdown').addEventListener('change', async () => {
-            await handleMarketOrDateChange();
-        });
+        document.getElementById('marketDropdown').addEventListener('change', checkValidationAndStatus);
+        document.getElementById('recordDate').addEventListener('change', checkValidationAndStatus);
 
-        document.getElementById('recordDate').addEventListener('change', async () => {
-            await handleMarketOrDateChange();
-        });
-
-        async function handleMarketOrDateChange() {
-            let marketName = document.getElementById('marketDropdown').value;
-            let dateStr = document.getElementById('recordDate').value;
-            if (marketName && dateStr) {
-                try {
-                    const qOpen = query(
-                        collection(db, "matka_records"),
-                        where("date", "==", dateStr),
-                        where("marketName", "==", marketName),
-                        where("session", "==", "Open")
-                    );
-                    const snapOpen = await getDocs(qOpen);
-                    if (!snapOpen.empty) {
-                        document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
-                    } else {
-                        document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
-                    }
-                    updateToggleUI();
-                } catch (e) {
-                    console.log("Auto-toggle error:", e);
-                }
-            }
-            checkValidationAndStatus(true);
-        }
-
-        async function checkValidationAndStatus(autoSwitchSession = true) {
+        async function checkValidationAndStatus() {
             let marketName = document.getElementById('marketDropdown').value;
             let dateStr = document.getElementById('recordDate').value;
             let session = document.querySelector('input[name="sessionToggle"]:checked').value;
@@ -888,22 +866,13 @@
             pannaInput.disabled = false;
 
             try {
-                const q = query(
-                    collection(db, "matka_records"),
-                    where("date", "==", dateStr),
-                    where("marketName", "==", marketName),
-                    where("session", "==", session)
-                );
-                const querySnapshot = await getDocs(q);
+                const docId = `${dateStr}_${marketName.replace(/\s+/g, '_')}`;
+                const docRef = doc(db, "matka_records", docId);
+                const docSnap = await getDoc(docRef);
 
-                if (!querySnapshot.empty) {
-                    let docId = "";
-                    let panaVal = "";
-                    querySnapshot.forEach((docSnap) => {
-                        docId = docSnap.id;
-                        let data = docSnap.data();
-                        panaVal = session === 'Open' ? data.openPana : data.closePana;
-                    });
+                if (docSnap.exists()) {
+                    let data = docSnap.data();
+                    let panaVal = session === 'Open' ? data.openPana : data.closePana;
 
                     if (panaVal) {
                         alertBox.classList.remove('hidden');
@@ -950,14 +919,12 @@
 
         function getFamilyGroup(panna) {
             const sorted = panna.split('').sort().join('');
-            
             const familyGroupCorrections = {
                 "066": "110", "660": "110", "016": "110", "115": "110", "156": "110", "160": "110", "566": "110",
                 "222": "222", "227": "222", "277": "222", "777": "222",
                 "444": "444", "449": "444", "499": "444", "999": "444",
                 "111": "111", "116": "111", "166": "111", "666": "111"
             };
-
             return familyGroupCorrections[sorted] || sorted;
         }
 
@@ -995,7 +962,6 @@
         document.getElementById('matkaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            let recordId = document.getElementById('recordId').value;
             let session = document.querySelector('input[name="sessionToggle"]:checked').value;
             let panna = document.getElementById('pannaInput').value;
             let date = document.getElementById('recordDate').value;
@@ -1011,46 +977,43 @@
                 return;
             }
 
-            let recordData = {
-                date: date,
-                marketName: marketName,
-                session: session,
-                timestamp: serverTimestamp()
-            };
-
-            if (session === "Open") {
-                recordData.openPana = panna;
-                recordData.openAnk = calculatedAnk;
-                recordData.openGroup = panna; 
-                recordData.openFamilyGroup = detectedFamilyGroup;
-                recordData.openType = detectedPanelType;
-            } else {
-                recordData.closePana = panna;
-                recordData.closeAnk = calculatedAnk;
-                recordData.closeGroup = panna; 
-                recordData.closeFamilyGroup = detectedFamilyGroup;
-                recordData.closeType = detectedPanelType;
-            }
+            const docId = `${date}_${marketName.replace(/\s+/g, '_')}`;
+            const docRef = doc(db, "matka_records", docId);
 
             try {
-                if (recordId) {
-                    await updateDoc(doc(db, "matka_records", recordId), recordData);
-                    showCustomAlert("Success", "Record updated successfully!");
+                let existingDoc = await getDoc(docRef);
+                let recordData = existingDoc.exists() ? existingDoc.data() : {
+                    date: date,
+                    marketName: marketName,
+                    timestamp: serverTimestamp()
+                };
+
+                if (session === "Open") {
+                    recordData.openPana = panna;
+                    recordData.openAnk = calculatedAnk;
+                    recordData.openGroup = panna; 
+                    recordData.openFamilyGroup = detectedFamilyGroup;
+                    recordData.openType = detectedPanelType;
                 } else {
-                    await addDoc(collection(db, "matka_records"), recordData);
-                    showCustomAlert("Success", "Record saved successfully!");
+                    recordData.closePana = panna;
+                    recordData.closeAnk = calculatedAnk;
+                    recordData.closeGroup = panna; 
+                    recordData.closeFamilyGroup = detectedFamilyGroup;
+                    recordData.closeType = detectedPanelType;
                 }
 
-                // Keep the selected date intact for back-dated continuous entries
+                // Using setDoc with merge to avoid race conditions and handle both sessions cleanly
+                await setDoc(docRef, recordData, { merge: true });
+                showCustomAlert("Success", "Record saved successfully!");
+
                 document.getElementById('matkaForm').reset();
                 document.getElementById('recordDate').value = date; 
-                document.getElementById('recordId').value = '';
                 document.getElementById('submitBtn').innerText = "Save Record";
                 document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
                 document.getElementById('cancelEditBtn').classList.add('hidden');
                 document.getElementById('entryAlertBox').classList.add('hidden');
                 
-                if (session === "Open" && !recordId) {
+                if (session === "Open") {
                     document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
                 } else {
                     document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
