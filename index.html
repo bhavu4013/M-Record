@@ -346,12 +346,23 @@
                 querySnapshot.forEach((docSnap) => {
                     let mData = docSnap.data();
                     marketsList.push({ id: docSnap.id, ...mData });
-                    
+                });
+
+                // Sort markets chronologically by openTime (earliest first)
+                marketsList.sort((a, b) => {
+                    let timeA = a.openTime || "23:59";
+                    let timeB = b.openTime || "23:59";
+                    return timeA.localeCompare(timeB);
+                });
+
+                // Populate dropdown
+                marketsList.forEach(mData => {
                     let opt = document.createElement('option');
                     opt.value = mData.name;
                     opt.textContent = mData.name;
                     marketDropdown.appendChild(opt);
                 });
+
                 if (currentSelected) marketDropdown.value = currentSelected;
                 checkValidationAndStatus(true);
             } catch (e) {
@@ -375,16 +386,45 @@
         }
         updateToggleUI();
 
-        // When user manually clicks Open or Close radio buttons
         radioButtons.forEach(radio => {
             radio.addEventListener('change', () => {
                 updateToggleUI();
-                checkValidationAndStatus(false); // Do not auto-switch when user explicitly clicks
+                checkValidationAndStatus(false);
             });
         });
 
-        document.getElementById('marketDropdown').addEventListener('change', () => checkValidationAndStatus(true));
-        document.getElementById('recordDate').addEventListener('change', () => checkValidationAndStatus(true));
+        document.getElementById('marketDropdown').addEventListener('change', async () => {
+            await handleMarketOrDateChange();
+        });
+
+        document.getElementById('recordDate').addEventListener('change', async () => {
+            await handleMarketOrDateChange();
+        });
+
+        async function handleMarketOrDateChange() {
+            let marketName = document.getElementById('marketDropdown').value;
+            let dateStr = document.getElementById('recordDate').value;
+            if (marketName && dateStr) {
+                try {
+                    const qOpen = query(
+                        collection(db, "matka_records"),
+                        where("date", "==", dateStr),
+                        where("marketName", "==", marketName),
+                        where("session", "==", "Open")
+                    );
+                    const snapOpen = await getDocs(qOpen);
+                    if (!snapOpen.empty) {
+                        document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
+                    } else {
+                        document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
+                    }
+                    updateToggleUI();
+                } catch (e) {
+                    console.log("Auto-toggle error:", e);
+                }
+            }
+            checkValidationAndStatus(true);
+        }
 
         async function checkValidationAndStatus(autoSwitchSession = true) {
             let marketName = document.getElementById('marketDropdown').value;
@@ -417,26 +457,6 @@
             submitBtn.disabled = false;
             submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             pannaInput.disabled = false;
-
-            // Auto-switch to Close if Open entry exists (only when autoSwitchSession is true, i.e. market or date changes)
-            if (autoSwitchSession) {
-                try {
-                    const qOpen = query(
-                        collection(db, "matka_records"),
-                        where("date", "==", dateStr),
-                        where("marketName", "==", marketName),
-                        where("session", "==", "Open")
-                    );
-                    const snapOpen = await getDocs(qOpen);
-                    if (!snapOpen.empty) {
-                        document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
-                        updateToggleUI();
-                        session = "Close"; // Update current session check to Close
-                    }
-                } catch (err) {
-                    console.log("Auto switch error:", err);
-                }
-            }
 
             // Check if record for the active session (Open or Close) already exists
             try {
@@ -525,6 +545,22 @@
         let detectedPanelType = '';
         let detectedFamilyGroup = '';
 
+        // Correct Family Panna mapping logic
+        function getFamilyGroup(panna) {
+            const sorted = panna.split('').sort().join('');
+            
+            // Custom mappings for specific family representatives (e.g. 660, 066, 016 -> 110)
+            const familyGroupCorrections = {
+                "066": "110",
+                "660": "110",
+                "016": "110",
+                "115": "110",
+                "156": "110"
+            };
+
+            return familyGroupCorrections[sorted] || sorted;
+        }
+
         document.getElementById('pannaInput').addEventListener('input', function(e) {
             let panna = e.target.value;
             if (panna.length === 3 && !isNaN(panna)) {
@@ -539,7 +575,8 @@
                     detectedPanelType = "SP (Single Panna)";
                 }
 
-                detectedFamilyGroup = panna.split('').sort().join('');
+                // Apply corrected family group mapping
+                detectedFamilyGroup = getFamilyGroup(panna);
 
                 document.getElementById('previewAnk').innerText = calculatedAnk;
                 document.getElementById('previewGroup').innerText = panna; 
