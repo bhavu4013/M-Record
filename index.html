@@ -329,16 +329,13 @@
             }
         });
 
-        // Time-based default market selection based on current time and market timings
         function selectDefaultMarketByTime() {
             if (marketsList.length === 0) return;
             
             const now = new Date();
-            const currentHours = now.getHours();
-            const currentMinutes = now.getMinutes();
-            const currentTimeMinutes = currentHours * 60 + currentMinutes;
+            const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
 
-            let selectedMarket = marketsList[0]; // Default fallback
+            let selectedMarket = marketsList[0];
 
             for (let i = 0; i < marketsList.length; i++) {
                 let market = marketsList[i];
@@ -349,18 +346,16 @@
                 let openMinutes = openH * 60 + openM;
                 let closeMinutes = closeH * 60 + closeM;
 
-                // Check if current time falls within this market's active window
                 if (currentTimeMinutes >= openMinutes && currentTimeMinutes <= closeMinutes) {
                     selectedMarket = market;
                     break;
                 } else if (i < marketsList.length - 1) {
-                    // Check if current time falls between this market's close time and the next market's open time
                     let nextMarket = marketsList[i + 1];
                     if (nextMarket.openTime) {
                         let [nextOpenH, nextOpenM] = nextMarket.openTime.split(':').map(Number);
                         let nextOpenMinutes = nextOpenH * 60 + nextOpenM;
                         if (currentTimeMinutes > closeMinutes && currentTimeMinutes < nextOpenMinutes) {
-                            selectedMarket = nextMarket; // Default to next upcoming market
+                            selectedMarket = nextMarket;
                             break;
                         }
                     }
@@ -387,7 +382,6 @@
                     marketsList.push({ id: docSnap.id, ...mData });
                 });
 
-                // Sort markets chronologically by openTime (earliest first)
                 marketsList.sort((a, b) => {
                     let timeA = a.openTime || "23:59";
                     let timeB = b.openTime || "23:59";
@@ -404,7 +398,7 @@
                 if (currentSelected) {
                     marketDropdown.value = currentSelected;
                 } else {
-                    selectDefaultMarketByTime(); // Automatically select based on current time
+                    selectDefaultMarketByTime();
                 }
                 
                 checkValidationAndStatus(true);
@@ -492,6 +486,7 @@
                     submitBtn.disabled = true;
                     submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
                     pannaInput.disabled = true;
+                    pannaInput.value = '';
                     return;
                 }
             }
@@ -524,9 +519,15 @@
                     submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
                     document.getElementById('cancelEditBtn').classList.remove('hidden');
 
-                    if (panaVal && pannaInput.value === '') {
+                    if (panaVal) {
                         pannaInput.value = panaVal;
                         pannaInput.dispatchEvent(new Event('input'));
+                    } else {
+                        pannaInput.value = '';
+                        document.getElementById('previewAnk').innerText = '-';
+                        document.getElementById('previewGroup').innerText = '-';
+                        document.getElementById('previewFamilyGroup').innerText = '-';
+                        document.getElementById('previewPanelType').innerText = '-';
                     }
                 } else {
                     alertBox.classList.add('hidden');
@@ -534,6 +535,11 @@
                     submitBtn.innerText = "Save Record";
                     submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
                     document.getElementById('cancelEditBtn').classList.add('hidden');
+                    pannaInput.value = '';
+                    document.getElementById('previewAnk').innerText = '-';
+                    document.getElementById('previewGroup').innerText = '-';
+                    document.getElementById('previewFamilyGroup').innerText = '-';
+                    document.getElementById('previewPanelType').innerText = '-';
                 }
             } catch (err) {
                 console.log("Check error:", err);
