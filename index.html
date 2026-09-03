@@ -20,9 +20,6 @@
         <!-- LOGGER SECTION -->
         <div id="loggerSection" class="space-y-4 w-full">
             <form id="matkaForm" class="space-y-4 w-full">
-                <!-- Hidden Record ID field for Update mode tracking -->
-                <input type="hidden" id="recordId">
-
                 <!-- Date Field -->
                 <div class="w-full">
                     <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
@@ -159,11 +156,11 @@
                     </div>
                 </div>
 
-                <!-- GAP GRID SECTION -->
+                <!-- GAP GRID SECTION (0 to 9 numbers grid) -->
                 <div class="space-y-1 pt-1">
                     <div class="text-xs font-bold text-slate-600" id="gridTitleLabel">📊 Gap:</div>
-                    <div id="gapGridContainer" class="space-y-1.5">
-                        <!-- Grid items injected dynamically via JS -->
+                    <div id="gapGridContainer" class="grid grid-cols-5 gap-1.5 text-center">
+                        <!-- Grid items injected dynamically -->
                     </div>
                 </div>
             </div>
@@ -785,40 +782,28 @@
                         let mid5 = sortedGroups.slice(5, 10);
                         let recent5 = sortedGroups.slice(10, 15);
 
-                        topAnkVal.innerText = top5[0] ? `${top5[0][0]}` : '-';
+                        topAnkVal.innerText = top5[0] ? `Grp ${top5[0][0]}` : '-';
                         topMaxVal.innerText = `Max: ${top5[0] ? top5[0][1] : 0}`;
                         topListContainer.innerText = `[${top5.map(g => g[0]).join(', ')}]`;
 
-                        midAnkVal.innerText = mid5[0] ? `${mid5[0][0]}` : '-';
+                        midAnkVal.innerText = mid5[0] ? `Grp ${mid5[0][0]}` : '-';
                         midMaxVal.innerText = `Max: ${mid5[0] ? mid5[0][1] : 0}`;
                         midListContainer.innerText = `[${mid5.map(g => g[0]).join(', ')}]`;
 
-                        recentAnkVal.innerText = recent5[0] ? `${recent5[0][0]}` : '-';
+                        recentAnkVal.innerText = recent5[0] ? `Grp ${recent5[0][0]}` : '-';
                         recentMaxVal.innerText = `Max: ${recent5[0] ? recent5[0][1] : 0}`;
                         recentListContainer.innerText = `[${recent5.map(g => g[0]).join(', ')}]`;
 
                         gapGridContainer.innerHTML = '';
-                        let row1 = document.createElement('div');
-                        row1.className = "grid grid-cols-3 gap-1.5 text-center";
-                        
-                        let row2 = document.createElement('div');
-                        row2.className = "grid grid-cols-2 gap-1.5 text-center pt-1.5";
-
-                        sortedGroups.forEach(([group, cnt], index) => {
+                        sortedGroups.forEach(([group, cnt]) => {
                             let card = document.createElement('div');
                             card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
                             card.innerHTML = `
-                                <div class="text-xs font-bold text-slate-500">${group}</div>
+                                <div class="text-xs font-bold text-slate-500">Group ${group}</div>
                                 <div class="text-sm font-extrabold text-indigo-600">${cnt}</div>
                             `;
-                            if (index < 3) {
-                                row1.appendChild(card);
-                            } else {
-                                row2.appendChild(card);
-                            }
+                            gapGridContainer.appendChild(card);
                         });
-                        gapGridContainer.appendChild(row1);
-                        gapGridContainer.appendChild(row2);
 
                     } else if (currentMoreSubView === 'FamilyPanna') {
                         topCardTitle.innerText = "🔥 Family Panna";
