@@ -602,7 +602,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Strict 4-2-4 Concept (Top: 4, Mid: 2, Recent: 4)
+        // Load and Compute Analysis Data with Strict 4-2-4 Concept and Correct Filtering
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -658,8 +658,6 @@
                         if (data.session === 'Close' && data.closeAnk !== undefined) {
                             rawRecords[key].closeAnk = parseInt(data.closeAnk);
                         }
-                        if (data.openAnk !== undefined) rawRecords[key].openAnk = parseInt(data.openAnk);
-                        if (data.closeAnk !== undefined) rawRecords[key].closeAnk = parseInt(data.closeAnk);
                     }
                 });
 
@@ -731,16 +729,14 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                // 1. RECENT: Exactly 4 Digits (Most Recently Passed / Lowest Delay first - Ascending)
-                let sortedByDelayAsc = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay);
-                let recent4 = sortedByDelayAsc.slice(0, 4);
+                // 1. RECENT: Exactly 4 Digits (જે સૌથી તાજેતરમાં પાસ થયા છે - ચડતા ક્રમમાં, જેથી લેટેસ્ટ પહેલા આવે)
+                let recent4 = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay).slice(0, 4);
 
-                // 2. TOP: Exactly 4 Digits (Most Delayed first - Descending, excluding Recent)
+                // 2. TOP: Exactly 4 Digits (જે સૌથી વધુ ડિલેડ છે - ઉતરતા ક્રમમાં)
                 let remainingForTopAndMid = ankList.filter(item => !recent4.some(r => r.ank === item.ank));
-                let sortedByDelayDesc = [...remainingForTopAndMid].sort((a, b) => b.currentDelay - a.currentDelay);
-                let top4 = sortedByDelayDesc.slice(0, 4);
+                let top4 = [...remainingForTopAndMid].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 4);
 
-                // 3. MID: Exactly 2 Digits (Remaining numbers not in Recent 4 or Top 4)
+                // 3. MID: Exactly 2 Digits (બાકી રહેલા 2 અંકો)
                 let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]);
                 let mid2 = ankList.filter(item => !usedAnks.has(item.ank));
 
