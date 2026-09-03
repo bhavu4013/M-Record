@@ -30,7 +30,7 @@
                 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
             </div>
 
-            <!-- Market Dropdown & Icon-only Management Button (Compact Dropdown & No Time) -->
+            <!-- Market Dropdown & Icon-only Management Button -->
             <div class="w-full">
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
                 <div class="flex items-center gap-2 w-full">
@@ -349,11 +349,11 @@
                     
                     let opt = document.createElement('option');
                     opt.value = mData.name;
-                    opt.textContent = mData.name; // Removed time display as requested
+                    opt.textContent = mData.name;
                     marketDropdown.appendChild(opt);
                 });
                 if (currentSelected) marketDropdown.value = currentSelected;
-                checkValidationAndStatus();
+                checkValidationAndStatus(false); // Do not force auto-switch on initial market load
             } catch (e) {
                 console.log("Markets load error:", e);
             }
@@ -378,40 +378,15 @@
         radioButtons.forEach(radio => {
             radio.addEventListener('change', () => {
                 updateToggleUI();
-                checkValidationAndStatus();
+                checkValidationAndStatus(false); // Manual change, do not auto-switch
             });
         });
 
-        document.getElementById('marketDropdown').addEventListener('change', checkOpenStatusAndAutoSwitch);
-        document.getElementById('recordDate').addEventListener('change', checkOpenStatusAndAutoSwitch);
+        document.getElementById('marketDropdown').addEventListener('change', () => checkValidationAndStatus(true));
+        document.getElementById('recordDate').addEventListener('change', () => checkValidationAndStatus(true));
 
-        async function checkOpenStatusAndAutoSwitch() {
-            let market = document.getElementById('marketDropdown').value;
-            let date = document.getElementById('recordDate').value;
-            if (!market || !date) return;
-
-            try {
-                const q = query(
-                    collection(db, "matka_records"),
-                    where("date", "==", date),
-                    where("marketName", "==", market),
-                    where("session", "==", "Open")
-                );
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
-                } else {
-                    document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
-                }
-                updateToggleUI();
-                checkValidationAndStatus();
-            } catch (err) {
-                console.log("Auto switch error:", err);
-            }
-        }
-
-        async function checkValidationAndStatus() {
+        // Function with an autoSwitch flag
+        async function checkValidationAndStatus(shouldAutoSwitch = false) {
             let marketName = document.getElementById('marketDropdown').value;
             let dateStr = document.getElementById('recordDate').value;
             let session = document.querySelector('input[name="sessionToggle"]:checked').value;
@@ -422,6 +397,7 @@
 
             if (!marketName || !dateStr) return;
 
+            // Working day check
             const d = new Date(dateStr);
             const daysMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const selectedDayShort = daysMap[d.getDay()];
@@ -442,6 +418,27 @@
             submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             pannaInput.disabled = false;
 
+            // Auto switch logic only when market or date changes
+            if (shouldAutoSwitch) {
+                try {
+                    const qOpen = query(
+                        collection(db, "matka_records"),
+                        where("date", "==", dateStr),
+                        where("marketName", "==", marketName),
+                        where("session", "==", "Open")
+                    );
+                    const snapOpen = await getDocs(qOpen);
+                    if (!snapOpen.empty) {
+                        document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
+                        updateToggleUI();
+                        session = "Close"; // Update current session check
+                    }
+                } catch (err) {
+                    console.log("Auto switch error:", err);
+                }
+            }
+
+            // Check if record for the current selected session exists
             try {
                 const q = query(
                     collection(db, "matka_records"),
@@ -460,7 +457,7 @@
                     });
 
                     alertBox.classList.remove('hidden');
-                    alertText.innerText = "Duplicate entry check: Record for this session already exists! Switched to Update mode.";
+                    alertText.innerText = `Entry available: Record for this ${session} session already exists! Switched to Update mode.`;
                     document.getElementById('recordId').value = docId;
                     submitBtn.innerText = "Update Record";
                     submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
@@ -602,7 +599,7 @@
             try {
                 if (recordId) {
                     await updateDoc(doc(db, "matka_records", recordId), recordData);
-                    alert("Record updated successfully (Duplicate prevented)!");
+                    alert("Record updated successfully!");
                 } else {
                     await addDoc(collection(db, "matka_records"), recordData);
                     alert("Record saved successfully!");
