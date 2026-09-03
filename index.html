@@ -88,22 +88,30 @@
             </form>
         </div>
 
-        <!-- ANALYSIS SECTION (Initially Hidden) -->
+        <!-- ANALYSIS SECTION (Merged & Individual Market Options) -->
         <div id="analysisSection" class="hidden space-y-4 w-full">
             <div class="space-y-3">
-                <label class="block text-xs font-semibold text-slate-600 uppercase">Select Market for Analysis</label>
-                <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">
-                    <option value="">All Markets</option>
-                </select>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market</label>
+                        <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800">
+                            <option value="merged">All Markets (Merged)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Month</label>
+                        <input type="month" id="analysisMonthSelect" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:outline-none bg-white font-semibold text-slate-800">
+                    </div>
+                </div>
                 
-                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center space-y-2">
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center space-y-2 mt-2">
                     <p class="text-xs font-bold text-indigo-800 uppercase tracking-wide">Total Records Logged</p>
                     <p id="totalRecordsCount" class="text-2xl font-extrabold text-indigo-900">0</p>
                 </div>
 
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2 text-sm text-slate-700">
                     <p class="font-bold text-slate-800">📊 Quick Insights:</p>
-                    <p id="analysisSummaryText" class="text-xs text-slate-600 leading-relaxed">Select a market or view overall statistics of your logged records here.</p>
+                    <p id="analysisSummaryText" class="text-xs text-slate-600 leading-relaxed">Select a market option (Merged or Individual) and month above to analyze your logged records.</p>
                 </div>
             </div>
         </div>
@@ -117,7 +125,7 @@
             <span class="text-xs">Logger</span>
         </button>
         <button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition">
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
             <span class="text-xs">Analysis</span>
         </button>
     </div>
@@ -215,6 +223,9 @@
         const dateInput = document.getElementById('recordDate');
         dateInput.value = new Date().toISOString().split('T')[0];
 
+        const analysisMonthSelect = document.getElementById('analysisMonthSelect');
+        analysisMonthSelect.value = new Date().toISOString().slice(0, 7);
+
         let marketsList = [];
         const modal = document.getElementById('marketModal');
 
@@ -242,7 +253,6 @@
             loadAnalysisData();
         });
 
-        // Custom Popup Alert Helper Function
         function showCustomAlert(title, message, type = 'success') {
             const alertModal = document.getElementById('customAlertModal');
             const alertTitle = document.getElementById('customAlertTitle');
@@ -472,7 +482,7 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "markets"));
                 marketDropdown.innerHTML = '<option value="">Select Market</option>';
-                analysisMarketSelect.innerHTML = '<option value="">All Markets</option>';
+                analysisMarketSelect.innerHTML = '<option value="merged">All Markets (Merged)</option>';
                 marketsList = [];
                 
                 querySnapshot.forEach((docSnap) => {
@@ -511,31 +521,32 @@
         }
         loadMarkets();
 
-        // Load Analysis Data function
         async function loadAnalysisData() {
             const selectedMarket = document.getElementById('analysisMarketSelect').value;
+            const selectedMonth = document.getElementById('analysisMonthSelect').value;
             const countBox = document.getElementById('totalRecordsCount');
             const summaryText = document.getElementById('analysisSummaryText');
 
             try {
                 const querySnapshot = await getDocs(collection(db, "matka_records"));
                 let total = 0;
-                let marketCounts = {};
 
                 querySnapshot.forEach((docSnap) => {
                     let data = docSnap.data();
-                    if (!selectedMarket || data.marketName === selectedMarket) {
+                    let recordDate = data.date;
+                    
+                    let matchMarket = (selectedMarket === 'merged') || (data.marketName === selectedMarket);
+                    let matchMonth = !selectedMonth || (recordDate && recordDate.startsWith(selectedMonth));
+
+                    if (matchMarket && matchMonth) {
                         total++;
-                        marketCounts[data.marketName] = (marketCounts[data.marketName] || 0) + 1;
                     }
                 });
 
                 countBox.innerText = total;
-                if (selectedMarket) {
-                    summaryText.innerText = `Showing records analysis specifically for market: ${selectedMarket}. Total logged entries: ${total}.`;
-                } else {
-                    summaryText.innerText = `Showing overall summary across all active markets. Total logged entries: ${total}.`;
-                }
+                let marketLabel = (selectedMarket === 'merged') ? "All Markets (Merged)" : selectedMarket;
+                let monthLabel = selectedMonth ? `for month ${selectedMonth}` : "for all time";
+                summaryText.innerText = `Showing records analysis for ${marketLabel} (${monthLabel}). Total logged entries: ${total}.`;
             } catch (e) {
                 console.log("Analysis load error:", e);
                 countBox.innerText = "0";
@@ -544,6 +555,7 @@
         }
 
         document.getElementById('analysisMarketSelect').addEventListener('change', loadAnalysisData);
+        document.getElementById('analysisMonthSelect').addEventListener('change', loadAnalysisData);
 
         const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');
         const openLabel = document.getElementById('openLabel');
