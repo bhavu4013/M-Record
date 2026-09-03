@@ -649,6 +649,7 @@
                     let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket);
                     if (matchMarket) {
                         let targetAnk = null;
+                        
                         if (currentAnalysisView === 'Open' && data.openAnk !== undefined) {
                             targetAnk = parseInt(data.openAnk);
                         } else if (currentAnalysisView === 'Close' && data.closeAnk !== undefined) {
