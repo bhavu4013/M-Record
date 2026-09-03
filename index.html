@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,47 +7,47 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 p-4 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-5">
+    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-4">
         <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
-        <!-- Last Entry Card -->
-        <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-sm text-sm text-amber-900 space-y-1">
+        <!-- Last Entry Card (Perfect Aligned) -->
+        <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-3.5 rounded-lg shadow-sm text-sm text-amber-900 space-y-1 w-full">
             <p class="font-bold text-amber-950 flex items-center gap-1">📌 Last Entry:</p>
             <p id="lastEntryDetails" class="leading-relaxed">Loading...</p>
         </div>
 
         <!-- Alert Box -->
-        <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
+        <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center w-full">
             ⚠️ <span id="alertMessageText">Entry for this session already exists! Switching to Update mode.</span>
         </div>
 
-        <form id="matkaForm" class="space-y-4">
+        <form id="matkaForm" class="space-y-4 w-full">
             <input type="hidden" id="recordId">
 
-            <!-- Date -->
-            <div>
+            <!-- Date Field -->
+            <div class="w-full">
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
-                <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
             </div>
 
-            <!-- Market Dropdown & Icon-only Management Button (Perfect Alignment) -->
-            <div>
+            <!-- Market Dropdown & Icon-only Management Button (Perfect Grid/Flex Alignment) -->
+            <div class="w-full">
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
-                <div class="flex items-center gap-2">
-                    <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                <div class="flex items-center gap-2 w-full">
+                    <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white h-[42px]" required>
                         <option value="">Select Market</option>
                     </select>
-                    <!-- Icon-only Button -->
-                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white p-2.5 rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center justify-center" title="Manage Markets">
+                    <!-- Icon-only Button with exact matching height -->
+                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-3 h-[42px] rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center justify-center shrink-0" title="Manage Markets">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </button>
                 </div>
             </div>
 
             <!-- Session Toggle Switch -->
-            <div>
+            <div class="w-full">
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label>
-                <div class="flex items-center bg-slate-200 p-1 rounded-lg">
+                <div class="flex items-center bg-slate-200 p-1 rounded-lg w-full">
                     <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel">
                         <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open
                     </label>
@@ -59,13 +58,13 @@
             </div>
 
             <!-- Panna Input -->
-            <div>
+            <div class="w-full">
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>
-                <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
             </div>
 
             <!-- Auto Calculation Preview -->
-            <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner">
+            <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner w-full">
                 <div class="flex justify-between items-center">
                     <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>
                     <span id="previewAnk" class="font-bold text-slate-900">-</span>
@@ -85,19 +84,19 @@
             </div>
 
             <!-- Submit and Red Cancel Button -->
-            <div class="flex gap-2 pt-1">
+            <div class="flex gap-2 pt-1 w-full">
                 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
                 <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
             </div>
         </form>
     </div>
 
-    <!-- Unified Market Management Modal with Action Toggle Switch (Add, Edit, Delete) -->
+    <!-- Unified Market Management Modal -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-slate-800 text-center">Market Management</h3>
             
-            <!-- Action Toggle Switch (Add, Edit, Delete) -->
+            <!-- Action Toggle Switch -->
             <div class="flex bg-slate-200 p-1 rounded-lg">
                 <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm" id="tabAdd">
                     <input type="radio" name="marketAction" value="add" checked class="hidden"> Add
@@ -110,32 +109,28 @@
                 </label>
             </div>
 
-            <!-- Select Market Section (Visible for Edit and Delete) -->
+            <!-- Select Market Section -->
             <div id="modalSelectMarketDiv" class="hidden space-y-1">
                 <label class="block text-xs font-semibold text-slate-600 uppercase">Select Market</label>
-                <select id="modalMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                <select id="modalMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">
                     <option value="">Select Market</option>
                 </select>
             </div>
 
-            <!-- Market Details Inputs (Visible for Add and Edit) -->
+            <!-- Market Details Inputs -->
             <div id="modalDetailsDiv" class="space-y-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>
-                    <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="e.g. Kalyan">
+                    <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white" placeholder="e.g. Kalyan">
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Open Time</label>
-                    <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                    <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Close Time</label>
-                    <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                    <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">
                 </div>
-
-                <!-- Working Days Checkboxes -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Working Days</label>
                     <div class="grid grid-cols-2 gap-2 text-xs text-slate-700">
