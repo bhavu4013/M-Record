@@ -3,94 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Data Logger Portal</title>
+    <title>Daily Data Logger & Analysis Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-100 p-4 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-4">
-        <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
+<body class="bg-slate-100 p-4 min-h-screen flex flex-col items-center justify-between pb-20">
+    
+    <!-- Main Container Card -->
+    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-4 my-auto">
+        <h2 id="pageTitle" class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
         <!-- Alert Box -->
         <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center w-full">
             ⚠️ <span id="alertMessageText">Entry for this session already exists! Switching to Update mode.</span>
         </div>
 
-        <form id="matkaForm" class="space-y-4 w-full">
-            <input type="hidden" id="recordId">
+        <!-- LOGGER SECTION -->
+        <div id="loggerSection" class="space-y-4 w-full">
+            <form id="matkaForm" class="space-y-4 w-full">
+                <input type="hidden" id="recordId">
 
-            <!-- Date Field -->
-            <div class="w-full">
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
-                <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
-            </div>
+                <!-- Date Field -->
+                <div class="w-full">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
+                    <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
+                </div>
 
-            <!-- Market Dropdown & Icon-only Management Button -->
-            <div class="w-full">
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
-                <div class="flex items-center gap-2 w-full">
-                    <select id="marketDropdown" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white h-[42px]" required>
-                        <option value="">Select Market</option>
-                    </select>
-                    <!-- Icon-only Button -->
-                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-3 h-[42px] rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center justify-center shrink-0" title="Manage Markets">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    </button>
+                <!-- Market Dropdown & Icon-only Management Button -->
+                <div class="w-full">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
+                    <div class="flex items-center gap-2 w-full">
+                        <select id="marketDropdown" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white h-[42px]" required>
+                            <option value="">Select Market</option>
+                        </select>
+                        <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-3 h-[42px] rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center justify-center shrink-0" title="Manage Markets">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Session Toggle Switch -->
+                <div class="w-full">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label>
+                    <div class="flex items-center bg-slate-200 p-1 rounded-lg w-full">
+                        <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel">
+                            <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open
+                        </label>
+                        <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel">
+                            <input type="radio" name="sessionToggle" value="Close" class="hidden"> Close
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Panna Input -->
+                <div class="w-full">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>
+                    <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
+                </div>
+
+                <!-- Auto Calculation Preview -->
+                <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner w-full">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>
+                        <span id="previewAnk" class="font-bold text-slate-900">-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-xs font-medium uppercase">Group:</span>
+                        <span id="previewGroup" class="font-bold text-slate-900">-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-xs font-medium uppercase">Family Group:</span>
+                        <span id="previewFamilyGroup" class="font-bold text-amber-700">-</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-xs font-medium uppercase">Type:</span>
+                        <span id="previewPanelType" class="font-bold text-blue-600">-</span>
+                    </div>
+                </div>
+
+                <!-- Submit and Red Cancel Button -->
+                <div class="flex gap-2 pt-1 w-full">
+                    <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
+                    <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ANALYSIS SECTION (Initially Hidden) -->
+        <div id="analysisSection" class="hidden space-y-4 w-full">
+            <div class="space-y-3">
+                <label class="block text-xs font-semibold text-slate-600 uppercase">Select Market for Analysis</label>
+                <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">
+                    <option value="">All Markets</option>
+                </select>
+                
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center space-y-2">
+                    <p class="text-xs font-bold text-indigo-800 uppercase tracking-wide">Total Records Logged</p>
+                    <p id="totalRecordsCount" class="text-2xl font-extrabold text-indigo-900">0</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2 text-sm text-slate-700">
+                    <p class="font-bold text-slate-800">📊 Quick Insights:</p>
+                    <p id="analysisSummaryText" class="text-xs text-slate-600 leading-relaxed">Select a market or view overall statistics of your logged records here.</p>
                 </div>
             </div>
+        </div>
 
-            <!-- Session Toggle Switch -->
-            <div class="w-full">
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label>
-                <div class="flex items-center bg-slate-200 p-1 rounded-lg w-full">
-                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel">
-                        <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open
-                    </label>
-                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel">
-                        <input type="radio" name="sessionToggle" value="Close" class="hidden"> Close
-                    </label>
-                </div>
-            </div>
+    </div>
 
-            <!-- Panna Input -->
-            <div class="w-full">
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>
-                <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
-            </div>
-
-            <!-- Auto Calculation Preview -->
-            <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner w-full">
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>
-                    <span id="previewAnk" class="font-bold text-slate-900">-</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">Group:</span>
-                    <span id="previewGroup" class="font-bold text-slate-900">-</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">Family Group:</span>
-                    <span id="previewFamilyGroup" class="font-bold text-amber-700">-</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">Type:</span>
-                    <span id="previewPanelType" class="font-bold text-blue-600">-</span>
-                </div>
-            </div>
-
-            <!-- Submit and Red Cancel Button -->
-            <div class="flex gap-2 pt-1 w-full">
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Save Record</button>
-                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
-            </div>
-        </form>
+    <!-- Bottom Navigation Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg flex justify-around p-2 max-w-md mx-auto z-40 rounded-t-2xl">
+        <button id="navLoggerBtn" class="flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+            <span class="text-xs">Logger</span>
+        </button>
+        <button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <span class="text-xs">Analysis</span>
+        </button>
     </div>
 
     <!-- Custom Beautiful Success / Alert Popup Modal -->
     <div id="customAlertModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
         <div class="bg-white p-6 rounded-2xl max-w-xs w-full space-y-4 shadow-2xl text-center transform transition-all scale-100">
-            <div id="customAlertIcon" class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-                ✓
-            </div>
+            <div id="customAlertIcon" class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
             <div class="space-y-1">
                 <h3 id="customAlertTitle" class="text-lg font-bold text-slate-800">Success</h3>
                 <p id="customAlertMessage" class="text-base font-medium text-slate-600 leading-relaxed">Operation completed successfully!</p>
@@ -100,11 +135,10 @@
     </div>
 
     <!-- Unified Market Management Modal -->
-    <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
+    <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-slate-800 text-center">Market Management</h3>
             
-            <!-- Action Toggle Switch -->
             <div class="flex bg-slate-200 p-1 rounded-lg">
                 <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm" id="tabAdd">
                     <input type="radio" name="marketAction" value="add" checked class="hidden"> Add
@@ -117,7 +151,6 @@
                 </label>
             </div>
 
-            <!-- Select Market Section -->
             <div id="modalSelectMarketDiv" class="hidden space-y-1">
                 <label class="block text-xs font-semibold text-slate-600 uppercase">Select Market</label>
                 <select id="modalMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">
@@ -125,7 +158,6 @@
                 </select>
             </div>
 
-            <!-- Market Details Inputs -->
             <div id="modalDetailsDiv" class="space-y-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>
@@ -153,12 +185,10 @@
                 </div>
             </div>
 
-            <!-- Delete Warning Notice -->
             <div id="modalDeleteNotice" class="hidden text-xs text-red-600 font-semibold text-center p-2 bg-red-50 rounded-lg border border-red-200">
                 ⚠️ Warning: This action will permanently delete the selected market!
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex gap-2 pt-2">
                 <button type="button" id="executeMarketActionBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save Market</button>
                 <button type="button" id="closeModalBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition">Cancel</button>
@@ -187,6 +217,30 @@
 
         let marketsList = [];
         const modal = document.getElementById('marketModal');
+
+        // Navigation Switcher Logic
+        const navLoggerBtn = document.getElementById('navLoggerBtn');
+        const navAnalysisBtn = document.getElementById('navAnalysisBtn');
+        const loggerSection = document.getElementById('loggerSection');
+        const analysisSection = document.getElementById('analysisSection');
+        const pageTitle = document.getElementById('pageTitle');
+
+        navLoggerBtn.addEventListener('click', () => {
+            loggerSection.classList.remove('hidden');
+            analysisSection.classList.add('hidden');
+            pageTitle.innerText = "Daily Activity Logger";
+            navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
+            navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
+        });
+
+        navAnalysisBtn.addEventListener('click', () => {
+            analysisSection.classList.remove('hidden');
+            loggerSection.classList.add('hidden');
+            pageTitle.innerText = "Data Analysis Portal";
+            navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
+            navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
+            loadAnalysisData();
+        });
 
         // Custom Popup Alert Helper Function
         function showCustomAlert(title, message, type = 'success') {
@@ -413,10 +467,12 @@
 
         async function loadMarkets() {
             const marketDropdown = document.getElementById('marketDropdown');
+            const analysisMarketSelect = document.getElementById('analysisMarketSelect');
             let currentSelected = marketDropdown.value;
             try {
                 const querySnapshot = await getDocs(collection(db, "markets"));
                 marketDropdown.innerHTML = '<option value="">Select Market</option>';
+                analysisMarketSelect.innerHTML = '<option value="">All Markets</option>';
                 marketsList = [];
                 
                 querySnapshot.forEach((docSnap) => {
@@ -431,10 +487,15 @@
                 });
 
                 marketsList.forEach(mData => {
-                    let opt = document.createElement('option');
-                    opt.value = mData.name;
-                    opt.textContent = mData.name;
-                    marketDropdown.appendChild(opt);
+                    let opt1 = document.createElement('option');
+                    opt1.value = mData.name;
+                    opt1.textContent = mData.name;
+                    marketDropdown.appendChild(opt1);
+
+                    let opt2 = document.createElement('option');
+                    opt2.value = mData.name;
+                    opt2.textContent = mData.name;
+                    analysisMarketSelect.appendChild(opt2);
                 });
 
                 if (currentSelected) {
@@ -449,6 +510,40 @@
             }
         }
         loadMarkets();
+
+        // Load Analysis Data function
+        async function loadAnalysisData() {
+            const selectedMarket = document.getElementById('analysisMarketSelect').value;
+            const countBox = document.getElementById('totalRecordsCount');
+            const summaryText = document.getElementById('analysisSummaryText');
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "matka_records"));
+                let total = 0;
+                let marketCounts = {};
+
+                querySnapshot.forEach((docSnap) => {
+                    let data = docSnap.data();
+                    if (!selectedMarket || data.marketName === selectedMarket) {
+                        total++;
+                        marketCounts[data.marketName] = (marketCounts[data.marketName] || 0) + 1;
+                    }
+                });
+
+                countBox.innerText = total;
+                if (selectedMarket) {
+                    summaryText.innerText = `Showing records analysis specifically for market: ${selectedMarket}. Total logged entries: ${total}.`;
+                } else {
+                    summaryText.innerText = `Showing overall summary across all active markets. Total logged entries: ${total}.`;
+                }
+            } catch (e) {
+                console.log("Analysis load error:", e);
+                countBox.innerText = "0";
+                summaryText.innerText = "Error loading analysis data.";
+            }
+        }
+
+        document.getElementById('analysisMarketSelect').addEventListener('change', loadAnalysisData);
 
         const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');
         const openLabel = document.getElementById('openLabel');
