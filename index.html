@@ -602,7 +602,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Hit Reset & Proper Total/Diff Logic
+        // Load and Compute Analysis Data with Group-wise Hit Reset Logic (0 when hit)
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -674,10 +674,8 @@
                     } else if (currentAnalysisView === 'Close' && closeVal !== undefined) {
                         targetAnk = closeVal;
                     } else if (currentAnalysisView === 'Total' && openVal !== undefined && closeVal !== undefined) {
-                        // Total rule: (Open + Close) % 10 (Last digit of sum)
                         targetAnk = (openVal + closeVal) % 10;
                     } else if (currentAnalysisView === 'Diff' && openVal !== undefined && closeVal !== undefined) {
-                        // Diff rule: Absolute difference last digit or modulo 10
                         let diff = Math.abs(openVal - closeVal);
                         targetAnk = diff % 10;
                     }
@@ -718,7 +716,6 @@
                         currentDelay = totalLen;
                         maxDelay = totalLen;
                     } else {
-                        // When hit, delay resets to 0 from the last appearance
                         currentDelay = totalLen - 1 - occs[occs.length - 1];
 
                         let gaps = [];
@@ -734,24 +731,35 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                ankList.sort((a, b) => b.currentDelay - a.currentDelay);
+                // Sorting groups accurately based on rules
+                let sortedByDelayDesc = [...ankList].sort((a, b) => b.currentDelay - a.currentDelay);
+                let top4 = sortedByDelayDesc.slice(0, 4); // Top (Most Delayed)
 
-                let top4 = ankList.slice(0, 4);
-                let recentList = ankList.slice(4, 8);
-                let midList = ankList.slice(8);
+                let sortedByDelayAsc = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay);
+                let recentList = sortedByDelayAsc.slice(0, 2); // Recent (Passed / 0 Delay)
 
+                let topAnksSet = new Set(top4.map(item => item.ank));
+                let recentAnksSet = new Set(recentList.map(item => item.ank));
+                
+                // Mid Group (Remaining numbers)
+                let midList = ankList.filter(item => !topAnksSet.has(item.ank) && !recentAnksSet.has(item.ank));
+
+                // Populate TOP Card
                 topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;
                 topMaxVal.innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;
                 topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`;
 
+                // Populate MID Card
                 midAnkVal.innerText = midList[0] ? midList[0].currentDelay : 0;
                 midMaxVal.innerText = `Max: ${midList[0] ? midList[0].maxDelay : 0}`;
                 midListContainer.innerText = `[${midList.map(i => i.ank).join(',')}]`;
 
+                // Populate RECENT Card (Reset to 0 when passed)
                 recentAnkVal.innerText = recentList[0] ? recentList[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recentList[0] ? recentList[0].maxDelay : 0}`;
                 recentListContainer.innerText = `[${recentList.map(i => i.ank).join(',')}]`;
 
+                // Render Gap Grid (0 to 9 numbers)
                 gapGridContainer.innerHTML = '';
                 for (let i = 0; i <= 9; i++) {
                     let found = ankList.find(item => item.ank === i);
