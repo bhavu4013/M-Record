@@ -159,7 +159,7 @@
                     </div>
                 </div>
 
-                <!-- GAP GRID SECTION (3 items on first row, 2 items on second row for Family Jodi) -->
+                <!-- GAP GRID SECTION -->
                 <div class="space-y-1 pt-1">
                     <div class="text-xs font-bold text-slate-600" id="gridTitleLabel">📊 Gap:</div>
                     <div id="gapGridContainer" class="space-y-1.5">
@@ -1008,7 +1008,6 @@
                     gapGridContainer.appendChild(card);
                 }
 
-            }
             } catch (e) {
                 console.log("Analysis render error:", e);
             }
@@ -1026,7 +1025,7 @@
                 closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
             } else {
                 closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm";
-                openLabel.className = "text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
+                openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
             }
         }
         updateToggleUI();
