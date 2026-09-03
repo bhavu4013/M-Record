@@ -353,7 +353,7 @@
                     marketDropdown.appendChild(opt);
                 });
                 if (currentSelected) marketDropdown.value = currentSelected;
-                checkValidationAndStatus(false); // Do not force auto-switch on initial market load
+                checkValidationAndStatus(true);
             } catch (e) {
                 console.log("Markets load error:", e);
             }
@@ -375,18 +375,18 @@
         }
         updateToggleUI();
 
+        // When user manually clicks Open or Close radio buttons
         radioButtons.forEach(radio => {
             radio.addEventListener('change', () => {
                 updateToggleUI();
-                checkValidationAndStatus(false); // Manual change, do not auto-switch
+                checkValidationAndStatus(false); // Do not auto-switch when user explicitly clicks
             });
         });
 
         document.getElementById('marketDropdown').addEventListener('change', () => checkValidationAndStatus(true));
         document.getElementById('recordDate').addEventListener('change', () => checkValidationAndStatus(true));
 
-        // Function with an autoSwitch flag
-        async function checkValidationAndStatus(shouldAutoSwitch = false) {
+        async function checkValidationAndStatus(autoSwitchSession = true) {
             let marketName = document.getElementById('marketDropdown').value;
             let dateStr = document.getElementById('recordDate').value;
             let session = document.querySelector('input[name="sessionToggle"]:checked').value;
@@ -418,8 +418,8 @@
             submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             pannaInput.disabled = false;
 
-            // Auto switch logic only when market or date changes
-            if (shouldAutoSwitch) {
+            // Auto-switch to Close if Open entry exists (only when autoSwitchSession is true, i.e. market or date changes)
+            if (autoSwitchSession) {
                 try {
                     const qOpen = query(
                         collection(db, "matka_records"),
@@ -431,14 +431,14 @@
                     if (!snapOpen.empty) {
                         document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
                         updateToggleUI();
-                        session = "Close"; // Update current session check
+                        session = "Close"; // Update current session check to Close
                     }
                 } catch (err) {
                     console.log("Auto switch error:", err);
                 }
             }
 
-            // Check if record for the current selected session exists
+            // Check if record for the active session (Open or Close) already exists
             try {
                 const q = query(
                     collection(db, "matka_records"),
