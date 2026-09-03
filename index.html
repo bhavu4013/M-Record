@@ -516,6 +516,7 @@
             const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
 
             let selectedMarket = marketsList[0];
+            let targetSession = "Open";
 
             for (let i = 0; i < marketsList.length; i++) {
                 let market = marketsList[i];
@@ -528,6 +529,8 @@
 
                 if (currentTimeMinutes >= openMinutes && currentTimeMinutes <= closeMinutes) {
                     selectedMarket = market;
+                    let midpoint = openMinutes + Math.floor((closeMinutes - openMinutes) / 2);
+                    targetSession = currentTimeMinutes <= midpoint ? "Open" : "Close";
                     break;
                 } else if (i < marketsList.length - 1) {
                     let nextMarket = marketsList[i + 1];
@@ -536,6 +539,7 @@
                         let nextOpenMinutes = nextOpenH * 60 + nextOpenM;
                         if (currentTimeMinutes > closeMinutes && currentTimeMinutes < nextOpenMinutes) {
                             selectedMarket = nextMarket;
+                            targetSession = "Open";
                             break;
                         }
                     }
@@ -545,6 +549,13 @@
             const marketDropdown = document.getElementById('marketDropdown');
             if (selectedMarket && marketDropdown.value === "") {
                 marketDropdown.value = selectedMarket.name;
+                
+                const sessionRadio = document.querySelector(`input[name="sessionToggle"][value="${targetSession}"]`);
+                if (sessionRadio) {
+                    sessionRadio.checked = true;
+                    updateToggleUI();
+                }
+
                 marketDropdown.dispatchEvent(new Event('change'));
             }
         }
