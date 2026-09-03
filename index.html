@@ -1019,13 +1019,14 @@
                     showCustomAlert("Success", "Record saved successfully!");
                 }
 
+                // Keep the selected date intact for back-dated continuous entries
                 document.getElementById('matkaForm').reset();
+                document.getElementById('recordDate').value = date; 
                 document.getElementById('recordId').value = '';
                 document.getElementById('submitBtn').innerText = "Save Record";
                 document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
                 document.getElementById('cancelEditBtn').classList.add('hidden');
                 document.getElementById('entryAlertBox').classList.add('hidden');
-                dateInput.value = new Date().toISOString().split('T')[0];
                 
                 if (session === "Open" && !recordId) {
                     document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
