@@ -603,7 +603,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Strict 4-2-4 Concept and Latest-First Recent Ordering
+        // Load and Compute Analysis Data with Strict 4-2-4 Concept and Precise Latest-First Ordering
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -704,40 +704,56 @@
                 });
 
                 let totalLen = records.length;
-                let ankList = [];
-
+                let ankLastSeen = {};
                 for (let i = 0; i <= 9; i++) {
                     let occs = ankStats[i].occurrences;
                     let currentDelay = 0;
-                    let maxDelay = 0;
-
                     if (occs.length === 0) {
                         currentDelay = totalLen;
-                        maxDelay = totalLen;
+                        ankLastSeen[i] = -1;
                     } else {
                         currentDelay = totalLen - 1 - occs[occs.length - 1];
+                        ankLastSeen[i] = occs[occs.length - 1];
+                    }
+                    ankStats[i].currentDelay = currentDelay;
+                }
 
-                        let gaps = [];
-                        gaps.push(occs[0]);
+                let ankList = [];
+                for (let i = 0; i <= 9; i++) {
+                    let occs = ankStats[i].occurrences;
+                    let maxDelay = 0;
+                    if (occs.length > 0) {
+                        let gaps = [occs[0]];
                         for (let j = 1; j < occs.length; j++) {
                             gaps.push(occs[j] - occs[j - 1] - 1);
                         }
                         gaps.push(totalLen - 1 - occs[occs.length - 1]);
-
                         maxDelay = Math.max(...gaps);
+                    } else {
+                        maxDelay = totalLen;
                     }
-
-                    ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
+                    ankList.push({ 
+                        ank: i, 
+                        currentDelay: ankStats[i].currentDelay, 
+                        maxDelay: maxDelay,
+                        lastSeen: ankLastSeen[i] 
+                    });
                 }
 
-                // 1. RECENT: Exactly 4 Digits (જે સૌથી તાજેતરમાં પાસ થયા છે - ચડતા ક્રમમાં)
-                let recent4 = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay).slice(0, 4);
+                // 1. RECENT: Exactly 4 Digits (Lowest delay first, latest seen first if delay matches)
+                let sortedByRecent = [...ankList].sort((a, b) => {
+                    if (a.currentDelay !== b.currentDelay) {
+                        return a.currentDelay - b.currentDelay;
+                    }
+                    return b.lastSeen - a.lastSeen;
+                });
+                let recent4 = sortedByRecent.slice(0, 4);
 
-                // 2. TOP: Exactly 4 Digits (જે સૌથી વધુ ડિલેડ છે - ઉતરતા ક્રમમાં)
-                let remainingForTopAndMid = ankList.filter(item => !recent4.some(r => r.ank === item.ank));
-                let top4 = [...remainingForTopAndMid].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 4);
+                // 2. TOP: Exactly 4 Digits (Highest delay first - Descending)
+                let remainingList = ankList.filter(item => !recent4.some(r => r.ank === item.ank));
+                let top4 = [...remainingList].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 4);
 
-                // 3. MID: Exactly 2 Digits (બાકી રહેલા 2 અંકો)
+                // 3. MID: Exactly 2 Digits (Remaining 2 numbers)
                 let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]);
                 let mid2 = ankList.filter(item => !usedAnks.has(item.ank));
 
