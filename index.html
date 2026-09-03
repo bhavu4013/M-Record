@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="gu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,49 +10,40 @@
     <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-5">
         <h2 class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>
 
-        <!-- છેલ્લી એન્ટ્રી પ્રદર્શિત કરવા માટેનું કાર્ડ -->
+        <!-- Last Entry Card -->
         <div id="lastEntryBox" class="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-sm text-sm text-amber-900 space-y-1">
-            <p class="font-bold text-amber-950 flex items-center gap-1">📌 છેલ્લી એન્ટ્રી (Last Entry):</p>
-            <p id="lastEntryDetails" class="leading-relaxed">લોડ થઈ રહ્યું છે...</p>
+            <p class="font-bold text-amber-950 flex items-center gap-1">📌 Last Entry:</p>
+            <p id="lastEntryDetails" class="leading-relaxed">Loading...</p>
         </div>
 
-        <!-- હોમ સ્ક્રીન પરથી ડાયરેક્ટ હોલિડે સેટ કરવા માટેનું ફંક્શન -->
-        <div class="bg-sky-50 border border-sky-200 p-3.5 rounded-lg space-y-2 text-sm text-sky-900">
-            <p class="font-bold flex items-center gap-1">🗓️ હોલિડે મેનેજમેન્ટ (Holiday Setup):</p>
-            <div class="flex gap-2">
-                <input type="date" id="homeHolidayDate" class="flex-1 border border-sky-300 rounded-lg p-2 text-xs bg-white focus:outline-none">
-                <button type="button" id="homeSetHolidayBtn" class="bg-sky-600 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-sky-700 transition">રજા ઉમેરો</button>
-            </div>
-        </div>
-
-        <!-- એલર્ટ મેસેજ -->
+        <!-- Alert Box -->
         <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
-            ⚠️ <span id="alertMessageText">આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે!</span>
+            ⚠️ <span id="alertMessageText">Entry for this session already exists!</span>
         </div>
 
         <form id="matkaForm" class="space-y-4">
             <input type="hidden" id="recordId">
 
-            <!-- તારીખ -->
+            <!-- Date -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">તારીખ (Date)</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
                 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- માર્કેટ અને 'Add' બટન -->
+            <!-- Market and Add Button -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">માર્કેટ (Market)</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
                 <div class="flex gap-2">
                     <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
-                        <option value="">માર્કેટ પસંદ કરો</option>
+                        <option value="">Select Market</option>
                     </select>
                     <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm font-medium shadow-sm transition">Add</button>
                 </div>
             </div>
 
-            <!-- સેશન ટોગલ સ્વીચ -->
+            <!-- Session Toggle Switch -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">સેશન (Session)</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label>
                 <div class="flex items-center bg-slate-200 p-1 rounded-lg">
                     <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel">
                         <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open
@@ -63,73 +54,73 @@
                 </div>
             </div>
 
-            <!-- પન્ના ઇનપુટ -->
+            <!-- Panna Input -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">પન્ના (3-Digit Panna)</label>
-                <input type="text" id="pannaInput" maxlength="3" placeholder="દા.ત. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>
+                <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- ઓટો કેલ્ક્યુલેશન પ્રીવ્યુ -->
+            <!-- Auto Calculation Preview -->
             <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner">
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">અંક (Ank):</span>
+                    <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>
                     <span id="previewAnk" class="font-bold text-slate-900">-</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">ગ્રુપ (Group):</span>
+                    <span class="text-slate-500 text-xs font-medium uppercase">Group:</span>
                     <span id="previewGroup" class="font-bold text-slate-900">-</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-xs font-medium uppercase">ટાઇપ (Type):</span>
+                    <span class="text-slate-500 text-xs font-medium uppercase">Type:</span>
                     <span id="previewPanelType" class="font-bold text-blue-600">-</span>
                 </div>
             </div>
 
-            <!-- સબમિટ અને કેન્સલ બટન -->
+            <!-- Submit and Red Cancel/Exit Button -->
             <div class="flex gap-2 pt-1">
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">ડેટા સેવ કરો</button>
-                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-slate-400 text-white py-2.5 rounded-lg hover:bg-slate-500 font-semibold text-sm transition">રદ કરો</button>
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
+                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
             </div>
         </form>
     </div>
 
-    <!-- Add Market Modal (વર્કિંગ ડેઝ ચેકબોક્સ સાથે) -->
+    <!-- Add Market Modal -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-lg font-bold text-slate-800">નવી માર્કેટ ઉમેરો</h3>
+            <h3 class="text-lg font-bold text-slate-800">Add New Market</h3>
             
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">માર્કેટનું નામ</label>
-                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="દા.ત. Kalyan">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>
+                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="e.g. Kalyan">
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ઓપન ટાઈમ</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Open Time</label>
                 <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ક્લોઝ ટાઈម</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Close Time</label>
                 <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
             </div>
 
-            <!-- અઠવાડિયાના દિવસો (Working Days Checkboxes) -->
+            <!-- Working Days Checkboxes -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">વર્કિંગ ડેઝ (Working Days)</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Working Days</label>
                 <div class="grid grid-cols-2 gap-2 text-xs text-slate-700">
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Mon" checked class="rounded"> સોમવાર (Mon)</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Tue" checked class="rounded"> મંગળવાર (Tue)</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Wed" checked class="rounded"> બુધવાર (Wed)</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Thu" checked class="rounded"> ગુરુવાર (Thu)</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Fri" checked class="rounded"> શુક્રવાર (Fri)</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sat" checked class="rounded"> શનિવાર (Sat)</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sun" checked class="rounded"> રવિવાર (Sun)</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Mon" checked class="rounded"> Monday</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Tue" checked class="rounded"> Tuesday</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Wed" checked class="rounded"> Wednesday</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Thu" checked class="rounded"> Thursday</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Fri" checked class="rounded"> Friday</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sat" checked class="rounded"> Saturday</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sun" checked class="rounded"> Sunday</label>
                 </div>
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">સેવ કરો</button>
-                <button type="button" id="closeModalBtn" class="flex-1 bg-slate-400 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-slate-500 transition">બંધ કરો</button>
+                <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save</button>
+                <button type="button" id="closeModalBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition">Cancel</button>
             </div>
         </div>
     </div>
@@ -163,7 +154,7 @@
             const marketDropdown = document.getElementById('marketDropdown');
             try {
                 const querySnapshot = await getDocs(collection(db, "markets"));
-                marketDropdown.innerHTML = '<option value="">માર્કેટ પસંદ કરો</option>';
+                marketDropdown.innerHTML = '<option value="">Select Market</option>';
                 marketsList = [];
                 
                 querySnapshot.forEach((docSnap) => {
@@ -182,7 +173,6 @@
         }
         loadMarkets();
 
-        // નવી માર્કેટ વર્કિંગ ડેઝ સાથે સેવ કરવી
         document.getElementById('saveMarketBtn').addEventListener('click', async () => {
             let name = document.getElementById('newMarketName').value.trim();
             let openTime = document.getElementById('openTime').value;
@@ -194,7 +184,7 @@
             });
 
             if(!name) {
-                alert("કૃપા કરીને માર્કેટનું નામ લખો!");
+                alert("Please enter the market name!");
                 return;
             }
 
@@ -204,50 +194,16 @@
                     openTime: openTime,
                     closeTime: closeTime,
                     workingDays: workingDays,
-                    holidays: [],
                     timestamp: serverTimestamp()
                 });
-                alert("માર્કેટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!");
+                alert("Market added successfully!");
                 modal.classList.add('hidden');
                 document.getElementById('newMarketName').value = '';
                 document.getElementById('openTime').value = '';
                 document.getElementById('closeTime').value = '';
                 loadMarkets();
             } catch (error) {
-                alert("ભૂલ આવી છે: " + error.message);
-            }
-        });
-
-        // હોમ સ્ક્રીન પરથી ડાયરેક્ટ હોલિડે ઉમેરવાનું ફંક્શન
-        document.getElementById('homeSetHolidayBtn').addEventListener('click', async () => {
-            let marketName = document.getElementById('marketDropdown').value;
-            let holidayDate = document.getElementById('homeHolidayDate').value;
-
-            if (!marketName) {
-                alert("કૃપા કરીને પહેલા માર્કેટ પસંદ કરો!");
-                return;
-            }
-            if (!holidayDate) {
-                alert("કૃપા કરીને રજાની તારીખ પસંદ કરો!");
-                return;
-            }
-
-            let marketObj = marketsList.find(m => m.name === marketName);
-            if (marketObj) {
-                let holidays = marketObj.holidays || [];
-                if (!holidays.includes(holidayDate)) {
-                    holidays.push(holidayDate);
-                    try {
-                        await updateDoc(doc(db, "markets", marketObj.id), { holidays: holidays });
-                        alert(`તારીખ ${holidayDate} ને ${marketName} માટે હોલિડે તરીકે સેવ કરી દેવામાં આવી છે.`);
-                        document.getElementById('homeHolidayDate').value = '';
-                        loadMarkets();
-                    } catch (e) {
-                        alert("રજા સેવ કરવામાં ભૂલ: " + e.message);
-                    }
-                } else {
-                    alert("આ તારીખની રજા પહેલેથી જ ઉમેરેલી છે.");
-                }
+                alert("Error: " + error.message);
             }
         });
 
@@ -273,10 +229,35 @@
             });
         });
 
-        document.getElementById('marketDropdown').addEventListener('change', checkValidationAndStatus);
-        document.getElementById('recordDate').addEventListener('change', checkValidationAndStatus);
+        document.getElementById('marketDropdown').addEventListener('change', checkOpenStatusAndAutoSwitch);
+        document.getElementById('recordDate').addEventListener('change', checkOpenStatusAndAutoSwitch);
 
-        // વર્કિંગ ડે, હોલિડે અને એન્ટ્રી સ્ટેટસ ચેક કરવાનું ફંક્શન
+        async function checkOpenStatusAndAutoSwitch() {
+            let market = document.getElementById('marketDropdown').value;
+            let date = document.getElementById('recordDate').value;
+            if (!market || !date) return;
+
+            try {
+                const q = query(
+                    collection(db, "matka_records"),
+                    where("date", "==", date),
+                    where("marketName", "==", market),
+                    where("session", "==", "Open")
+                );
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;
+                } else {
+                    document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;
+                }
+                updateToggleUI();
+                checkValidationAndStatus();
+            } catch (err) {
+                console.log("Auto switch error:", err);
+            }
+        }
+
         async function checkValidationAndStatus() {
             let marketName = document.getElementById('marketDropdown').value;
             let dateStr = document.getElementById('recordDate').value;
@@ -288,7 +269,6 @@
 
             if (!marketName || !dateStr) return;
 
-            // ૧. ડે ઓફ વીક ચેક કરો (Working Days validation)
             const d = new Date(dateStr);
             const daysMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const selectedDayShort = daysMap[d.getDay()];
@@ -297,7 +277,7 @@
             if (selectedMarketObj && selectedMarketObj.workingDays) {
                 if (!selectedMarketObj.workingDays.includes(selectedDayShort)) {
                     alertBox.classList.remove('hidden');
-                    alertText.innerText = "આ દિવસે આ માર્કેટ બંધ (Non-working day) રહે છે!";
+                    alertText.innerText = "Market is closed on this day (Non-working day)!";
                     submitBtn.disabled = true;
                     submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
                     pannaInput.disabled = true;
@@ -305,24 +285,10 @@
                 }
             }
 
-            // ૨. હોલિડે (Holiday) ચેક કરો
-            if (selectedMarketObj && selectedMarketObj.holidays) {
-                if (selectedMarketObj.holidays.includes(dateStr)) {
-                    alertBox.classList.remove('hidden');
-                    alertText.innerText = "આ તારીખે આ માર્કેટમાં હોલિડે (રજા) છે!";
-                    submitBtn.disabled = true;
-                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    pannaInput.disabled = true;
-                    return;
-                }
-            }
-
-            // જો બધું બરાબર હોય તો ઇનપુટ ચાલુ કરો
             submitBtn.disabled = false;
             submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             pannaInput.disabled = false;
 
-            // ૩. ડેટાબેઝમાં એન્ટ્રી પહેલેથી છે કે નહીં તે ચેક કરો
             try {
                 const q = query(
                     collection(db, "matka_records"),
@@ -341,9 +307,9 @@
                     });
 
                     alertBox.classList.remove('hidden');
-                    alertText.innerText = "આ સેશનની એન્ટ્રી પહેલેથી જ થયેલી છે!";
+                    alertText.innerText = "Entry for this session already exists!";
                     document.getElementById('recordId').value = docId;
-                    submitBtn.innerText = "ડેટા અપડેટ કરો";
+                    submitBtn.innerText = "Update Record";
                     submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
                     document.getElementById('cancelEditBtn').classList.remove('hidden');
 
@@ -354,7 +320,7 @@
                 } else {
                     alertBox.classList.add('hidden');
                     document.getElementById('recordId').value = '';
-                    submitBtn.innerText = "ડેટા સેવ કરો";
+                    submitBtn.innerText = "Save Record";
                     submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
                     document.getElementById('cancelEditBtn').classList.add('hidden');
                 }
@@ -376,10 +342,10 @@
                         let pannaVal = sessionVal === 'Open' ? data.openPana : data.closePana;
                         let ankVal = sessionVal === 'Open' ? data.openAnk : data.closeAnk;
                         
-                        detailsBox.innerHTML = `તારીખ: ${data.date} | માર્કેટ: ${data.marketName} | સેશન: ${sessionVal} | પન્નો: ${pannaVal} (અંક: ${ankVal})`;
+                        detailsBox.innerHTML = `Date: ${data.date} | Market: ${data.marketName} | Session: ${sessionVal} | Panna: ${pannaVal} (Ank: ${ankVal})`;
                     });
                 } else {
-                    detailsBox.innerText = "કોઈ જૂની એન્ટ્રી મળી નથી.";
+                    detailsBox.innerText = "No previous entries found.";
                 }
             } catch (error) {
                 console.error("Error fetching last entry: ", error);
@@ -391,7 +357,7 @@
         document.getElementById('cancelEditBtn').addEventListener('click', function() {
             document.getElementById('matkaForm').reset();
             document.getElementById('recordId').value = '';
-            document.getElementById('submitBtn').innerText = "ડેટા સેવ કરો";
+            document.getElementById('submitBtn').innerText = "Save Record";
             document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
             this.classList.add('hidden');
             document.getElementById('entryAlertBox').classList.add('hidden');
@@ -442,12 +408,12 @@
             let marketName = document.getElementById('marketDropdown').value;
 
             if (!marketName) {
-                alert("કૃપા કરીને માર્કેટ પસંદ કરો!");
+                alert("Please select a market!");
                 return;
             }
 
             if (panna.length !== 3 || calculatedAnk === '') {
-                alert("કૃપા કરીને ૩ ડિજિટનો સાચો પન્નો નાખો!");
+                alert("Please enter a valid 3-digit panna!");
                 return;
             }
 
@@ -473,15 +439,15 @@
             try {
                 if (recordId) {
                     await updateDoc(doc(db, "matka_records", recordId), recordData);
-                    alert("ડેટા સફળતાપૂર્વક અપડેટ થઈ ગયો છે!");
+                    alert("Record updated successfully!");
                 } else {
                     await addDoc(collection(db, "matka_records"), recordData);
-                    alert("ડેટા સફળતાપૂર્વક સેવ થઈ ગયો છે!");
+                    alert("Record saved successfully!");
                 }
 
                 document.getElementById('matkaForm').reset();
                 document.getElementById('recordId').value = '';
-                document.getElementById('submitBtn').innerText = "ડેટા સેવ કરો";
+                document.getElementById('submitBtn').innerText = "Save Record";
                 document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
                 document.getElementById('cancelEditBtn').classList.add('hidden');
                 document.getElementById('entryAlertBox').classList.add('hidden');
@@ -500,7 +466,7 @@
                 
                 fetchLastEntry();
             } catch (error) {
-                alert("ભૂલ આવી છે: " + error.message);
+                alert("Error: " + error.message);
             }
         });
     </script>
