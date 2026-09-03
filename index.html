@@ -57,7 +57,7 @@
                 <!-- Panna Input -->
                 <div class="w-full">
                     <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>
-                    <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
+                    <input type="text" id="pannaInput" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
                 </div>
 
                 <!-- Auto Calculation Preview -->
@@ -289,6 +289,7 @@
         navAnalysisBtn.addEventListener('click', () => {
             analysisSection.classList.remove('hidden');
             loggerSection.classList.add('hidden');
+            document.getElementById('entryAlertBox').classList.add('hidden'); // Clear alert on analysis tab
             pageTitle.innerText = "Data Analysis Portal";
             navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
             navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
@@ -729,7 +730,7 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                // 1. RECENT: Exactly 4 Digits (જે સૌથી તાજેતરમાં પાસ થયા છે - લેટેસ્ટ પહેલા આવે તે રીતે એસેન્ડિંગ ક્રમ)
+                // 1. RECENT: Exactly 4 Digits (જે સૌથી તાજેતરમાં પાસ થયા છે - ચડતા ક્રમમાં)
                 let recent4 = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay).slice(0, 4);
 
                 // 2. TOP: Exactly 4 Digits (જે સૌથી વધુ ડિલેડ છે - ઉતરતા ક્રમમાં)
@@ -750,7 +751,7 @@
                 midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
                 midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
 
-                // Populate RECENT Card (4 digits - લેટેસ્ટ પાસ થયેલ અંક પહેલા)
+                // Populate RECENT Card (4 digits)
                 recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
                 recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
