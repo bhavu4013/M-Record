@@ -16,7 +16,7 @@
             <p id="lastEntryDetails" class="leading-relaxed">Loading...</p>
         </div>
 
-        <!-- Alert Box for Duplicate Prevention -->
+        <!-- Alert Box -->
         <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
             ⚠️ <span id="alertMessageText">Entry for this session already exists! Switching to Update mode.</span>
         </div>
@@ -30,14 +30,21 @@
                 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- Market and Add/Edit Button -->
+            <!-- Market, Add/Edit & Remove Buttons with Icons -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
                 <div class="flex gap-2">
                     <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                         <option value="">Select Market</option>
                     </select>
-                    <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm font-medium shadow-sm transition">Add / Edit</button>
+                    <!-- Add/Edit Icon Button -->
+                    <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-3.5 py-2.5 rounded-lg hover:bg-emerald-700 shadow-sm transition flex items-center justify-center" title="Add / Edit Market">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                    </button>
+                    <!-- Remove/Delete Icon Button -->
+                    <button type="button" id="deleteMarketBtn" class="bg-red-600 text-white px-3.5 py-2.5 rounded-lg hover:bg-red-700 shadow-sm transition flex items-center justify-center" title="Delete Selected Market">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
                 </div>
             </div>
 
@@ -83,7 +90,9 @@
             <!-- Submit and Red Cancel Button -->
             <div class="flex gap-2 pt-1">
                 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
-                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
+                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round5" d="M6 18L18 6M6 6l12 12"></path></svg> Cancel
+                </button>
             </div>
         </form>
     </div>
@@ -91,7 +100,7 @@
     <!-- Add / Edit Market Modal -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 id="marketModalTitle" class="text-lg font-bold text-slate-800">Add / Update Market</h3>
+            <h3 id="marketModalTitle" class="text-lg font-bold text-slate-800">Add New Market</h3>
             <input type="hidden" id="editMarketId">
             
             <div>
@@ -132,7 +141,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
@@ -153,13 +162,13 @@
 
         const modal = document.getElementById('marketModal');
         
-        // Open Modal: If a market is currently selected in dropdown, load its details for updating!
+        // Open Modal for Add or Edit Market based on dropdown selection
         document.getElementById('openModalBtn').addEventListener('click', () => {
             let selectedMarketName = document.getElementById('marketDropdown').value;
             let marketObj = marketsList.find(m => m.name === selectedMarketName);
 
             if (marketObj) {
-                // Edit Mode for Market
+                // Edit Mode
                 document.getElementById('editMarketId').value = marketObj.id;
                 document.getElementById('newMarketName').value = marketObj.name;
                 document.getElementById('openTime').value = marketObj.openTime || '';
@@ -167,13 +176,12 @@
                 document.getElementById('marketModalTitle').innerText = "Update Market Details";
                 document.getElementById('saveMarketBtn').innerText = "Update Market";
 
-                // Set checkboxes
                 let days = marketObj.workingDays || [];
                 document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
                     cb.checked = days.includes(cb.value);
                 });
             } else {
-                // Add New Mode
+                // Add Mode (If nothing selected or just adding new)
                 document.getElementById('editMarketId').value = '';
                 document.getElementById('newMarketName').value = '';
                 document.getElementById('openTime').value = '';
@@ -181,13 +189,35 @@
                 document.getElementById('marketModalTitle').innerText = "Add New Market";
                 document.getElementById('saveMarketBtn').innerText = "Save Market";
                 document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
-                    cb.checked = true; // default all checked
+                    cb.checked = true;
                 });
             }
             modal.classList.remove('hidden');
         });
 
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
+
+        // Delete/Remove Market Functionality
+        document.getElementById('deleteMarketBtn').addEventListener('click', async () => {
+            let selectedMarketName = document.getElementById('marketDropdown').value;
+            if (!selectedMarketName) {
+                alert("Please select a market from the dropdown to delete!");
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete the market "${selectedMarketName}"?`)) {
+                let marketObj = marketsList.find(m => m.name === selectedMarketName);
+                if (marketObj) {
+                    try {
+                        await deleteDoc(doc(db, "markets", marketObj.id));
+                        alert("Market deleted successfully!");
+                        loadMarkets();
+                    } catch (error) {
+                        alert("Error deleting market: " + error.message);
+                    }
+                }
+            }
+        });
 
         async function loadMarkets() {
             const marketDropdown = document.getElementById('marketDropdown');
@@ -214,7 +244,6 @@
         }
         loadMarkets();
 
-        // Save or Update Market function
         document.getElementById('saveMarketBtn').addEventListener('click', async () => {
             let marketId = document.getElementById('editMarketId').value;
             let name = document.getElementById('newMarketName').value.trim();
@@ -231,7 +260,6 @@
                 return;
             }
 
-            // Duplicate check (if adding new or renaming to an existing name)
             let existingMarket = marketsList.find(m => m.name.toLowerCase() === name.toLowerCase() && m.id !== marketId);
             if (existingMarket) {
                 alert("Duplicate market error: This market name already exists!");
@@ -240,7 +268,6 @@
 
             try {
                 if (marketId) {
-                    // Update existing market
                     await updateDoc(doc(db, "markets", marketId), {
                         name: name,
                         openTime: openTime,
@@ -249,7 +276,6 @@
                     });
                     alert("Market updated successfully!");
                 } else {
-                    // Add new market
                     await addDoc(collection(db, "markets"), {
                         name: name,
                         openTime: openTime,
