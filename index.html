@@ -832,7 +832,6 @@
                             let fpKey = null;
                             let pannaToTest = data.openPana;
                             
-                            // Check if this panna matches any family panna group
                             if (pannaToTest && pannaToTest.length === 3) {
                                 for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {
                                     if (pList.includes(pannaToTest)) {
@@ -1355,7 +1354,6 @@
                 "0": ["000", "456", "230", "366", "334", "177", "244"]
             };
 
-            // Filter records based on selected market/merged and active market filter
             let analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
             
@@ -1365,16 +1363,23 @@
             });
 
             let totalLen = filteredRecords.length;
-            let pannaList = familyPannaGroupsMap[groupKey] || [groupKey];
+            let groupPannas = familyPannaGroupsMap[groupKey] || [groupKey];
             
-            // Filter only pannas belonging to the selected digit chart if necessary, 
-            // but the user wants pannas of the clicked group filtered by selected digit if they belong to it.
+            // Filter only pannas that belong to the selected digit's chart
             let activeDigitList = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];
-            
+            let pannaList = groupPannas.filter(p => {
+                // Check if this panna belongs to the current digit group definition
+                // For safety, let's verify if the group belongs to the active digit chart
+                return activeDigitList.includes(groupKey);
+            });
+            if (pannaList.length === 0) {
+                pannaList = groupPannas; // Fallback if needed
+            }
+
             let contentDiv = document.getElementById('fpModalContent');
             contentDiv.innerHTML = '';
 
-            document.getElementById('fpModalTitle').innerText = `Digit (${selectedFamilyPannaDigit}) - Group ${groupKey} Pannas Delay`;
+            document.getElementById('fpModalTitle').innerText = `Digit (${selectedFamilyPannaDigit}) - Group ${groupKey} Details`;
 
             pannaList.forEach(panna => {
                 let lastIdx = -1;
