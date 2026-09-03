@@ -731,18 +731,18 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                // 1. TOP: Exactly 4 Digits (Most Delayed first - Descending)
-                let sortedByDelayDesc = [...ankList].sort((a, b) => b.currentDelay - a.currentDelay);
-                let top4 = sortedByDelayDesc.slice(0, 4);
-
-                // 2. RECENT: Exactly 4 Digits (Most Recently Passed / Lowest Delay first - Ascending)
+                // 1. RECENT: Exactly 4 Digits (Most Recently Passed / Lowest Delay first - Ascending)
                 let sortedByDelayAsc = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay);
                 let recent4 = sortedByDelayAsc.slice(0, 4);
 
-                // 3. MID: Exactly 2 Digits (Remaining numbers not in Top 4 or Recent 4)
-                let topAnksSet = new Set(top4.map(item => item.ank));
-                let recentAnksSet = new Set(recent4.map(item => item.ank));
-                let mid2 = ankList.filter(item => !topAnksSet.has(item.ank) && !recentAnksSet.has(item.ank));
+                // 2. TOP: Exactly 4 Digits (Most Delayed first - Descending, excluding Recent)
+                let remainingForTopAndMid = ankList.filter(item => !recent4.some(r => r.ank === item.ank));
+                let sortedByDelayDesc = [...remainingForTopAndMid].sort((a, b) => b.currentDelay - a.currentDelay);
+                let top4 = sortedByDelayDesc.slice(0, 4);
+
+                // 3. MID: Exactly 2 Digits (Remaining numbers not in Recent 4 or Top 4)
+                let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]);
+                let mid2 = ankList.filter(item => !usedAnks.has(item.ank));
 
                 // Populate TOP Card (4 digits)
                 topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;
@@ -754,7 +754,7 @@
                 midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
                 midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
 
-                // Populate RECENT Card (4 digits - Hit reset to 0 logic applied)
+                // Populate RECENT Card (4 digits)
                 recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
                 recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
