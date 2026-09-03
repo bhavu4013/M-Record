@@ -509,20 +509,27 @@
                     let panaVal = "";
                     querySnapshot.forEach((docSnap) => {
                         docId = docSnap.id;
-                        panaVal = session === 'Open' ? docSnap.data().openPana : docSnap.data().closePana;
+                        let data = docSnap.data();
+                        panaVal = session === 'Open' ? data.openPana : data.closePana;
                     });
 
-                    alertBox.classList.remove('hidden');
-                    alertText.innerText = `Entry available: Record for this ${session} session already exists! Switched to Update mode.`;
-                    document.getElementById('recordId').value = docId;
-                    submitBtn.innerText = "Update Record";
-                    submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
-                    document.getElementById('cancelEditBtn').classList.remove('hidden');
-
                     if (panaVal) {
+                        alertBox.classList.remove('hidden');
+                        alertText.innerText = `Entry available: Record for this ${session} session already exists! Switched to Update mode.`;
+                        document.getElementById('recordId').value = docId;
+                        submitBtn.innerText = "Update Record";
+                        submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
+                        document.getElementById('cancelEditBtn').classList.remove('hidden');
+
                         pannaInput.value = panaVal;
                         pannaInput.dispatchEvent(new Event('input'));
                     } else {
+                        // If record document exists for this session but panna for this specific session is empty/missing
+                        alertBox.classList.add('hidden');
+                        document.getElementById('recordId').value = docId; // keep docId for updating the existing record doc
+                        submitBtn.innerText = "Save Record";
+                        submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
+                        document.getElementById('cancelEditBtn').classList.add('hidden');
                         pannaInput.value = '';
                         document.getElementById('previewAnk').innerText = '-';
                         document.getElementById('previewGroup').innerText = '-';
@@ -553,14 +560,16 @@
         function getFamilyGroup(panna) {
             const sorted = panna.split('').sort().join('');
             
+            // Comprehensive family group mapping based on standard Satta Matka chart rules and user examples
             const familyGroupCorrections = {
-                "066": "110",
-                "660": "110",
-                "016": "110",
-                "115": "110",
-                "156": "110",
-                "160": "110",
-                "566": "110"
+                // Group 110 family
+                "016": "110", "066": "110", "110": "110", "115": "110", "156": "110", "160": "110", "566": "110", "660": "110",
+                // Group 222 family
+                "222": "222", "227": "227", "277": "277", "777": "777", // or mapped to canonical base family
+                // Group 444 family
+                "444": "444", "449": "444", "499": "444", "999": "444",
+                // Group 111 family
+                "111": "111", "116": "111", "166": "111", "666": "111"
             };
 
             return familyGroupCorrections[sorted] || sorted;
