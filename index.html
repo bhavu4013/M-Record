@@ -110,11 +110,11 @@
 
                 <!-- Minimal Segmented Pill Filters (Open, Close, Total, Diff, More) -->
                 <div class="grid grid-cols-5 gap-1 text-xs font-bold">
-                    <button class="bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center">Open</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Close</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Total</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Diff</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">More ▾</button>
+                    <button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button>
+                    <button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button>
+                    <button type="button" data-view="Total" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Total</button>
+                    <button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button>
+                    <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button>
                 </div>
 
                 <!-- Header Info Bar -->
@@ -123,7 +123,7 @@
                     <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span>
                 </div>
 
-                <!-- Three Segment Cards (TOP, MID, RECENT) - Dots Removed -->
+                <!-- Three Segment Cards (TOP, MID, RECENT) -->
                 <div class="grid grid-cols-3 gap-2 text-center">
                     <!-- TOP CARD -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
@@ -152,7 +152,7 @@
 
                 <!-- GAP GRID SECTION (0 to 9 numbers grid) -->
                 <div class="space-y-1 pt-1">
-                    <div class="text-xs font-bold text-slate-600">📊 Gap:</div>
+                    <div class="text-xs font-bold text-slate-600" id="gridTitleLabel">📊 Gap:</div>
                     <div id="gapGridContainer" class="grid grid-cols-5 gap-1.5 text-center">
                         <!-- Grid items injected dynamically -->
                     </div>
@@ -269,6 +269,7 @@
 
         let marketsList = [];
         const modal = document.getElementById('marketModal');
+        let currentAnalysisView = 'Open'; // Default view
 
         // Navigation Switcher Logic
         const navLoggerBtn = document.getElementById('navLoggerBtn');
@@ -292,6 +293,19 @@
             navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
             navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
             loadAnalysisData();
+        });
+
+        // Analysis View Pill Buttons Logic (Open, Close, Total, Diff, More)
+        const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');
+        analysisViewBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                analysisViewBtns.forEach(b => {
+                    b.className = "analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition";
+                });
+                e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition";
+                currentAnalysisView = e.target.getAttribute('data-view');
+                loadAnalysisData();
+            });
         });
 
         // Analysis Type Toggle Logic (Selected Market vs Merged)
@@ -588,6 +602,7 @@
         }
         loadMarkets();
 
+        // Load and Compute Analysis Data dynamically based on currentAnalysisView (Open, Close, Total, Diff)
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -613,14 +628,17 @@
             const recentListContainer = document.getElementById('recentListContainer');
 
             const gapGridContainer = document.getElementById('gapGridContainer');
+            const gridTitleLabel = document.getElementById('gridTitleLabel');
 
             if (analysisType === 'selected' && !selectedMarket) {
                 openTotalLogs.innerText = "0 ગેમ્સ ડેટા";
-                analysisHeaderTitle.innerText = "SELECT A MARKET (OPEN)";
+                analysisHeaderTitle.innerText = `SELECT A MARKET (${currentAnalysisView.toUpperCase()})`;
                 return;
             }
 
-            analysisHeaderTitle.innerText = (analysisType === 'merged') ? "ALL MARKETS (MERGED) (OPEN)" : `${selectedMarket.toUpperCase()} (OPEN)`;
+            let marketLabel = (analysisType === 'merged') ? "ALL MARKETS (MERGED)" : selectedMarket.toUpperCase();
+            analysisHeaderTitle.innerText = `⏳ ${marketLabel} (${currentAnalysisView.toUpperCase()})`;
+            gridTitleLabel.innerText = `📊 ${currentAnalysisView} Gap:`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "matka_records"));
@@ -629,13 +647,27 @@
                 querySnapshot.forEach((docSnap) => {
                     let data = docSnap.data();
                     let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket);
-                    if (matchMarket && data.session === 'Open' && data.openAnk !== undefined) {
-                        records.push({
-                            date: data.date,
-                            marketName: data.marketName,
-                            ank: parseInt(data.openAnk),
-                            timestamp: data.timestamp
-                        });
+                    if (matchMarket) {
+                        let targetAnk = null;
+                        if (currentAnalysisView === 'Open' && data.openAnk !== undefined) {
+                            targetAnk = parseInt(data.openAnk);
+                        } else if (currentAnalysisView === 'Close' && data.closeAnk !== undefined) {
+                            targetAnk = parseInt(data.closeAnk);
+                        } else if (currentAnalysisView === 'Total' && data.openAnk !== undefined && data.closeAnk !== undefined) {
+                            targetAnk = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10;
+                        } else if (currentAnalysisView === 'Diff' && data.openAnk !== undefined && data.closeAnk !== undefined) {
+                            let diff = Math.abs(parseInt(data.openAnk) - parseInt(data.closeAnk));
+                            targetAnk = diff % 10;
+                        }
+
+                        if (targetAnk !== null && !isNaN(targetAnk)) {
+                            records.push({
+                                date: data.date,
+                                marketName: data.marketName,
+                                ank: targetAnk,
+                                timestamp: data.timestamp
+                            });
+                        }
                     }
                 });
 
