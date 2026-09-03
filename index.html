@@ -30,20 +30,17 @@
                 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- Market, Add/Edit & Remove Buttons with Icons -->
+            <!-- Market Dropdown & Single Unified Management Button -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
                 <div class="flex gap-2">
                     <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                         <option value="">Select Market</option>
                     </select>
-                    <!-- Add/Edit Icon Button -->
-                    <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-3.5 py-2.5 rounded-lg hover:bg-emerald-700 shadow-sm transition flex items-center justify-center" title="Add / Edit Market">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
-                    </button>
-                    <!-- Remove/Delete Icon Button -->
-                    <button type="button" id="deleteMarketBtn" class="bg-red-600 text-white px-3.5 py-2.5 rounded-lg hover:bg-red-700 shadow-sm transition flex items-center justify-center" title="Delete Selected Market">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <!-- Single Button to Open Unified Management Popup -->
+                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-4 py-2.5 rounded-lg hover:bg-indigo-700 text-sm font-medium shadow-sm transition flex items-center gap-1.5" title="Manage Markets">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Manage
                     </button>
                 </div>
             </div>
@@ -90,50 +87,77 @@
             <!-- Submit and Red Cancel Button -->
             <div class="flex gap-2 pt-1">
                 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
-                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition flex items-center justify-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round5" d="M6 18L18 6M6 6l12 12"></path></svg> Cancel
-                </button>
+                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
             </div>
         </form>
     </div>
 
-    <!-- Add / Edit Market Modal -->
+    <!-- Unified Market Management Modal with Action Toggle Switch (Add, Edit, Delete) -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 id="marketModalTitle" class="text-lg font-bold text-slate-800">Add New Market</h3>
-            <input type="hidden" id="editMarketId">
+            <h3 class="text-lg font-bold text-slate-800 text-center">Market Management</h3>
             
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>
-                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="e.g. Kalyan">
+            <!-- Action Toggle Switch (Add, Edit, Delete) -->
+            <div class="flex bg-slate-200 p-1 rounded-lg">
+                <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm" id="tabAdd">
+                    <input type="radio" name="marketAction" value="add" checked class="hidden"> Add
+                </label>
+                <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700" id="tabEdit">
+                    <input type="radio" name="marketAction" value="edit" class="hidden"> Edit
+                </label>
+                <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700" id="tabDelete">
+                    <input type="radio" name="marketAction" value="delete" class="hidden"> Delete
+                </label>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Open Time</label>
-                <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+            <!-- Select Market Section (Visible for Edit and Delete) -->
+            <div id="modalSelectMarketDiv" class="hidden space-y-1">
+                <label class="block text-xs font-semibold text-slate-600 uppercase">Select Market</label>
+                <select id="modalMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                    <option value="">Select Market</option>
+                </select>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Close Time</label>
-                <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
-            </div>
+            <!-- Market Details Inputs (Visible for Add and Edit) -->
+            <div id="modalDetailsDiv" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>
+                    <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none" placeholder="e.g. Kalyan">
+                </div>
 
-            <!-- Working Days Checkboxes -->
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Working Days</label>
-                <div class="grid grid-cols-2 gap-2 text-xs text-slate-700">
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Mon" checked class="rounded"> Monday</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Tue" checked class="rounded"> Tuesday</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Wed" checked class="rounded"> Wednesday</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Thu" checked class="rounded"> Thursday</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Fri" checked class="rounded"> Friday</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sat" checked class="rounded"> Saturday</label>
-                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sun" checked class="rounded"> Sunday</label>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Open Time</label>
+                    <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Close Time</label>
+                    <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none">
+                </div>
+
+                <!-- Working Days Checkboxes -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Working Days</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs text-slate-700">
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Mon" checked class="rounded"> Monday</label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Tue" checked class="rounded"> Tuesday</label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Wed" checked class="rounded"> Wednesday</label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Thu" checked class="rounded"> Thursday</label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Fri" checked class="rounded"> Friday</label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sat" checked class="rounded"> Saturday</label>
+                        <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sun" checked class="rounded"> Sunday</label>
+                    </div>
                 </div>
             </div>
 
+            <!-- Delete Warning Notice -->
+            <div id="modalDeleteNotice" class="hidden text-xs text-red-600 font-semibold text-center p-2 bg-red-50 rounded-lg border border-red-200">
+                ⚠️ Warning: This action will permanently delete the selected market!
+            </div>
+
+            <!-- Action Buttons -->
             <div class="flex gap-2 pt-2">
-                <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save Market</button>
+                <button type="button" id="executeMarketActionBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save Market</button>
                 <button type="button" id="closeModalBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition">Cancel</button>
             </div>
         </div>
@@ -159,62 +183,166 @@
         dateInput.value = new Date().toISOString().split('T')[0];
 
         let marketsList = [];
-
         const modal = document.getElementById('marketModal');
-        
-        // Open Modal for Add or Edit Market based on dropdown selection
+
+        // Open Modal Button
         document.getElementById('openModalBtn').addEventListener('click', () => {
-            let selectedMarketName = document.getElementById('marketDropdown').value;
-            let marketObj = marketsList.find(m => m.name === selectedMarketName);
-
-            if (marketObj) {
-                // Edit Mode
-                document.getElementById('editMarketId').value = marketObj.id;
-                document.getElementById('newMarketName').value = marketObj.name;
-                document.getElementById('openTime').value = marketObj.openTime || '';
-                document.getElementById('closeTime').value = marketObj.closeTime || '';
-                document.getElementById('marketModalTitle').innerText = "Update Market Details";
-                document.getElementById('saveMarketBtn').innerText = "Update Market";
-
-                let days = marketObj.workingDays || [];
-                document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
-                    cb.checked = days.includes(cb.value);
-                });
-            } else {
-                // Add Mode (If nothing selected or just adding new)
-                document.getElementById('editMarketId').value = '';
-                document.getElementById('newMarketName').value = '';
-                document.getElementById('openTime').value = '';
-                document.getElementById('closeTime').value = '';
-                document.getElementById('marketModalTitle').innerText = "Add New Market";
-                document.getElementById('saveMarketBtn').innerText = "Save Market";
-                document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
-                    cb.checked = true;
-                });
-            }
+            // Default reset to 'Add' mode when opening modal
+            document.querySelector('input[name="marketAction"][value="add"]').checked = true;
+            updateActionTabUI();
             modal.classList.remove('hidden');
         });
 
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
 
-        // Delete/Remove Market Functionality
-        document.getElementById('deleteMarketBtn').addEventListener('click', async () => {
-            let selectedMarketName = document.getElementById('marketDropdown').value;
-            if (!selectedMarketName) {
-                alert("Please select a market from the dropdown to delete!");
-                return;
+        // Handle Action Toggle Switch inside Modal (Add, Edit, Delete)
+        const actionRadios = document.querySelectorAll('input[name="marketAction"]');
+        
+        function updateActionTabUI() {
+            let currentAction = document.querySelector('input[name="marketAction"]:checked').value;
+            
+            // Tab UI Styling
+            document.querySelectorAll('.action-tab').forEach(tab => {
+                tab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700";
+            });
+            let activeTab = document.getElementById(`tab${currentAction.charAt(0).toUpperCase() + currentAction.slice(1)}`);
+            if(currentAction === 'delete') {
+                activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-red-600 text-white shadow-sm";
+            } else {
+                activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm";
             }
 
-            if (confirm(`Are you sure you want to delete the market "${selectedMarketName}"?`)) {
-                let marketObj = marketsList.find(m => m.name === selectedMarketName);
-                if (marketObj) {
+            // Visibility controls
+            const selectDiv = document.getElementById('modalSelectMarketDiv');
+            const detailsDiv = document.getElementById('modalDetailsDiv');
+            const deleteNotice = document.getElementById('modalDeleteNotice');
+            const actionBtn = document.getElementById('executeMarketActionBtn');
+
+            populateModalDropdown();
+
+            if (currentAction === 'add') {
+                selectDiv.classList.add('hidden');
+                detailsDiv.classList.remove('hidden');
+                deleteNotice.classList.add('hidden');
+                actionBtn.innerText = "Save Market";
+                actionBtn.className = "flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition";
+                
+                // Clear inputs
+                document.getElementById('newMarketName').value = '';
+                document.getElementById('openTime').value = '';
+                document.getElementById('closeTime').value = '';
+                document.querySelectorAll('input[name="workingDay"]').forEach(cb => cb.checked = true);
+            } else if (currentAction === 'edit') {
+                selectDiv.classList.remove('hidden');
+                detailsDiv.classList.remove('hidden');
+                deleteNotice.classList.add('hidden');
+                actionBtn.innerText = "Update Market";
+                actionBtn.className = "flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-blue-700 transition";
+                loadSelectedMarketDataToModal();
+            } else if (currentAction === 'delete') {
+                selectDiv.classList.remove('hidden');
+                detailsDiv.classList.add('hidden');
+                deleteNotice.classList.remove('hidden');
+                actionBtn.innerText = "Delete Market";
+                actionBtn.className = "flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition";
+            }
+        }
+
+        actionRadios.forEach(radio => {
+            radio.addEventListener('change', updateActionTabUI);
+        });
+
+        function populateModalDropdown() {
+            const modalSelect = document.getElementById('modalMarketSelect');
+            modalSelect.innerHTML = '<option value="">Select Market</option>';
+            marketsList.forEach(m => {
+                let opt = document.createElement('option');
+                opt.value = m.name;
+                opt.textContent = m.name;
+                modalSelect.appendChild(opt);
+            });
+        }
+
+        document.getElementById('modalMarketSelect').addEventListener('change', loadSelectedMarketDataToModal);
+
+        function loadSelectedMarketDataToModal() {
+            let currentAction = document.querySelector('input[name="marketAction"]:checked').value;
+            if (currentAction === 'add') return;
+
+            let selectedName = document.getElementById('modalMarketSelect').value;
+            let marketObj = marketsList.find(m => m.name === selectedName);
+
+            if (marketObj && currentAction === 'edit') {
+                document.getElementById('newMarketName').value = marketObj.name;
+                document.getElementById('openTime').value = marketObj.openTime || '';
+                document.getElementById('closeTime').value = marketObj.closeTime || '';
+                let days = marketObj.workingDays || [];
+                document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
+                    cb.checked = days.includes(cb.value);
+                });
+            }
+        }
+
+        // Execute Market Action (Add, Edit, Delete)
+        document.getElementById('executeMarketActionBtn').addEventListener('click', async () => {
+            let currentAction = document.querySelector('input[name="marketAction"]:checked').value;
+            
+            if (currentAction === 'add') {
+                let name = document.getElementById('newMarketName').value.trim();
+                let openTime = document.getElementById('openTime').value;
+                let closeTime = document.getElementById('closeTime').value;
+                let workingDays = [];
+                document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => workingDays.push(cb.value));
+
+                if (!name) { alert("Please enter market name!"); return; }
+                if (marketsList.some(m => m.name.toLowerCase() === name.toLowerCase())) {
+                    alert("Duplicate market error: Market already exists!");
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, "markets"), {
+                        name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays, timestamp: serverTimestamp()
+                    });
+                    alert("Market added successfully!");
+                    modal.classList.add('hidden');
+                    loadMarkets();
+                } catch (e) { alert("Error: " + e.message); }
+
+            } else if (currentAction === 'edit') {
+                let selectedName = document.getElementById('modalMarketSelect').value;
+                let marketObj = marketsList.find(m => m.name === selectedName);
+                if (!marketObj) { alert("Please select a market to edit!"); return; }
+
+                let name = document.getElementById('newMarketName').value.trim();
+                let openTime = document.getElementById('openTime').value;
+                let closeTime = document.getElementById('closeTime').value;
+                let workingDays = [];
+                document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => workingDays.push(cb.value));
+
+                if (!name) { alert("Please enter market name!"); return; }
+
+                try {
+                    await updateDoc(doc(db, "markets", marketObj.id), {
+                        name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays
+                    });
+                    alert("Market updated successfully!");
+                    modal.classList.add('hidden');
+                    loadMarkets();
+                } catch (e) { alert("Error: " + e.message); }
+
+            } else if (currentAction === 'delete') {
+                let selectedName = document.getElementById('modalMarketSelect').value;
+                let marketObj = marketsList.find(m => m.name === selectedName);
+                if (!marketObj) { alert("Please select a market to delete!"); return; }
+
+                if (confirm(`Are you sure you want to delete market "${selectedName}"?`)) {
                     try {
                         await deleteDoc(doc(db, "markets", marketObj.id));
                         alert("Market deleted successfully!");
+                        modal.classList.add('hidden');
                         loadMarkets();
-                    } catch (error) {
-                        alert("Error deleting market: " + error.message);
-                    }
+                    } catch (e) { alert("Error: " + e.message); }
                 }
             }
         });
@@ -243,55 +371,6 @@
             }
         }
         loadMarkets();
-
-        document.getElementById('saveMarketBtn').addEventListener('click', async () => {
-            let marketId = document.getElementById('editMarketId').value;
-            let name = document.getElementById('newMarketName').value.trim();
-            let openTime = document.getElementById('openTime').value;
-            let closeTime = document.getElementById('closeTime').value;
-            
-            let workingDays = [];
-            document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => {
-                workingDays.push(cb.value);
-            });
-
-            if(!name) {
-                alert("Please enter the market name!");
-                return;
-            }
-
-            let existingMarket = marketsList.find(m => m.name.toLowerCase() === name.toLowerCase() && m.id !== marketId);
-            if (existingMarket) {
-                alert("Duplicate market error: This market name already exists!");
-                return;
-            }
-
-            try {
-                if (marketId) {
-                    await updateDoc(doc(db, "markets", marketId), {
-                        name: name,
-                        openTime: openTime,
-                        closeTime: closeTime,
-                        workingDays: workingDays
-                    });
-                    alert("Market updated successfully!");
-                } else {
-                    await addDoc(collection(db, "markets"), {
-                        name: name,
-                        openTime: openTime,
-                        closeTime: closeTime,
-                        workingDays: workingDays,
-                        timestamp: serverTimestamp()
-                    });
-                    alert("Market added successfully!");
-                }
-
-                modal.classList.add('hidden');
-                loadMarkets();
-            } catch (error) {
-                alert("Error: " + error.message);
-            }
-        });
 
         const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');
         const openLabel = document.getElementById('openLabel');
