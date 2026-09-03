@@ -135,27 +135,34 @@
                 <!-- Three Segment Cards (TOP, MID, RECENT) -->
                 <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer">
                     <!-- TOP CARD -->
-                    <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
+                    <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm flex flex-col justify-between">
                         <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>
-                        <div id="topAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
-                        <div id="topMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
-                        <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold overflow-hidden text-ellipsis whitespace-nowrap">[]</div>
+                        <div id="topMaxVal" class="text-[11px] text-slate-600 font-bold hidden">Max: 0</div>
+                        <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[10px] font-mono py-1 px-1 rounded font-bold space-y-1">
+                            <!-- 2 Rows Layout: Row 1 (3 items), Row 2 (2 items) -->
+                            <div id="topRow1" class="grid grid-cols-3 gap-0.5 text-center"></div>
+                            <div id="topRow2" class="grid grid-cols-2 gap-0.5 text-center"></div>
+                        </div>
                     </div>
 
                     <!-- MID CARD -->
-                    <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">
+                    <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm flex flex-col justify-between">
                         <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>
-                        <div id="midAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
-                        <div id="midMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
-                        <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold overflow-hidden text-ellipsis whitespace-nowrap">[]</div>
+                        <div id="midMaxVal" class="text-[11px] text-slate-600 font-bold hidden">Max: 0</div>
+                        <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-mono py-1 px-1 rounded font-bold space-y-1">
+                            <div id="midRow1" class="grid grid-cols-3 gap-0.5 text-center"></div>
+                            <div id="midRow2" class="grid grid-cols-2 gap-0.5 text-center"></div>
+                        </div>
                     </div>
 
                     <!-- RECENT CARD -->
-                    <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">
+                    <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm flex flex-col justify-between">
                         <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>
-                        <div id="recentAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
-                        <div id="recentMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
-                        <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold overflow-hidden text-ellipsis whitespace-nowrap">[]</div>
+                        <div id="recentMaxVal" class="text-[11px] text-slate-600 font-bold hidden">Max: 0</div>
+                        <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-1 rounded font-bold space-y-1">
+                            <div id="recentRow1" class="grid grid-cols-3 gap-0.5 text-center"></div>
+                            <div id="recentRow2" class="grid grid-cols-2 gap-0.5 text-center"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -643,6 +650,22 @@
         }
         loadMarkets();
 
+        // Helper function to populate card rows with 3 items in top row and 2 items in bottom row
+        function renderCardListRows(row1Elem, row2Elem, listArray) {
+            row1Elem.innerHTML = '';
+            row2Elem.innerHTML = '';
+            listArray.forEach((item, index) => {
+                let span = document.createElement('span');
+                span.className = "text-center";
+                span.innerText = item;
+                if (index < 3) {
+                    row1Elem.appendChild(span);
+                } else {
+                    row2Elem.appendChild(span);
+                }
+            });
+        }
+
         // Load and Compute Analysis Data
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
@@ -661,15 +684,18 @@
             
             const topAnkVal = document.getElementById('topAnkVal');
             const topMaxVal = document.getElementById('topMaxVal');
-            const topListContainer = document.getElementById('topListContainer');
+            const topRow1 = document.getElementById('topRow1');
+            const topRow2 = document.getElementById('topRow2');
 
             const midAnkVal = document.getElementById('midAnkVal');
             const midMaxVal = document.getElementById('midMaxVal');
-            const midListContainer = document.getElementById('midListContainer');
+            const midRow1 = document.getElementById('midRow1');
+            const midRow2 = document.getElementById('midRow2');
 
             const recentAnkVal = document.getElementById('recentAnkVal');
             const recentMaxVal = document.getElementById('recentMaxVal');
-            const recentListContainer = document.getElementById('recentListContainer');
+            const recentRow1 = document.getElementById('recentRow1');
+            const recentRow2 = document.getElementById('recentRow2');
 
             const gapGridContainer = document.getElementById('gapGridContainer');
             const gridTitleLabel = document.getElementById('gridTitleLabel');
@@ -785,19 +811,19 @@
                         let mid5 = sortedGroups.slice(5, 10);
                         let recent5 = sortedGroups.slice(10, 15);
 
-                        topAnkVal.innerText = top5[0] ? `${top5[0][0]}` : '-';
+                        // Hide main big number as requested
+                        topAnkVal.parentElement.style.display = 'none';
+                        midAnkVal.parentElement.style.display = 'none';
+                        recentAnkVal.parentElement.style.display = 'none';
+
                         topMaxVal.innerText = `Max: ${top5[0] ? top5[0][1] : 0}`;
-                        topListContainer.innerText = `[${top5.map(g => g[0]).join(', ')}]`;
-
-                        midAnkVal.innerText = mid5[0] ? `${mid5[0][0]}` : '-';
                         midMaxVal.innerText = `Max: ${mid5[0] ? mid5[0][1] : 0}`;
-                        midListContainer.innerText = `[${mid5.map(g => g[0]).join(', ')}]`;
-
-                        recentAnkVal.innerText = recent5[0] ? `${recent5[0][0]}` : '-';
                         recentMaxVal.innerText = `Max: ${recent5[0] ? recent5[0][1] : 0}`;
-                        recentListContainer.innerText = `[${recent5.map(g => g[0]).join(', ')}]`;
 
-                        // 3 rows with 5 items each (grid-cols-5)
+                        renderCardListRows(topRow1, topRow2, top5.map(g => g[0]));
+                        renderCardListRows(midRow1, midRow2, mid5.map(g => g[0]));
+                        renderCardListRows(recentRow1, recentRow2, recent5.map(g => g[0]));
+
                         gapGridContainer.innerHTML = '';
                         let gridWrapper = document.createElement('div');
                         gridWrapper.className = "grid grid-cols-5 gap-1.5 text-center";
@@ -814,6 +840,10 @@
                         gapGridContainer.appendChild(gridWrapper);
 
                     } else if (currentMoreSubView === 'FamilyPanna') {
+                        topAnkVal.parentElement.style.display = 'block';
+                        midAnkVal.parentElement.style.display = 'block';
+                        recentAnkVal.parentElement.style.display = 'block';
+
                         topCardTitle.innerText = "🔥 Family Panna";
                         midCardTitle.innerText = "💠 Unique";
                         recentCardTitle.innerText = "⚡ Stats";
@@ -826,19 +856,23 @@
 
                         topAnkVal.innerText = sortedFam.length > 0 ? sortedFam[0][0] : '-';
                         topMaxVal.innerText = `Max: ${sortedFam.length > 0 ? sortedFam[0][1] : 0}`;
-                        topListContainer.innerText = `[Top Families]`;
+                        topRow1.innerHTML = ''; topRow2.innerHTML = '';
 
                         midAnkVal.innerText = Object.keys(famCounts).length;
                         midMaxVal.innerText = "Max: Active";
-                        midListContainer.innerText = `[Unique Groups]`;
+                        midRow1.innerHTML = ''; midRow2.innerHTML = '';
 
                         recentAnkVal.innerText = sortedFam.length > 1 ? sortedFam[1][0] : '-';
                         recentMaxVal.innerText = `Max: ${sortedFam.length > 1 ? sortedFam[1][1] : 0}`;
-                        recentListContainer.innerText = `[2nd Family]`;
+                        recentRow1.innerHTML = ''; recentRow2.innerHTML = '';
 
                         gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">Family Panna Group Statistics Active</div>';
 
                     } else if (currentMoreSubView === 'OddEven') {
+                        topAnkVal.parentElement.style.display = 'block';
+                        midAnkVal.parentElement.style.display = 'block';
+                        recentAnkVal.parentElement.style.display = 'block';
+
                         topCardTitle.innerText = "🔥 Odd Count";
                         midCardTitle.innerText = "💠 Even Count";
                         recentCardTitle.innerText = "⚡ Ratio";
@@ -857,15 +891,15 @@
 
                         topAnkVal.innerText = oddCount;
                         topMaxVal.innerText = `Max: ${oddPct}%`;
-                        topListContainer.innerText = `[Odd Stats]`;
+                        topRow1.innerHTML = ''; topRow2.innerHTML = '';
 
                         midAnkVal.innerText = evenCount;
                         midMaxVal.innerText = `Max: ${evenPct}%`;
-                        midListContainer.innerText = `[Even Stats]`;
+                        midRow1.innerHTML = ''; midRow2.innerHTML = '';
 
                         recentAnkVal.innerText = `${oddPct}:${evenPct}`;
                         recentMaxVal.innerText = "Max: Ratio";
-                        recentListContainer.innerText = `[Comparative]`;
+                        recentRow1.innerHTML = ''; recentRow2.innerHTML = '';
 
                         gapGridContainer.innerHTML = `
                             <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">
@@ -875,6 +909,10 @@
                         `;
 
                     } else if (currentMoreSubView === 'PanelType') {
+                        topAnkVal.parentElement.style.display = 'block';
+                        midAnkVal.parentElement.style.display = 'block';
+                        recentAnkVal.parentElement.style.display = 'block';
+
                         topCardTitle.innerText = "🔥 Single (SP)";
                         midCardTitle.innerText = "💠 Double (DP)";
                         recentCardTitle.innerText = "⚡ Triple (TP)";
@@ -888,15 +926,15 @@
 
                         topAnkVal.innerText = spCount;
                         topMaxVal.innerText = "Max: SP";
-                        topListContainer.innerText = `[Single Panna]`;
+                        topRow1.innerHTML = ''; topRow2.innerHTML = '';
 
                         midAnkVal.innerText = dpCount;
                         midMaxVal.innerText = "Max: DP";
-                        midListContainer.innerText = `[Double Panna]`;
+                        midRow1.innerHTML = ''; midRow2.innerHTML = '';
 
                         recentAnkVal.innerText = tpCount;
                         recentMaxVal.innerText = "Max: TP";
-                        recentListContainer.innerText = `[Triple Panna]`;
+                        recentRow1.innerHTML = ''; recentRow2.innerHTML = '';
 
                         gapGridContainer.innerHTML = `
                             <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">
@@ -907,6 +945,10 @@
                     }
                     return;
                 } else {
+                    topAnkVal.parentElement.style.display = 'block';
+                    midAnkVal.parentElement.style.display = 'block';
+                    recentAnkVal.parentElement.style.display = 'block';
+
                     topCardTitle.innerText = "🔥 TOP";
                     midCardTitle.innerText = "💠 MID";
                     recentCardTitle.innerText = "⚡ RECENT";
@@ -977,15 +1019,18 @@
 
                 topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;
                 topMaxVal.innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;
-                topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`;
+                topRow1.innerHTML = ''; topRow2.innerHTML = '';
+                topRow1.innerText = `[${top4.map(i => i.ank).join(',')}]`;
 
                 midAnkVal.innerText = mid2[0] ? mid2[0].currentDelay : 0;
                 midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
-                midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
+                midRow1.innerHTML = ''; midRow2.innerHTML = '';
+                midRow1.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
 
                 recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
-                recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
+                recentRow1.innerHTML = ''; recentRow2.innerHTML = '';
+                recentRow1.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
 
                 gapGridContainer.innerHTML = '';
                 for (let i = 0; i <= 9; i++) {
