@@ -137,7 +137,7 @@
                     <!-- TOP CARD -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>
-                        <div id="topAnkVal" class="text-sm font-black text-slate-800 truncate hidden">0</div>
+                        <div id="topAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
                         <div id="topMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
                         <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>
                     </div>
@@ -145,7 +145,7 @@
                     <!-- MID CARD -->
                     <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>
-                        <div id="midAnkVal" class="text-sm font-black text-slate-800 truncate hidden">0</div>
+                        <div id="midAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
                         <div id="midMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
                         <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>
                     </div>
@@ -153,7 +153,7 @@
                     <!-- RECENT CARD -->
                     <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>
-                        <div id="recentAnkVal" class="text-sm font-black text-slate-800 truncate hidden">0</div>
+                        <div id="recentAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
                         <div id="recentMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
                         <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>
                     </div>
@@ -835,31 +835,33 @@
                         let usedGroups = new Set([...recent5.map(r => r.group), ...top5.map(t => t.group)]);
                         let midGroups = listArr.filter(item => !usedGroups.has(item.group));
 
-                        topAnkVal.className = "hidden";
-                        midAnkVal.className = "hidden";
-                        recentAnkVal.className = "hidden";
+                        topAnkVal.className = "text-sm font-black text-slate-800 truncate";
+                        midAnkVal.className = "text-sm font-black text-slate-800 truncate";
+                        recentAnkVal.className = "text-sm font-black text-slate-800 truncate";
 
-                        let calculateCombinedDelay = (groupKeys) => {
-                            let minDelay = totalLen;
-                            groupKeys.forEach(gKey => {
-                                let occs = groupStats[gKey].occurrences;
-                                let d = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1];
-                                if (d < minDelay) minDelay = d;
-                            });
-                            return minDelay;
-                        };
+                        topListContainer.classList.remove('hidden');
+                        midListContainer.classList.remove('hidden');
+                        recentListContainer.classList.remove('hidden');
 
-                        let topDelay = calculateCombinedDelay(top5.map(x => x.group));
-                        let midDelay = calculateCombinedDelay(midGroups.map(x => x.group));
-                        let recentDelay = calculateCombinedDelay(recent5.map(x => x.group));
+                        let topCurrDelay = top5[0] ? top5[0].currentDelay : 0;
+                        let midCurrDelay = midGroups[0] ? midGroups[0].currentDelay : 0;
+                        let recentCurrDelay = recent5[0] ? recent5[0].currentDelay : 0;
 
-                        topMaxVal.innerHTML = `<span class="text-xs font-bold text-orange-700">Delay: ${topDelay} | [${top5.map(x => x.group).join(', ')}]</span>`;
-                        midMaxVal.innerHTML = `<span class="text-xs font-bold text-indigo-700">Delay: ${midDelay} | [${midGroups.map(x => x.group).join(', ')}]</span>`;
-                        recentMaxVal.innerHTML = `<span class="text-xs font-bold text-emerald-700">Delay: ${recentDelay} | [${recent5.map(x => x.group).join(', ')}]</span>`;
+                        let topMaxD = top5[0] ? top5[0].maxDelay : 0;
+                        let midMaxD = midGroups[0] ? midGroups[0].maxDelay : 0;
+                        let recentMaxD = recent5[0] ? recent5[0].maxDelay : 0;
 
-                        topListContainer.classList.add("hidden");
-                        midListContainer.classList.add("hidden");
-                        recentListContainer.classList.add("hidden");
+                        topAnkVal.innerText = topCurrDelay;
+                        topMaxVal.innerText = `Max: ${topMaxD}`;
+                        topListContainer.innerText = `[${top5.map(x => x.group).join(', ')}]`;
+
+                        midAnkVal.innerText = midCurrDelay;
+                        midMaxVal.innerText = `Max: ${midMaxD}`;
+                        midListContainer.innerText = `[${midGroups.map(x => x.group).join(', ')}]`;
+
+                        recentAnkVal.innerText = recentCurrDelay;
+                        recentMaxVal.innerText = `Max: ${recentMaxD}`;
+                        recentListContainer.innerText = `[${recent5.map(x => x.group).join(', ')}]`;
 
                         gapGridContainer.innerHTML = '';
                         let gridWrapper = document.createElement('div');
