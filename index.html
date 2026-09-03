@@ -88,20 +88,31 @@
             </form>
         </div>
 
-        <!-- ANALYSIS SECTION (Merged & Individual Market Options) -->
+        <!-- ANALYSIS SECTION (With Toggle Switch for Selected Market vs Merged) -->
         <div id="analysisSection" class="hidden space-y-4 w-full">
             <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market</label>
-                        <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800">
-                            <option value="merged">All Markets (Merged)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Month</label>
-                        <input type="month" id="analysisMonthSelect" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:outline-none bg-white font-semibold text-slate-800">
-                    </div>
+                <!-- Analysis Type Toggle Switch (Selected Market vs Merged) -->
+                <div class="flex bg-slate-200 p-1 rounded-lg">
+                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected">
+                        <input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market
+                    </label>
+                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-tab text-slate-700" id="analysisTabMerged">
+                        <input type="radio" name="analysisType" value="merged" class="hidden"> Merged
+                    </label>
+                </div>
+
+                <!-- Conditional Market Dropdown (Visible only when 'Selected Market' is active) -->
+                <div id="analysisMarketContainer" class="space-y-1">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Select Market</label>
+                    <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800">
+                        <option value="">Select Market</option>
+                    </select>
+                </div>
+
+                <!-- Month Filter -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Month Filter</label>
+                    <input type="month" id="analysisMonthSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800">
                 </div>
                 
                 <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center space-y-2 mt-2">
@@ -111,7 +122,7 @@
 
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2 text-sm text-slate-700">
                     <p class="font-bold text-slate-800">📊 Quick Insights:</p>
-                    <p id="analysisSummaryText" class="text-xs text-slate-600 leading-relaxed">Select a market option (Merged or Individual) and month above to analyze your logged records.</p>
+                    <p id="analysisSummaryText" class="text-xs text-slate-600 leading-relaxed">Toggle between Selected Market and Merged view to analyze your records.</p>
                 </div>
             </div>
         </div>
@@ -251,6 +262,28 @@
             navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
             navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
             loadAnalysisData();
+        });
+
+        // Analysis Type Toggle Logic (Selected Market vs Merged)
+        const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]');
+        const analysisMarketContainer = document.getElementById('analysisMarketContainer');
+
+        analysisTypeRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const val = e.target.value;
+                document.querySelectorAll('.analysis-tab').forEach(tab => {
+                    tab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-tab text-slate-700";
+                });
+                const activeTab = document.getElementById(`analysisTab${val.charAt(0).toUpperCase() + val.slice(1)}`);
+                activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-tab bg-indigo-600 text-white shadow-sm";
+
+                if (val === 'selected') {
+                    analysisMarketContainer.classList.remove('hidden');
+                } else {
+                    analysisMarketContainer.classList.add('hidden');
+                }
+                loadAnalysisData();
+            });
         });
 
         function showCustomAlert(title, message, type = 'success') {
@@ -482,7 +515,7 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "markets"));
                 marketDropdown.innerHTML = '<option value="">Select Market</option>';
-                analysisMarketSelect.innerHTML = '<option value="merged">All Markets (Merged)</option>';
+                analysisMarketSelect.innerHTML = '<option value="">Select Market</option>';
                 marketsList = [];
                 
                 querySnapshot.forEach((docSnap) => {
@@ -522,6 +555,7 @@
         loadMarkets();
 
         async function loadAnalysisData() {
+            const analysisType = document.querySelector('input[name="analysisType"]:checked').value; // 'selected' or 'merged'
             const selectedMarket = document.getElementById('analysisMarketSelect').value;
             const selectedMonth = document.getElementById('analysisMonthSelect').value;
             const countBox = document.getElementById('totalRecordsCount');
@@ -535,7 +569,11 @@
                     let data = docSnap.data();
                     let recordDate = data.date;
                     
-                    let matchMarket = (selectedMarket === 'merged') || (data.marketName === selectedMarket);
+                    let matchMarket = true;
+                    if (analysisType === 'selected') {
+                        matchMarket = selectedMarket && (data.marketName === selectedMarket);
+                    }
+                    
                     let matchMonth = !selectedMonth || (recordDate && recordDate.startsWith(selectedMonth));
 
                     if (matchMarket && matchMonth) {
@@ -544,9 +582,9 @@
                 });
 
                 countBox.innerText = total;
-                let marketLabel = (selectedMarket === 'merged') ? "All Markets (Merged)" : selectedMarket;
+                let modeLabel = (analysisType === 'merged') ? "All Markets (Merged)" : (selectedMarket || "None Selected");
                 let monthLabel = selectedMonth ? `for month ${selectedMonth}` : "for all time";
-                summaryText.innerText = `Showing records analysis for ${marketLabel} (${monthLabel}). Total logged entries: ${total}.`;
+                summaryText.innerText = `Showing records analysis for ${modeLabel} (${monthLabel}). Total logged entries: ${total}.`;
             } catch (e) {
                 console.log("Analysis load error:", e);
                 countBox.innerText = "0";
