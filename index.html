@@ -602,7 +602,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Hit Reset (0 delay when hit) & Total/Diff Calculation
+        // Load and Compute Analysis Data with Hit Reset & Proper Total/Diff Logic
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -674,10 +674,10 @@
                     } else if (currentAnalysisView === 'Close' && closeVal !== undefined) {
                         targetAnk = closeVal;
                     } else if (currentAnalysisView === 'Total' && openVal !== undefined && closeVal !== undefined) {
-                        // Total Calculation rule: (Open + Close) % 10 (Last digit)
+                        // Total rule: (Open + Close) % 10 (Last digit of sum)
                         targetAnk = (openVal + closeVal) % 10;
                     } else if (currentAnalysisView === 'Diff' && openVal !== undefined && closeVal !== undefined) {
-                        // Difference Calculation rule: |Open - Close| % 10 (or absolute difference last digit)
+                        // Diff rule: Absolute difference last digit or modulo 10
                         let diff = Math.abs(openVal - closeVal);
                         targetAnk = diff % 10;
                     }
@@ -718,7 +718,7 @@
                         currentDelay = totalLen;
                         maxDelay = totalLen;
                     } else {
-                        // When hit (appears), current delay resets/counts from last occurrence to total length
+                        // When hit, delay resets to 0 from the last appearance
                         currentDelay = totalLen - 1 - occs[occs.length - 1];
 
                         let gaps = [];
