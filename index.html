@@ -599,7 +599,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Chronological Timing & More Panel Support
+        // Load and Compute Analysis Data with Total Calculation and More Panel Features
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -664,19 +664,17 @@
                             if (data.openAnk !== undefined && data.closeAnk !== undefined) {
                                 targetVal = Math.abs(parseInt(data.openAnk) - parseInt(data.closeAnk)) % 10;
                             }
-                        } else if (currentAnalysisView === 'More') {
-                            // Example for More view: Family group or panel type tracking
-                            if (data.openFamilyGroup) {
-                                targetVal = data.openFamilyGroup;
-                            }
                         }
 
-                        if (targetVal !== null && !isNaN(targetVal) || currentAnalysisView === 'More' && targetVal) {
+                        if (targetVal !== null && !isNaN(targetVal)) {
                             records.push({
                                 date: data.date,
                                 marketName: data.marketName,
                                 openTime: openTime,
-                                val: targetVal
+                                val: targetVal,
+                                openFamily: data.openFamilyGroup || '-',
+                                closeFamily: data.closeFamilyGroup || '-',
+                                openType: data.openType || '-'
                             });
                         }
                     }
@@ -691,20 +689,43 @@
 
                 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`;
 
+                // More View Feature (Family Groups, Odd/Even, Panel Types)
                 if (currentAnalysisView === 'More') {
                     topCardTitle.innerText = "🔥 Family Groups";
                     midCardTitle.innerText = "💠 Odd / Even";
                     recentCardTitle.innerText = "⚡ Panel Stats";
-                    topAnkVal.innerText = "-";
+                    
+                    let familyCounts = {};
+                    let oddCount = 0, evenCount = 0;
+                    let spCount = 0, dpCount = 0, tpCount = 0;
+
+                    records.forEach(r => {
+                        if (r.openFamily) familyCounts[r.openFamily] = (familyCounts[r.openFamily] || 0) + 1;
+                        if (r.val !== null) {
+                            if (r.val % 2 === 0) evenCount++;
+                            else oddCount++;
+                        }
+                        if (r.openType.includes("SP")) spCount++;
+                        else if (r.openType.includes("DP")) dpCount++;
+                        else if (r.openType.includes("TP")) tpCount++;
+                    });
+
+                    topAnkVal.innerText = Object.keys(familyCounts).length;
                     topMaxVal.innerText = "Active";
-                    topListContainer.innerText = "[Family Analysis]";
-                    midAnkVal.innerText = "Odd/Even";
+                    topListContainer.innerText = `[${Object.keys(familyCounts).slice(0, 3).join(', ')}]`;
+
+                    let totalOddEven = oddCount + evenCount;
+                    let oddPct = totalOddEven > 0 ? Math.round((oddCount / totalOddEven) * 100) : 0;
+                    let evenPct = totalOddEven > 0 ? Math.round((evenCount / totalOddEven) * 100) : 0;
+                    midAnkVal.innerText = `${oddPct}% / ${evenPct}%`;
                     midMaxVal.innerText = "Ratio";
-                    midListContainer.innerText = "[Odd: 50%, Even: 50%]";
-                    recentAnkVal.innerText = "SP/DP";
-                    recentMaxVal.innerText = "Types";
-                    recentListContainer.innerText = "[SP, DP, TP]";
-                    gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">More Panel Custom Analysis Active</div>';
+                    midListContainer.innerText = `[Odd: ${oddCount}, Even: ${evenCount}]`;
+
+                    recentAnkVal.innerText = `SP:${spCount}`;
+                    recentMaxVal.innerText = `DP:${dpCount} TP:${tpCount}`;
+                    recentListContainer.innerText = `[Single/Double/Triple]`;
+
+                    gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">More Panel Custom Analysis Active (Family & Odd/Even)</div>';
                     return;
                 } else {
                     topCardTitle.innerText = "🔥 TOP";
@@ -1002,7 +1023,6 @@
                     recordData.closeType = detectedPanelType;
                 }
 
-                // Using setDoc with merge to avoid race conditions and handle both sessions cleanly
                 await setDoc(docRef, recordData, { merge: true });
                 showCustomAlert("Success", "Record saved successfully!");
 
