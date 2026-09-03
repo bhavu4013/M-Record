@@ -269,7 +269,7 @@
 
         let marketsList = [];
         const modal = document.getElementById('marketModal');
-        let currentAnalysisView = 'Open'; // Default view
+        let currentAnalysisView = 'Open';
 
         // Navigation Switcher Logic
         const navLoggerBtn = document.getElementById('navLoggerBtn');
@@ -602,7 +602,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data dynamically based on currentAnalysisView (Open, Close, Total, Diff)
+        // Load and Compute Analysis Data with Combined Open & Close Logic for Total/Diff
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -642,33 +642,50 @@
 
             try {
                 const querySnapshot = await getDocs(collection(db, "matka_records"));
-                let records = [];
+                let rawRecords = {};
 
                 querySnapshot.forEach((docSnap) => {
                     let data = docSnap.data();
                     let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket);
-                    if (matchMarket) {
-                        let targetAnk = null;
-                        
-                        if (currentAnalysisView === 'Open' && data.openAnk !== undefined) {
-                            targetAnk = parseInt(data.openAnk);
-                        } else if (currentAnalysisView === 'Close' && data.closeAnk !== undefined) {
-                            targetAnk = parseInt(data.closeAnk);
-                        } else if (currentAnalysisView === 'Total' && data.openAnk !== undefined && data.closeAnk !== undefined) {
-                            targetAnk = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10;
-                        } else if (currentAnalysisView === 'Diff' && data.openAnk !== undefined && data.closeAnk !== undefined) {
-                            let diff = Math.abs(parseInt(data.openAnk) - parseInt(data.closeAnk));
-                            targetAnk = diff % 10;
+                    if (matchMarket && data.date && data.marketName) {
+                        let key = `${data.date}_${data.marketName}`;
+                        if (!rawRecords[key]) {
+                            rawRecords[key] = { date: data.date, marketName: data.marketName };
                         }
+                        if (data.session === 'Open' && data.openAnk !== undefined) {
+                            rawRecords[key].openAnk = parseInt(data.openAnk);
+                        }
+                        if (data.session === 'Close' && data.closeAnk !== undefined) {
+                            rawRecords[key].closeAnk = parseInt(data.closeAnk);
+                        }
+                        if (data.openAnk !== undefined) rawRecords[key].openAnk = parseInt(data.openAnk);
+                        if (data.closeAnk !== undefined) rawRecords[key].closeAnk = parseInt(data.closeAnk);
+                    }
+                });
 
-                        if (targetAnk !== null && !isNaN(targetAnk)) {
-                            records.push({
-                                date: data.date,
-                                marketName: data.marketName,
-                                ank: targetAnk,
-                                timestamp: data.timestamp
-                            });
-                        }
+                let records = [];
+                Object.values(rawRecords).forEach(rec => {
+                    let targetAnk = null;
+                    let openVal = rec.openAnk;
+                    let closeVal = rec.closeAnk;
+
+                    if (currentAnalysisView === 'Open' && openVal !== undefined) {
+                        targetAnk = openVal;
+                    } else if (currentAnalysisView === 'Close' && closeVal !== undefined) {
+                        targetAnk = closeVal;
+                    } else if (currentAnalysisView === 'Total' && openVal !== undefined && closeVal !== undefined) {
+                        targetAnk = (openVal + closeVal) % 10;
+                    } else if (currentAnalysisView === 'Diff' && openVal !== undefined && closeVal !== undefined) {
+                        let diff = Math.abs(openVal - closeVal);
+                        targetAnk = diff % 10;
+                    }
+
+                    if (targetAnk !== null && !isNaN(targetAnk)) {
+                        records.push({
+                            date: rec.date,
+                            marketName: rec.marketName,
+                            ank: targetAnk
+                        });
                     }
                 });
 
