@@ -129,30 +129,30 @@
                     <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span>
                 </div>
 
-                <!-- Three Segment Cards (TOP: 4/5, MID: 2/5, RECENT: 4/5) -->
+                <!-- Three Segment Cards (TOP, MID, RECENT) -->
                 <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer">
                     <!-- TOP CARD -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>
-                        <div id="topAnkVal" class="text-xl font-black text-slate-800">0</div>
-                        <div id="topMaxVal" class="text-xs text-slate-600 font-bold">Max: 0</div>
-                        <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
+                        <div id="topAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
+                        <div id="topMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
+                        <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold overflow-hidden text-ellipsis whitespace-nowrap">[]</div>
                     </div>
 
                     <!-- MID CARD -->
                     <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>
-                        <div id="midAnkVal" class="text-xl font-black text-slate-800">0</div>
-                        <div id="midMaxVal" class="text-xs text-slate-600 font-bold">Max: 0</div>
-                        <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
+                        <div id="midAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
+                        <div id="midMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
+                        <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold overflow-hidden text-ellipsis whitespace-nowrap">[]</div>
                     </div>
 
                     <!-- RECENT CARD -->
                     <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>
-                        <div id="recentAnkVal" class="text-xl font-black text-slate-800">0</div>
-                        <div id="recentMaxVal" class="text-xs text-slate-600 font-bold">Max: 0</div>
-                        <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
+                        <div id="recentAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>
+                        <div id="recentMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>
+                        <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold overflow-hidden text-ellipsis whitespace-nowrap">[]</div>
                     </div>
                 </div>
 
@@ -640,7 +640,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Total Calculation and More Panel Features
+        // Load and Compute Analysis Data
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -721,15 +721,12 @@
                                 closeAnk: data.closeAnk,
                                 openFamily: data.openFamilyGroup || '-',
                                 closeFamily: data.closeFamilyGroup || '-',
-                                openPana: data.openPana || '',
-                                closePana: data.closePana || '',
                                 openType: data.openType || '-'
                             });
                         }
                     }
                 });
 
-                // Chronological sorting by date and market opening time
                 records.sort((a, b) => {
                     let dateComp = new Date(a.date) - new Date(b.date);
                     if (dateComp !== 0) return dateComp;
@@ -743,8 +740,8 @@
                     gridTitleLabel.innerText = `📊 More Analysis (${currentMoreSubView}):`;
 
                     if (currentMoreSubView === 'FamilyJodi') {
-                        topCardTitle.innerText = "🔥 TOP 5 FAMILIES";
-                        midCardTitle.innerText = "💠 MID 5 FAMILIES";
+                        topCardTitle.innerText = "🔥 TOP 5";
+                        midCardTitle.innerText = "💠 MID 5";
                         recentCardTitle.innerText = "⚡ RECENT 5";
 
                         const familyGroupsMap = {
@@ -785,16 +782,16 @@
                         let mid5 = sortedGroups.slice(5, 10);
                         let recent5 = sortedGroups.slice(10, 15);
 
-                        topAnkVal.innerText = top5[0] ? top5[0][0] : '-';
-                        topMaxVal.innerText = `Count: ${top5[0] ? top5[0][1] : 0}`;
+                        topAnkVal.innerText = top5[0] ? `Grp ${top5[0][0]}` : '-';
+                        topMaxVal.innerText = `Max: ${top5[0] ? top5[0][1] : 0}`;
                         topListContainer.innerText = `[${top5.map(g => g[0]).join(', ')}]`;
 
-                        midAnkVal.innerText = mid5[0] ? mid5[0][0] : '-';
-                        midMaxVal.innerText = `Count: ${mid5[0] ? mid5[0][1] : 0}`;
+                        midAnkVal.innerText = mid5[0] ? `Grp ${mid5[0][0]}` : '-';
+                        midMaxVal.innerText = `Max: ${mid5[0] ? mid5[0][1] : 0}`;
                         midListContainer.innerText = `[${mid5.map(g => g[0]).join(', ')}]`;
 
-                        recentAnkVal.innerText = recent5[0] ? recent5[0][0] : '-';
-                        recentMaxVal.innerText = `Count: ${recent5[0] ? recent5[0][1] : 0}`;
+                        recentAnkVal.innerText = recent5[0] ? `Grp ${recent5[0][0]}` : '-';
+                        recentMaxVal.innerText = `Max: ${recent5[0] ? recent5[0][1] : 0}`;
                         recentListContainer.innerText = `[${recent5.map(g => g[0]).join(', ')}]`;
 
                         gapGridContainer.innerHTML = '';
@@ -803,7 +800,7 @@
                             card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
                             card.innerHTML = `
                                 <div class="text-xs font-bold text-slate-500">Group ${group}</div>
-                                <div class="text-sm font-extrabold text-indigo-600">${cnt} Hits</div>
+                                <div class="text-sm font-extrabold text-indigo-600">${cnt}</div>
                             `;
                             gapGridContainer.appendChild(card);
                         });
@@ -820,15 +817,15 @@
                         let sortedFam = Object.entries(famCounts).sort((a, b) => b[1] - a[1]);
 
                         topAnkVal.innerText = sortedFam.length > 0 ? sortedFam[0][0] : '-';
-                        topMaxVal.innerText = `Count: ${sortedFam.length > 0 ? sortedFam[0][1] : 0}`;
-                        topListContainer.innerText = `[Top Panna Families]`;
+                        topMaxVal.innerText = `Max: ${sortedFam.length > 0 ? sortedFam[0][1] : 0}`;
+                        topListContainer.innerText = `[Top Families]`;
 
                         midAnkVal.innerText = Object.keys(famCounts).length;
-                        midMaxVal.innerText = "Groups";
-                        midListContainer.innerText = `[Active Families]`;
+                        midMaxVal.innerText = "Max: Active";
+                        midListContainer.innerText = `[Unique Groups]`;
 
                         recentAnkVal.innerText = sortedFam.length > 1 ? sortedFam[1][0] : '-';
-                        recentMaxVal.innerText = `Count: ${sortedFam.length > 1 ? sortedFam[1][1] : 0}`;
+                        recentMaxVal.innerText = `Max: ${sortedFam.length > 1 ? sortedFam[1][1] : 0}`;
                         recentListContainer.innerText = `[2nd Family]`;
 
                         gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">Family Panna Group Statistics Active</div>';
@@ -851,15 +848,15 @@
                         let evenPct = total > 0 ? Math.round((evenCount / total) * 100) : 0;
 
                         topAnkVal.innerText = oddCount;
-                        topMaxVal.innerText = `${oddPct}%`;
+                        topMaxVal.innerText = `Max: ${oddPct}%`;
                         topListContainer.innerText = `[Odd Stats]`;
 
                         midAnkVal.innerText = evenCount;
-                        midMaxVal.innerText = `${evenPct}%`;
+                        midMaxVal.innerText = `Max: ${evenPct}%`;
                         midListContainer.innerText = `[Even Stats]`;
 
                         recentAnkVal.innerText = `${oddPct}:${evenPct}`;
-                        recentMaxVal.innerText = "Ratio";
+                        recentMaxVal.innerText = "Max: Ratio";
                         recentListContainer.innerText = `[Comparative]`;
 
                         gapGridContainer.innerHTML = `
@@ -882,15 +879,15 @@
                         });
 
                         topAnkVal.innerText = spCount;
-                        topMaxVal.innerText = "Panel Type";
+                        topMaxVal.innerText = "Max: SP";
                         topListContainer.innerText = `[Single Panna]`;
 
                         midAnkVal.innerText = dpCount;
-                        midMaxVal.innerText = "Panel Type";
+                        midMaxVal.innerText = "Max: DP";
                         midListContainer.innerText = `[Double Panna]`;
 
                         recentAnkVal.innerText = tpCount;
-                        recentMaxVal.innerText = "Panel Type";
+                        recentMaxVal.innerText = "Max: TP";
                         recentListContainer.innerText = `[Triple Panna]`;
 
                         gapGridContainer.innerHTML = `
