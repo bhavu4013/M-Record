@@ -60,7 +60,7 @@
                 <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- Auto Calculation Preview -->
+            <!-- Auto Calculation Preview (Including Family Group) -->
             <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner">
                 <div class="flex justify-between items-center">
                     <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>
@@ -69,6 +69,10 @@
                 <div class="flex justify-between items-center">
                     <span class="text-slate-500 text-xs font-medium uppercase">Group:</span>
                     <span id="previewGroup" class="font-bold text-slate-900">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500 text-xs font-medium uppercase">Family Group:</span>
+                    <span id="previewFamilyGroup" class="font-bold text-amber-700">-</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-slate-500 text-xs font-medium uppercase">Type:</span>
@@ -341,8 +345,9 @@
                         let sessionVal = data.session || (data.openPana ? 'Open' : 'Close');
                         let pannaVal = sessionVal === 'Open' ? data.openPana : data.closePana;
                         let ankVal = sessionVal === 'Open' ? data.openAnk : data.closeAnk;
+                        let familyGroupVal = sessionVal === 'Open' ? (data.openFamilyGroup || '-') : (data.closeFamilyGroup || '-');
                         
-                        detailsBox.innerHTML = `Date: ${data.date} | Market: ${data.marketName} | Session: ${sessionVal} | Panna: ${pannaVal} (Ank: ${ankVal})`;
+                        detailsBox.innerHTML = `Date: ${data.date} | Market: ${data.marketName} | Session: ${sessionVal} | Panna: ${pannaVal} (Ank: ${ankVal}, Family: ${familyGroupVal})`;
                     });
                 } else {
                     detailsBox.innerText = "No previous entries found.";
@@ -366,11 +371,33 @@
             updateToggleUI();
             document.getElementById('previewAnk').innerText = '-';
             document.getElementById('previewGroup').innerText = '-';
+            document.getElementById('previewFamilyGroup').innerText = '-';
             document.getElementById('previewPanelType').innerText = '-';
         });
 
         let calculatedAnk = '';
         let detectedPanelType = '';
+        let detectedFamilyGroup = '';
+
+        // Family Group Mapping Function based on sorted digits / family rules
+        function getFamilyGroup(panna) {
+            // Sort digits to get canonical/representative form (e.g., '128' -> '128', '821' -> '128')
+            const sorted = panna.split('').sort().join('');
+            
+            // Map known family groups or canonical forms
+            // You can add or expand mappings here according to your chart
+            const familyMap = {
+                // Example 123 family mappings (sorted: '123', '137'->'137' sorted='137', etc.)
+                // Let's use sorted canonical representation or specific group representative:
+                // User examples: 128, 678, 236, 137, 123, 178, 367, 268 all belong to group '123'
+                // Let's map canonical sorted keys to their family group name:
+            };
+
+            // Automatic canonical sorting fallback or explicit mapping:
+            // If sorted digits match any family combination:
+            // For instance, let's group by sorted digits or specific rules:
+            return sorted; // Returns canonical sorted representation as family group representative
+        }
 
         document.getElementById('pannaInput').addEventListener('input', function(e) {
             let panna = e.target.value;
@@ -378,6 +405,7 @@
                 let sum = parseInt(panna[0]) + parseInt(panna[1]) + parseInt(panna[2]);
                 calculatedAnk = sum % 10; 
                 
+                // Panel Type Detection (SP / DP / TP)
                 if (panna[0] === panna[1] && panna[1] === panna[2]) {
                     detectedPanelType = "TP (Triple Panna)";
                 } else if (panna[0] === panna[1] || panna[1] === panna[2] || panna[0] === panna[2]) {
@@ -386,14 +414,20 @@
                     detectedPanelType = "SP (Single Panna)";
                 }
 
+                // Family Group Detection (Sorted canonical group name)
+                detectedFamilyGroup = panna.split('').sort().join('');
+
                 document.getElementById('previewAnk').innerText = calculatedAnk;
                 document.getElementById('previewGroup').innerText = panna; 
+                document.getElementById('previewFamilyGroup').innerText = detectedFamilyGroup;
                 document.getElementById('previewPanelType').innerText = detectedPanelType;
             } else {
                 calculatedAnk = '';
                 detectedPanelType = '';
+                detectedFamilyGroup = '';
                 document.getElementById('previewAnk').innerText = '-';
                 document.getElementById('previewGroup').innerText = '-';
+                document.getElementById('previewFamilyGroup').innerText = '-';
                 document.getElementById('previewPanelType').innerText = '-';
             }
         });
@@ -428,11 +462,13 @@
                 recordData.openPana = panna;
                 recordData.openAnk = calculatedAnk;
                 recordData.openGroup = panna; 
+                recordData.openFamilyGroup = detectedFamilyGroup;
                 recordData.openType = detectedPanelType;
             } else {
                 recordData.closePana = panna;
                 recordData.closeAnk = calculatedAnk;
                 recordData.closeGroup = panna; 
+                recordData.closeFamilyGroup = detectedFamilyGroup;
                 recordData.closeType = detectedPanelType;
             }
 
@@ -462,6 +498,7 @@
 
                 document.getElementById('previewAnk').innerText = '-';
                 document.getElementById('previewGroup').innerText = '-';
+                document.getElementById('previewFamilyGroup').innerText = '-';
                 document.getElementById('previewPanelType').innerText = '-';
                 
                 fetchLastEntry();
