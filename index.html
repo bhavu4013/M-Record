@@ -110,11 +110,11 @@
 
                 <!-- Minimal Segmented Pill Filters (Open, Close, Total, Diff, More) -->
                 <div class="grid grid-cols-5 gap-1 text-xs font-bold">
-                    <button class="bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center">Open</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Close</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Total</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">Diff</button>
-                    <button class="bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300">More ▾</button>
+                    <button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button>
+                    <button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button>
+                    <button type="button" data-view="Total" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Total</button>
+                    <button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button>
+                    <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button>
                 </div>
 
                 <!-- Header Info Bar -->
@@ -123,9 +123,9 @@
                     <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span>
                 </div>
 
-                <!-- Three Segment Cards (TOP, MID, RECENT) - Dots Removed -->
+                <!-- Three Segment Cards (TOP: 4, MID: 2, RECENT: 4) -->
                 <div class="grid grid-cols-3 gap-2 text-center">
-                    <!-- TOP CARD -->
+                    <!-- TOP CARD (4 Digits) -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-orange-600 font-extrabold text-xs">🔥 TOP</div>
                         <div id="topAnkVal" class="text-xl font-black text-slate-800">0</div>
@@ -133,7 +133,7 @@
                         <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
                     </div>
 
-                    <!-- MID CARD -->
+                    <!-- MID CARD (2 Digits) -->
                     <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-indigo-600 font-extrabold text-xs">💠 MID</div>
                         <div id="midAnkVal" class="text-xl font-black text-slate-800">0</div>
@@ -141,7 +141,7 @@
                         <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
                     </div>
 
-                    <!-- RECENT CARD -->
+                    <!-- RECENT CARD (4 Digits) -->
                     <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-emerald-600 font-extrabold text-xs">⚡ RECENT</div>
                         <div id="recentAnkVal" class="text-xl font-black text-slate-800">0</div>
@@ -152,7 +152,7 @@
 
                 <!-- GAP GRID SECTION (0 to 9 numbers grid) -->
                 <div class="space-y-1 pt-1">
-                    <div class="text-xs font-bold text-slate-600">📊 Gap:</div>
+                    <div class="text-xs font-bold text-slate-600" id="gridTitleLabel">📊 Gap:</div>
                     <div id="gapGridContainer" class="grid grid-cols-5 gap-1.5 text-center">
                         <!-- Grid items injected dynamically -->
                     </div>
@@ -269,6 +269,7 @@
 
         let marketsList = [];
         const modal = document.getElementById('marketModal');
+        let currentAnalysisView = 'Open';
 
         // Navigation Switcher Logic
         const navLoggerBtn = document.getElementById('navLoggerBtn');
@@ -292,6 +293,19 @@
             navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";
             navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";
             loadAnalysisData();
+        });
+
+        // Analysis View Pill Buttons Logic (Open, Close, Total, Diff, More)
+        const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');
+        analysisViewBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                analysisViewBtns.forEach(b => {
+                    b.className = "analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition";
+                });
+                e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition";
+                currentAnalysisView = e.target.getAttribute('data-view');
+                loadAnalysisData();
+            });
         });
 
         // Analysis Type Toggle Logic (Selected Market vs Merged)
@@ -588,6 +602,7 @@
         }
         loadMarkets();
 
+        // Load and Compute Analysis Data with 4-2-4 Concept (Top: 4, Mid: 2, Recent: 4)
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -613,28 +628,63 @@
             const recentListContainer = document.getElementById('recentListContainer');
 
             const gapGridContainer = document.getElementById('gapGridContainer');
+            const gridTitleLabel = document.getElementById('gridTitleLabel');
 
             if (analysisType === 'selected' && !selectedMarket) {
                 openTotalLogs.innerText = "0 ગેમ્સ ડેટા";
-                analysisHeaderTitle.innerText = "SELECT A MARKET (OPEN)";
+                analysisHeaderTitle.innerText = `SELECT A MARKET (${currentAnalysisView.toUpperCase()})`;
                 return;
             }
 
-            analysisHeaderTitle.innerText = (analysisType === 'merged') ? "ALL MARKETS (MERGED) (OPEN)" : `${selectedMarket.toUpperCase()} (OPEN)`;
+            let marketLabel = (analysisType === 'merged') ? "ALL MARKETS (MERGED)" : selectedMarket.toUpperCase();
+            analysisHeaderTitle.innerText = `⏳ ${marketLabel} (${currentAnalysisView.toUpperCase()})`;
+            gridTitleLabel.innerText = `📊 ${currentAnalysisView} Gap:`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "matka_records"));
-                let records = [];
+                let rawRecords = {};
 
                 querySnapshot.forEach((docSnap) => {
                     let data = docSnap.data();
                     let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket);
-                    if (matchMarket && data.session === 'Open' && data.openAnk !== undefined) {
+                    if (matchMarket && data.date && data.marketName) {
+                        let key = `${data.date}_${data.marketName}`;
+                        if (!rawRecords[key]) {
+                            rawRecords[key] = { date: data.date, marketName: data.marketName };
+                        }
+                        if (data.session === 'Open' && data.openAnk !== undefined) {
+                            rawRecords[key].openAnk = parseInt(data.openAnk);
+                        }
+                        if (data.session === 'Close' && data.closeAnk !== undefined) {
+                            rawRecords[key].closeAnk = parseInt(data.closeAnk);
+                        }
+                        if (data.openAnk !== undefined) rawRecords[key].openAnk = parseInt(data.openAnk);
+                        if (data.closeAnk !== undefined) rawRecords[key].closeAnk = parseInt(data.closeAnk);
+                    }
+                });
+
+                let records = [];
+                Object.values(rawRecords).forEach(rec => {
+                    let targetAnk = null;
+                    let openVal = rec.openAnk;
+                    let closeVal = rec.closeAnk;
+
+                    if (currentAnalysisView === 'Open' && openVal !== undefined) {
+                        targetAnk = openVal;
+                    } else if (currentAnalysisView === 'Close' && closeVal !== undefined) {
+                        targetAnk = closeVal;
+                    } else if (currentAnalysisView === 'Total' && openVal !== undefined && closeVal !== undefined) {
+                        targetAnk = (openVal + closeVal) % 10;
+                    } else if (currentAnalysisView === 'Diff' && openVal !== undefined && closeVal !== undefined) {
+                        let diff = Math.abs(openVal - closeVal);
+                        targetAnk = diff % 10;
+                    }
+
+                    if (targetAnk !== null && !isNaN(targetAnk)) {
                         records.push({
-                            date: data.date,
-                            marketName: data.marketName,
-                            ank: parseInt(data.openAnk),
-                            timestamp: data.timestamp
+                            date: rec.date,
+                            marketName: rec.marketName,
+                            ank: targetAnk
                         });
                     }
                 });
@@ -681,24 +731,35 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                ankList.sort((a, b) => b.currentDelay - a.currentDelay);
+                // 1. TOP: 4 Digits (Most Delayed first - Descending)
+                let sortedByDelayDesc = [...ankList].sort((a, b) => b.currentDelay - a.currentDelay);
+                let top4 = sortedByDelayDesc.slice(0, 4);
 
-                let top4 = ankList.slice(0, 4);
-                let recentList = ankList.slice(4, 8);
-                let midList = ankList.slice(8);
+                // 2. RECENT: 4 Digits (Most Recently Passed / Lowest Delay first - Ascending)
+                let sortedByDelayAsc = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay);
+                let recent4 = sortedByDelayAsc.slice(0, 4);
 
+                // 3. MID: 2 Digits (Remaining numbers not in Top 4 or Recent 4)
+                let topAnksSet = new Set(top4.map(item => item.ank));
+                let recentAnksSet = new Set(recent4.map(item => item.ank));
+                let mid2 = ankList.filter(item => !topAnksSet.has(item.ank) && !recentAnksSet.has(item.ank));
+
+                // Populate TOP Card (4 digits)
                 topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;
                 topMaxVal.innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;
                 topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`;
 
-                midAnkVal.innerText = midList[0] ? midList[0].currentDelay : 0;
-                midMaxVal.innerText = `Max: ${midList[0] ? midList[0].maxDelay : 0}`;
-                midListContainer.innerText = `[${midList.map(i => i.ank).join(',')}]`;
+                // Populate MID Card (2 digits)
+                midAnkVal.innerText = mid2[0] ? mid2[0].currentDelay : 0;
+                midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
+                midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
 
-                recentAnkVal.innerText = recentList[0] ? recentList[0].currentDelay : 0;
-                recentMaxVal.innerText = `Max: ${recentList[0] ? recentList[0].maxDelay : 0}`;
-                recentListContainer.innerText = `[${recentList.map(i => i.ank).join(',')}]`;
+                // Populate RECENT Card (4 digits)
+                recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;
+                recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
+                recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
 
+                // Render Gap Grid (0 to 9 numbers)
                 gapGridContainer.innerHTML = '';
                 for (let i = 0; i <= 9; i++) {
                     let found = ankList.find(item => item.ank === i);
