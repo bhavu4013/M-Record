@@ -743,9 +743,9 @@
                     gridTitleLabel.innerText = `📊 More Analysis (${currentMoreSubView}):`;
 
                     if (currentMoreSubView === 'FamilyJodi') {
-                        topCardTitle.innerText = "🔥 TOP 5";
-                        midCardTitle.innerText = "💠 MID 5";
-                        recentCardTitle.innerText = "⚡ RECENT 5";
+                        topCardTitle.innerText = "🔥 TOP";
+                        midCardTitle.innerText = "💠 MID";
+                        recentCardTitle.innerText = "⚡ RECENT";
 
                         const familyGroupsMap = {
                             "11": ["11", "16", "61", "66"],
@@ -797,28 +797,21 @@
                         recentMaxVal.innerText = `Max: ${recent5[0] ? recent5[0][1] : 0}`;
                         recentListContainer.innerText = `[${recent5.map(g => g[0]).join(', ')}]`;
 
+                        // 3 rows with 5 items each (grid-cols-5)
                         gapGridContainer.innerHTML = '';
-                        let row1 = document.createElement('div');
-                        row1.className = "grid grid-cols-3 gap-1.5 text-center";
-                        
-                        let row2 = document.createElement('div');
-                        row2.className = "grid grid-cols-2 gap-1.5 text-center pt-1.5";
+                        let gridWrapper = document.createElement('div');
+                        gridWrapper.className = "grid grid-cols-5 gap-1.5 text-center";
 
-                        sortedGroups.forEach(([group, cnt], index) => {
+                        sortedGroups.forEach(([group, cnt]) => {
                             let card = document.createElement('div');
                             card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
                             card.innerHTML = `
                                 <div class="text-xs font-bold text-slate-500">${group}</div>
                                 <div class="text-sm font-extrabold text-indigo-600">${cnt}</div>
                             `;
-                            if (index < 3) {
-                                row1.appendChild(card);
-                            } else {
-                                row2.appendChild(card);
-                            }
+                            gridWrapper.appendChild(card);
                         });
-                        gapGridContainer.appendChild(row1);
-                        gapGridContainer.appendChild(row2);
+                        gapGridContainer.appendChild(gridWrapper);
 
                     } else if (currentMoreSubView === 'FamilyPanna') {
                         topCardTitle.innerText = "🔥 Family Panna";
@@ -1184,7 +1177,8 @@
                 return;
             }
 
-            const docId = `${date}_${marketName.replace(/\s+/g, '_')}`;
+            let recordIdInput = document.getElementById('recordId').value;
+            const docId = recordIdInput || `${date}_${marketName.replace(/\s+/g, '_')}`;
             const docRef = doc(db, "matka_records", docId);
 
             try {
