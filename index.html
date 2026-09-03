@@ -116,9 +116,10 @@
                 </div>
 
                 <!-- More Sub-Filters Container (Shown only when More is active) -->
-                <div id="moreSubFiltersContainer" class="hidden grid grid-cols-3 gap-1 text-xs font-bold pt-1">
-                    <button type="button" data-subview="Family" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family</button>
-                    <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd / Even</button>
+                <div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1">
+                    <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button>
+                    <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button>
+                    <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd/Even</button>
                     <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button>
                 </div>
 
@@ -128,9 +129,9 @@
                     <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span>
                 </div>
 
-                <!-- Three Segment Cards (TOP: 4, MID: 2, RECENT: 4) -->
+                <!-- Three Segment Cards (TOP: 4/5, MID: 2/5, RECENT: 4/5) -->
                 <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer">
-                    <!-- TOP CARD (4 Digits) -->
+                    <!-- TOP CARD -->
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>
                         <div id="topAnkVal" class="text-xl font-black text-slate-800">0</div>
@@ -138,7 +139,7 @@
                         <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
                     </div>
 
-                    <!-- MID CARD (2 Digits) -->
+                    <!-- MID CARD -->
                     <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>
                         <div id="midAnkVal" class="text-xl font-black text-slate-800">0</div>
@@ -146,7 +147,7 @@
                         <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-mono py-1 rounded font-bold">[]</div>
                     </div>
 
-                    <!-- RECENT CARD (4 Digits) -->
+                    <!-- RECENT CARD -->
                     <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">
                         <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>
                         <div id="recentAnkVal" class="text-xl font-black text-slate-800">0</div>
@@ -275,7 +276,7 @@
         let marketsList = [];
         const modal = document.getElementById('marketModal');
         let currentAnalysisView = 'Open';
-        let currentMoreSubView = 'Family';
+        let currentMoreSubView = 'FamilyJodi';
 
         const navLoggerBtn = document.getElementById('navLoggerBtn');
         const navAnalysisBtn = document.getElementById('navAnalysisBtn');
@@ -716,8 +717,12 @@
                                 marketName: data.marketName,
                                 openTime: openTime,
                                 val: targetVal,
+                                openAnk: data.openAnk,
+                                closeAnk: data.closeAnk,
                                 openFamily: data.openFamilyGroup || '-',
                                 closeFamily: data.closeFamilyGroup || '-',
+                                openPana: data.openPana || '',
+                                closePana: data.closePana || '',
                                 openType: data.openType || '-'
                             });
                         }
@@ -733,44 +738,100 @@
 
                 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`;
 
-                // More View Feature (Family Groups, Odd/Even, Panel Types)
+                // More View Sub-features Handling
                 if (currentAnalysisView === 'More') {
                     gridTitleLabel.innerText = `📊 More Analysis (${currentMoreSubView}):`;
 
-                    if (currentMoreSubView === 'Family') {
-                        topCardTitle.innerText = "🔥 Top Family";
-                        midCardTitle.innerText = "💠 Unique Families";
-                        recentCardTitle.innerText = "⚡ 2nd Family";
+                    if (currentMoreSubView === 'FamilyJodi') {
+                        topCardTitle.innerText = "🔥 TOP 5 FAMILIES";
+                        midCardTitle.innerText = "💠 MID 5 FAMILIES";
+                        recentCardTitle.innerText = "⚡ RECENT 5";
 
-                        let familyCounts = {};
+                        const familyGroupsMap = {
+                            "11": ["11", "16", "61", "66"],
+                            "12": ["12", "17", "21", "26", "62", "67", "71", "76"],
+                            "13": ["13", "18", "31", "36", "63", "68", "81", "86"],
+                            "14": ["14", "19", "41", "46", "64", "69", "91", "96"],
+                            "15": ["10", "15", "50", "55", "01", "06", "51", "60"],
+                            "22": ["22", "27", "72", "77"],
+                            "23": ["23", "28", "32", "37", "73", "78", "82", "87"],
+                            "24": ["24", "29", "42", "47", "74", "79", "92", "97"],
+                            "25": ["20", "25", "52", "57", "70", "75", "02", "07"],
+                            "33": ["33", "38", "83", "88"],
+                            "34": ["34", "39", "43", "48", "84", "89", "93", "98"],
+                            "35": ["30", "35", "53", "58", "80", "85", "03", "08"],
+                            "44": ["44", "49", "94", "99"],
+                            "45": ["40", "45", "54", "59", "90", "95", "04", "09"],
+                            "55": ["00", "05", "50", "55"]
+                        };
+
+                        let jodiCounts = {};
+                        Object.keys(familyGroupsMap).forEach(k => jodiCounts[k] = 0);
+
                         records.forEach(r => {
-                            if (r.openFamily && r.openFamily !== '-') familyCounts[r.openFamily] = (familyCounts[r.openFamily] || 0) + 1;
+                            if (r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== '' && r.closeAnk !== '') {
+                                let jodi = `${r.openAnk}${r.closeAnk}`;
+                                for (let [groupKey, jodiList] of Object.entries(familyGroupsMap)) {
+                                    if (jodiList.includes(jodi)) {
+                                        jodiCounts[groupKey]++;
+                                        break;
+                                    }
+                                }
+                            }
                         });
 
-                        let sortedFamilies = Object.entries(familyCounts).sort((a, b) => b[1] - a[1]);
+                        let sortedGroups = Object.entries(jodiCounts).sort((a, b) => b[1] - a[1]);
+                        let top5 = sortedGroups.slice(0, 5);
+                        let mid5 = sortedGroups.slice(5, 10);
+                        let recent5 = sortedGroups.slice(10, 15);
 
-                        topAnkVal.innerText = sortedFamilies.length > 0 ? sortedFamilies[0][0] : '-';
-                        topMaxVal.innerText = `Count: ${sortedFamilies.length > 0 ? sortedFamilies[0][1] : 0}`;
-                        topListContainer.innerText = `[Family Groups]`;
+                        topAnkVal.innerText = top5[0] ? top5[0][0] : '-';
+                        topMaxVal.innerText = `Count: ${top5[0] ? top5[0][1] : 0}`;
+                        topListContainer.innerText = `[${top5.map(g => g[0]).join(', ')}]`;
 
-                        midAnkVal.innerText = Object.keys(familyCounts).length;
-                        midMaxVal.innerText = "Active";
-                        midListContainer.innerText = `[Unique Count]`;
+                        midAnkVal.innerText = mid5[0] ? mid5[0][0] : '-';
+                        midMaxVal.innerText = `Count: ${mid5[0] ? mid5[0][1] : 0}`;
+                        midListContainer.innerText = `[${mid5.map(g => g[0]).join(', ')}]`;
 
-                        recentAnkVal.innerText = sortedFamilies.length > 1 ? sortedFamilies[1][0] : '-';
-                        recentMaxVal.innerText = `Count: ${sortedFamilies.length > 1 ? sortedFamilies[1][1] : 0}`;
-                        recentListContainer.innerText = `[2nd Frequent]`;
+                        recentAnkVal.innerText = recent5[0] ? recent5[0][0] : '-';
+                        recentMaxVal.innerText = `Count: ${recent5[0] ? recent5[0][1] : 0}`;
+                        recentListContainer.innerText = `[${recent5.map(g => g[0]).join(', ')}]`;
 
                         gapGridContainer.innerHTML = '';
-                        sortedFamilies.slice(0, 10).forEach(([fam, count]) => {
+                        sortedGroups.forEach(([group, cnt]) => {
                             let card = document.createElement('div');
                             card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
                             card.innerHTML = `
-                                <div class="text-xs font-bold text-slate-500">${fam}</div>
-                                <div class="text-sm font-extrabold text-indigo-600">${count}</div>
+                                <div class="text-xs font-bold text-slate-500">Group ${group}</div>
+                                <div class="text-sm font-extrabold text-indigo-600">${cnt} Hits</div>
                             `;
                             gapGridContainer.appendChild(card);
                         });
+
+                    } else if (currentMoreSubView === 'FamilyPanna') {
+                        topCardTitle.innerText = "🔥 Family Panna";
+                        midCardTitle.innerText = "💠 Unique";
+                        recentCardTitle.innerText = "⚡ Stats";
+
+                        let famCounts = {};
+                        records.forEach(r => {
+                            if (r.openFamily && r.openFamily !== '-') famCounts[r.openFamily] = (famCounts[r.openFamily] || 0) + 1;
+                        });
+                        let sortedFam = Object.entries(famCounts).sort((a, b) => b[1] - a[1]);
+
+                        topAnkVal.innerText = sortedFam.length > 0 ? sortedFam[0][0] : '-';
+                        topMaxVal.innerText = `Count: ${sortedFam.length > 0 ? sortedFam[0][1] : 0}`;
+                        topListContainer.innerText = `[Top Panna Families]`;
+
+                        midAnkVal.innerText = Object.keys(famCounts).length;
+                        midMaxVal.innerText = "Groups";
+                        midListContainer.innerText = `[Active Families]`;
+
+                        recentAnkVal.innerText = sortedFam.length > 1 ? sortedFam[1][0] : '-';
+                        recentMaxVal.innerText = `Count: ${sortedFam.length > 1 ? sortedFam[1][1] : 0}`;
+                        recentListContainer.innerText = `[2nd Family]`;
+
+                        gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">Family Panna Group Statistics Active</div>';
 
                     } else if (currentMoreSubView === 'OddEven') {
                         topCardTitle.innerText = "🔥 Odd Count";
@@ -791,11 +852,11 @@
 
                         topAnkVal.innerText = oddCount;
                         topMaxVal.innerText = `${oddPct}%`;
-                        topListContainer.innerText = `[Odd Ank Stats]`;
+                        topListContainer.innerText = `[Odd Stats]`;
 
                         midAnkVal.innerText = evenCount;
                         midMaxVal.innerText = `${evenPct}%`;
-                        midListContainer.innerText = `[Even Ank Stats]`;
+                        midListContainer.innerText = `[Even Stats]`;
 
                         recentAnkVal.innerText = `${oddPct}:${evenPct}`;
                         recentMaxVal.innerText = "Ratio";
