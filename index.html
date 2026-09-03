@@ -602,7 +602,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Strict 4-2-4 Concept and Correct Filtering
+        // Load and Compute Analysis Data with Strict 4-2-4 Concept and Latest-First Recent Ordering
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -729,7 +729,7 @@
                     ankList.push({ ank: i, currentDelay: currentDelay, maxDelay: maxDelay });
                 }
 
-                // 1. RECENT: Exactly 4 Digits (જે સૌથી તાજેતરમાં પાસ થયા છે - ચડતા ક્રમમાં, જેથી લેટેસ્ટ પહેલા આવે)
+                // 1. RECENT: Exactly 4 Digits (જે સૌથી તાજેતરમાં પાસ થયા છે - લેટેસ્ટ પહેલા આવે તે રીતે એસેન્ડિંગ ક્રમ)
                 let recent4 = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay).slice(0, 4);
 
                 // 2. TOP: Exactly 4 Digits (જે સૌથી વધુ ડિલેડ છે - ઉતરતા ક્રમમાં)
@@ -750,7 +750,7 @@
                 midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
                 midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;
 
-                // Populate RECENT Card (4 digits)
+                // Populate RECENT Card (4 digits - લેટેસ્ટ પાસ થયેલ અંક પહેલા)
                 recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;
                 recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
                 recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;
