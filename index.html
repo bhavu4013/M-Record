@@ -30,17 +30,16 @@
                 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- Market Dropdown & Single Unified Management Button -->
+            <!-- Market Dropdown & Icon-only Management Button -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
                 <div class="flex gap-2">
                     <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                         <option value="">Select Market</option>
                     </select>
-                    <!-- Single Button to Open Unified Management Popup -->
-                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-4 py-2.5 rounded-lg hover:bg-indigo-700 text-sm font-medium shadow-sm transition flex items-center gap-1.5" title="Manage Markets">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Manage
+                    <!-- Icon-only Button -->
+                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-3 py-2.5 rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center justify-center" title="Manage Markets">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </button>
                 </div>
             </div>
@@ -185,9 +184,7 @@
         let marketsList = [];
         const modal = document.getElementById('marketModal');
 
-        // Open Modal Button
         document.getElementById('openModalBtn').addEventListener('click', () => {
-            // Default reset to 'Add' mode when opening modal
             document.querySelector('input[name="marketAction"][value="add"]').checked = true;
             updateActionTabUI();
             modal.classList.remove('hidden');
@@ -195,13 +192,11 @@
 
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
 
-        // Handle Action Toggle Switch inside Modal (Add, Edit, Delete)
         const actionRadios = document.querySelectorAll('input[name="marketAction"]');
         
         function updateActionTabUI() {
             let currentAction = document.querySelector('input[name="marketAction"]:checked').value;
             
-            // Tab UI Styling
             document.querySelectorAll('.action-tab').forEach(tab => {
                 tab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700";
             });
@@ -212,7 +207,6 @@
                 activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm";
             }
 
-            // Visibility controls
             const selectDiv = document.getElementById('modalSelectMarketDiv');
             const detailsDiv = document.getElementById('modalDetailsDiv');
             const deleteNotice = document.getElementById('modalDeleteNotice');
@@ -227,7 +221,6 @@
                 actionBtn.innerText = "Save Market";
                 actionBtn.className = "flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition";
                 
-                // Clear inputs
                 document.getElementById('newMarketName').value = '';
                 document.getElementById('openTime').value = '';
                 document.getElementById('closeTime').value = '';
@@ -283,7 +276,6 @@
             }
         }
 
-        // Execute Market Action (Add, Edit, Delete)
         document.getElementById('executeMarketActionBtn').addEventListener('click', async () => {
             let currentAction = document.querySelector('input[name="marketAction"]:checked').value;
             
