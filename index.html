@@ -115,6 +115,13 @@
                     <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button>
                 </div>
 
+                <!-- More Sub-Filters Container (Shown only when More is active) -->
+                <div id="moreSubFiltersContainer" class="hidden grid grid-cols-3 gap-1 text-xs font-bold pt-1">
+                    <button type="button" data-subview="Family" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family</button>
+                    <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd / Even</button>
+                    <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button>
+                </div>
+
                 <!-- Header Info Bar -->
                 <div class="flex justify-between items-center text-xs font-bold px-1 pt-1 text-slate-700">
                     <span id="analysisHeaderTitle" class="text-indigo-700">⏳ ALL MARKETS (MERGED) (OPEN)</span>
@@ -268,6 +275,7 @@
         let marketsList = [];
         const modal = document.getElementById('marketModal');
         let currentAnalysisView = 'Open';
+        let currentMoreSubView = 'Family';
 
         const navLoggerBtn = document.getElementById('navLoggerBtn');
         const navAnalysisBtn = document.getElementById('navAnalysisBtn');
@@ -294,6 +302,8 @@
         });
 
         const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');
+        const moreSubFiltersContainer = document.getElementById('moreSubFiltersContainer');
+
         analysisViewBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 analysisViewBtns.forEach(b => {
@@ -301,6 +311,25 @@
                 });
                 e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition";
                 currentAnalysisView = e.target.getAttribute('data-view');
+
+                if (currentAnalysisView === 'More') {
+                    moreSubFiltersContainer.classList.remove('hidden');
+                } else {
+                    moreSubFiltersContainer.classList.add('hidden');
+                }
+
+                loadAnalysisData();
+            });
+        });
+
+        const moreSubBtns = document.querySelectorAll('.more-sub-btn');
+        moreSubBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                moreSubBtns.forEach(b => {
+                    b.className = "more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition";
+                });
+                e.target.className = "more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition";
+                currentMoreSubView = e.target.getAttribute('data-subview');
                 loadAnalysisData();
             });
         });
@@ -681,7 +710,7 @@
                             }
                         }
 
-                        if (targetVal !== null && !isNaN(targetVal)) {
+                        if (targetVal !== null && !isNaN(targetVal) || currentAnalysisView === 'More') {
                             records.push({
                                 date: data.date,
                                 marketName: data.marketName,
@@ -706,41 +735,110 @@
 
                 // More View Feature (Family Groups, Odd/Even, Panel Types)
                 if (currentAnalysisView === 'More') {
-                    topCardTitle.innerText = "🔥 Family Groups";
-                    midCardTitle.innerText = "💠 Odd / Even";
-                    recentCardTitle.innerText = "⚡ Panel Stats";
-                    
-                    let familyCounts = {};
-                    let oddCount = 0, evenCount = 0;
-                    let spCount = 0, dpCount = 0, tpCount = 0;
+                    gridTitleLabel.innerText = `📊 More Analysis (${currentMoreSubView}):`;
 
-                    records.forEach(r => {
-                        if (r.openFamily) familyCounts[r.openFamily] = (familyCounts[r.openFamily] || 0) + 1;
-                        if (r.val !== null) {
-                            if (r.val % 2 === 0) evenCount++;
-                            else oddCount++;
-                        }
-                        if (r.openType.includes("SP")) spCount++;
-                        else if (r.openType.includes("DP")) dpCount++;
-                        else if (r.openType.includes("TP")) tpCount++;
-                    });
+                    if (currentMoreSubView === 'Family') {
+                        topCardTitle.innerText = "🔥 Top Family";
+                        midCardTitle.innerText = "💠 Unique Families";
+                        recentCardTitle.innerText = "⚡ 2nd Family";
 
-                    topAnkVal.innerText = Object.keys(familyCounts).length;
-                    topMaxVal.innerText = "Active";
-                    topListContainer.innerText = `[${Object.keys(familyCounts).slice(0, 3).join(', ')}]`;
+                        let familyCounts = {};
+                        records.forEach(r => {
+                            if (r.openFamily && r.openFamily !== '-') familyCounts[r.openFamily] = (familyCounts[r.openFamily] || 0) + 1;
+                        });
 
-                    let totalOddEven = oddCount + evenCount;
-                    let oddPct = totalOddEven > 0 ? Math.round((oddCount / totalOddEven) * 100) : 0;
-                    let evenPct = totalOddEven > 0 ? Math.round((evenCount / totalOddEven) * 100) : 0;
-                    midAnkVal.innerText = `${oddPct}% / ${evenPct}%`;
-                    midMaxVal.innerText = "Ratio";
-                    midListContainer.innerText = `[Odd: ${oddCount}, Even: ${evenCount}]`;
+                        let sortedFamilies = Object.entries(familyCounts).sort((a, b) => b[1] - a[1]);
 
-                    recentAnkVal.innerText = `SP:${spCount}`;
-                    recentMaxVal.innerText = `DP:${dpCount} TP:${tpCount}`;
-                    recentListContainer.innerText = `[Single/Double/Triple]`;
+                        topAnkVal.innerText = sortedFamilies.length > 0 ? sortedFamilies[0][0] : '-';
+                        topMaxVal.innerText = `Count: ${sortedFamilies.length > 0 ? sortedFamilies[0][1] : 0}`;
+                        topListContainer.innerText = `[Family Groups]`;
 
-                    gapGridContainer.innerHTML = '<div class="col-span-5 text-center text-xs text-slate-500 py-4 font-semibold">More Panel Custom Analysis Active (Family & Odd/Even)</div>';
+                        midAnkVal.innerText = Object.keys(familyCounts).length;
+                        midMaxVal.innerText = "Active";
+                        midListContainer.innerText = `[Unique Count]`;
+
+                        recentAnkVal.innerText = sortedFamilies.length > 1 ? sortedFamilies[1][0] : '-';
+                        recentMaxVal.innerText = `Count: ${sortedFamilies.length > 1 ? sortedFamilies[1][1] : 0}`;
+                        recentListContainer.innerText = `[2nd Frequent]`;
+
+                        gapGridContainer.innerHTML = '';
+                        sortedFamilies.slice(0, 10).forEach(([fam, count]) => {
+                            let card = document.createElement('div');
+                            card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
+                            card.innerHTML = `
+                                <div class="text-xs font-bold text-slate-500">${fam}</div>
+                                <div class="text-sm font-extrabold text-indigo-600">${count}</div>
+                            `;
+                            gapGridContainer.appendChild(card);
+                        });
+
+                    } else if (currentMoreSubView === 'OddEven') {
+                        topCardTitle.innerText = "🔥 Odd Count";
+                        midCardTitle.innerText = "💠 Even Count";
+                        recentCardTitle.innerText = "⚡ Ratio";
+
+                        let oddCount = 0, evenCount = 0;
+                        records.forEach(r => {
+                            if (r.val !== null && !isNaN(r.val)) {
+                                if (r.val % 2 === 0) evenCount++;
+                                else oddCount++;
+                            }
+                        });
+
+                        let total = oddCount + evenCount;
+                        let oddPct = total > 0 ? Math.round((oddCount / total) * 100) : 0;
+                        let evenPct = total > 0 ? Math.round((evenCount / total) * 100) : 0;
+
+                        topAnkVal.innerText = oddCount;
+                        topMaxVal.innerText = `${oddPct}%`;
+                        topListContainer.innerText = `[Odd Ank Stats]`;
+
+                        midAnkVal.innerText = evenCount;
+                        midMaxVal.innerText = `${evenPct}%`;
+                        midListContainer.innerText = `[Even Ank Stats]`;
+
+                        recentAnkVal.innerText = `${oddPct}:${evenPct}`;
+                        recentMaxVal.innerText = "Ratio";
+                        recentListContainer.innerText = `[Comparative]`;
+
+                        gapGridContainer.innerHTML = `
+                            <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">
+                                <div class="text-xs font-bold text-slate-600">Distribution Overview</div>
+                                <div class="text-sm font-black text-blue-600">Odd: ${oddCount} (${oddPct}%) | Even: ${evenCount} (${evenPct}%)</div>
+                            </div>
+                        `;
+
+                    } else if (currentMoreSubView === 'PanelType') {
+                        topCardTitle.innerText = "🔥 Single (SP)";
+                        midCardTitle.innerText = "💠 Double (DP)";
+                        recentCardTitle.innerText = "⚡ Triple (TP)";
+
+                        let spCount = 0, dpCount = 0, tpCount = 0;
+                        records.forEach(r => {
+                            if (r.openType.includes("SP")) spCount++;
+                            else if (r.openType.includes("DP")) dpCount++;
+                            else if (r.openType.includes("TP")) tpCount++;
+                        });
+
+                        topAnkVal.innerText = spCount;
+                        topMaxVal.innerText = "Panel Type";
+                        topListContainer.innerText = `[Single Panna]`;
+
+                        midAnkVal.innerText = dpCount;
+                        midMaxVal.innerText = "Panel Type";
+                        midListContainer.innerText = `[Double Panna]`;
+
+                        recentAnkVal.innerText = tpCount;
+                        recentMaxVal.innerText = "Panel Type";
+                        recentListContainer.innerText = `[Triple Panna]`;
+
+                        gapGridContainer.innerHTML = `
+                            <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">
+                                <div class="text-xs font-bold text-slate-600">Panel Types Breakdown</div>
+                                <div class="text-xs font-bold text-slate-700">SP: ${spCount} | DP: ${dpCount} | TP: ${tpCount}</div>
+                            </div>
+                        `;
+                    }
                     return;
                 } else {
                     topCardTitle.innerText = "🔥 TOP";
