@@ -329,6 +329,51 @@
             }
         });
 
+        // Time-based default market selection based on current time and market timings
+        function selectDefaultMarketByTime() {
+            if (marketsList.length === 0) return;
+            
+            const now = new Date();
+            const currentHours = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const currentTimeMinutes = currentHours * 60 + currentMinutes;
+
+            let selectedMarket = marketsList[0]; // Default fallback
+
+            for (let i = 0; i < marketsList.length; i++) {
+                let market = marketsList[i];
+                if (!market.openTime || !market.closeTime) continue;
+
+                let [openH, openM] = market.openTime.split(':').map(Number);
+                let [closeH, closeM] = market.closeTime.split(':').map(Number);
+                let openMinutes = openH * 60 + openM;
+                let closeMinutes = closeH * 60 + closeM;
+
+                // Check if current time falls within this market's active window
+                if (currentTimeMinutes >= openMinutes && currentTimeMinutes <= closeMinutes) {
+                    selectedMarket = market;
+                    break;
+                } else if (i < marketsList.length - 1) {
+                    // Check if current time falls between this market's close time and the next market's open time
+                    let nextMarket = marketsList[i + 1];
+                    if (nextMarket.openTime) {
+                        let [nextOpenH, nextOpenM] = nextMarket.openTime.split(':').map(Number);
+                        let nextOpenMinutes = nextOpenH * 60 + nextOpenM;
+                        if (currentTimeMinutes > closeMinutes && currentTimeMinutes < nextOpenMinutes) {
+                            selectedMarket = nextMarket; // Default to next upcoming market
+                            break;
+                        }
+                    }
+                }
+            }
+
+            const marketDropdown = document.getElementById('marketDropdown');
+            if (selectedMarket && marketDropdown.value === "") {
+                marketDropdown.value = selectedMarket.name;
+                marketDropdown.dispatchEvent(new Event('change'));
+            }
+        }
+
         async function loadMarkets() {
             const marketDropdown = document.getElementById('marketDropdown');
             let currentSelected = marketDropdown.value;
@@ -342,6 +387,7 @@
                     marketsList.push({ id: docSnap.id, ...mData });
                 });
 
+                // Sort markets chronologically by openTime (earliest first)
                 marketsList.sort((a, b) => {
                     let timeA = a.openTime || "23:59";
                     let timeB = b.openTime || "23:59";
@@ -355,7 +401,12 @@
                     marketDropdown.appendChild(opt);
                 });
 
-                if (currentSelected) marketDropdown.value = currentSelected;
+                if (currentSelected) {
+                    marketDropdown.value = currentSelected;
+                } else {
+                    selectDefaultMarketByTime(); // Automatically select based on current time
+                }
+                
                 checkValidationAndStatus(true);
             } catch (e) {
                 console.log("Markets load error:", e);
@@ -496,7 +547,6 @@
         function getFamilyGroup(panna) {
             const sorted = panna.split('').sort().join('');
             
-            // Corrected family group mappings based on user examples (e.g. 660, 115, 156, etc. map to 110 family)
             const familyGroupCorrections = {
                 "066": "110",
                 "660": "110",
