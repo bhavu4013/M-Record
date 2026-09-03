@@ -603,7 +603,7 @@
         }
         loadMarkets();
 
-        // Load and Compute Analysis Data with Strict 4-2-4 Concept and Precise Latest-First Ordering
+        // Load and Compute Analysis Data with Strict Market & Date Sorting for Merged Mode
         async function loadAnalysisData() {
             const analysisType = document.querySelector('input[name="analysisType"]:checked').value;
             let selectedMarket = document.getElementById('analysisMarketSelect').value;
@@ -688,7 +688,13 @@
                     }
                 });
 
-                records.sort((a, b) => new Date(a.date) - new Date(b.date));
+                // Correct sorting by date and then market name to keep multi-market merged timeline accurate
+                records.sort((a, b) => {
+                    let dateComp = new Date(a.date) - new Date(b.date);
+                    if (dateComp !== 0) return dateComp;
+                    return a.marketName.localeCompare(b.marketName);
+                });
+
                 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`;
 
                 let ankStats = {};
