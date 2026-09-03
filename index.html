@@ -79,10 +79,24 @@
 
             <!-- Submit and Red Cancel Button -->
             <div class="flex gap-2 pt-1 w-full">
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Save Record</button>
                 <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
             </div>
         </form>
+    </div>
+
+    <!-- Custom Beautiful Success / Alert Popup Modal -->
+    <div id="customAlertModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl max-w-xs w-full space-y-4 shadow-2xl text-center transform transition-all scale-100">
+            <div id="customAlertIcon" class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
+                ✓
+            </div>
+            <div class="space-y-1">
+                <h3 id="customAlertTitle" class="text-lg font-bold text-slate-800">Success</h3>
+                <p id="customAlertMessage" class="text-base font-medium text-slate-600 leading-relaxed">Operation completed successfully!</p>
+            </div>
+            <button type="button" id="customAlertOkBtn" class="w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-base hover:bg-emerald-700 shadow-md transition">OK</button>
+        </div>
     </div>
 
     <!-- Unified Market Management Modal -->
@@ -173,6 +187,34 @@
 
         let marketsList = [];
         const modal = document.getElementById('marketModal');
+
+        // Custom Popup Alert Helper Function
+        function showCustomAlert(title, message, type = 'success') {
+            const alertModal = document.getElementById('customAlertModal');
+            const alertTitle = document.getElementById('customAlertTitle');
+            const alertMessage = document.getElementById('customAlertMessage');
+            const alertIcon = document.getElementById('customAlertIcon');
+            const okBtn = document.getElementById('customAlertOkBtn');
+
+            alertTitle.innerText = title;
+            alertMessage.innerText = message;
+
+            if (type === 'success') {
+                alertIcon.className = "w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold";
+                alertIcon.innerHTML = "✓";
+                okBtn.className = "w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-base hover:bg-emerald-700 shadow-md transition";
+            } else {
+                alertIcon.className = "w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold";
+                alertIcon.innerHTML = "✕";
+                okBtn.className = "w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-base hover:bg-red-700 shadow-md transition";
+            }
+
+            alertModal.classList.remove('hidden');
+        }
+
+        document.getElementById('customAlertOkBtn').addEventListener('click', () => {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        });
 
         document.getElementById('openModalBtn').addEventListener('click', () => {
             document.querySelector('input[name="marketAction"][value="add"]').checked = true;
@@ -276,9 +318,9 @@
                 let workingDays = [];
                 document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => workingDays.push(cb.value));
 
-                if (!name) { alert("Please enter market name!"); return; }
+                if (!name) { showCustomAlert("Error", "Please enter market name!", "error"); return; }
                 if (marketsList.some(m => m.name.toLowerCase() === name.toLowerCase())) {
-                    alert("Duplicate market error: Market already exists!");
+                    showCustomAlert("Error", "Duplicate market error: Market already exists!", "error");
                     return;
                 }
 
@@ -286,15 +328,15 @@
                     await addDoc(collection(db, "markets"), {
                         name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays, timestamp: serverTimestamp()
                     });
-                    alert("Market added successfully!");
+                    showCustomAlert("Success", "Market added successfully!");
                     modal.classList.add('hidden');
                     loadMarkets();
-                } catch (e) { alert("Error: " + e.message); }
+                } catch (e) { showCustomAlert("Error", e.message, "error"); }
 
             } else if (currentAction === 'edit') {
                 let selectedName = document.getElementById('modalMarketSelect').value;
                 let marketObj = marketsList.find(m => m.name === selectedName);
-                if (!marketObj) { alert("Please select a market to edit!"); return; }
+                if (!marketObj) { showCustomAlert("Error", "Please select a market to edit!", "error"); return; }
 
                 let name = document.getElementById('newMarketName').value.trim();
                 let openTime = document.getElementById('openTime').value;
@@ -302,29 +344,29 @@
                 let workingDays = [];
                 document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => workingDays.push(cb.value));
 
-                if (!name) { alert("Please enter market name!"); return; }
+                if (!name) { showCustomAlert("Error", "Please enter market name!", "error"); return; }
 
                 try {
                     await updateDoc(doc(db, "markets", marketObj.id), {
                         name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays
                     });
-                    alert("Market updated successfully!");
+                    showCustomAlert("Success", "Market updated successfully!");
                     modal.classList.add('hidden');
                     loadMarkets();
-                } catch (e) { alert("Error: " + e.message); }
+                } catch (e) { showCustomAlert("Error", e.message, "error"); }
 
             } else if (currentAction === 'delete') {
                 let selectedName = document.getElementById('modalMarketSelect').value;
                 let marketObj = marketsList.find(m => m.name === selectedName);
-                if (!marketObj) { alert("Please select a market to delete!"); return; }
+                if (!marketObj) { showCustomAlert("Error", "Please select a market to delete!", "error"); return; }
 
                 if (confirm(`Are you sure you want to delete market "${selectedName}"?`)) {
                     try {
                         await deleteDoc(doc(db, "markets", marketObj.id));
-                        alert("Market deleted successfully!");
+                        showCustomAlert("Success", "Market deleted successfully!");
                         modal.classList.add('hidden');
                         loadMarkets();
-                    } catch (e) { alert("Error: " + e.message); }
+                    } catch (e) { showCustomAlert("Error", e.message, "error"); }
                 }
             }
         });
@@ -524,9 +566,8 @@
                         pannaInput.value = panaVal;
                         pannaInput.dispatchEvent(new Event('input'));
                     } else {
-                        // If record document exists for this session but panna for this specific session is empty/missing
                         alertBox.classList.add('hidden');
-                        document.getElementById('recordId').value = docId; // keep docId for updating the existing record doc
+                        document.getElementById('recordId').value = docId;
                         submitBtn.innerText = "Save Record";
                         submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
                         document.getElementById('cancelEditBtn').classList.add('hidden');
@@ -560,15 +601,10 @@
         function getFamilyGroup(panna) {
             const sorted = panna.split('').sort().join('');
             
-            // Comprehensive family group mapping based on standard Satta Matka chart rules and user examples
             const familyGroupCorrections = {
-                // Group 110 family
-                "016": "110", "066": "110", "110": "110", "115": "110", "156": "110", "160": "110", "566": "110", "660": "110",
-                // Group 222 family
-                "222": "222", "227": "227", "277": "277", "777": "777", // or mapped to canonical base family
-                // Group 444 family
+                "066": "110", "660": "110", "016": "110", "115": "110", "156": "110", "160": "110", "566": "110",
+                "222": "222", "227": "222", "277": "222", "777": "222",
                 "444": "444", "449": "444", "499": "444", "999": "444",
-                // Group 111 family
                 "111": "111", "116": "111", "166": "111", "666": "111"
             };
 
@@ -616,12 +652,12 @@
             let marketName = document.getElementById('marketDropdown').value;
 
             if (!marketName) {
-                alert("Please select a market!");
+                showCustomAlert("Error", "Please select a market!", "error");
                 return;
             }
 
             if (panna.length !== 3 || calculatedAnk === '') {
-                alert("Please enter a valid 3-digit panna!");
+                showCustomAlert("Error", "Please enter a valid 3-digit panna!", "error");
                 return;
             }
 
@@ -649,10 +685,10 @@
             try {
                 if (recordId) {
                     await updateDoc(doc(db, "matka_records", recordId), recordData);
-                    alert("Record updated successfully!");
+                    showCustomAlert("Success", "Record updated successfully!");
                 } else {
                     await addDoc(collection(db, "matka_records"), recordData);
-                    alert("Record saved successfully!");
+                    showCustomAlert("Success", "Record saved successfully!");
                 }
 
                 document.getElementById('matkaForm').reset();
@@ -675,7 +711,7 @@
                 document.getElementById('previewFamilyGroup').innerText = '-';
                 document.getElementById('previewPanelType').innerText = '-';
             } catch (error) {
-                alert("Error: " + error.message);
+                showCustomAlert("Error", error.message, "error");
             }
         });
     </script>
