@@ -16,9 +16,9 @@
             <p id="lastEntryDetails" class="leading-relaxed">Loading...</p>
         </div>
 
-        <!-- Alert Box -->
+        <!-- Alert Box for Duplicate Prevention -->
         <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center">
-            ⚠️ <span id="alertMessageText">Entry for this session already exists!</span>
+            ⚠️ <span id="alertMessageText">Entry for this session already exists! Switching to Update mode.</span>
         </div>
 
         <form id="matkaForm" class="space-y-4">
@@ -30,14 +30,14 @@
                 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- Market and Add Button -->
+            <!-- Market and Add/Edit Button -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
                 <div class="flex gap-2">
                     <select id="marketDropdown" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                         <option value="">Select Market</option>
                     </select>
-                    <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm font-medium shadow-sm transition">Add</button>
+                    <button type="button" id="openModalBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm font-medium shadow-sm transition">Add / Edit</button>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
                 <input type="text" id="pannaInput" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <!-- Auto Calculation Preview (Including Family Group) -->
+            <!-- Auto Calculation Preview -->
             <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner">
                 <div class="flex justify-between items-center">
                     <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>
@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <!-- Submit and Red Cancel/Exit Button -->
+            <!-- Submit and Red Cancel Button -->
             <div class="flex gap-2 pt-1">
                 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>
                 <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>
@@ -88,10 +88,11 @@
         </form>
     </div>
 
-    <!-- Add Market Modal -->
+    <!-- Add / Edit Market Modal -->
     <div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4">
         <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-lg font-bold text-slate-800">Add New Market</h3>
+            <h3 id="marketModalTitle" class="text-lg font-bold text-slate-800">Add / Update Market</h3>
+            <input type="hidden" id="editMarketId">
             
             <div>
                 <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>
@@ -123,7 +124,7 @@
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save</button>
+                <button type="button" id="saveMarketBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save Market</button>
                 <button type="button" id="closeModalBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition">Cancel</button>
             </div>
         </div>
@@ -151,11 +152,46 @@
         let marketsList = [];
 
         const modal = document.getElementById('marketModal');
-        document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
+        
+        // Open Modal: If a market is currently selected in dropdown, load its details for updating!
+        document.getElementById('openModalBtn').addEventListener('click', () => {
+            let selectedMarketName = document.getElementById('marketDropdown').value;
+            let marketObj = marketsList.find(m => m.name === selectedMarketName);
+
+            if (marketObj) {
+                // Edit Mode for Market
+                document.getElementById('editMarketId').value = marketObj.id;
+                document.getElementById('newMarketName').value = marketObj.name;
+                document.getElementById('openTime').value = marketObj.openTime || '';
+                document.getElementById('closeTime').value = marketObj.closeTime || '';
+                document.getElementById('marketModalTitle').innerText = "Update Market Details";
+                document.getElementById('saveMarketBtn').innerText = "Update Market";
+
+                // Set checkboxes
+                let days = marketObj.workingDays || [];
+                document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
+                    cb.checked = days.includes(cb.value);
+                });
+            } else {
+                // Add New Mode
+                document.getElementById('editMarketId').value = '';
+                document.getElementById('newMarketName').value = '';
+                document.getElementById('openTime').value = '';
+                document.getElementById('closeTime').value = '';
+                document.getElementById('marketModalTitle').innerText = "Add New Market";
+                document.getElementById('saveMarketBtn').innerText = "Save Market";
+                document.querySelectorAll('input[name="workingDay"]').forEach(cb => {
+                    cb.checked = true; // default all checked
+                });
+            }
+            modal.classList.remove('hidden');
+        });
+
         document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
 
         async function loadMarkets() {
             const marketDropdown = document.getElementById('marketDropdown');
+            let currentSelected = marketDropdown.value;
             try {
                 const querySnapshot = await getDocs(collection(db, "markets"));
                 marketDropdown.innerHTML = '<option value="">Select Market</option>';
@@ -170,6 +206,7 @@
                     opt.textContent = `${mData.name} (${mData.openTime || '-'} / ${mData.closeTime || '-'})`;
                     marketDropdown.appendChild(opt);
                 });
+                if (currentSelected) marketDropdown.value = currentSelected;
                 checkValidationAndStatus();
             } catch (e) {
                 console.log("Markets load error:", e);
@@ -177,7 +214,9 @@
         }
         loadMarkets();
 
+        // Save or Update Market function
         document.getElementById('saveMarketBtn').addEventListener('click', async () => {
+            let marketId = document.getElementById('editMarketId').value;
             let name = document.getElementById('newMarketName').value.trim();
             let openTime = document.getElementById('openTime').value;
             let closeTime = document.getElementById('closeTime').value;
@@ -192,19 +231,36 @@
                 return;
             }
 
+            // Duplicate check (if adding new or renaming to an existing name)
+            let existingMarket = marketsList.find(m => m.name.toLowerCase() === name.toLowerCase() && m.id !== marketId);
+            if (existingMarket) {
+                alert("Duplicate market error: This market name already exists!");
+                return;
+            }
+
             try {
-                await addDoc(collection(db, "markets"), {
-                    name: name,
-                    openTime: openTime,
-                    closeTime: closeTime,
-                    workingDays: workingDays,
-                    timestamp: serverTimestamp()
-                });
-                alert("Market added successfully!");
+                if (marketId) {
+                    // Update existing market
+                    await updateDoc(doc(db, "markets", marketId), {
+                        name: name,
+                        openTime: openTime,
+                        closeTime: closeTime,
+                        workingDays: workingDays
+                    });
+                    alert("Market updated successfully!");
+                } else {
+                    // Add new market
+                    await addDoc(collection(db, "markets"), {
+                        name: name,
+                        openTime: openTime,
+                        closeTime: closeTime,
+                        workingDays: workingDays,
+                        timestamp: serverTimestamp()
+                    });
+                    alert("Market added successfully!");
+                }
+
                 modal.classList.add('hidden');
-                document.getElementById('newMarketName').value = '';
-                document.getElementById('openTime').value = '';
-                document.getElementById('closeTime').value = '';
                 loadMarkets();
             } catch (error) {
                 alert("Error: " + error.message);
@@ -311,7 +367,7 @@
                     });
 
                     alertBox.classList.remove('hidden');
-                    alertText.innerText = "Entry for this session already exists!";
+                    alertText.innerText = "Duplicate entry check: Record for this session already exists! Switched to Update mode.";
                     document.getElementById('recordId').value = docId;
                     submitBtn.innerText = "Update Record";
                     submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
@@ -379,33 +435,12 @@
         let detectedPanelType = '';
         let detectedFamilyGroup = '';
 
-        // Family Group Mapping Function based on sorted digits / family rules
-        function getFamilyGroup(panna) {
-            // Sort digits to get canonical/representative form (e.g., '128' -> '128', '821' -> '128')
-            const sorted = panna.split('').sort().join('');
-            
-            // Map known family groups or canonical forms
-            // You can add or expand mappings here according to your chart
-            const familyMap = {
-                // Example 123 family mappings (sorted: '123', '137'->'137' sorted='137', etc.)
-                // Let's use sorted canonical representation or specific group representative:
-                // User examples: 128, 678, 236, 137, 123, 178, 367, 268 all belong to group '123'
-                // Let's map canonical sorted keys to their family group name:
-            };
-
-            // Automatic canonical sorting fallback or explicit mapping:
-            // If sorted digits match any family combination:
-            // For instance, let's group by sorted digits or specific rules:
-            return sorted; // Returns canonical sorted representation as family group representative
-        }
-
         document.getElementById('pannaInput').addEventListener('input', function(e) {
             let panna = e.target.value;
             if (panna.length === 3 && !isNaN(panna)) {
                 let sum = parseInt(panna[0]) + parseInt(panna[1]) + parseInt(panna[2]);
                 calculatedAnk = sum % 10; 
                 
-                // Panel Type Detection (SP / DP / TP)
                 if (panna[0] === panna[1] && panna[1] === panna[2]) {
                     detectedPanelType = "TP (Triple Panna)";
                 } else if (panna[0] === panna[1] || panna[1] === panna[2] || panna[0] === panna[2]) {
@@ -414,7 +449,6 @@
                     detectedPanelType = "SP (Single Panna)";
                 }
 
-                // Family Group Detection (Sorted canonical group name)
                 detectedFamilyGroup = panna.split('').sort().join('');
 
                 document.getElementById('previewAnk').innerText = calculatedAnk;
@@ -475,7 +509,7 @@
             try {
                 if (recordId) {
                     await updateDoc(doc(db, "matka_records", recordId), recordData);
-                    alert("Record updated successfully!");
+                    alert("Record updated successfully (Duplicate prevented)!");
                 } else {
                     await addDoc(collection(db, "matka_records"), recordData);
                     alert("Record saved successfully!");
