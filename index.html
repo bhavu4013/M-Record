@@ -820,34 +820,42 @@
 
                         let listArr = allGroupKeys.map(k => ({ group: k, ...groupStats[k] }));
 
-                        // Sorted by Recent (lowest currentDelay first, then highest lastSeen)
+                        // Sorted by Recent
                         let sortedByRecent = [...listArr].sort((a, b) => {
                             if (a.currentDelay !== b.currentDelay) return a.currentDelay - b.currentDelay;
                             return b.lastSeen - a.lastSeen;
                         });
                         let recent5 = sortedByRecent.slice(0, 5);
 
-                        // Sorted by Top (highest currentDelay first)
+                        // Sorted by Top
                         let remainingForTop = listArr.filter(item => !recent5.some(r => r.group === item.group));
                         let top5 = [...remainingForTop].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 5);
 
-                        // Mid = remaining
+                        // Mid
                         let usedGroups = new Set([...recent5.map(r => r.group), ...top5.map(t => t.group)]);
                         let midGroups = listArr.filter(item => !usedGroups.has(item.group));
 
-                        topAnkVal.innerText = "";
-                        topMaxVal.innerText = `Delay: ${top5[0] ? top5[0].currentDelay : 0}`;
-                        topListContainer.parentElement.querySelector('#topListContainer').remove(); // remove useless container if present or clear it
-                        
-                        // We set text in maxVal and hide unused small text if needed, or put delay values nicely
                         topAnkVal.className = "hidden";
                         midAnkVal.className = "hidden";
                         recentAnkVal.className = "hidden";
 
-                        // Let's populate the TOP, MID, RECENT cards with their respective 5 group items & delays
-                        topMaxVal.innerHTML = `<span class="text-xs font-bold text-orange-700">${top5.map(x => `${x.group}(${x.currentDelay})`).join(', ')}</span>`;
-                        midMaxVal.innerHTML = `<span class="text-xs font-bold text-indigo-700">${midGroups.map(x => `${x.group}(${x.currentDelay})`).join(', ')}</span>`;
-                        recentMaxVal.innerHTML = `<span class="text-xs font-bold text-emerald-700">${recent5.map(x => `${x.group}(${x.currentDelay})`).join(', ')}</span>`;
+                        let calculateCombinedDelay = (groupKeys) => {
+                            let minDelay = totalLen;
+                            groupKeys.forEach(gKey => {
+                                let occs = groupStats[gKey].occurrences;
+                                let d = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1];
+                                if (d < minDelay) minDelay = d;
+                            });
+                            return minDelay;
+                        };
+
+                        let topDelay = calculateCombinedDelay(top5.map(x => x.group));
+                        let midDelay = calculateCombinedDelay(midGroups.map(x => x.group));
+                        let recentDelay = calculateCombinedDelay(recent5.map(x => x.group));
+
+                        topMaxVal.innerHTML = `<span class="text-xs font-bold text-orange-700">Delay: ${topDelay} | [${top5.map(x => x.group).join(', ')}]</span>`;
+                        midMaxVal.innerHTML = `<span class="text-xs font-bold text-indigo-700">Delay: ${midDelay} | [${midGroups.map(x => x.group).join(', ')}]</span>`;
+                        recentMaxVal.innerHTML = `<span class="text-xs font-bold text-emerald-700">Delay: ${recentDelay} | [${recent5.map(x => x.group).join(', ')}]</span>`;
 
                         topListContainer.classList.add("hidden");
                         midListContainer.classList.add("hidden");
@@ -882,6 +890,10 @@
                         topAnkVal.className = "text-sm font-black text-slate-800 truncate";
                         midAnkVal.className = "text-sm font-black text-slate-800 truncate";
                         recentAnkVal.className = "text-sm font-black text-slate-800 truncate";
+
+                        topListContainer.classList.remove('hidden');
+                        midListContainer.classList.remove('hidden');
+                        recentListContainer.classList.remove('hidden');
 
                         topAnkVal.innerText = sortedFam.length > 0 ? sortedFam[0][0] : '-';
                         topMaxVal.innerText = `Max: ${sortedFam.length > 0 ? sortedFam[0][1] : 0}`;
@@ -918,6 +930,10 @@
                         midAnkVal.className = "text-sm font-black text-slate-800 truncate";
                         recentAnkVal.className = "text-sm font-black text-slate-800 truncate";
 
+                        topListContainer.classList.remove('hidden');
+                        midListContainer.classList.remove('hidden');
+                        recentListContainer.classList.remove('hidden');
+
                         topAnkVal.innerText = oddCount;
                         topMaxVal.innerText = `Max: ${oddPct}%`;
                         topListContainer.innerText = `[Odd Stats]`;
@@ -952,6 +968,10 @@
                         topAnkVal.className = "text-sm font-black text-slate-800 truncate";
                         midAnkVal.className = "text-sm font-black text-slate-800 truncate";
                         recentAnkVal.className = "text-sm font-black text-slate-800 truncate";
+
+                        topListContainer.classList.remove('hidden');
+                        midListContainer.classList.remove('hidden');
+                        recentListContainer.classList.remove('hidden');
 
                         topAnkVal.innerText = spCount;
                         topMaxVal.innerText = "Max: SP";
