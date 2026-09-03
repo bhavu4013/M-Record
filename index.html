@@ -188,6 +188,19 @@
 
     </div>
 
+    <!-- Family Panna Group Breakdown Popup Modal -->
+    <div id="fpDetailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
+        <div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-3 shadow-2xl">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 id="fpModalTitle" class="text-sm font-bold text-slate-800">Group Details</h3>
+                <button type="button" id="closeFpModalBtn" class="text-slate-400 hover:text-slate-600 font-bold text-sm">✕</button>
+            </div>
+            <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-xs">
+                <!-- Individual Panna breakdown injected here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Bottom Navigation Bar -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg flex justify-around p-2 max-w-md mx-auto z-40 rounded-t-2xl">
         <button id="navLoggerBtn" class="flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition">
@@ -298,6 +311,7 @@
         let currentAnalysisView = 'Open';
         let currentMoreSubView = 'FamilyJodi';
         let selectedFamilyPannaDigit = "0";
+        let globalAllRecords = [];
 
         const navLoggerBtn = document.getElementById('navLoggerBtn');
         const navAnalysisBtn = document.getElementById('navAnalysisBtn');
@@ -377,6 +391,10 @@
                 selectedFamilyPannaDigit = e.target.getAttribute('data-digit');
                 loadAnalysisData();
             });
+        });
+
+        document.getElementById('closeFpModalBtn').addEventListener('click', () => {
+            document.getElementById('fpDetailModal').classList.add('hidden');
         });
 
         const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]');
@@ -809,42 +827,40 @@
                         if (targetVal !== null && !isNaN(targetVal) || currentAnalysisView === 'More') {
                             let fKey = null;
                             let fpKey = null;
-                            if (currentAnalysisView === 'More') {
-                                if (currentMoreSubView === 'FamilyJodi') {
-                                    if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {
-                                        let jodi = `${data.openAnk}${data.closeAnk}`;
-                                        const familyGroupsMap = {
-                                            "11": ["11", "16", "61", "66"],
-                                            "12": ["12", "17", "21", "26", "62", "67", "71", "76"],
-                                            "13": ["13", "18", "31", "36", "63", "68", "81", "86"],
-                                            "14": ["14", "19", "41", "46", "64", "69", "91", "96"],
-                                            "15": ["10", "15", "50", "55", "01", "06", "51", "60"],
-                                            "22": ["22", "27", "72", "77"],
-                                            "23": ["23", "28", "32", "37", "73", "78", "82", "87"],
-                                            "24": ["24", "29", "42", "47", "74", "79", "92", "97"],
-                                            "25": ["20", "25", "52", "57", "70", "75", "02", "07"],
-                                            "33": ["33", "38", "83", "88"],
-                                            "34": ["34", "39", "43", "48", "84", "89", "93", "98"],
-                                            "35": ["30", "35", "53", "58", "80", "85", "03", "08"],
-                                            "44": ["44", "49", "94", "99"],
-                                            "45": ["40", "45", "54", "59", "90", "95", "04", "09"],
-                                            "55": ["00", "05", "50", "55"]
-                                        };
-                                        for (let [gKey, jList] of Object.entries(familyGroupsMap)) {
-                                            if (jList.includes(jodi)) {
-                                                fKey = gKey;
-                                                break;
-                                            }
-                                        }
+                            let pannaToTest = data.openPana;
+                            if (pannaToTest && pannaToTest.length === 3) {
+                                for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {
+                                    if (pList.includes(pannaToTest)) {
+                                        fpKey = gKey;
+                                        break;
                                     }
-                                } else if (currentMoreSubView === 'FamilyPanna') {
-                                    let pannaToTest = data.openPana;
-                                    if (pannaToTest && pannaToTest.length === 3) {
-                                        for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {
-                                            if (pList.includes(pannaToTest)) {
-                                                fpKey = gKey;
-                                                break;
-                                            }
+                                }
+                            }
+
+                            if (currentAnalysisView === 'More' && currentMoreSubView === 'FamilyJodi') {
+                                if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {
+                                    let jodi = `${data.openAnk}${data.closeAnk}`;
+                                    const familyGroupsMap = {
+                                        "11": ["11", "16", "61", "66"],
+                                        "12": ["12", "17", "21", "26", "62", "67", "71", "76"],
+                                        "13": ["13", "18", "31", "36", "63", "68", "81", "86"],
+                                        "14": ["14", "19", "41", "46", "64", "69", "91", "96"],
+                                        "15": ["10", "15", "50", "55", "01", "06", "51", "60"],
+                                        "22": ["22", "27", "72", "77"],
+                                        "23": ["23", "28", "32", "37", "73", "78", "82", "87"],
+                                        "24": ["24", "29", "42", "47", "74", "79", "92", "97"],
+                                        "25": ["20", "25", "52", "57", "70", "75", "02", "07"],
+                                        "33": ["33", "38", "83", "88"],
+                                        "34": ["34", "39", "43", "48", "84", "89", "93", "98"],
+                                        "35": ["30", "35", "53", "58", "80", "85", "03", "08"],
+                                        "44": ["44", "49", "94", "99"],
+                                        "45": ["40", "45", "54", "59", "90", "95", "04", "09"],
+                                        "55": ["00", "05", "50", "55"]
+                                    };
+                                    for (let [gKey, jList] of Object.entries(familyGroupsMap)) {
+                                        if (jList.includes(jodi)) {
+                                            fKey = gKey;
+                                            break;
                                         }
                                     }
                                 }
@@ -857,6 +873,7 @@
                                 val: targetVal,
                                 familyKey: fKey,
                                 familyPannaKey: fpKey,
+                                openPana: data.openPana,
                                 openAnk: data.openAnk,
                                 closeAnk: data.closeAnk,
                                 openFamily: data.openFamilyGroup || '-',
@@ -866,6 +883,8 @@
                         }
                     }
                 });
+
+                globalAllRecords = records;
 
                 records.sort((a, b) => {
                     let dateComp = new Date(a.date) - new Date(b.date);
@@ -1068,11 +1087,13 @@
 
                         fpListArr.forEach((item, idx) => {
                             let card = document.createElement('div');
-                            card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
+                            card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";
                             card.innerHTML = `
-                                <div class="text-xs font-bold text-slate-500">${item.group}</div>
+                                <div class="text-xs font-bold text-slate-500">Grp ${item.group}</div>
                                 <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>
                             `;
+                            card.addEventListener('click', () => showFamilyPannaDetails(item.group));
+
                             if (idx < 2) row1.appendChild(card);
                             else if (idx < 5) row2.appendChild(card);
                             else row3.appendChild(card);
@@ -1277,6 +1298,75 @@
             }
         }
 
+        function showFamilyPannaDetails(groupKey) {
+            const familyPannaGroupsMap = {
+                "222": ["777", "222", "227", "277"],
+                "444": ["444", "999", "499", "449"],
+                "666": ["111", "666", "166", "116"],
+                "888": ["888", "333", "338", "388"],
+                "000": ["555", "000", "500", "550"],
+                "123": ["128", "123", "678", "178", "236", "367", "137", "268"],
+                "345": ["345", "890", "390", "340", "480", "458", "589", "359"],
+                "567": ["157", "567", "120", "260", "670", "170", "256", "125"],
+                "789": ["789", "234", "248", "478", "239", "289", "347", "379"],
+                "456": ["456", "145", "140", "190", "690", "460", "159", "569"],
+                "470": ["470", "240", "290", "790", "245", "259", "579", "457"],
+                "246": ["246", "269", "129", "124", "147", "179", "679", "467"],
+                "369": ["346", "369", "148", "134", "139", "189", "689", "468"],
+                "130": ["130", "180", "680", "360", "356", "568", "158", "135"],
+                "230": ["230", "280", "780", "370", "258", "235", "357", "578"],
+                "100": ["100", "600", "155", "556", "560", "150"],
+                "200": ["200", "700", "255", "557", "570", "250"],
+                "300": ["300", "800", "355", "558", "580", "350"],
+                "400": ["400", "900", "455", "559", "590", "450"],
+                "366": ["366", "668", "113", "118", "168", "136"],
+                "330": ["335", "330", "588", "880", "380", "358"],
+                "110": ["110", "115", "660", "566", "156", "160"],
+                "440": ["445", "440", "599", "990", "490", "459"],
+                "220": ["220", "225", "770", "577", "257", "270"],
+                "334": ["339", "334", "889", "488", "348", "389"],
+                "399": ["399", "899", "344", "448", "489", "349"],
+                "377": ["778", "377", "228", "223", "237", "278"],
+                "477": ["779", "477", "229", "224", "247", "279"],
+                "144": ["446", "144", "699", "199", "149", "469"],
+                "177": ["177", "677", "122", "226", "267", "127"],
+                "114": ["119", "114", "669", "466", "146", "169"],
+                "133": ["336", "133", "688", "188", "138", "368"],
+                "233": ["337", "233", "788", "288", "238", "378"],
+                "266": ["266", "667", "112", "117", "167", "126"],
+                "244": ["447", "244", "799", "299", "249", "479"]
+            };
+
+            let pannaList = familyPannaGroupsMap[groupKey] || [groupKey];
+            let totalLen = globalAllRecords.length;
+            let contentDiv = document.getElementById('fpModalContent');
+            contentDiv.innerHTML = '';
+
+            document.getElementById('fpModalTitle').innerText = `Group ${groupKey} Pannas Delay Details`;
+
+            pannaList.forEach(panna => {
+                let lastIdx = -1;
+                for (let i = globalAllRecords.length - 1; i >= 0; i--) {
+                    if (globalAllRecords[i].openPana === panna) {
+                        lastIdx = i;
+                        break;
+                    }
+                }
+
+                let delay = lastIdx === -1 ? totalLen : totalLen - 1 - lastIdx;
+
+                let row = document.createElement('div');
+                row.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-2 rounded-lg font-mono";
+                row.innerHTML = `
+                    <span class="font-bold text-slate-800">Panna: ${panna}</span>
+                    <span class="font-bold text-indigo-600">Delay: ${delay} games</span>
+                `;
+                contentDiv.appendChild(row);
+            });
+
+            document.getElementById('fpDetailModal').classList.remove('hidden');
+        }
+
         document.getElementById('analysisMarketSelect').addEventListener('change', loadAnalysisData);
 
         const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');
@@ -1289,7 +1379,7 @@
                 closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
             } else {
                 closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm";
-                openLabel.className = "text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
+                openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";
             }
         }
         updateToggleUI();
