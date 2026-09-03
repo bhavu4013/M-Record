@@ -653,15 +653,19 @@
 
                         let targetVal = null;
                         if (currentAnalysisView === 'Open') {
-                            targetVal = data.openAnk !== undefined ? parseInt(data.openAnk) : null;
+                            if (data.openAnk !== undefined && data.openAnk !== null && data.openAnk !== '') {
+                                targetVal = parseInt(data.openAnk);
+                            }
                         } else if (currentAnalysisView === 'Close') {
-                            targetVal = data.closeAnk !== undefined ? parseInt(data.closeAnk) : null;
+                            if (data.closeAnk !== undefined && data.closeAnk !== null && data.closeAnk !== '') {
+                                targetVal = parseInt(data.closeAnk);
+                            }
                         } else if (currentAnalysisView === 'Total') {
-                            if (data.openAnk !== undefined && data.closeAnk !== undefined) {
+                            if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {
                                 targetVal = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10;
                             }
                         } else if (currentAnalysisView === 'Diff') {
-                            if (data.openAnk !== undefined && data.closeAnk !== undefined) {
+                            if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {
                                 targetVal = Math.abs(parseInt(data.openAnk) - parseInt(data.closeAnk)) % 10;
                             }
                         }
