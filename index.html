@@ -199,12 +199,12 @@
         <div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">  
             <div class="flex justify-between items-center border-b pb-2">  
                 <h3 id="fpModalTitle" class="text-sm font-bold text-slate-800">Group Details</h3>  
-                <button type="button" id="closeFpModalBtn" class="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 hover:bg-slate-200 w-7 h-7 rounded-full flex items-center justify-center transition">✕</button>  
+                <!-- Top close icon removed -->  
             </div>  
             <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-xs pr-1">  
                 <!-- Individual Panna breakdown injected here -->  
             </div>  
-            <button type="button" id="closeFpModalFooterBtn" class="w-full bg-slate-800 text-white py-2 rounded-xl font-bold text-xs hover:bg-slate-900 transition shadow-sm">Close</button>  
+            <button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold text-xs transition shadow-md">Close</button>  
         </div>  
     </div>  
 
@@ -462,7 +462,6 @@
         const closeFpModal = () => {  
             document.getElementById('fpDetailModal').classList.add('hidden');  
         };  
-        document.getElementById('closeFpModalBtn').addEventListener('click', closeFpModal);  
         document.getElementById('closeFpModalFooterBtn').addEventListener('click', closeFpModal);  
 
         const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]');  
@@ -1168,16 +1167,24 @@
                         midListContainer.classList.remove('hidden');  
                         recentListContainer.classList.remove('hidden');  
 
-                        topAnkVal.innerText = fpTop2[0] ? fpTop2[0].currentDelay : 0;  
-                        topMaxVal.innerText = `Max: ${fpTop2[0] ? fpTop2[0].maxDelay : 0}`;  
+                        let topCurrDelay = fpTop2[0] ? fpTop2[0].currentDelay : 0;  
+                        let midCurrDelay = fpMid3[0] ? fpMid3[0].currentDelay : 0;  
+                        let recentCurrDelay = fpRecent2[0] ? fpRecent2[0].currentDelay : 0;  
+
+                        let topMaxD = fpTop2[0] ? fpTop2[0].maxDelay : 0;  
+                        let midMaxD = fpMid3[0] ? fpMid3[0].maxDelay : 0;  
+                        let recentMaxD = fpRecent2[0] ? fpRecent2[0].maxDelay : 0;  
+
+                        topAnkVal.innerText = topCurrDelay;  
+                        topMaxVal.innerText = `Max: ${topMaxD}`;  
                         topListContainer.innerText = `[${fpTop2.map(x => x.group).join(', ')}]`;  
 
-                        midAnkVal.innerText = fpMid3[0] ? fpMid3[0].currentDelay : 0;  
-                        midMaxVal.innerText = `Max: ${fpMid3[0] ? fpMid3[0].maxDelay : 0}`;  
+                        midAnkVal.innerText = midCurrDelay;  
+                        midMaxVal.innerText = `Max: ${midMaxD}`;  
                         midListContainer.innerText = `[${fpMid3.map(x => x.group).join(', ')}]`;  
 
-                        recentAnkVal.innerText = fpRecent2[0] ? fpRecent2[0].currentDelay : 0;  
-                        recentMaxVal.innerText = `Max: ${fpRecent2[0] ? fpRecent2[0].maxDelay : 0}`;  
+                        recentAnkVal.innerText = recentCurrDelay;  
+                        recentMaxVal.innerText = `Max: ${recentMaxD}`;  
                         recentListContainer.innerText = `[${fpRecent2.map(x => x.group).join(', ')}]`;  
 
                         gapGridContainer.innerHTML = '';  
@@ -1497,8 +1504,8 @@
             contentDiv.innerHTML = '';  
 
             document.getElementById('fpModalTitle').innerText = familyPannaMode === 'each'
-                ? `Digit (${selectedFamilyPannaDigit}) - Group ${groupKey} Details`
-                : `Combined Group ${groupKey} Details`;  
+                ? `Digit (${selectedFamilyPannaDigit}) - Group ${groupKey}`
+                : `Combined Group ${groupKey}`;  
 
             if (pannaList.length === 0) {  
                 contentDiv.innerHTML = `  
@@ -1512,32 +1519,45 @@
             }  
 
             pannaList.forEach(panna => {  
-                let lastIdx = -1;  
+                let occurrences = [];
+                filteredRecords.forEach((r, idx) => {
+                    if (String(r.pannaVal || '') === String(panna)) {
+                        occurrences.push(idx);
+                    }
+                });
 
-                for (let i = filteredRecords.length - 1; i >= 0; i--) {  
-                    if (String(filteredRecords[i].pannaVal || '') === String(panna)) {  
-                        lastIdx = i;  
-                        break;  
-                    }  
-                }  
+                let currentDelay = 0;
+                if (occurrences.length === 0) {
+                    currentDelay = totalLen;
+                } else {
+                    currentDelay = totalLen - 1 - occurrences[occurrences.length - 1];
+                }
 
-                const delay = lastIdx === -1 ? totalLen : totalLen - 1 - lastIdx;  
-                const occurrenceCount = filteredRecords.filter(r => String(r.pannaVal || '') === String(panna)).length;  
+                let maxDelay = 0;
+                if (occurrences.length > 0) {
+                    let gaps = [occurrences[0]];
+                    for (let j = 1; j < occurrences.length; j++) {
+                        gaps.push(occurrences[j] - occurrences[j - 1] - 1);
+                    }
+                    gaps.push(totalLen - 1 - occurrences[occurrences.length - 1]);
+                    maxDelay = Math.max(...gaps);
+                } else {
+                    maxDelay = totalLen;
+                }
 
                 const row = document.createElement('div');  
-                row.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 rounded-xl font-mono shadow-sm";  
+                row.className = "bg-slate-50 border border-slate-200 p-2.5 rounded-xl font-mono shadow-sm flex items-center justify-between";  
                 row.innerHTML = `  
-                    <div class="space-y-0.5">  
-                        <div class="font-bold text-slate-800 text-xs">  
-                            Panna: <span class="text-indigo-600">${panna}</span>  
-                        </div>  
+                    <div class="font-bold text-slate-800 text-sm tracking-wider">  
+                        ${panna}  
                     </div>  
-
-                    <div class="text-right space-y-0.5">  
-                        <div class="font-bold text-slate-700 text-xs">  
-                            Delay: <span class="text-emerald-600">${delay}</span> games  
+                    <div class="text-right space-y-0.5 text-xs">  
+                        <div class="font-bold text-indigo-600">  
+                            Delay: ${currentDelay}  
                         </div>  
-                        <div class="text-[10px] text-slate-400">Total: ${occurrenceCount}</div>  
+                        <div class="font-bold text-slate-500 text-[11px]">  
+                            Max Delay: ${maxDelay}  
+                        </div>  
                     </div>  
                 `;  
                 contentDiv.appendChild(row);  
