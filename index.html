@@ -1201,6 +1201,7 @@
                             card.innerHTML = `  
                                 <div class="text-xs font-bold text-slate-500">${item.group}</div>  
                                 <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
+                                <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
                             `;  
                             card.addEventListener('click', () => showFamilyPannaDetails(item.group));  
 
@@ -1222,6 +1223,7 @@
                                 card.innerHTML = `  
                                     <div class="text-xs font-bold text-slate-500">${item.group}</div>  
                                     <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
+                                    <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
                                 `;  
                                 card.addEventListener('click', () => showFamilyPannaDetails(item.group));
                                 flexibleGrid.appendChild(card);
@@ -1516,7 +1518,6 @@
                 return;  
             }  
 
-            // Calculate metrics for each panna and prepare list for sorting
             let pannaStats = [];
             pannaList.forEach(panna => {  
                 let occurrences = [];
@@ -1548,10 +1549,9 @@
                 pannaStats.push({ panna, currentDelay, maxDelay });
             });  
 
-            // Sort Descending by Current Delay (Highest delay first)
+            // Sort Descending by Current Delay
             pannaStats.sort((a, b) => b.currentDelay - a.currentDelay);
 
-            // Render sorted rows in bigger, clear font
             pannaStats.forEach(stat => {
                 const row = document.createElement('div');  
                 row.className = "bg-slate-50 border border-slate-200 p-3 rounded-xl font-mono shadow-sm flex items-center justify-between";  
