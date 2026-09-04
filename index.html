@@ -21,12 +21,10 @@
 <div id="loggerSection" class="space-y-4 w-full"> 
 <form id="matkaForm" class="space-y-4 w-full"> 
 <input type="hidden" id="recordId"> 
-
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label> 
 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required> 
 </div> 
-
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label> 
 <div class="flex items-center gap-2 w-full"> 
@@ -38,31 +36,23 @@
 </button> 
 </div> 
 </div> 
-
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label> 
 <div class="flex items-center bg-slate-200 p-1 rounded-lg w-full"> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel"> 
-<input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open 
-</label> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel"> 
-<input type="radio" name="sessionToggle" value="Close" class="hidden"> Close 
-</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel"><input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel"><input type="radio" name="sessionToggle" value="Close" class="hidden"> Close</label> 
 </div> 
 </div> 
-
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label> 
 <input type="text" id="pannaInput" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required> 
 </div> 
-
 <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner w-full"> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Ank:</span><span id="previewAnk" class="font-bold text-slate-900">-</span></div> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Group:</span><span id="previewGroup" class="font-bold text-slate-900">-</span></div> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Family Group:</span><span id="previewFamilyGroup" class="font-bold text-amber-700">-</span></div> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Type:</span><span id="previewPanelType" class="font-bold text-blue-600">-</span></div> 
 </div> 
-
 <div class="flex gap-2 pt-1 w-full"> 
 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button> 
 <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button> 
@@ -74,20 +64,12 @@
 <div id="analysisSection" class="hidden space-y-4 w-full"> 
 <div class="space-y-3"> 
 <div class="flex bg-slate-200 p-1 rounded-lg gap-1"> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected"> 
-<input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market 
-</label> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700" id="analysisTabMerged"> 
-<input type="radio" name="analysisType" value="merged" class="hidden"> Merged 
-</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected"><input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700" id="analysisTabMerged"><input type="radio" name="analysisType" value="merged" class="hidden"> Merged</label> 
 </div> 
-
 <div id="analysisMarketContainer" class="space-y-1"> 
-<select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"> 
-<option value="">Select Market</option> 
-</select> 
+<select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"><option value="">Select Market</option></select> 
 </div> 
-
 <div class="grid grid-cols-5 gap-1 text-xs font-bold"> 
 <button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button> 
 <button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button> 
@@ -95,14 +77,12 @@
 <button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button> 
 <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button> 
 </div> 
-
 <div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1"> 
 <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button> 
 <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button> 
 <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd/Even</button> 
 <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button> 
 </div> 
-
 <div id="familyPannaDigitContainer" class="hidden space-y-1.5 pt-1"> 
 <div class="text-[11px] font-bold text-slate-600">Select Digit (0-9):</div> 
 <div class="grid grid-cols-5 gap-1 text-xs font-bold"> 
@@ -118,12 +98,10 @@
 <button type="button" data-digit="0" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition">0</button> 
 </div> 
 </div> 
-
 <div class="flex justify-between items-center text-xs font-bold px-1 pt-1 text-slate-700"> 
 <span id="analysisHeaderTitle" class="text-indigo-700">⏳ ALL MARKETS (MERGED) (OPEN)</span> 
 <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span> 
 </div> 
-
 <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer"> 
 <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm"> 
 <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div> 
@@ -144,7 +122,6 @@
 <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div> 
 </div> 
 </div> 
-
 <div class="space-y-1 pt-1"> 
 <div class="text-xs font-bold text-slate-600" id="gridTitleLabel">📊 Gap:</div> 
 <div id="gapGridContainer" class="space-y-1.5"></div> 
@@ -163,7 +140,7 @@
 </div> 
 <div class="space-y-3 pt-1"> 
 <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl shadow-sm space-y-1.5"> 
-<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Best Common Open Ank (Rule Applied)</div> 
+<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Top 4 Common Open Anks (Rules 1-4 Applied)</div> 
 <div id="bestCommonAnkOutput" class="text-xl font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 </div> 
@@ -554,7 +531,7 @@ shortlistMarketSelect.appendChild(opt);
 }); 
 } 
 
-// SHORTLIST RULES CALCULATION LOGIC
+// SHORTLIST RULES CALCULATION LOGIC ACCORDING TO USER'S 4 RULES
 document.getElementById('generateShortlistBtn').addEventListener('click', async () => { 
 const selectedMarket = document.getElementById('shortlistMarketSelect').value; 
 let bestCommonAnkOutput = document.getElementById('bestCommonAnkOutput'); 
@@ -580,6 +557,10 @@ return;
 
 let fetchedAnks = []; 
 
+const digitFamilyPannaMap = { 
+"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
+}; 
+
 // --- RULE 1: Open View ---
 let openAnksList = rawRecords.filter(r => r.openAnk !== undefined && r.openAnk !== "").map(r => parseInt(r.openAnk)); 
 let openAnkStats = {}; 
@@ -594,7 +575,8 @@ if(sortedOpenAnks.length > 0) {
 let topOpen = sortedOpenAnks[0]; 
 let recentOpen = sortedOpenAnks[sortedOpenAnks.length - 1]; 
 let r1TargetGroupAnk = openAnkStats[topOpen].delay >= openAnkStats[recentOpen].delay ? topOpen : recentOpen; 
-fetchedAnks.push(parseInt(r1TargetGroupAnk)); 
+let groupDigits = digitFamilyPannaMap[r1TargetGroupAnk] ? digitFamilyPannaMap[r1TargetGroupAnk][0].split('').map(Number) : [parseInt(r1TargetGroupAnk)]; 
+groupDigits.forEach(d => fetchedAnks.push(d)); 
 } 
 
 // --- RULE 2: Close View ---
@@ -693,13 +675,13 @@ let sortedDiffJodis = Object.keys(jodiDiffCounts).sort((a,b) => jodiDiffCounts[a
 sortedDiffJodis.forEach(j => fetchedAnks.push(parseInt(j[0]))); 
 } 
 
-// --- FINAL SELECTION: Most Common Digit ---
+// --- FINAL SELECTION: Most Common 3 or 4 Digits ---
 if(fetchedAnks.length > 0) { 
 let ankFrequencyMap = {}; 
 fetchedAnks.forEach(ank => { ankFrequencyMap[ank] = (ankFrequencyMap[ank] || 0) + 1; }); 
 let finalSortedAnks = Object.keys(ankFrequencyMap).sort((a, b) => ankFrequencyMap[b] - ankFrequencyMap[a]); 
-let bestCommonAnk = finalSortedAnks[0] !== undefined ? finalSortedAnks[0] : "-"; 
-bestCommonAnkOutput.innerText = `[ Best Open Ank: ${bestCommonAnk} ]`; 
+let topCommonAnks = finalSortedAnks.slice(0, 4).join(', '); 
+bestCommonAnkOutput.innerText = `[ Top Common Open Anks: ${topCommonAnks} ]`; 
 } else { 
 bestCommonAnkOutput.innerText = "[ No matching records found ]"; 
 } 
