@@ -122,8 +122,8 @@
             <div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1">  
                 <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button>  
                 <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button>  
-                <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd/Even</button>  
-                <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button>  
+                <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">Odd/Even</button>  
+                <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">Panel Type</button>  
             </div>  
 
             <!-- Family Panna Digit Selection Buttons (Shown only when Family Panna subview is active) -->  
@@ -823,7 +823,6 @@
                         }  
                     } else if (currentAnalysisView === 'Diff') {  
                         if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {  
-                            // Correct formula for Diff (e.g. 85 -> (10 + 5 - 8) % 10 = 7)  
                             let openA = parseInt(data.openAnk);  
                             let closeA = parseInt(data.closeAnk);  
                             targetVal = (10 + closeA - openA) % 10;  
@@ -873,6 +872,21 @@
                             }  
                         }  
 
+                        let oddEvenKey = null;
+                        if (currentAnalysisView === 'More' && currentMoreSubView === 'OddEven') {
+                            if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {
+                                let oVal = parseInt(data.openAnk);
+                                let cVal = parseInt(data.closeAnk);
+                                let isFirstOdd = (oVal % 2 !== 0);
+                                let isSecondOdd = (cVal % 2 !== 0);
+
+                                if (isFirstOdd && isSecondOdd) oddEvenKey = "Odd-Odd";
+                                else if (!isFirstOdd && !isSecondOdd) oddEvenKey = "Even-Even";
+                                else if (isFirstOdd && !isSecondOdd) oddEvenKey = "Odd-Even";
+                                else oddEvenKey = "Even-Odd";
+                            }
+                        }
+
                         records.push({  
                             date: data.date,  
                             marketName: data.marketName,  
@@ -880,6 +894,7 @@
                             val: targetVal,  
                             familyKey: fKey,  
                             familyPannaKey: fpKey,  
+                            oddEvenKey: oddEvenKey,
                             openPana: data.openPana,  
                             openAnk: data.openAnk,  
                             closeAnk: data.closeAnk,  
@@ -1111,48 +1126,95 @@
                     gapGridContainer.appendChild(row3);  
 
                 } else if (currentMoreSubView === 'OddEven') {  
-                    topCardTitle.innerText = "🔥 Odd Count";  
-                    midCardTitle.innerText = "💠 Even Count";  
-                    recentCardTitle.innerText = "⚡ Ratio";  
+                    topCardTitle.innerText = "🔥 TOP";  
+                    midCardTitle.innerText = "💠 MID";  
+                    recentCardTitle.innerText = "⚡ RECENT";  
 
-                    let oddCount = 0, evenCount = 0;  
-                    records.forEach(r => {  
-                        if (r.val !== null && !isNaN(r.val)) {  
-                            if (r.val % 2 === 0) evenCount++;  
-                            else oddCount++;  
-                        }  
-                    });  
+                    const oeTypes = ["Odd-Odd", "Even-Even", "Odd-Even", "Even-Odd"];
+                    let oeStats = {};
+                    oeTypes.forEach(t => {
+                        oeStats[t] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 };
+                    });
 
-                    let total = oddCount + evenCount;  
-                    let oddPct = total > 0 ? Math.round((oddCount / total) * 100) : 0;  
-                    let evenPct = total > 0 ? Math.round((evenCount / total) * 100) : 0;  
+                    records.forEach((rec, idx) => {
+                        if (rec.oddEvenKey && oeStats[rec.oddEvenKey]) {
+                            oeStats[rec.oddEvenKey].occurrences.push(idx);
+                        }
+                    });
 
-                    topAnkVal.className = "text-sm font-black text-slate-800 truncate";  
-                    midAnkVal.className = "text-sm font-black text-slate-800 truncate";  
-                    recentAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    let totalLen = records.length;
+                    oeTypes.forEach(t => {
+                        let occs = oeStats[t].occurrences;
+                        let currentDelay = 0;
+                        if (occs.length === 0) {
+                            currentDelay = totalLen;
+                        } else {
+                            currentDelay = totalLen - 1 - occs[occs.length - 1];
+                            oeStats[t].lastSeen = occs[occs.length - 1];
+                        }
+                        oeStats[t].currentDelay = currentDelay;
 
-                    topListContainer.classList.remove('hidden');  
-                    midListContainer.classList.remove('hidden');  
-                    recentListContainer.classList.remove('hidden');  
+                        let maxDelay = 0;
+                        if (occs.length > 0) {
+                            let gaps = [occs[0]];
+                            for (let j = 1; j < occs.length; j++) {
+                                gaps.push(occs[j] - occs[j - 1] - 1);
+                            }
+                            gaps.push(totalLen - 1 - occs[occs.length - 1]);
+                            maxDelay = Math.max(...gaps);
+                        } else {
+                            maxDelay = totalLen;
+                        }
+                        oeStats[t].maxDelay = maxDelay;
+                    });
 
-                    topAnkVal.innerText = oddCount;  
-                    topMaxVal.innerText = `Max: ${oddPct}%`;  
-                    topListContainer.innerText = `[Odd Stats]`;  
+                    let oeListArr = oeTypes.map(t => ({ combo: t, ...oeStats[t] }));
 
-                    midAnkVal.innerText = evenCount;  
-                    midMaxVal.innerText = `Max: ${evenPct}%`;  
-                    midListContainer.innerText = `[Even Stats]`;  
+                    let sortedByRecent = [...oeListArr].sort((a, b) => {
+                        if (a.currentDelay !== b.currentDelay) return a.currentDelay - b.currentDelay;
+                        return b.lastSeen - a.lastSeen;
+                    });
+                    let recent1 = sortedByRecent.slice(0, 1);
+                    let remainingForTop = oeListArr.filter(item => !recent1.some(r => r.combo === item.combo));
+                    let top2 = [...remainingForTop].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 2);
+                    let usedCombos = new Set([...recent1.map(x => x.combo), ...top2.map(x => x.combo)]);
+                    let mid1 = oeListArr.filter(x => !usedCombos.has(x.combo));
 
-                    recentAnkVal.innerText = `${oddPct}:${evenPct}`;  
-                    recentMaxVal.innerText = "Max: Ratio";  
-                    recentListContainer.innerText = `[Comparative]`;  
+                    topAnkVal.className = "text-xs font-black text-slate-800 truncate";
+                    midAnkVal.className = "text-xs font-black text-slate-800 truncate";
+                    recentAnkVal.className = "text-xs font-black text-slate-800 truncate";
 
-                    gapGridContainer.innerHTML = `  
-                        <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">  
-                            <div class="text-xs font-bold text-slate-600">Distribution Overview</div>  
-                            <div class="text-sm font-black text-blue-600">Odd: ${oddCount} (${oddPct}%) | Even: ${evenCount} (${evenPct}%)</div>  
-                        </div>  
-                    `;  
+                    topListContainer.classList.remove('hidden');
+                    midListContainer.classList.remove('hidden');
+                    recentListContainer.classList.remove('hidden');
+
+                    topAnkVal.innerText = top2.map(x => x.combo).join(', ');
+                    topMaxVal.innerText = `Max: ${top2[0] ? top2[0].maxDelay : 0}`;
+                    topListContainer.innerText = `[Top 2 Combos]`;
+
+                    midAnkVal.innerText = mid1.map(x => x.combo).join(', ');
+                    midMaxVal.innerText = `Max: ${mid1[0] ? mid1[0].maxDelay : 0}`;
+                    midListContainer.innerText = `[Mid Combo]`;
+
+                    recentAnkVal.innerText = recent1.map(x => x.combo).join(', ');
+                    recentMaxVal.innerText = `Max: ${recent1[0] ? recent1[0].maxDelay : 0}`;
+                    recentListContainer.innerText = `[Recent Combo]`;
+
+                    gapGridContainer.innerHTML = '';
+                    let oeGridWrapper = document.createElement('div');
+                    oeGridWrapper.className = "grid grid-cols-2 gap-2 text-center";
+
+                    oeListArr.forEach(item => {
+                        let card = document.createElement('div');
+                        card.className = "bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1";
+                        card.innerHTML = `
+                            <div class="text-xs font-bold text-slate-600">${item.combo}</div>
+                            <div class="text-sm font-extrabold text-blue-600">Delay: ${item.currentDelay}</div>
+                            <div class="text-[10px] font-bold text-slate-500">Max: ${item.maxDelay}</div>
+                        `;
+                        oeGridWrapper.appendChild(card);
+                    });
+                    gapGridContainer.appendChild(oeGridWrapper);
 
                 } else if (currentMoreSubView === 'PanelType') {  
                     topCardTitle.innerText = "🔥 Single (SP)";  
@@ -1283,7 +1345,6 @@
             recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;  
             recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;  
 
-            // Render Open, Close, Total, Diff Grid cleanly into 5-5 rows (two rows of 5 items each)  
             gapGridContainer.innerHTML = '';  
             let gridRowsWrapper = document.createElement('div');  
             gridRowsWrapper.className = "space-y-1.5";  
@@ -1696,7 +1757,7 @@
             showCustomAlert("Error", error.message, "error");  
         }  
     });  
-</script>  
+</script>
 
 </body>  
 </html>
