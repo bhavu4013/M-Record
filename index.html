@@ -159,7 +159,7 @@
                 <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer">  
                     <!-- TOP CARD -->  
                     <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">  
-                        <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP (2)</div>  
+                        <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>  
                         <div id="topAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>  
                         <div id="topMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>  
                         <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>  
@@ -167,7 +167,7 @@
 
                     <!-- MID CARD -->  
                     <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">  
-                        <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID (3)</div>  
+                        <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>  
                         <div id="midAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>  
                         <div id="midMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>  
                         <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>  
@@ -175,7 +175,7 @@
 
                     <!-- RECENT CARD -->  
                     <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">  
-                        <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT (2)</div>  
+                        <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>  
                         <div id="recentAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>  
                         <div id="recentMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>  
                         <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>  
@@ -405,7 +405,7 @@
             modeEachAnkBtn.className = "flex-1 py-1 rounded text-[11px] font-bold transition bg-indigo-600 text-white shadow-sm";
             modeCombinedBtn.className = "flex-1 py-1 rounded text-[11px] font-bold transition text-slate-700";
             
-            // Render 0-9 buttons
+            fpDigitButtonsGrid.className = "grid grid-cols-5 gap-1 text-xs font-bold";
             fpDigitButtonsGrid.innerHTML = `
                 <button type="button" data-digit="1" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">1</button>
                 <button type="button" data-digit="2" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">2</button>
@@ -428,7 +428,6 @@
             modeCombinedBtn.className = "flex-1 py-1 rounded text-[11px] font-bold transition bg-indigo-600 text-white shadow-sm";
             modeEachAnkBtn.className = "flex-1 py-1 rounded text-[11px] font-bold transition text-slate-700";
             
-            // Render Combined Pair buttons (1-6, 2-7, 3-8, 4-9, 5-0)
             fpDigitButtonsGrid.className = "grid grid-cols-5 gap-1 text-[11px] font-bold";
             fpDigitButtonsGrid.innerHTML = `
                 <button type="button" data-digit="1-6" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition col-span-1">1-6</button>
@@ -1095,9 +1094,9 @@
                         gapGridContainer.appendChild(gridWrapper);  
 
                     } else if (currentMoreSubView === 'FamilyPanna') {  
-                        topCardTitle.innerText = "🔥 TOP (2)";  
-                        midCardTitle.innerText = "💠 MID (3)";  
-                        recentCardTitle.innerText = "⚡ RECENT (2)";  
+                        topCardTitle.innerText = "🔥 TOP";  
+                        midCardTitle.innerText = "💠 MID";  
+                        recentCardTitle.innerText = "⚡ RECENT";  
 
                         let allowedGroups = [];
                         if (familyPannaMode === 'each') {
@@ -1107,7 +1106,6 @@
                             let parts = selectedFamilyPannaDigit.split('-');
                             let g1 = digitFamilyPannaMap[parts[0]] || [];
                             let g2 = digitFamilyPannaMap[parts[1]] || [];
-                            // Combine unique groups
                             allowedGroups = [...new Set([...g1, ...g2])];
                         }
 
@@ -1196,7 +1194,7 @@
                             let card = document.createElement('div');  
                             card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";  
                             card.innerHTML = `  
-                                <div class="text-xs font-bold text-slate-500">Grp ${item.group}</div>  
+                                <div class="text-xs font-bold text-slate-500">${item.group}</div>  
                                 <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
                             `;  
                             card.addEventListener('click', () => showFamilyPannaDetails(item.group));  
@@ -1211,14 +1209,13 @@
                             gapGridContainer.appendChild(row2);  
                             gapGridContainer.appendChild(row3);  
                         } else {
-                            // Flexible grid if combined has different count
                             let flexibleGrid = document.createElement('div');
                             flexibleGrid.className = "grid grid-cols-4 gap-1.5 text-center";
                             fpListArr.forEach(item => {
                                 let card = document.createElement('div');  
                                 card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";  
                                 card.innerHTML = `  
-                                    <div class="text-xs font-bold text-slate-500">Grp ${item.group}</div>  
+                                    <div class="text-xs font-bold text-slate-500">${item.group}</div>  
                                     <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
                                 `;  
                                 card.addEventListener('click', () => showFamilyPannaDetails(item.group));
