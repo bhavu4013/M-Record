@@ -144,15 +144,15 @@
 <div id="rule1Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-blue-700 uppercase">🔥 Rule 2 Output (4 Open Digits from Jodis)</div> 
+<div class="text-xs font-bold text-blue-700 uppercase">🔥 Rule 2 Output (4 Open Digits)</div> 
 <div id="rule2Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Rule 3 Output (4 Open Digits from Total Jodis)</div> 
+<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Rule 3 Output (4 Open Digits)</div> 
 <div id="rule3Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-amber-700 uppercase">🔥 Rule 4 Output (4 Open Digits from Diff Jodis)</div> 
+<div class="text-xs font-bold text-amber-700 uppercase">🔥 Rule 4 Output (4 Open Digits)</div> 
 <div id="rule4Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 </div> 
@@ -594,7 +594,6 @@ let topOpen = sortedOpenAnks[0];
 let recentOpen = sortedOpenAnks[sortedOpenAnks.length - 1]; 
 let r1TargetAnk = openAnkStats[topOpen].delay >= openAnkStats[recentOpen].delay ? topOpen : recentOpen; 
 r1Digits = digitFamilyPannaMap[r1TargetAnk] ? digitFamilyPannaMap[r1TargetAnk][0].split('').map(Number) : [parseInt(r1TargetAnk)]; 
-// Sort descending by individual digit delay/frequency if needed, or keep as group digits sorted
 r1Digits.sort((a, b) => openAnkStats[b].delay - openAnkStats[a].delay);
 } 
 rule1Out.innerText = r1Digits.length > 0 ? `[ ${r1Digits.join(', ')} ]` : "N/A";
@@ -627,11 +626,10 @@ jodiLastSeen[j] = idx;
 } 
 }); 
 let validJodis = Object.keys(jodiCounts).filter(j => targetCloseGroup.includes(j[1])); 
-// Most delayed jodis: sort descending by delay (totalLen - 1 - lastSeen) or ascending frequency
 validJodis.sort((a,b) => {
 let delayA = jodiLastSeen[a] !== undefined ? totalLen - 1 - jodiLastSeen[a] : totalLen;
 let delayB = jodiLastSeen[b] !== undefined ? totalLen - 1 - jodiLastSeen[b] : totalLen;
-return delayB - delayA; // Descending order (Most delayed first)
+return delayB - delayA; 
 }); 
 let mostDelayed4Jodis = validJodis.slice(0, 4); 
 r2Digits = mostDelayed4Jodis.map(j => parseInt(j[0])); 
@@ -674,7 +672,7 @@ let validTotalJodis = Object.keys(jodiTotalCounts);
 validTotalJodis.sort((a,b) => {
 let delayA = jodiTotalLastSeen[a] !== undefined ? totalLen - 1 - jodiTotalLastSeen[a] : totalLen;
 let delayB = jodiTotalLastSeen[b] !== undefined ? totalLen - 1 - jodiTotalLastSeen[b] : totalLen;
-return delayB - delayA; // Descending order
+return delayB - delayA; 
 });
 let sortedTotalJodis = validTotalJodis.slice(0, 4); 
 r3Digits = sortedTotalJodis.map(j => parseInt(j[0])); 
@@ -717,7 +715,7 @@ let validDiffJodis = Object.keys(jodiDiffCounts);
 validDiffJodis.sort((a,b) => {
 let delayA = jodiDiffLastSeen[a] !== undefined ? totalLen - 1 - jodiDiffLastSeen[a] : totalLen;
 let delayB = jodiDiffLastSeen[b] !== undefined ? totalLen - 1 - jodiDiffLastSeen[b] : totalLen;
-return delayB - delayA; // Descending order
+return delayB - delayA; 
 });
 let sortedDiffJodis = validDiffJodis.slice(0, 4); 
 r4Digits = sortedDiffJodis.map(j => parseInt(j[0])); 
