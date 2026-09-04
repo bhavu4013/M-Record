@@ -140,7 +140,7 @@
 </div> 
 <div class="space-y-3 pt-1"> 
 <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl shadow-sm space-y-1.5"> 
-<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Top 4 Common Open Anks (Rules 1-4 Applied)</div> 
+<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Top 4 Common Open Anks (Rules Applied)</div> 
 <div id="bestCommonAnkOutput" class="text-xl font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 </div> 
@@ -675,7 +675,7 @@ let sortedDiffJodis = Object.keys(jodiDiffCounts).sort((a,b) => jodiDiffCounts[a
 sortedDiffJodis.forEach(j => fetchedAnks.push(parseInt(j[0]))); 
 } 
 
-// --- FINAL SELECTION: Most Common 3 or 4 Digits ---
+// --- FINAL SELECTION: Most Common 4 Digits ---
 if(fetchedAnks.length > 0) { 
 let ankFrequencyMap = {}; 
 fetchedAnks.forEach(ank => { ankFrequencyMap[ank] = (ankFrequencyMap[ank] || 0) + 1; }); 
