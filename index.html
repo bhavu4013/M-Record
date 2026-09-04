@@ -73,18 +73,9 @@
 <!-- ANALYSIS SECTION --> 
 <div id="analysisSection" class="hidden space-y-4 w-full"> 
 <div class="space-y-3"> 
-<div class="flex bg-slate-200 p-1 rounded-lg gap-1"> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected"> 
-<input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market 
-</label> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700" id="analysisTabMerged"> 
-<input type="radio" name="analysisType" value="merged" class="hidden"> Merged 
-</label> 
-</div> 
-
 <div id="analysisMarketContainer" class="space-y-1"> 
 <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"> 
-<option value="">Select Market</option> 
+<option value="ALL_MERGED">All Markets (Merged)</option> 
 </select> 
 </div> 
 
@@ -306,7 +297,7 @@ pageTitle.innerText = "Daily Activity Logger";
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
 navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
-checkValidationAndStatus();
+checkValidationAndStatus(); 
 }); 
 
 navAnalysisBtn.addEventListener('click', () => { 
@@ -377,19 +368,6 @@ loadAnalysisData();
 const closeFpModal = () => document.getElementById('fpDetailModal').classList.add('hidden'); 
 document.getElementById('closeFpModalBtn').addEventListener('click', closeFpModal); 
 document.getElementById('closeFpModalFooterBtn').addEventListener('click', closeFpModal); 
-
-const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]'); 
-const analysisMarketContainer = document.getElementById('analysisMarketContainer'); 
-analysisTypeRadios.forEach(radio => { 
-radio.addEventListener('change', (e) => { 
-const val = e.target.value; 
-document.querySelectorAll('.analysis-main-tab').forEach(tab => tab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700 bg-transparent"); 
-document.getElementById(`analysisTab${val.charAt(0).toUpperCase() + val.slice(1)}`).className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm"; 
-if (val === 'selected') analysisMarketContainer.classList.remove('hidden'); 
-else analysisMarketContainer.classList.add('hidden'); 
-loadAnalysisData(); 
-}); 
-}); 
 
 function showCustomAlert(title, message, type = 'success') { 
 const alertModal = document.getElementById('customAlertModal'); 
@@ -550,7 +528,7 @@ let currentSelected = marketDropdown.value;
 try { 
 const querySnapshot = await getDocs(collection(db, "markets")); 
 marketDropdown.innerHTML = '<option value="">Select Market</option>'; 
-analysisMarketSelect.innerHTML = '<option value="">Select Market</option>'; 
+analysisMarketSelect.innerHTML = '<option value="ALL_MERGED">All Markets (Merged)</option>'; 
 marketsList = []; 
 querySnapshot.forEach((docSnap) => marketsList.push({ id: docSnap.id, ...docSnap.data() })); 
 marketsList.sort((a, b) => (a.openTime || "23:59").localeCompare(b.openTime || "23:59")); 
@@ -560,7 +538,6 @@ let opt2 = document.createElement('option'); opt2.value = mData.name; opt2.textC
 }); 
 if (currentSelected) marketDropdown.value = currentSelected; 
 else selectDefaultMarketByTime(); 
-if (marketsList.length > 0 && analysisMarketSelect.value === "") analysisMarketSelect.value = marketsList[0].name; 
 checkValidationAndStatus(); 
 } catch (e) { console.log(e); } 
 } 
@@ -610,7 +587,7 @@ const digitFamilyPannaMap = {
 "1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
 }; 
 
-// --- RULE 1: Open View ---
+// --- RULE 1 ---
 let openAnksList = rawRecords.filter(r => r.openAnk !== undefined && r.openAnk !== "").map(r => parseInt(r.openAnk)); 
 let openAnkStats = {}; 
 for(let i=0; i<=9; i++) openAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -630,7 +607,7 @@ r1Digits.sort((a, b) => openAnkStats[b].delay - openAnkStats[a].delay);
 } 
 rule1Out.innerText = r1Digits.length > 0 ? `[ ${r1Digits.join(', ')} ]` : "N/A"; 
 
-// --- RULE 2: Close View ---
+// --- RULE 2 ---
 let closeAnksList = rawRecords.filter(r => r.closeAnk !== undefined && r.closeAnk !== "").map(r => parseInt(r.closeAnk)); 
 let closeAnkStats = {}; 
 for(let i=0; i<=9; i++) closeAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -668,7 +645,7 @@ r2Digits = mostDelayed4Jodis.map(j => parseInt(j[0]));
 } 
 rule2Out.innerText = r2Digits.length > 0 ? `[ ${r2Digits.join(', ')} ]` : "N/A"; 
 
-// --- RULE 3: Total View ---
+// --- RULE 3 ---
 let totalStats = {}; 
 for(let i=0; i<=9; i++) totalStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -711,7 +688,7 @@ r3Digits = sortedTotalJodis.map(j => parseInt(j[0]));
 } 
 rule3Out.innerText = r3Digits.length > 0 ? `[ ${r3Digits.join(', ')} ]` : "N/A"; 
 
-// --- RULE 4: Diff View ---
+// --- RULE 4 ---
 let diffStats = {}; 
 for(let i=0; i<=9; i++) diffStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -760,14 +737,9 @@ console.log("Rule calculation error details:", e);
 } 
 }); 
 
-// --- DYNAMIC GROUP-WISE DELAY SIMULATION WITH REAL-TIME HIT DETECTION & COLOR HIGHLIGHTING ---
+// --- DYNAMIC GROUP-WISE DELAY SIMULATION WITH CORRECT HIT RESET & COLOR HIGHLIGHTING ---
 async function loadAnalysisData() { 
-const analysisType = document.querySelector('input[name="analysisType"]:checked').value; 
-let selectedMarket = document.getElementById('analysisMarketSelect').value; 
-if (analysisType === 'selected' && !selectedMarket && marketsList.length > 0) { 
-selectedMarket = marketsList[0].name; 
-document.getElementById('analysisMarketSelect').value = selectedMarket; 
-} 
+let selectedMarketVal = document.getElementById('analysisMarketSelect').value; 
 const analysisHeaderTitle = document.getElementById('analysisHeaderTitle'); 
 const openTotalLogs = document.getElementById('openTotalLogs'); 
 const topAnkVal = document.getElementById('topAnkVal'); 
@@ -786,13 +758,7 @@ const topCardBox = document.getElementById('topCardBox');
 const midCardBox = document.getElementById('midCardBox'); 
 const recentCardBox = document.getElementById('recentCardBox'); 
 
-if (analysisType === 'selected' && !selectedMarket) { 
-openTotalLogs.innerText = "0 ગેમ્સ ડેટા"; 
-analysisHeaderTitle.innerText = `SELECT A MARKET (${currentAnalysisView.toUpperCase()})`; 
-return; 
-} 
-
-let marketLabel = (analysisType === 'merged') ? "ALL MARKETS (MERGED)" : selectedMarket.toUpperCase(); 
+let marketLabel = (selectedMarketVal === 'ALL_MERGED' || !selectedMarketVal) ? "ALL MARKETS (MERGED)" : selectedMarketVal.toUpperCase(); 
 analysisHeaderTitle.innerText = `⏳ ${marketLabel} (${currentAnalysisView.toUpperCase()})`; 
 gridTitleLabel.innerText = `📊 ${currentAnalysisView} Analysis:`; 
 
@@ -802,7 +768,7 @@ let records = [];
 
 querySnapshot.forEach((docSnap) => { 
 let data = docSnap.data(); 
-let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket); 
+let matchMarket = (selectedMarketVal === 'ALL_MERGED' || !selectedMarketVal) || (data.marketName === selectedMarketVal); 
 if (matchMarket && data.date && data.marketName) { 
 let marketObj = marketsList.find(m => m.name === data.marketName); 
 let openTime = marketObj ? marketObj.openTime || "00:00" : "00:00"; 
@@ -830,7 +796,6 @@ gapGridContainer.innerHTML = '';
 return;
 }
 
-// State tracker for digits (0-9)
 let digitDelays = {}; 
 let digitLastSeen = {}; 
 for (let i = 0; i <= 9; i++) { 
@@ -842,11 +807,9 @@ let topGroupDelay = 0, topGroupMaxDelay = 0;
 let midGroupDelay = 0, midGroupMaxDelay = 0; 
 let recentGroupDelay = 0, recentGroupMaxDelay = 0; 
 
-// Historical Chronological Loop to check hits and reset accurately
 records.forEach((rec, idx) => { 
 let val = rec.val; 
 
-// Formulate pre-game groups based on delays BEFORE this game
 let dList = []; 
 for (let i = 0; i <= 9; i++) { 
 dList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] }); 
@@ -864,16 +827,19 @@ let tp4Set = new Set(tp4.map(x => x.ank));
 let md2 = remaining.filter(x => !tp4Set.has(x.ank)); 
 let md2Set = new Set(md2.map(x => x.ank)); 
 
-// Reset group on hit, increment other groups
-if (tp4Set.has(val)) { 
+let hitTop = tp4Set.has(val);
+let hitMid = md2Set.has(val);
+let hitRecent = rec4Set.has(val);
+
+if (hitTop) { 
 topGroupDelay = 0; 
 midGroupDelay++; 
 recentGroupDelay++; 
-} else if (md2Set.has(val)) { 
+} else if (hitMid) { 
 midGroupDelay = 0; 
 topGroupDelay++; 
 recentGroupDelay++; 
-} else if (rec4Set.has(val)) { 
+} else if (hitRecent) { 
 recentGroupDelay = 0; 
 topGroupDelay++; 
 midGroupDelay++; 
@@ -887,7 +853,6 @@ if (topGroupDelay > topGroupMaxDelay) topGroupMaxDelay = topGroupDelay;
 if (midGroupDelay > midGroupMaxDelay) midGroupMaxDelay = midGroupDelay; 
 if (recentGroupDelay > recentGroupMaxDelay) recentGroupMaxDelay = recentGroupDelay; 
 
-// Update individual digit delays
 for (let i = 0; i <= 9; i++) { 
 if (i === val) { 
 digitDelays[i] = 0; 
@@ -898,7 +863,6 @@ digitDelays[i]++;
 } 
 }); 
 
-// Form Current Groups for Next Game Output
 let currentDList = []; 
 for (let i = 0; i <= 9; i++) { 
 currentDList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] }); 
@@ -926,7 +890,6 @@ recentAnkVal.innerText = recentGroupDelay;
 recentMaxVal.innerText = `Max: ${recentGroupMaxDelay}`; 
 recentListContainer.innerText = `[${curRecent4.map(i => i.ank).join(',')}]`; 
 
-// Color Highlights: Green if delay is 0 (Hit!), Red if maximum delay
 let maxDel = Math.max(topGroupDelay, midGroupDelay, recentGroupDelay); 
 let cards = [ 
 { box: topCardBox, delay: topGroupDelay, defaultBorder: 'border-orange-400' }, 
@@ -944,7 +907,6 @@ c.box.className = `bg-white border-2 ${c.defaultBorder} rounded-xl p-2 space-y-1
 } 
 }); 
 
-// Bottom 0-9 Individual Digit Grid
 gapGridContainer.innerHTML = ''; 
 let gridRowsWrapper = document.createElement('div'); 
 gridRowsWrapper.className = "space-y-1.5"; 
@@ -969,6 +931,8 @@ gapGridContainer.appendChild(gridRowsWrapper);
 console.log("Analysis error:", e); 
 } 
 } 
+
+document.getElementById('analysisMarketSelect').addEventListener('change', loadAnalysisData);
 
 // --- LOGGER FORM & DUPLICATE VALIDATION LOGIC ---
 const radioButtons = document.querySelectorAll('input[name="sessionToggle"]'); 
