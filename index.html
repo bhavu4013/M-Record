@@ -299,10 +299,12 @@ const pageTitle = document.getElementById('pageTitle');
 
 navLoggerBtn.addEventListener('click', () => { 
 loggerSection.classList.remove('hidden'); analysisSection.classList.add('hidden'); shortlistSection.classList.add('hidden'); 
+document.getElementById('entryAlertBox').classList.remove('hidden'); 
 pageTitle.innerText = "Daily Activity Logger"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
 navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+checkValidationAndStatus();
 }); 
 
 navAnalysisBtn.addEventListener('click', () => { 
@@ -601,7 +603,7 @@ const digitFamilyPannaMap = {
 "1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
 }; 
 
-// --- RULE 1: Open View ---
+// --- RULE 1 ---
 let openAnksList = rawRecords.filter(r => r.openAnk !== undefined && r.openAnk !== "").map(r => parseInt(r.openAnk)); 
 let openAnkStats = {}; 
 for(let i=0; i<=9; i++) openAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -621,7 +623,7 @@ r1Digits.sort((a, b) => openAnkStats[b].delay - openAnkStats[a].delay);
 } 
 rule1Out.innerText = r1Digits.length > 0 ? `[ ${r1Digits.join(', ')} ]` : "N/A";
 
-// --- RULE 2: Close View ---
+// --- RULE 2 ---
 let closeAnksList = rawRecords.filter(r => r.closeAnk !== undefined && r.closeAnk !== "").map(r => parseInt(r.closeAnk)); 
 let closeAnkStats = {}; 
 for(let i=0; i<=9; i++) closeAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -659,7 +661,7 @@ r2Digits = mostDelayed4Jodis.map(j => parseInt(j[0]));
 } 
 rule2Out.innerText = r2Digits.length > 0 ? `[ ${r2Digits.join(', ')} ]` : "N/A";
 
-// --- RULE 3: Total View ---
+// --- RULE 3 ---
 let totalStats = {}; 
 for(let i=0; i<=9; i++) totalStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -702,7 +704,7 @@ r3Digits = sortedTotalJodis.map(j => parseInt(j[0]));
 } 
 rule3Out.innerText = r3Digits.length > 0 ? `[ ${r3Digits.join(', ')} ]` : "N/A";
 
-// --- RULE 4: Diff View ---
+// --- RULE 4 ---
 let diffStats = {}; 
 for(let i=0; i<=9; i++) diffStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -751,7 +753,7 @@ console.log("Rule calculation error details:", e);
 } 
 }); 
 
-// --- GROUP-WISE DELAY SIMULATION WITH RESET ON HIT & COLOR HIGHLIGHTING ---
+// --- GROUP-WISE DELAY SIMULATION & COLOR HIGHLIGHTING ---
 async function loadAnalysisData() { 
 const analysisType = document.querySelector('input[name="analysisType"]:checked').value; 
 let selectedMarket = document.getElementById('analysisMarketSelect').value; 
@@ -836,11 +838,9 @@ records.sort((a, b) => new Date(a.date) - new Date(b.date) || a.openTime.localeC
 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`; 
 
 if (currentAnalysisView === 'More') { 
-// More views logic stays intact
 return; 
 } 
 
-// --- BASE ANK STATS FOR GROUPING ---
 let ankStats = {}; 
 for (let i = 0; i <= 9; i++) ankStats[i] = { occurrences: [] }; 
 records.forEach((rec, idx) => { if (rec.val >= 0 && rec.val <= 9) ankStats[rec.val].occurrences.push(idx); }); 
@@ -862,7 +862,6 @@ let top4 = ankList.filter(item => !recent4.some(r => r.ank === item.ank)).sort((
 let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]); 
 let mid2 = ankList.filter(item => !usedAnks.has(item.ank)); 
 
-// --- GROUP-WISE DELAY SIMULATION (Reset on hit for respective group, increment others) ---
 let topGroupDelay = 0, topGroupMaxDelay = 0;
 let midGroupDelay = 0, midGroupMaxDelay = 0;
 let recentGroupDelay = 0, recentGroupMaxDelay = 0;
@@ -873,20 +872,13 @@ let recentAnksSet = new Set(recent4.map(x => x.ank));
 
 records.forEach(rec => {
 let val = rec.val;
-let hitTop = topAnksSet.has(val);
-let hitMid = midAnksSet.has(val);
-let hitRecent = recentAnksSet.has(val);
-
-// TOP Group
-if (hitTop) { topGroupDelay = 0; } else { topGroupDelay++; }
+if (topAnksSet.has(val)) { topGroupDelay = 0; } else { topGroupDelay++; }
 if (topGroupDelay > topGroupMaxDelay) topGroupMaxDelay = topGroupDelay;
 
-// MID Group
-if (hitMid) { midGroupDelay = 0; } else { midGroupDelay++; }
+if (midAnksSet.has(val)) { midGroupDelay = 0; } else { midGroupDelay++; }
 if (midGroupDelay > midGroupMaxDelay) midGroupMaxDelay = midGroupDelay;
 
-// RECENT Group
-if (hitRecent) { recentGroupDelay = 0; } else { recentGroupDelay++; }
+if (recentAnksSet.has(val)) { recentGroupDelay = 0; } else { recentGroupDelay++; }
 if (recentGroupDelay > recentGroupMaxDelay) recentGroupMaxDelay = recentGroupDelay;
 });
 
@@ -902,7 +894,6 @@ recentAnkVal.innerText = recentGroupDelay;
 recentMaxVal.innerText = `Max: ${recentGroupMaxDelay}`; 
 recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`; 
 
-// --- COLOR HIGHLIGHTING: Green for lowest/hit, Red for highest delay ---
 let delays = [
 { box: topCardBox, delay: topGroupDelay },
 { box: midCardBox, delay: midGroupDelay },
@@ -932,7 +923,223 @@ gridRowsWrapper.appendChild(row1); gridRowsWrapper.appendChild(row2); gapGridCon
 } catch (e) { console.log("Analysis error:", e); } 
 } 
 
-// Form submission, modal, and navigation event listeners remain fully intact
+// --- LOGGER FORM & SESSION TOGGLE LOGIC ---
+const radioButtons = document.querySelectorAll('input[name="sessionToggle"]'); 
+const openLabel = document.getElementById('openLabel'); 
+const closeLabel = document.getElementById('closeLabel'); 
+
+function updateToggleUI() { 
+if(document.querySelector('input[name="sessionToggle"]:checked').value === 'Open') { 
+openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm"; 
+closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600"; 
+} else { 
+closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm"; 
+openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600"; 
+} 
+} 
+updateToggleUI(); 
+
+radioButtons.forEach(radio => { 
+radio.addEventListener('change', () => { 
+updateToggleUI(); 
+checkValidationAndStatus(); 
+}); 
+}); 
+
+document.getElementById('marketDropdown').addEventListener('change', checkValidationAndStatus); 
+document.getElementById('recordDate').addEventListener('change', checkValidationAndStatus); 
+
+async function checkValidationAndStatus() { 
+let marketName = document.getElementById('marketDropdown').value; 
+let dateStr = document.getElementById('recordDate').value; 
+let session = document.querySelector('input[name="sessionToggle"]:checked').value; 
+let alertBox = document.getElementById('entryAlertBox'); 
+let alertText = document.getElementById('alertMessageText'); 
+let submitBtn = document.getElementById('submitBtn'); 
+let pannaInput = document.getElementById('pannaInput'); 
+if (!marketName || !dateStr) return; 
+
+const d = new Date(dateStr); 
+const daysMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; 
+const selectedDayShort = daysMap[d.getDay()]; 
+let selectedMarketObj = marketsList.find(m => m.name === marketName); 
+if (selectedMarketObj && selectedMarketObj.workingDays) { 
+if (!selectedMarketObj.workingDays.includes(selectedDayShort)) { 
+alertBox.classList.remove('hidden'); 
+alertText.innerText = "Market is closed on this day (Non-working day)!"; 
+submitBtn.disabled = true; 
+submitBtn.classList.add('opacity-50', 'cursor-not-allowed'); 
+pannaInput.disabled = true; 
+pannaInput.value = ''; 
+return; 
+} 
+} 
+submitBtn.disabled = false; 
+submitBtn.classList.remove('opacity-50', 'cursor-not-allowed'); 
+pannaInput.disabled = false; 
+
+try { 
+const docId = `${dateStr}_${marketName.replace(/\s+/g, '_')}`; 
+const docRef = doc(db, "matka_records", docId); 
+const docSnap = await getDoc(docRef); 
+if (docSnap.exists()) { 
+let data = docSnap.data(); 
+let panaVal = session === 'Open' ? data.openPana : data.closePana; 
+if (panaVal) { 
+alertBox.classList.remove('hidden'); 
+alertText.innerText = `Entry available: Record for this ${session} session already exists! Switched to Update mode.`; 
+document.getElementById('recordId').value = docId; 
+submitBtn.innerText = "Update Record"; 
+submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600'); 
+document.getElementById('cancelEditBtn').classList.remove('hidden'); 
+pannaInput.value = panaVal; 
+pannaInput.dispatchEvent(new Event('input')); 
+} else { 
+alertBox.classList.add('hidden'); 
+document.getElementById('recordId').value = docId; 
+submitBtn.innerText = "Save Record"; 
+submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600'); 
+document.getElementById('cancelEditBtn').classList.add('hidden'); 
+pannaInput.value = ''; 
+document.getElementById('previewAnk').innerText = '-'; 
+document.getElementById('previewGroup').innerText = '-'; 
+document.getElementById('previewFamilyGroup').innerText = '-'; 
+document.getElementById('previewPanelType').innerText = '-'; 
+} 
+} else { 
+alertBox.classList.add('hidden'); 
+document.getElementById('recordId').value = ''; 
+submitBtn.innerText = "Save Record"; 
+submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600'); 
+document.getElementById('cancelEditBtn').classList.add('hidden'); 
+pannaInput.value = ''; 
+document.getElementById('previewAnk').innerText = '-'; 
+document.getElementById('previewGroup').innerText = '-'; 
+document.getElementById('previewFamilyGroup').innerText = '-'; 
+document.getElementById('previewPanelType').innerText = '-'; 
+} 
+} catch (err) { 
+console.log("Check error:", err); 
+} 
+} 
+
+let calculatedAnk = ''; 
+let detectedPanelType = ''; 
+let detectedFamilyGroup = ''; 
+
+function getFamilyGroup(panna) { 
+const familyPannaGroupsMap = { 
+"222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
+"123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
+}; 
+for (let [groupKey, pannaList] of Object.entries(familyPannaGroupsMap)) { 
+if (pannaList.includes(panna)) { 
+return groupKey; 
+} 
+} 
+return panna.split('').sort().join(''); 
+} 
+
+document.getElementById('pannaInput').addEventListener('input', function(e) { 
+let panna = e.target.value; 
+if (panna.length === 3 && !isNaN(panna)) { 
+let sum = parseInt(panna[0]) + parseInt(panna[1]) + parseInt(panna[2]); 
+calculatedAnk = sum % 10; 
+if (panna[0] === panna[1] && panna[1] === panna[2]) { 
+detectedPanelType = "TP (Triple Panna)"; 
+} else if (panna[0] === panna[1] || panna[1] === panna[2] || panna[0] === panna[2]) { 
+detectedPanelType = "DP (Double Panna)"; 
+} else { 
+detectedPanelType = "SP (Single Panna)"; 
+} 
+detectedFamilyGroup = getFamilyGroup(panna); 
+document.getElementById('previewAnk').innerText = calculatedAnk; 
+document.getElementById('previewGroup').innerText = panna; 
+document.getElementById('previewFamilyGroup').innerText = detectedFamilyGroup; 
+document.getElementById('previewPanelType').innerText = detectedPanelType; 
+} else { 
+calculatedAnk = ''; 
+detectedPanelType = ''; 
+detectedFamilyGroup = ''; 
+document.getElementById('previewAnk').innerText = '-'; 
+document.getElementById('previewGroup').innerText = '-'; 
+document.getElementById('previewFamilyGroup').innerText = '-'; 
+document.getElementById('previewPanelType').innerText = '-'; 
+} 
+}); 
+
+document.getElementById('cancelEditBtn').addEventListener('click', () => {
+document.getElementById('matkaForm').reset();
+document.getElementById('recordDate').value = new Date().toISOString().split('T')[0];
+document.getElementById('submitBtn').innerText = "Save Record";
+document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
+document.getElementById('cancelEditBtn').classList.add('hidden');
+document.getElementById('entryAlertBox').classList.add('hidden');
+document.getElementById('previewAnk').innerText = '-'; 
+document.getElementById('previewGroup').innerText = '-'; 
+document.getElementById('previewFamilyGroup').innerText = '-'; 
+document.getElementById('previewPanelType').innerText = '-';
+});
+
+document.getElementById('matkaForm').addEventListener('submit', async function(e) { 
+e.preventDefault(); 
+let session = document.querySelector('input[name="sessionToggle"]:checked').value; 
+let panna = document.getElementById('pannaInput').value; 
+let date = document.getElementById('recordDate').value; 
+let marketName = document.getElementById('marketDropdown').value; 
+if (!marketName) { 
+showCustomAlert("Error", "Please select a market!", "error"); 
+return; 
+} 
+if (panna.length !== 3 || calculatedAnk === '') { 
+showCustomAlert("Error", "Please enter a valid 3-digit panna!", "error"); 
+return; 
+} 
+const docId = `${date}_${marketName.replace(/\s+/g, '_')}`; 
+const docRef = doc(db, "matka_records", docId); 
+try { 
+let existingDoc = await getDoc(docRef); 
+let recordData = existingDoc.exists() ? existingDoc.data() : { 
+date: date, 
+marketName: marketName, 
+timestamp: serverTimestamp() 
+}; 
+if (session === "Open") { 
+recordData.openPana = panna; 
+recordData.openAnk = calculatedAnk; 
+recordData.openGroup = panna; 
+recordData.openFamilyGroup = detectedFamilyGroup; 
+recordData.openType = detectedPanelType; 
+} else { 
+recordData.closePana = panna; 
+recordData.closeAnk = calculatedAnk; 
+recordData.closeGroup = panna; 
+recordData.closeFamilyGroup = detectedFamilyGroup; 
+recordData.closeType = detectedPanelType; 
+} 
+await setDoc(docRef, recordData, { merge: true }); 
+showCustomAlert("Success", "Record saved successfully!"); 
+document.getElementById('matkaForm').reset(); 
+document.getElementById('recordDate').value = date; 
+document.getElementById('submitBtn').innerText = "Save Record"; 
+document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600'); 
+document.getElementById('cancelEditBtn').classList.add('hidden'); 
+document.getElementById('entryAlertBox').classList.add('hidden'); 
+if (session === "Open") { 
+document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true; 
+} else { 
+document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true; 
+} 
+updateToggleUI(); 
+document.getElementById('previewAnk').innerText = '-'; 
+document.getElementById('previewGroup').innerText = '-'; 
+document.getElementById('previewFamilyGroup').innerText = '-'; 
+document.getElementById('previewPanelType').innerText = '-'; 
+checkValidationAndStatus();
+} catch (error) { 
+showCustomAlert("Error", error.message, "error"); 
+} 
+}); 
 </script> 
 </body> 
 </html>
