@@ -21,10 +21,12 @@
 <div id="loggerSection" class="space-y-4 w-full"> 
 <form id="matkaForm" class="space-y-4 w-full"> 
 <input type="hidden" id="recordId"> 
+
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label> 
 <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required> 
 </div> 
+
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label> 
 <div class="flex items-center gap-2 w-full"> 
@@ -36,23 +38,31 @@
 </button> 
 </div> 
 </div> 
+
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label> 
 <div class="flex items-center bg-slate-200 p-1 rounded-lg w-full"> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel"><input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open</label> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel"><input type="radio" name="sessionToggle" value="Close" class="hidden"> Close</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel"> 
+<input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open 
+</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel"> 
+<input type="radio" name="sessionToggle" value="Close" class="hidden"> Close 
+</label> 
 </div> 
 </div> 
+
 <div class="w-full"> 
 <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label> 
 <input type="text" id="pannaInput" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required> 
 </div> 
+
 <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner w-full"> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Ank:</span><span id="previewAnk" class="font-bold text-slate-900">-</span></div> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Group:</span><span id="previewGroup" class="font-bold text-slate-900">-</span></div> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Family Group:</span><span id="previewFamilyGroup" class="font-bold text-amber-700">-</span></div> 
 <div class="flex justify-between items-center"><span class="text-slate-500 text-xs font-medium uppercase">Type:</span><span id="previewPanelType" class="font-bold text-blue-600">-</span></div> 
 </div> 
+
 <div class="flex gap-2 pt-1 w-full"> 
 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button> 
 <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button> 
@@ -64,12 +74,20 @@
 <div id="analysisSection" class="hidden space-y-4 w-full"> 
 <div class="space-y-3"> 
 <div class="flex bg-slate-200 p-1 rounded-lg gap-1"> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected"><input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market</label> 
-<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700" id="analysisTabMerged"><input type="radio" name="analysisType" value="merged" class="hidden"> Merged</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected"> 
+<input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market 
+</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700" id="analysisTabMerged"> 
+<input type="radio" name="analysisType" value="merged" class="hidden"> Merged 
+</label> 
 </div> 
+
 <div id="analysisMarketContainer" class="space-y-1"> 
-<select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"><option value="">Select Market</option></select> 
+<select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"> 
+<option value="">Select Market</option> 
+</select> 
 </div> 
+
 <div class="grid grid-cols-5 gap-1 text-xs font-bold"> 
 <button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button> 
 <button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button> 
@@ -77,12 +95,14 @@
 <button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button> 
 <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button> 
 </div> 
+
 <div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1"> 
 <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button> 
 <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button> 
 <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd/Even</button> 
 <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button> 
 </div> 
+
 <div id="familyPannaDigitContainer" class="hidden space-y-1.5 pt-1"> 
 <div class="text-[11px] font-bold text-slate-600">Select Digit (0-9):</div> 
 <div class="grid grid-cols-5 gap-1 text-xs font-bold"> 
@@ -98,12 +118,12 @@
 <button type="button" data-digit="0" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition">0</button> 
 </div> 
 </div> 
+
 <div class="flex justify-between items-center text-xs font-bold px-1 pt-1 text-slate-700"> 
 <span id="analysisHeaderTitle" class="text-indigo-700">⏳ ALL MARKETS (MERGED) (OPEN)</span> 
 <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span> 
 </div> 
 
-<!-- Three Segment Cards (TOP, MID, RECENT) with Group-wise Delay & Max --> 
 <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer"> 
 <div id="topCardBox" class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm transition"> 
 <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div> 
@@ -731,7 +751,7 @@ console.log("Rule calculation error details:", e);
 } 
 }); 
 
-// --- GROUP-WISE DELAY CALCULATION WITH RESET ON HIT & COLOR HIGHLIGHTING ---
+// --- GROUP-WISE DELAY SIMULATION WITH RESET ON HIT & COLOR HIGHLIGHTING ---
 async function loadAnalysisData() { 
 const analysisType = document.querySelector('input[name="analysisType"]:checked').value; 
 let selectedMarket = document.getElementById('analysisMarketSelect').value; 
@@ -816,11 +836,11 @@ records.sort((a, b) => new Date(a.date) - new Date(b.date) || a.openTime.localeC
 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`; 
 
 if (currentAnalysisView === 'More') { 
-// More subviews handling remains stable
+// More views logic stays intact
 return; 
 } 
 
-// --- GROUP-WISE DELAY SIMULATION & MAX DELAY CALCULATION ---
+// --- BASE ANK STATS FOR GROUPING ---
 let ankStats = {}; 
 for (let i = 0; i <= 9; i++) ankStats[i] = { occurrences: [] }; 
 records.forEach((rec, idx) => { if (rec.val >= 0 && rec.val <= 9) ankStats[rec.val].occurrences.push(idx); }); 
@@ -842,7 +862,7 @@ let top4 = ankList.filter(item => !recent4.some(r => r.ank === item.ank)).sort((
 let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]); 
 let mid2 = ankList.filter(item => !usedAnks.has(item.ank)); 
 
-// Calculate Group-wise Delays and Max Delays simulating day-by-day hits
+// --- GROUP-WISE DELAY SIMULATION (Reset on hit for respective group, increment others) ---
 let topGroupDelay = 0, topGroupMaxDelay = 0;
 let midGroupDelay = 0, midGroupMaxDelay = 0;
 let recentGroupDelay = 0, recentGroupMaxDelay = 0;
@@ -853,16 +873,20 @@ let recentAnksSet = new Set(recent4.map(x => x.ank));
 
 records.forEach(rec => {
 let val = rec.val;
-// TOP Group check
-if (topAnksSet.has(val)) { topGroupDelay = 0; } else { topGroupDelay++; }
+let hitTop = topAnksSet.has(val);
+let hitMid = midAnksSet.has(val);
+let hitRecent = recentAnksSet.has(val);
+
+// TOP Group
+if (hitTop) { topGroupDelay = 0; } else { topGroupDelay++; }
 if (topGroupDelay > topGroupMaxDelay) topGroupMaxDelay = topGroupDelay;
 
-// MID Group check
-if (midAnksSet.has(val)) { midGroupDelay = 0; } else { midGroupDelay++; }
+// MID Group
+if (hitMid) { midGroupDelay = 0; } else { midGroupDelay++; }
 if (midGroupDelay > midGroupMaxDelay) midGroupMaxDelay = midGroupDelay;
 
-// RECENT Group check
-if (recentAnksSet.has(val)) { recentGroupDelay = 0; } else { recentGroupDelay++; }
+// RECENT Group
+if (hitRecent) { recentGroupDelay = 0; } else { recentGroupDelay++; }
 if (recentGroupDelay > recentGroupMaxDelay) recentGroupMaxDelay = recentGroupDelay;
 });
 
@@ -878,7 +902,7 @@ recentAnkVal.innerText = recentGroupDelay;
 recentMaxVal.innerText = `Max: ${recentGroupMaxDelay}`; 
 recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`; 
 
-// --- COLOR HIGHLIGHTING LOGIC (Green for low/recent hit, Red for highest delay) ---
+// --- COLOR HIGHLIGHTING: Green for lowest/hit, Red for highest delay ---
 let delays = [
 { box: topCardBox, delay: topGroupDelay },
 { box: midCardBox, delay: midGroupDelay },
@@ -886,12 +910,10 @@ let delays = [
 ];
 delays.sort((a, b) => b.delay - a.delay);
 
-// Reset classes
 [topCardBox, midCardBox, recentCardBox].forEach(box => {
 box.className = "bg-white border-2 rounded-xl p-2 space-y-1 shadow-sm transition";
 });
 
-// Highest delay gets Red highlight, Lowest/0 gets Green highlight
 delays[0].box.classList.add('border-red-500', 'bg-red-50/30');
 delays[2].box.classList.add('border-emerald-500', 'bg-emerald-50/30');
 delays[1].box.classList.add('border-indigo-400');
@@ -910,7 +932,7 @@ gridRowsWrapper.appendChild(row1); gridRowsWrapper.appendChild(row2); gapGridCon
 } catch (e) { console.log("Analysis error:", e); } 
 } 
 
-// Standard form submit, modal and navigation listeners remain untouched
+// Form submission, modal, and navigation event listeners remain fully intact
 </script> 
 </body> 
 </html>
