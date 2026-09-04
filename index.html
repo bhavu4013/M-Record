@@ -94,10 +94,14 @@
 <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button> 
 </div> 
 
-<div id="familyPannaDigitContainer" class="hidden space-y-1.5 pt-1"> 
-<div class="text-[11px] font-bold text-slate-600">Select Digit (0-9):</div> 
-<div class="grid grid-cols-5 gap-1 text-xs font-bold"> 
-<button type="button" data-digit="1" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">1</button> 
+<!-- Family Panna Toggle & Digit Selection --> 
+<div id="familyPannaOptionsContainer" class="hidden space-y-2 pt-1"> 
+<div class="flex justify-between items-center bg-slate-200 p-1 rounded-lg"> 
+<button type="button" id="fpToggleSingle" class="flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition">Single Digit</button> 
+<button type="button" id="fpToggleMerge" class="flex-1 py-1 rounded text-xs font-bold text-slate-700 transition">Cut / Merge (1-6)</button> 
+</div> 
+<div class="grid grid-cols-5 gap-1 text-xs font-bold pt-1" id="fpDigitButtonsGrid"> 
+<button type="button" data-digit="1" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition">1</button> 
 <button type="button" data-digit="2" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">2</button> 
 <button type="button" data-digit="3" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">3</button> 
 <button type="button" data-digit="4" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">4</button> 
@@ -106,7 +110,7 @@
 <button type="button" data-digit="7" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">7</button> 
 <button type="button" data-digit="8" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">8</button> 
 <button type="button" data-digit="9" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">9</button> 
-<button type="button" data-digit="0" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition">0</button> 
+<button type="button" data-digit="0" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">0</button> 
 </div> 
 </div> 
 
@@ -176,15 +180,14 @@
 
 </div> 
 
-<!-- Family Panna Group Breakdown Popup Modal --> 
+<!-- Family Panna Group Breakdown Popup Modal with Bottom Red Close Button --> 
 <div id="fpDetailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50"> 
 <div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl"> 
 <div class="flex justify-between items-center border-b pb-2"> 
 <h3 id="fpModalTitle" class="text-sm font-bold text-slate-800">Group Details</h3> 
-<button type="button" id="closeFpModalBtn" class="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 hover:bg-slate-200 w-7 h-7 rounded-full flex items-center justify-center transition">✕</button> 
 </div> 
 <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-xs pr-1"></div> 
-<button type="button" id="closeFpModalFooterBtn" class="w-full bg-slate-800 text-white py-2 rounded-xl font-bold text-xs hover:bg-slate-900 transition shadow-sm">Close</button> 
+<button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button> 
 </div> 
 </div> 
 
@@ -276,7 +279,8 @@ let marketsList = [];
 const modal = document.getElementById('marketModal'); 
 let currentAnalysisView = 'Open'; 
 let currentMoreSubView = 'FamilyJodi'; 
-let selectedFamilyPannaDigit = "0"; 
+let selectedFamilyPannaDigit = "1"; 
+let isFamilyPannaMergeMode = false; 
 let globalAllRecords = []; 
 
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
@@ -326,7 +330,7 @@ loadShortlistMarkets();
 
 const analysisViewBtns = document.querySelectorAll('.analysis-view-btn'); 
 const moreSubFiltersContainer = document.getElementById('moreSubFiltersContainer'); 
-const familyPannaDigitContainer = document.getElementById('familyPannaDigitContainer'); 
+const familyPannaOptionsContainer = document.getElementById('familyPannaOptionsContainer'); 
 
 analysisViewBtns.forEach(btn => { 
 btn.addEventListener('click', (e) => { 
@@ -335,10 +339,10 @@ e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg
 currentAnalysisView = e.target.getAttribute('data-view'); 
 if (currentAnalysisView === 'More') { 
 moreSubFiltersContainer.classList.remove('hidden'); 
-if (currentMoreSubView === 'FamilyPanna') familyPannaDigitContainer.classList.remove('hidden'); 
+if (currentMoreSubView === 'FamilyPanna') familyPannaOptionsContainer.classList.remove('hidden'); 
 } else { 
 moreSubFiltersContainer.classList.add('hidden'); 
-familyPannaDigitContainer.classList.add('hidden'); 
+familyPannaOptionsContainer.classList.add('hidden'); 
 } 
 loadAnalysisData(); 
 }); 
@@ -350,23 +354,59 @@ btn.addEventListener('click', (e) => {
 moreSubBtns.forEach(b => b.className = "more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition"); 
 e.target.className = "more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition"; 
 currentMoreSubView = e.target.getAttribute('data-subview'); 
-if (currentMoreSubView === 'FamilyPanna') familyPannaDigitContainer.classList.remove('hidden'); 
-else familyPannaDigitContainer.classList.add('hidden'); 
+if (currentMoreSubView === 'FamilyPanna') { 
+familyPannaOptionsContainer.classList.remove('hidden'); 
+} else { 
+familyPannaOptionsContainer.classList.add('hidden'); 
+} 
 loadAnalysisData(); 
 }); 
 }); 
 
-document.querySelectorAll('.fp-digit-btn').forEach(btn => { 
-btn.addEventListener('click', (e) => { 
-document.querySelectorAll('.fp-digit-btn').forEach(b => b.className = "fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition"); 
-e.target.className = "fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition"; 
-selectedFamilyPannaDigit = e.target.getAttribute('data-digit'); 
-loadAnalysisData(); 
-}); 
-}); 
+// Family Panna Toggle & Digit Grid Setup
+const fpToggleSingle = document.getElementById('fpToggleSingle');
+const fpToggleMerge = document.getElementById('fpToggleMerge');
+const fpDigitButtonsGrid = document.getElementById('fpDigitButtonsGrid');
+
+fpToggleSingle.addEventListener('click', () => {
+isFamilyPannaMergeMode = false;
+fpToggleSingle.className = "flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition";
+fpToggleMerge.className = "flex-1 py-1 rounded text-xs font-bold text-slate-700 transition";
+selectedFamilyPannaDigit = "1";
+renderFpDigitButtons();
+loadAnalysisData();
+});
+
+fpToggleMerge.addEventListener('click', () => {
+isFamilyPannaMergeMode = true;
+fpToggleMerge.className = "flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition";
+fpToggleSingle.className = "flex-1 py-1 rounded text-xs font-bold text-slate-700 transition";
+selectedFamilyPannaDigit = "1-6";
+renderFpDigitButtons();
+loadAnalysisData();
+});
+
+function renderFpDigitButtons() {
+fpDigitButtonsGrid.innerHTML = '';
+let digits = isFamilyPannaMergeMode ? ["1-6", "2-7", "3-8", "4-9", "0-5"] : ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+digits.forEach(d => {
+let btn = document.createElement('button');
+btn.type = "button";
+btn.setAttribute('data-digit', d);
+btn.className = `fp-digit-btn py-1 rounded text-center transition text-xs font-bold ${selectedFamilyPannaDigit === d ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-200 text-slate-700'}`;
+btn.innerText = d;
+btn.addEventListener('click', () => {
+document.querySelectorAll('.fp-digit-btn').forEach(b => b.className = "fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition text-xs font-bold");
+btn.className = "fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition text-xs font-bold shadow-sm";
+selectedFamilyPannaDigit = d;
+loadAnalysisData();
+});
+fpDigitButtonsGrid.appendChild(btn);
+});
+}
+renderFpDigitButtons();
 
 const closeFpModal = () => document.getElementById('fpDetailModal').classList.add('hidden'); 
-document.getElementById('closeFpModalBtn').addEventListener('click', closeFpModal); 
 document.getElementById('closeFpModalFooterBtn').addEventListener('click', closeFpModal); 
 
 function showCustomAlert(title, message, type = 'success') { 
@@ -772,9 +812,6 @@ const familyPannaGroupsMap = {
 "222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
 "123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
 }; 
-const digitFamilyPannaMap = { 
-"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
-}; 
 
 querySnapshot.forEach((docSnap) => { 
 let data = docSnap.data(); 
@@ -794,17 +831,18 @@ for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {
 if (pList.includes(pannaToTest)) { fpKey = gKey; break; } 
 } 
 } 
+let jodiKey = null; 
 if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== "" && data.closeAnk !== "") { 
 let jodi = `${data.openAnk}${data.closeAnk}`; 
 const familyGroupsMap = { 
 "11": ["11", "16", "61", "66"], "12": ["12", "17", "21", "26", "62", "67", "71", "76"], "13": ["13", "18", "31", "36", "63", "68", "81", "86"], "14": ["14", "19", "41", "46", "64", "69", "91", "96"], "15": ["10", "15", "50", "55", "01", "06", "51", "60"], "22": ["22", "27", "72", "77"], "23": ["23", "28", "32", "37", "73", "78", "82", "87"], "24": ["24", "29", "42", "47", "74", "79", "92", "97"], "25": ["20", "25", "52", "57", "70", "75", "02", "07"], "33": ["33", "38", "83", "88"], "34": ["34", "39", "43", "48", "84", "89", "93", "98"], "35": ["30", "35", "53", "58", "80", "85", "03", "08"], "44": ["44", "49", "94", "99"], "45": ["40", "45", "54", "59", "90", "95", "04", "09"], "55": ["00", "05", "50", "55"] 
 }; 
 for (let [gKey, jList] of Object.entries(familyGroupsMap)) { 
-if (jList.includes(jodi)) { fKey = gKey; break; } 
+if (jList.includes(jodi)) { jodiKey = gKey; break; } 
 } 
 } 
 
-records.push({ date: data.date, marketName: data.marketName, openTime, val: targetVal, familyKey: fKey, familyPannaKey: fpKey, openPana: data.openPana, openAnk: data.openAnk, closeAnk: data.closeAnk, openType: data.openType || '-' }); 
+records.push({ date: data.date, marketName: data.marketName, openTime, val: targetVal, familyKey: jodiKey, familyPannaKey: fpKey, openPana: data.openPana, openAnk: data.openAnk, closeAnk: data.closeAnk, openType: data.openType || '-' }); 
 } 
 }); 
 
@@ -852,12 +890,24 @@ gridWrapper.appendChild(card);
 gapGridContainer.appendChild(gridWrapper); 
 } else if (currentMoreSubView === 'FamilyPanna') { 
 topCardTitle.innerText = "🔥 TOP (2)"; midCardTitle.innerText = "💠 MID (3)"; recentCardTitle.innerText = "⚡ RECENT (2)"; 
-let allowedGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || []; 
+let activeGroups = [];
+const digitFamilyPannaMap = { 
+"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
+};
+if (isFamilyPannaMergeMode) {
+let parts = selectedFamilyPannaDigit.split('-');
+let set1 = digitFamilyPannaMap[parts[0]] || [];
+let set2 = digitFamilyPannaMap[parts[1]] || [];
+activeGroups = [...new Set([...set1, ...set2])];
+} else {
+activeGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];
+}
+
 let fpStats = {}; 
-allowedGroups.forEach(k => fpStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 }); 
+activeGroups.forEach(k => fpStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 }); 
 records.forEach((rec, idx) => { if (rec.familyPannaKey && fpStats[rec.familyPannaKey]) fpStats[rec.familyPannaKey].occurrences.push(idx); }); 
 let totalLen = records.length; 
-allowedGroups.forEach(k => { 
+activeGroups.forEach(k => { 
 let occs = fpStats[k].occurrences; 
 fpStats[k].currentDelay = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1]; 
 if (occs.length > 0) fpStats[k].lastSeen = occs[occs.length - 1]; 
@@ -866,7 +916,7 @@ for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1);
 if (occs.length > 0) gaps.push(totalLen - 1 - occs[occs.length - 1]); 
 fpStats[k].maxDelay = Math.max(...gaps); 
 }); 
-let fpListArr = allowedGroups.map(k => ({ group: k, ...fpStats[k] })); 
+let fpListArr = activeGroups.map(k => ({ group: k, ...fpStats[k] })); 
 let sortedByRecent = [...fpListArr].sort((a, b) => a.currentDelay - b.currentDelay || b.lastSeen - a.lastSeen); 
 let fpRecent2 = sortedByRecent.slice(0, 2); 
 let fpTop2 = fpListArr.filter(item => !fpRecent2.some(r => r.group === item.group)).sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 2); 
@@ -878,16 +928,14 @@ midAnkVal.innerText = fpMid3[0] ? fpMid3[0].currentDelay : 0; midMaxVal.innerTex
 recentAnkVal.innerText = fpRecent2[0] ? fpRecent2[0].currentDelay : 0; recentMaxVal.innerText = `Max: ${fpRecent2[0] ? fpRecent2[0].maxDelay : 0}`; recentListContainer.innerText = `[${fpRecent2.map(x => x.group).join(', ')}]`; 
 
 gapGridContainer.innerHTML = ''; 
-let row1 = document.createElement('div'); row1.className = "grid grid-cols-2 gap-1.5 text-center"; 
-let row2 = document.createElement('div'); row2.className = "grid grid-cols-3 gap-1.5 text-center pt-1"; 
-let row3 = document.createElement('div'); row3.className = "grid grid-cols-2 gap-1.5 text-center pt-1"; 
-fpListArr.forEach((item, idx) => { 
+let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-3 gap-1.5 text-center"; 
+fpListArr.forEach((item) => { 
 let card = document.createElement('div'); card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition"; 
 card.innerHTML = `<div class="text-xs font-bold text-slate-500">Grp ${item.group}</div><div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>`; 
 card.addEventListener('click', () => showFamilyPannaDetails(item.group)); 
-if (idx < 2) row1.appendChild(card); else if (idx < 5) row2.appendChild(card); else row3.appendChild(card); 
+gridWrapper.appendChild(card); 
 }); 
-gapGridContainer.appendChild(row1); gapGridContainer.appendChild(row2); gapGridContainer.appendChild(row3); 
+gapGridContainer.appendChild(gridWrapper); 
 } else if (currentMoreSubView === 'OddEven') { 
 topCardTitle.innerText = "🔥 Odd Count"; midCardTitle.innerText = "💠 Even Count"; recentCardTitle.innerText = "⚡ Ratio"; 
 let oddCount = 0, evenCount = 0; 
@@ -911,7 +959,7 @@ return;
 
 topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT"; 
 
-// --- DYNAMIC GROUP-WISE DELAY SIMULATION WITH ACCURATE HIT RESET ---
+// --- DYNAMIC GROUP-WISE DELAY SIMULATION WITH CORRECT HIT RESET ---
 let digitDelays = {}; 
 let digitLastSeen = {}; 
 for (let i = 0; i <= 9; i++) { 
@@ -1053,33 +1101,15 @@ const familyPannaGroupsMap = {
 "222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
 "123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
 }; 
-const digitFamilyPannaMap = { 
-"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
-}; 
 
-const analysisTypeVal = document.getElementById('analysisMarketSelect').value; 
-const filteredRecords = globalAllRecords.filter(r => analysisTypeVal === 'ALL_MERGED' || !analysisTypeVal || r.marketName === analysisTypeVal); 
+let selectedMarketVal = document.getElementById('analysisMarketSelect').value; 
+const filteredRecords = globalAllRecords.filter(r => selectedMarketVal === 'ALL_MERGED' || !selectedMarketVal || r.marketName === selectedMarketVal); 
 const totalLen = filteredRecords.length; 
 const groupPannas = familyPannaGroupsMap[groupKey] || [groupKey]; 
-const activeDigitList = digitFamilyPannaMap[String(selectedFamilyPannaDigit)] || []; 
-
-if (!activeDigitList.includes(groupKey)) return; 
-
-const pannaList = groupPannas.filter(panna => { 
-const digits = String(panna).split('').map(Number); 
-const ank = digits.reduce((sum, digit) => sum + digit, 0) % 10; 
-return String(ank) === String(selectedFamilyPannaDigit); 
-}); 
 
 const contentDiv = document.getElementById('fpModalContent'); 
 contentDiv.innerHTML = ''; 
-document.getElementById('fpModalTitle').innerText = `Digit (${selectedFamilyPannaDigit}) - Group ${groupKey} Details`; 
-
-if (pannaList.length === 0) { 
-contentDiv.innerHTML = `<div class="bg-amber-50 border border-amber-200 text-amber-700 rounded-xl p-4 text-center"><div class="font-bold text-sm">No Panna found</div><div class="text-[11px] mt-1">Group ${groupKey} has no Panna for Digit ${selectedFamilyPannaDigit}</div></div>`; 
-document.getElementById('fpDetailModal').classList.remove('hidden'); 
-return; 
-} 
+document.getElementById('fpModalTitle').innerText = `Group ${groupKey} Details`; 
 
 pannaList.forEach(panna => { 
 let lastIdx = -1; 
@@ -1094,7 +1124,6 @@ row.className = "flex justify-between items-center bg-slate-50 border border-sla
 row.innerHTML = ` 
 <div class="space-y-0.5"> 
 <div class="font-bold text-slate-800 text-xs">Panna: <span class="text-indigo-600">${panna}</span></div> 
-<div class="text-[10px] text-slate-400">Ank: ${selectedFamilyPannaDigit}</div> 
 </div> 
 <div class="text-right space-y-0.5"> 
 <div class="font-bold text-slate-700 text-xs">Delay: <span class="text-emerald-600">${delay}</span> games</div> 
