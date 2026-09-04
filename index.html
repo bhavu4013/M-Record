@@ -199,12 +199,11 @@
         <div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">  
             <div class="flex justify-between items-center border-b pb-2">  
                 <h3 id="fpModalTitle" class="text-sm font-bold text-slate-800">Group Details</h3>  
-                <!-- Top close icon removed -->  
             </div>  
-            <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-xs pr-1">  
+            <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-sm pr-1">  
                 <!-- Individual Panna breakdown injected here -->  
             </div>  
-            <button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold text-xs transition shadow-md">Close</button>  
+            <button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold text-sm transition shadow-md">Close</button>  
         </div>  
     </div>  
 
@@ -1101,7 +1100,6 @@
                         if (familyPannaMode === 'each') {
                             allowedGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];
                         } else {
-                            // Combined Mode (1-6, 2-7, 3-8, 4-9, 5-0)
                             let parts = selectedFamilyPannaDigit.split('-');
                             let g1 = digitFamilyPannaMap[parts[0]] || [];
                             let g2 = digitFamilyPannaMap[parts[1]] || [];
@@ -1518,6 +1516,8 @@
                 return;  
             }  
 
+            // Calculate metrics for each panna and prepare list for sorting
+            let pannaStats = [];
             pannaList.forEach(panna => {  
                 let occurrences = [];
                 filteredRecords.forEach((r, idx) => {
@@ -1545,23 +1545,31 @@
                     maxDelay = totalLen;
                 }
 
+                pannaStats.push({ panna, currentDelay, maxDelay });
+            });  
+
+            // Sort Descending by Current Delay (Highest delay first)
+            pannaStats.sort((a, b) => b.currentDelay - a.currentDelay);
+
+            // Render sorted rows in bigger, clear font
+            pannaStats.forEach(stat => {
                 const row = document.createElement('div');  
-                row.className = "bg-slate-50 border border-slate-200 p-2.5 rounded-xl font-mono shadow-sm flex items-center justify-between";  
+                row.className = "bg-slate-50 border border-slate-200 p-3 rounded-xl font-mono shadow-sm flex items-center justify-between";  
                 row.innerHTML = `  
-                    <div class="font-bold text-slate-800 text-sm tracking-wider">  
-                        ${panna}  
+                    <div class="font-black text-slate-900 text-base tracking-wider">  
+                        ${stat.panna}  
                     </div>  
-                    <div class="text-right space-y-0.5 text-xs">  
-                        <div class="font-bold text-indigo-600">  
-                            Delay: ${currentDelay}  
+                    <div class="flex items-center gap-4 text-xs font-bold">  
+                        <div class="text-slate-600">  
+                            Max: <span class="text-slate-800 text-sm font-black">${stat.maxDelay}</span>  
                         </div>  
-                        <div class="font-bold text-slate-500 text-[11px]">  
-                            Max Delay: ${maxDelay}  
+                        <div class="text-indigo-600">  
+                            Delay: <span class="text-indigo-700 text-sm font-black">${stat.currentDelay}</span>  
                         </div>  
                     </div>  
                 `;  
-                contentDiv.appendChild(row);  
-            });  
+                contentDiv.appendChild(row);
+            });
 
             document.getElementById('fpDetailModal').classList.remove('hidden');  
         }  
