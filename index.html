@@ -151,6 +151,47 @@
 </div> 
 </div> 
 </div> 
+
+<!-- SHORTLIST SECTION --> 
+<div id="shortlistSection" class="hidden space-y-4 w-full"> 
+<div class="space-y-3"> 
+<div class="space-y-1"> 
+<label class="block text-xs font-semibold text-slate-600 uppercase">Select Market</label> 
+<select id="shortlistMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"> 
+<option value="">All Markets (Merged)</option> 
+</select> 
+</div> 
+
+<div class="flex items-center bg-slate-200 p-1 rounded-lg w-full"> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold bg-indigo-600 text-white shadow-sm" id="slOpenLabel"> 
+<input type="radio" name="slSession" value="Open" checked class="hidden"> Open 
+</label> 
+<label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold text-slate-700" id="slCloseLabel"> 
+<input type="radio" name="slSession" value="Close" class="hidden"> Close 
+</label> 
+</div> 
+
+<div class="space-y-3 pt-1"> 
+<div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl shadow-sm space-y-1.5"> 
+<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Best 4 Open Digits (Ank)</div> 
+<div id="best4AnksOutput" class="text-base font-black text-slate-800 tracking-wider">-</div> 
+</div> 
+
+<div class="bg-indigo-50 border border-indigo-200 p-3.5 rounded-xl shadow-sm space-y-1.5"> 
+<div class="text-xs font-bold text-indigo-700 uppercase">💎 5 Strong Jodi Output</div> 
+<div id="strongJodiOutput" class="text-sm font-bold text-slate-800 tracking-wide font-mono">-</div> 
+</div> 
+
+<div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl shadow-sm space-y-1.5"> 
+<div class="text-xs font-bold text-amber-700 uppercase">🛡️ 5 Support Jodi Output</div> 
+<div id="supportJodiOutput" class="text-sm font-bold text-slate-800 tracking-wide font-mono">-</div> 
+</div> 
+</div> 
+
+<button type="button" id="generateShortlistBtn" class="w-full bg-indigo-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-md transition">Calculate & Generate</button> 
+</div> 
+</div> 
+
 </div> 
 
 <!-- Family Panna Group Breakdown Popup Modal --> 
@@ -174,6 +215,10 @@
 <button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"> 
 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> 
 <span class="text-xs">Analysis</span> 
+</button> 
+<button id="navShortlistBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"> 
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> 
+<span class="text-xs">Shortlist</span> 
 </button> 
 </div> 
 
@@ -273,26 +318,45 @@ let globalAllRecords = [];
 
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
 const navAnalysisBtn = document.getElementById('navAnalysisBtn'); 
+const navShortlistBtn = document.getElementById('navShortlistBtn'); 
+
 const loggerSection = document.getElementById('loggerSection'); 
 const analysisSection = document.getElementById('analysisSection'); 
+const shortlistSection = document.getElementById('shortlistSection'); 
 const pageTitle = document.getElementById('pageTitle'); 
 
 navLoggerBtn.addEventListener('click', () => { 
 loggerSection.classList.remove('hidden'); 
 analysisSection.classList.add('hidden'); 
+shortlistSection.classList.add('hidden'); 
 pageTitle.innerText = "Daily Activity Logger"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
 }); 
 
 navAnalysisBtn.addEventListener('click', () => { 
 analysisSection.classList.remove('hidden'); 
 loggerSection.classList.add('hidden'); 
+shortlistSection.classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Data Analysis Portal"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
 loadAnalysisData(); 
+}); 
+
+navShortlistBtn.addEventListener('click', () => { 
+shortlistSection.classList.remove('hidden'); 
+loggerSection.classList.add('hidden'); 
+analysisSection.classList.add('hidden'); 
+document.getElementById('entryAlertBox').classList.add('hidden'); 
+pageTitle.innerText = "Game Shortlist Portal"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
+navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+loadShortlistMarkets(); 
 }); 
 
 const analysisViewBtns = document.querySelectorAll('.analysis-view-btn'); 
@@ -615,6 +679,65 @@ console.log("Markets load error:", e);
 } 
 } 
 loadMarkets(); 
+
+async function loadShortlistMarkets() { 
+const shortlistMarketSelect = document.getElementById('shortlistMarketSelect'); 
+shortlistMarketSelect.innerHTML = '<option value="">All Markets (Merged)</option>'; 
+marketsList.forEach(m => { 
+let opt = document.createElement('option'); 
+opt.value = m.name; 
+opt.textContent = m.name; 
+shortlistMarketSelect.appendChild(opt); 
+}); 
+} 
+
+document.getElementById('generateShortlistBtn').addEventListener('click', async () => { 
+const selectedMarket = document.getElementById('shortlistMarketSelect').value; 
+const session = document.querySelector('input[name="slSession"]:checked').value; 
+let best4AnksOutput = document.getElementById('best4AnksOutput'); 
+let strongJodiOutput = document.getElementById('strongJodiOutput'); 
+let supportJodiOutput = document.getElementById('supportJodiOutput'); 
+
+best4AnksOutput.innerText = "Analyzing..."; 
+strongJodiOutput.innerText = "Calculating..."; 
+supportJodiOutput.innerText = "Calculating..."; 
+
+try { 
+const querySnapshot = await getDocs(collection(db, "matka_records")); 
+let ankCounts = {}; 
+for(let i=0; i<=9; i++) ankCounts[i] = 0; 
+let jodiCounts = {}; 
+
+querySnapshot.forEach((docSnap) => { 
+let data = docSnap.data(); 
+let matchMarket = (selectedMarket === "" || data.marketName === selectedMarket); 
+if (matchMarket) { 
+let val = session === 'Open' ? data.openAnk : data.closeAnk; 
+if (val !== undefined && val !== null && val !== '') { 
+let num = parseInt(val); 
+if (!isNaN(num)) ankCounts[num]++; 
+} 
+if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') { 
+let jodi = `${data.openAnk}${data.closeAnk}`; 
+jodiCounts[jodi] = (jodiCounts[jodi] || 0) + 1; 
+} 
+} 
+}); 
+
+let sortedAnks = Object.keys(ankCounts).sort((a, b) => ankCounts[b] - ankCounts[a]); 
+let best4 = sortedAnks.slice(0, 4).join(', '); 
+best4AnksOutput.innerText = `[ ${best4} ]`; 
+
+let sortedJodis = Object.keys(jodiCounts).sort((a, b) => jodiCounts[b] - jodiCounts[a]); 
+let top5Strong = sortedJodis.slice(0, 5).join(', '); 
+let top5Support = sortedJodis.slice(5, 10).join(', '); 
+
+strongJodiOutput.innerText = top5Strong ? `[ ${top5Strong} ]` : "Not enough data"; 
+supportJodiOutput.innerText = top5Support ? `[ ${top5Support} ]` : "Not enough data"; 
+} catch (e) { 
+best4AnksOutput.innerText = "Error loading data"; 
+} 
+}); 
 
 async function loadAnalysisData() { 
 const analysisType = document.querySelector('input[name="analysisType"]:checked').value; 
