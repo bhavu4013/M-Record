@@ -1056,13 +1056,32 @@
                         midListContainer.classList.remove('hidden');  
                         recentListContainer.classList.remove('hidden');  
 
-                        let topCurrDelay = top5[0] ? top5[0].currentDelay : 0;  
-                        let midCurrDelay = midGroups[0] ? midGroups[0].currentDelay : 0;  
-                        let recentCurrDelay = recent5[0] ? recent5[0].currentDelay : 0;  
+                        let calculateCombinedDelay = (groupKeys) => {
+                            let minDelay = totalLen;
+                            groupKeys.forEach(gKey => {
+                                let occs = groupStats[gKey].occurrences;
+                                let d = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1];
+                                if (d < minDelay) minDelay = d;
+                            });
+                            return minDelay;
+                        };
 
-                        let topMaxD = top5[0] ? top5[0].maxDelay : 0;  
-                        let midMaxD = midGroups[0] ? midGroups[0].maxDelay : 0;  
-                        let recentMaxD = recent5[0] ? recent5[0].maxDelay : 0;  
+                        let calculateCombinedMaxDelay = (groupKeys) => {
+                            let maxD = 0;
+                            groupKeys.forEach(gKey => {
+                                let m = groupStats[gKey].maxDelay;
+                                if (m > maxD) maxD = m;
+                            });
+                            return maxD;
+                        };
+
+                        let topCurrDelay = calculateCombinedDelay(top5.map(x => x.group));
+                        let midCurrDelay = calculateCombinedDelay(midGroups.map(x => x.group));
+                        let recentCurrDelay = calculateCombinedDelay(recent5.map(x => x.group));
+
+                        let topMaxD = calculateCombinedMaxDelay(top5.map(x => x.group));
+                        let midMaxD = calculateCombinedMaxDelay(midGroups.map(x => x.group));
+                        let recentMaxD = calculateCombinedMaxDelay(recent5.map(x => x.group));
 
                         topAnkVal.innerText = topCurrDelay;  
                         topMaxVal.innerText = `Max: ${topMaxD}`;  
@@ -1086,6 +1105,7 @@
                             card.innerHTML = `  
                                 <div class="text-xs font-bold text-slate-500">${item.group}</div>  
                                 <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
+                                <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
                             `;  
                             gridWrapper.appendChild(card);  
                         });  
