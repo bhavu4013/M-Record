@@ -122,20 +122,13 @@
             <div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1">  
                 <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button>  
                 <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button>  
-                <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">Odd/Even</button>  
-                <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">Panel Type</button>  
+                <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd/Even</button>  
+                <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button>  
             </div>  
 
             <!-- Family Panna Digit Selection Buttons (Shown only when Family Panna subview is active) -->  
             <div id="familyPannaDigitContainer" class="hidden space-y-1.5 pt-1">  
-                <div class="text-[11px] font-bold text-slate-600 flex justify-between items-center">  
-                    <span>Select Digit (0-9):</span>  
-                    <div class="flex items-center gap-2">  
-                        <label class="cursor-pointer text-[10px] bg-slate-200 px-2 py-0.5 rounded font-semibold text-slate-700" id="fpToggleLabel">  
-                            <input type="checkbox" id="fpCombinedToggle" class="mr-1"> Combined Mode  
-                        </label>  
-                    </div>  
-                </div>  
+                <div class="text-[11px] font-bold text-slate-600">Select Digit (0-9):</div>  
                 <div class="grid grid-cols-5 gap-1 text-xs font-bold">  
                     <button type="button" data-digit="1" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">1</button>  
                     <button type="button" data-digit="2" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">2</button>  
@@ -200,11 +193,12 @@
     <div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">  
         <div class="flex justify-between items-center border-b pb-2">  
             <h3 id="fpModalTitle" class="text-sm font-bold text-slate-800">Group Details</h3>  
+            <button type="button" id="closeFpModalBtn" class="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 hover:bg-slate-200 w-7 h-7 rounded-full flex items-center justify-center transition">✕</button>  
         </div>  
         <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-xs pr-1">  
             <!-- Individual Panna breakdown injected here -->  
         </div>  
-        <button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-sm">Close</button>  
+        <button type="button" id="closeFpModalFooterBtn" class="w-full bg-slate-800 text-white py-2 rounded-xl font-bold text-xs hover:bg-slate-900 transition shadow-sm">Close</button>  
     </div>  
 </div>  
 
@@ -318,7 +312,6 @@
     let currentAnalysisView = 'Open';  
     let currentMoreSubView = 'FamilyJodi';  
     let selectedFamilyPannaDigit = "0";  
-    let isFpCombined = false;  
     let globalAllRecords = [];  
 
     const navLoggerBtn = document.getElementById('navLoggerBtn');  
@@ -401,14 +394,10 @@
         });  
     });  
 
-    document.getElementById('fpCombinedToggle').addEventListener('change', (e) => {
-        isFpCombined = e.target.checked;
-        loadAnalysisData();
-    });
-
     const closeFpModal = () => {  
         document.getElementById('fpDetailModal').classList.add('hidden');  
     };  
+    document.getElementById('closeFpModalBtn').addEventListener('click', closeFpModal);  
     document.getElementById('closeFpModalFooterBtn').addEventListener('click', closeFpModal);  
 
     const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]');  
@@ -819,19 +808,29 @@
                     let marketObj = marketsList.find(m => m.name === data.marketName);  
                     let openTime = marketObj ? marketObj.openTime || "00:00" : "00:00";  
 
-                    // Process Open Session if exists
-                    if (data.openAnk !== undefined && data.openAnk !== null && data.openAnk !== '') {  
-                        let openAnkVal = parseInt(data.openAnk);
-                        let targetVal = null;  
-                        if (currentAnalysisView === 'Open') targetVal = openAnkVal;  
-                        else if (currentAnalysisView === 'Close') { /* handled separately */ }  
-                        else if (currentAnalysisView === 'Total' && data.closeAnk !== undefined && data.closeAnk !== '') {  
-                            targetVal = (openAnkVal + parseInt(data.closeAnk)) % 10;  
-                        } else if (currentAnalysisView === 'Diff' && data.closeAnk !== undefined && data.closeAnk !== '') {  
-                            let closeAnkVal = parseInt(data.closeAnk);
-                            targetVal = (10 + closeAnkVal - openAnkVal) % 10;  
+                    let targetVal = null;  
+                    if (currentAnalysisView === 'Open') {  
+                        if (data.openAnk !== undefined && data.openAnk !== null && data.openAnk !== '') {  
+                            targetVal = parseInt(data.openAnk);  
                         }  
+                    } else if (currentAnalysisView === 'Close') {  
+                        if (data.closeAnk !== undefined && data.closeAnk !== null && data.closeAnk !== '') {  
+                            targetVal = parseInt(data.closeAnk);  
+                        }  
+                    } else if (currentAnalysisView === 'Total') {  
+                        if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {  
+                            targetVal = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10;  
+                        }  
+                    } else if (currentAnalysisView === 'Diff') {  
+                        if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {  
+                            // Correct formula for Diff (e.g. 85 -> (10 + 5 - 8) % 10 = 7)  
+                            let openA = parseInt(data.openAnk);  
+                            let closeA = parseInt(data.closeAnk);  
+                            targetVal = (10 + closeA - openA) % 10;  
+                        }  
+                    }  
 
+                    if (targetVal !== null && !isNaN(targetVal) || currentAnalysisView === 'More') {  
                         let fKey = null;  
                         let fpKey = null;  
                         let pannaToTest = data.openPana;  
@@ -846,7 +845,7 @@
                         }  
 
                         if (currentAnalysisView === 'More' && currentMoreSubView === 'FamilyJodi') {  
-                            if (data.closeAnk !== undefined && data.closeAnk !== '' && data.closeAnk !== null) {  
+                            if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') {  
                                 let jodi = `${data.openAnk}${data.closeAnk}`;  
                                 const familyGroupsMap = {  
                                     "11": ["11", "16", "61", "66"],  
@@ -878,50 +877,17 @@
                             date: data.date,  
                             marketName: data.marketName,  
                             openTime: openTime,  
-                            session: 'Open',
                             val: targetVal,  
                             familyKey: fKey,  
                             familyPannaKey: fpKey,  
                             openPana: data.openPana,  
                             openAnk: data.openAnk,  
                             closeAnk: data.closeAnk,  
+                            openFamily: data.openFamilyGroup || '-',  
+                            closeFamily: data.closeFamilyGroup || '-',  
                             openType: data.openType || '-'  
                         });  
-                    }
-
-                    // Process Close Session if exists
-                    if (data.closeAnk !== undefined && data.closeAnk !== null && data.closeAnk !== '') {  
-                        let closeAnkVal = parseInt(data.closeAnk);
-                        let targetVal = null;  
-                        if (currentAnalysisView === 'Close') targetVal = closeAnkVal;  
-
-                        let fKey = null;  
-                        let fpKey = null;  
-                        let pannaToTest = data.closePana;  
-                          
-                        if (pannaToTest && pannaToTest.length === 3) {  
-                            for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {  
-                                if (pList.includes(pannaToTest)) {  
-                                    fpKey = gKey;  
-                                    break;  
-                                }  
-                            }  
-                        }  
-
-                        records.push({  
-                            date: data.date,  
-                            marketName: data.marketName,  
-                            openTime: openTime + "_close", // ensures chronological sequence per day
-                            session: 'Close',
-                            val: targetVal,  
-                            familyKey: fKey,  
-                            familyPannaKey: fpKey,  
-                            openPana: data.closePana,  
-                            openAnk: data.closeAnk,  
-                            closeAnk: data.closeAnk,  
-                            openType: data.closeType || '-'  
-                        });  
-                    }
+                    }  
                 }  
             });  
 
@@ -1025,44 +991,26 @@
                     recentListContainer.innerText = `[${recent5.map(x => x.group).join(', ')}]`;  
 
                     gapGridContainer.innerHTML = '';  
-                    let row1 = document.createElement('div');  
-                    row1.className = "grid grid-cols-3 gap-1.5 text-center";  
+                    let gridWrapper = document.createElement('div');  
+                    gridWrapper.className = "grid grid-cols-5 gap-1.5 text-center";  
 
-                    let row2 = document.createElement('div');  
-                    row2.className = "grid grid-cols-2 gap-1.5 text-center pt-1";  
-
-                    listArr.forEach((item, idx) => {  
+                    listArr.forEach(item => {  
                         let card = document.createElement('div');  
                         card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";  
                         card.innerHTML = `  
                             <div class="text-xs font-bold text-slate-500">${item.group}</div>  
                             <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
-                            <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
                         `;  
-                        if (idx < 3) row1.appendChild(card);  
-                        else row2.appendChild(card);  
+                        gridWrapper.appendChild(card);  
                     });  
-                    gapGridContainer.appendChild(row1);  
-                    gapGridContainer.appendChild(row2);  
+                    gapGridContainer.appendChild(gridWrapper);  
 
                 } else if (currentMoreSubView === 'FamilyPanna') {  
-                    topCardTitle.innerText = "🔥 TOP";  
-                    midCardTitle.innerText = "💠 MID";  
-                    recentCardTitle.innerText = "⚡ RECENT";  
+                    topCardTitle.innerText = "🔥 TOP (2)";  
+                    midCardTitle.innerText = "💠 MID (3)";  
+                    recentCardTitle.innerText = "⚡ RECENT (2)";  
 
-                    let allowedGroups = [];
-                    if (isFpCombined) {
-                        let d = selectedFamilyPannaDigit;
-                        let partner = (parseInt(d) + 5) % 10;
-                        let setGroups = new Set([
-                            ...(digitFamilyPannaMap[d] || []),
-                            ...(digitFamilyPannaMap[String(partner)] || [])
-                        ]);
-                        allowedGroups = Array.from(setGroups);
-                    } else {
-                        allowedGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];  
-                    }
-
+                    let allowedGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];  
                     let fpStats = {};  
                     allowedGroups.forEach(k => {  
                         fpStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 };  
@@ -1102,13 +1050,12 @@
 
                     let fpListArr = allowedGroups.map(k => ({ group: k, ...fpStats[k] }));  
 
-                    // Sorting for Top (2), Mid (3), Recent (2) when 7 groups
                     let sortedByRecent = [...fpListArr].sort((a, b) => {  
                         if (a.currentDelay !== b.currentDelay) return a.currentDelay - b.currentDelay;  
                         return b.lastSeen - a.lastSeen;  
                     });  
-                    
                     let fpRecent2 = sortedByRecent.slice(0, 2);  
+
                     let remainingForTop = fpListArr.filter(item => !fpRecent2.some(r => r.group === item.group));  
                     let fpTop2 = [...remainingForTop].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 2);  
 
@@ -1149,9 +1096,8 @@
                         let card = document.createElement('div');  
                         card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";  
                         card.innerHTML = `  
-                            <div class="text-xs font-bold text-slate-500">${item.group}</div>  
+                            <div class="text-xs font-bold text-slate-500">Grp ${item.group}</div>  
                             <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
-                            <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
                         `;  
                         card.addEventListener('click', () => showFamilyPannaDetails(item.group));  
 
@@ -1160,26 +1106,9 @@
                         else row3.appendChild(card);  
                     });  
 
-                    if (fpListArr.length === 7) {
-                        gapGridContainer.appendChild(row1);  
-                        gapGridContainer.appendChild(row2);  
-                        gapGridContainer.appendChild(row3);  
-                    } else {
-                        let flexibleGrid = document.createElement('div');
-                        flexibleGrid.className = "grid grid-cols-4 gap-1.5 text-center";
-                        fpListArr.forEach(item => {
-                            let card = document.createElement('div');  
-                            card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";  
-                            card.innerHTML = `  
-                                <div class="text-xs font-bold text-slate-500">${item.group}</div>  
-                                <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
-                                <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
-                            `;  
-                            card.addEventListener('click', () => showFamilyPannaDetails(item.group));
-                            flexibleGrid.appendChild(card);
-                        });
-                        gapGridContainer.appendChild(flexibleGrid);
-                    }
+                    gapGridContainer.appendChild(row1);  
+                    gapGridContainer.appendChild(row2);  
+                    gapGridContainer.appendChild(row3);  
 
                 } else if (currentMoreSubView === 'OddEven') {  
                     topCardTitle.innerText = "🔥 Odd Count";  
@@ -1368,14 +1297,12 @@
             for (let i = 0; i <= 9; i++) {  
                 let found = ankList.find(item => item.ank === i);  
                 let delayVal = found ? found.currentDelay : 0;  
-                let maxVal = found ? found.maxDelay : 0;  
                   
                 let card = document.createElement('div');  
                 card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";  
                 card.innerHTML = `  
                     <div class="text-xs font-bold text-slate-500">${i}</div>  
                     <div class="text-sm font-extrabold text-blue-600">${delayVal}</div>  
-                    <div class="text-[10px] font-bold text-slate-600">Max: ${maxVal}</div>  
                 `;  
 
                 if (i < 5) {  
@@ -1433,6 +1360,19 @@
             "244": ["447", "244", "799", "299", "249", "479"]  
         };  
 
+        const digitFamilyPannaMap = {  
+            "1": ["222", "123", "470", "100", "330", "399", "114"],  
+            "2": ["444", "345", "246", "200", "110", "377", "133"],  
+            "3": ["666", "567", "369", "300", "440", "477", "233"],  
+            "4": ["888", "789", "130", "400", "220", "144", "266"],  
+            "5": ["000", "456", "230", "366", "334", "177", "244"],  
+            "6": ["222", "123", "470", "100", "330", "399", "114"],  
+            "7": ["444", "345", "246", "200", "110", "377", "133"],  
+            "8": ["666", "567", "369", "300", "440", "477", "233"],  
+            "9": ["888", "789", "130", "400", "220", "144", "266"],  
+            "0": ["000", "456", "230", "366", "334", "177", "244"]  
+        };  
+
         const analysisType = document.querySelector('input[name="analysisType"]:checked').value;  
         const selectedMarket = document.getElementById('analysisMarketSelect').value;  
 
@@ -1442,16 +1382,21 @@
 
         const totalLen = filteredRecords.length;  
         const groupPannas = familyPannaGroupsMap[groupKey] || [groupKey];  
+        const activeDigitList = digitFamilyPannaMap[String(selectedFamilyPannaDigit)] || [];  
+
+        if (!activeDigitList.includes(groupKey)) {  
+            return;  
+        }  
 
         const pannaList = groupPannas.filter(panna => {  
             const digits = String(panna).split('').map(Number);  
             const ank = digits.reduce((sum, digit) => sum + digit, 0) % 10;  
-            return String(ank) === String(selectedFamilyPannaDigit) || (isFpCombined && String((ank+5)%10) === String(selectedFamilyPannaDigit));  
+            return String(ank) === String(selectedFamilyPannaDigit);  
         });  
 
         const contentDiv = document.getElementById('fpModalContent');  
         contentDiv.innerHTML = '';  
-        document.getElementById('fpModalTitle').innerText = `Group ${groupKey} Details`;  
+        document.getElementById('fpModalTitle').innerText = `Digit (${selectedFamilyPannaDigit}) - Group ${groupKey} Details`;  
 
         if (pannaList.length === 0) {  
             contentDiv.innerHTML = `  
@@ -1464,51 +1409,32 @@
             return;  
         }  
 
-        let pannaDetailsArray = [];
-
         pannaList.forEach(panna => {  
-            let occurrences = [];
-            filteredRecords.forEach((r, idx) => {  
-                if (String(r.openPana || '') === String(panna)) {  
-                    occurrences.push(idx);  
+            let lastIdx = -1;  
+            for (let i = filteredRecords.length - 1; i >= 0; i--) {  
+                if (String(filteredRecords[i].openPana || '') === String(panna)) {  
+                    lastIdx = i;  
+                    break;  
                 }  
-            });  
-
-            let lastIdx = occurrences.length > 0 ? occurrences[occurrences.length - 1] : -1;  
-            const delay = lastIdx === -1 ? totalLen : totalLen - 1 - lastIdx;  
-
-            let maxDelay = 0;  
-            if (occurrences.length > 0) {  
-                let gaps = [occurrences[0]];  
-                for (let j = 1; j < occurrences.length; j++) {  
-                    gaps.push(occurrences[j] - occurrences[j - 1] - 1);  
-                }  
-                gaps.push(totalLen - 1 - occurrences[occurrences.length - 1]);  
-                maxDelay = Math.max(...gaps);  
-            } else {  
-                maxDelay = totalLen;  
             }  
 
-            pannaDetailsArray.push({ panna, delay, maxDelay });
-        });  
+            const delay = lastIdx === -1 ? totalLen : totalLen - 1 - lastIdx;  
+            const occurrenceCount = filteredRecords.filter(r => String(r.openPana || '') === String(panna)).length;  
 
-        // Sort descending by delay
-        pannaDetailsArray.sort((a, b) => b.delay - a.delay);
-
-        pannaDetailsArray.forEach(item => {
             const row = document.createElement('div');  
-            row.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-3 rounded-xl font-mono shadow-sm text-sm";  
+            row.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 rounded-xl font-mono shadow-sm";  
             row.innerHTML = `  
-                <div class="font-bold text-slate-900 text-base">  
-                    ${item.panna}  
+                <div class="space-y-0.5">  
+                    <div class="font-bold text-slate-800 text-xs">Panna: <span class="text-indigo-600">${panna}</span></div>  
+                    <div class="text-[10px] text-slate-400">Ank: ${selectedFamilyPannaDigit}</div>  
                 </div>  
-                <div class="text-right text-xs font-semibold text-slate-700 space-x-3">  
-                    <span>Max: <strong class="text-indigo-600 text-sm">${item.maxDelay}</strong></span>  
-                    <span>Delay: <strong class="text-emerald-600 text-sm">${item.delay}</strong></span>  
+                <div class="text-right space-y-0.5">  
+                    <div class="font-bold text-slate-700 text-xs">Delay: <span class="text-emerald-600">${delay}</span> games</div>  
+                    <div class="text-[10px] text-slate-400">Total: ${occurrenceCount}</div>  
                 </div>  
             `;  
             contentDiv.appendChild(row);  
-        });
+        });  
 
         document.getElementById('fpDetailModal').classList.remove('hidden');  
     }  
