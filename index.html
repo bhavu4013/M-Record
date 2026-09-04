@@ -1,1068 +1,1776 @@
-<!DOCTYPE html>
-<html lang="gu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matka Record & Analysis System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-</head>
-<body class="bg-slate-100 text-slate-800 pb-20">
-
-    <!-- App Header -->
-    <header class="bg-blue-600 text-white p-4 shadow-md sticky top-0 z-50 flex justify-between items-center">
-        <h1 id="pageTitle" class="text-lg font-bold">Matka Record System</h1>
-        <div id="marketClock" class="text-xs bg-blue-700 px-2 py-1 rounded-md font-mono">--:--:--</div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-md mx-auto p-4">
-
-        <!-- ================= LOGGER SECTION ================= -->
-        <div id="loggerSection" class="space-y-4">
-            
-            <!-- Entry Form Card -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-sm font-extrabold text-slate-700 uppercase tracking-wider">Record Entry Form</h2>
-                    <button type="button" id="openMarketModalBtn" class="text-xs bg-blue-50 text-blue-600 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
-                        <i class="fa-solid fa-plus mr-1"></i> Add Market
-                    </button>
-                </div>
-
-                <form id="matkaForm" class="space-y-3">
-                    <input type="hidden" id="recordId">
-
-                    <!-- Alert Box for Existing Entry -->
-                    <div id="entryAlertBox" class="hidden bg-amber-50 border border-amber-200 text-amber-800 text-xs p-2.5 rounded-xl font-medium">
-                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> <span id="entryAlertText">Entry available for this session! Switched to Update mode.</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>
-                            <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Day</label>
-                            <input type="text" id="day" readonly class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm text-slate-500">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>
-                            <select id="marketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
-                                <option value="">Select Market</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label>
-                            <select id="sessionType" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
-                                <option value="Open">Open</option>
-                                <option value="Close">Close</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>
-                            <input type="text" id="pannaInput" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Single Ank</label>
-                            <input type="text" id="singleAnk" readonly class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm text-center font-bold text-blue-600">
-                        </div>
-                    </div>
-
-                    <div class="pt-2 flex gap-2">
-                        <button type="submit" id="submitBtn" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition">
-                            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Data
-                        </button>
-                        <button type="button" id="cancelEditBtn" class="hidden bg-red-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-red-700 transition">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Records Management List -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-sm font-extrabold text-slate-700 uppercase tracking-wider mb-3">Recent Logged Records</h3>
-                <div id="recordsListContainer" class="space-y-2 max-h-60 overflow-y-auto text-xs">
-                    <p class="text-slate-400 text-center py-4">Loading records...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= ANALYSIS SECTION ================= -->
-        <div id="analysisSection" class="hidden space-y-4">
-            
-            <!-- Analysis Top Toggle Controls -->
-            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 space-y-2.5">
-                <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl">
-                    <button type="button" id="tabSelectedMarket" class="py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white shadow-sm transition">Selected Market</button>
-                    <button type="button" id="tabMergedMarket" class="py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">Merged</button>
-                </div>
-
-                <div id="analysisMarketDropdownWrapper">
-                    <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                        <option value="">Select Market</option>
-                    </select>
-                </div>
-
-                <!-- Analysis Views (Open, Close, Total, Diff, More) -->
-                <div class="grid grid-cols-5 gap-1 text-xs font-bold">
-                    <button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button>
-                    <button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button>
-                    <button type="button" data-view="Total" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Total</button>
-                    <button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button>
-                    <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button>
-                </div>
-
-                <!-- More Sub-Filters Container -->
-                <div id="moreSubFiltersContainer" class="hidden grid grid-cols-3 gap-1 text-xs font-bold pt-1">
-                    <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Family Jodi</button>
-                    <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Family Panna</button>
-                    <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Odd/Even</button>
-                </div>
-            </div>
-
-            <!-- Standard 0-9 Analysis Cards (Open, Close, Total, Diff) -->
-            <div id="standardAnalysisContainer" class="space-y-3">
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-white border border-amber-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider mb-1">TOP</div>
-                        <div id="topAnkVal" class="text-base font-black text-slate-800">-</div>
-                        <div id="topMaxVal" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                    </div>
-                    <div class="bg-white border border-purple-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-purple-600 uppercase tracking-wider mb-1">MID</div>
-                        <div id="midAnkVal" class="text-base font-black text-slate-800">-</div>
-                        <div id="midMaxVal" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                    </div>
-                    <div class="bg-white border border-emerald-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider mb-1">RECENT</div>
-                        <div id="recentAnkVal" class="text-base font-black text-slate-800">-</div>
-                        <div id="recentMaxVal" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                    <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center">Delay Grid (0-9)</h4>
-                    <div id="gapGridContainer" class="grid grid-cols-5 gap-2 text-center"></div>
-                </div>
-            </div>
-
-            <!-- Family Jodi Analysis Container -->
-            <div id="familyJodiAnalysisContainer" class="hidden space-y-3">
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-white border border-amber-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider mb-1">TOP</div>
-                        <div id="fjTopVal" class="text-sm font-black text-slate-800 truncate">-</div>
-                        <div id="fjTopMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                        <div id="fjTopList" class="text-[9px] text-slate-400 mt-0.5 truncate">[]</div>
-                    </div>
-                    <div class="bg-white border border-purple-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-purple-600 uppercase tracking-wider mb-1">MID</div>
-                        <div id="fjMidVal" class="text-sm font-black text-slate-800 truncate">-</div>
-                        <div id="fjMidMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                        <div id="fjMidList" class="text-[9px] text-slate-400 mt-0.5 truncate">[]</div>
-                    </div>
-                    <div class="bg-white border border-emerald-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider mb-1">RECENT</div>
-                        <div id="fjRecentVal" class="text-sm font-black text-slate-800 truncate">-</div>
-                        <div id="fjRecentMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                        <div id="fjRecentList" class="text-[9px] text-slate-400 mt-0.5 truncate">[]</div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                    <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center">15 Family Jodi Delay Grid</h4>
-                    <div id="fjGridContainer" class="space-y-1.5"></div>
-                </div>
-            </div>
-
-            <!-- Family Panna Analysis Container -->
-            <div id="familyPannaAnalysisContainer" class="hidden space-y-3">
-                <div class="grid grid-cols-5 gap-1 bg-white p-2 rounded-xl border border-slate-200">
-                    <button type="button" data-digit="0" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white text-center">0</button>
-                    <button type="button" data-digit="1" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">1</button>
-                    <button type="button" data-digit="2" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">2</button>
-                    <button type="button" data-digit="3" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">3</button>
-                    <button type="button" data-digit="4" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">4</button>
-                    <button type="button" data-digit="5" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">5</button>
-                    <button type="button" data-digit="6" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">6</button>
-                    <button type="button" data-digit="7" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">7</button>
-                    <button type="button" data-digit="8" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">8</button>
-                    <button type="button" data-digit="9" class="fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center">9</button>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-white border border-amber-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider mb-1">TOP</div>
-                        <div id="fpTopVal" class="text-xs font-black text-slate-800 truncate">-</div>
-                        <div id="fpTopMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                        <div id="fpTopList" class="text-[9px] text-slate-400 mt-0.5 truncate">[]</div>
-                    </div>
-                    <div class="bg-white border border-purple-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-purple-600 uppercase tracking-wider mb-1">MID</div>
-                        <div id="fpMidVal" class="text-xs font-black text-slate-800 truncate">-</div>
-                        <div id="fpMidMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                        <div id="fpMidList" class="text-[9px] text-slate-400 mt-0.5 truncate">[]</div>
-                    </div>
-                    <div class="bg-white border border-emerald-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider mb-1">RECENT</div>
-                        <div id="fpRecentVal" class="text-xs font-black text-slate-800 truncate">-</div>
-                        <div id="fpRecentMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                        <div id="fpRecentList" class="text-[9px] text-slate-400 mt-0.5 truncate">[]</div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-1.5" id="fpGroupsLayout"></div>
-            </div>
-
-            <!-- Odd / Even Analysis Container -->
-            <div id="oddEvenAnalysisContainer" class="hidden space-y-3">
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-white border border-amber-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider mb-1">TOP</div>
-                        <div id="oeTopVal" class="text-xs font-black text-slate-800 truncate">-</div>
-                        <div id="oeTopMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                    </div>
-                    <div class="bg-white border border-purple-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-purple-600 uppercase tracking-wider mb-1">MID</div>
-                        <div id="oeMidVal" class="text-xs font-black text-slate-800 truncate">-</div>
-                        <div id="oeMidMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                    </div>
-                    <div class="bg-white border border-emerald-300 rounded-2xl p-3 shadow-sm text-center">
-                        <div class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider mb-1">RECENT</div>
-                        <div id="oeRecentVal" class="text-xs font-black text-slate-800 truncate">-</div>
-                        <div id="oeRecentMax" class="text-[10px] font-bold text-slate-500 mt-1">Max: 0</div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                    <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center">Odd/Even Combo Grid (4 Types)</h4>
-                    <div id="oeGridContainer" class="grid grid-cols-2 gap-2 text-center"></div>
-                </div>
-            </div>
-
-        </div>
-
-    </main>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="bg-white border-t border-slate-200 fixed bottom-0 left-0 right-0 max-w-md mx-auto flex justify-around p-2 shadow-lg z-50">
-        <button type="button" id="navLoggerBtn" class="flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition">
-            <i class="fa-solid fa-calculator text-base mb-0.5"></i>
-            <span class="text-[10px]">Logger</span>
-        </button>
-        <button type="button" id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-400 font-semibold transition">
-            <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
-            <span class="text-[10px]">Analysis</span>
-        </button>
-    </nav>
-
-    <!-- Add Market Modal -->
-    <div id="marketModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
-        <div class="bg-white p-5 rounded-2xl max-w-xs w-full space-y-3 shadow-xl">
-            <h3 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Add New Market</h3>
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Market Name</label>
-                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g. Kalyan">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Open Time</label>
-                <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Close Time</label>
-                <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-            <div class="flex gap-2 pt-2">
-                <button type="button" id="saveMarketBtn" class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-bold shadow-sm hover:bg-blue-700 transition">Save</button>
-                <button type="button" id="closeModalBtn" class="flex-1 bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold hover:bg-slate-300 transition">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Panna Detail Popup Modal for Family Panna -->
-    <div id="pannaDetailModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
-        <div class="bg-white p-5 rounded-2xl max-w-xs w-full space-y-3 shadow-xl">
-            <h3 id="modalGroupName" class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Group Details</h3>
-            <div id="modalPannasContainer" class="space-y-1.5 max-h-60 overflow-y-auto text-xs"></div>
-            <button type="button" id="closePannaModalBtn" class="w-full bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold hover:bg-slate-300 transition">Close</button>
-        </div>
-    </div>
-
-    <!-- JavaScript Application Logic -->
-    <script>
-        // Firebase Config
-        const firebaseConfig = {
-          apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
-          authDomain: "m-record-f9c51.firebaseapp.com",
-          projectId: "m-record-f9c51",
-          storageBucket: "m-record-f9c51.firebasestorage.app",
-          messagingSenderId: "479303152172",
-          appId: "1:479303152172:web:3cc53dcecc9e8ce1ebd789"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Clock UI
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('marketClock').innerText = now.toTimeString().split(' ')[0];
-        }, 1000);
-
-        // Navigation elements
-        const navLoggerBtn = document.getElementById('navLoggerBtn');
-        const navAnalysisBtn = document.getElementById('navAnalysisBtn');
-        const loggerSection = document.getElementById('loggerSection');
-        const analysisSection = document.getElementById('analysisSection');
-        const pageTitle = document.getElementById('pageTitle');
-
-        navLoggerBtn.addEventListener('click', () => {
-            loggerSection.classList.remove('hidden');
-            analysisSection.classList.add('hidden');
-            pageTitle.innerText = "Matka Record System";
-            navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition";
-            navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-400 font-semibold transition";
-        });
-
-        navAnalysisBtn.addEventListener('click', () => {
-            analysisSection.classList.remove('hidden');
-            loggerSection.classList.add('hidden');
-            document.getElementById('entryAlertBox').classList.add('hidden');
-            pageTitle.innerText = "Data Analysis Portal";
-            navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition";
-            navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-400 font-semibold transition";
-            loadAnalysisData();
-        });
-
-        // Date and Day Init
-        const dateInput = document.getElementById('recordDate');
-        const dayInput = document.getElementById('day');
-        const todayStr = new Date().toISOString().split('T')[0];
-        dateInput.value = todayStr;
-        updateDay(todayStr);
-
-        dateInput.addEventListener('change', (e) => {
-            updateDay(e.target.value);
-            checkExistingEntry();
-        });
-
-        function updateDay(dateStr) {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const d = new Date(dateStr);
-            dayInput.value = days[d.getDay()];
-        }
-
-        // Market Modal Controls
-        const marketModal = document.getElementById('marketModal');
-        document.getElementById('openMarketModalBtn').addEventListener('click', () => marketModal.classList.remove('hidden'));
-        document.getElementById('closeModalBtn').addEventListener('click', () => marketModal.classList.add('hidden'));
-
-        document.getElementById('saveMarketBtn').addEventListener('click', async () => {
-            let name = document.getElementById('newMarketName').value.trim();
-            let openTime = document.getElementById('openTime').value;
-            let closeTime = document.getElementById('closeTime').value;
-            if(!name) { alert("Please enter market name!"); return; }
-
-            try {
-                await db.collection("markets").add({ name, openTime, closeTime });
-                alert("Market added successfully!");
-                document.getElementById('newMarketName').value = '';
-                marketModal.classList.add('hidden');
-                loadMarkets();
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-        });
-
-        // Load Markets into Dropdowns
-        async function loadMarkets() {
-            const marketSelect = document.getElementById('marketName');
-            const analysisMarketSelect = document.getElementById('analysisMarketSelect');
-            marketSelect.innerHTML = '<option value="">Select Market</option>';
-            analysisMarketSelect.innerHTML = '<option value="">Select Market</option>';
-
-            try {
-                let snap = await db.collection("markets").orderBy("openTime").get();
-                snap.forEach(doc => {
-                    let m = doc.data();
-                    let opt1 = document.createElement('option');
-                    opt1.value = m.name;
-                    opt1.innerText = m.name;
-                    marketSelect.appendChild(opt1);
-
-                    let opt2 = document.createElement('option');
-                    opt2.value = m.name;
-                    opt2.innerText = m.name;
-                    analysisMarketSelect.appendChild(opt2);
-                });
-            } catch(e) { console.log(e); }
-        }
-        loadMarkets();
-
-        // Single Ank & Panna Calculation
-        const pannaInput = document.getElementById('pannaInput');
-        const singleAnkInput = document.getElementById('singleAnk');
-
-        pannaInput.addEventListener('input', (e) => {
-            let val = e.target.value;
-            if(val.length === 3 && !isNaN(val)) {
-                let sum = parseInt(val[0]) + parseInt(val[1]) + parseInt(val[2]);
-                singleAnkInput.value = sum % 10;
-            } else {
-                singleAnkInput.value = '';
-            }
-        });
-
-        // Market & Session Check
-        const marketSelect = document.getElementById('marketName');
-        const sessionSelect = document.getElementById('sessionType');
-        const alertBox = document.getElementById('entryAlertBox');
-        const alertText = document.getElementById('entryAlertText');
-        const submitBtn = document.getElementById('submitBtn');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-
-        marketSelect.addEventListener('change', checkExistingEntry);
-        sessionSelect.addEventListener('change', checkExistingEntry);
-
-        async function checkExistingEntry() {
-            let date = dateInput.value;
-            let market = marketSelect.value;
-            let session = sessionSelect.value;
-            if(!date || !market) return;
-
-            let docId = `${date}_${market}`;
-            let docRef = db.collection("matka_records").doc(docId);
-            let docSnap = await docRef.get();
-
-            alertBox.classList.add('hidden');
-            document.getElementById('recordId').value = '';
-            submitBtn.innerText = "Save Data";
-            submitBtn.className = "flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition";
-            cancelEditBtn.classList.add('hidden');
-
-            if(docSnap.exists) {
-                let data = docSnap.data();
-                if(session === 'Open' && data.openPana) {
-                    alertBox.classList.remove('hidden');
-                    alertText.innerText = "Open entry found! Switched to Update mode.";
-                    document.getElementById('recordId').value = docId;
-                    submitBtn.innerText = "Update Record";
-                    submitBtn.className = "flex-1 bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-emerald-700 transition";
-                    cancelEditBtn.classList.remove('hidden');
-                    pannaInput.value = data.openPana;
-                    singleAnkInput.value = data.openAnk;
-                } else if(session === 'Close' && data.closePana) {
-                    alertBox.classList.remove('hidden');
-                    alertText.innerText = "Close entry found! Switched to Update mode.";
-                    document.getElementById('recordId').value = docId;
-                    submitBtn.innerText = "Update Record";
-                    submitBtn.className = "flex-1 bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-emerald-700 transition";
-                    cancelEditBtn.classList.remove('hidden');
-                    pannaInput.value = data.closePana;
-                    singleAnkInput.value = data.closeAnk;
-                } else {
-                    pannaInput.value = '';
-                    singleAnkInput.value = '';
-                }
-            } else {
-                pannaInput.value = '';
-                singleAnkInput.value = '';
-            }
-        }
-
-        cancelEditBtn.addEventListener('click', () => {
-            document.getElementById('matkaForm').reset();
-            dateInput.value = todayStr;
-            updateDay(todayStr);
-            alertBox.classList.add('hidden');
-            document.getElementById('recordId').value = '';
-            submitBtn.innerText = "Save Data";
-            submitBtn.className = "flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition";
-            cancelEditBtn.classList.add('hidden');
-        });
-
-        // Save / Update Form Submission
-        document.getElementById('matkaForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            let date = dateInput.value;
-            let market = marketSelect.value;
-            let session = sessionSelect.value;
-            let panna = pannaInput.value;
-            let ank = singleAnkInput.value;
-            let recordId = document.getElementById('recordId').value;
-
-            if(panna.length !== 3) { alert("Please enter valid 3-digit panna!"); return; }
-
-            let docId = recordId || `${date}_${market}`;
-            let docRef = db.collection("matka_records").doc(docId);
-
-            let payload = {};
-            if(session === 'Open') {
-                payload = { date, marketName: market, openPana: panna, openAnk: parseInt(ank) };
-            } else {
-                payload = { date, marketName: market, closePana: panna, closeAnk: parseInt(ank) };
-            }
-
-            try {
-                await docRef.set(payload, { merge: true });
-                alert("Data saved successfully!");
-                document.getElementById('matkaForm').reset();
-                dateInput.value = todayStr;
-                updateDay(todayStr);
-                alertBox.classList.add('hidden');
-                submitBtn.innerText = "Save Data";
-                submitBtn.className = "flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition";
-                cancelEditBtn.classList.add('hidden');
-                loadRecordsList();
-            } catch(err) {
-                alert("Error: " + err.message);
-            }
-        });
-
-        // Load Records List
-        async function loadRecordsList() {
-            const container = document.getElementById('recordsListContainer');
-            container.innerHTML = '<p class="text-slate-400 text-center py-2">Loading...</p>';
-            try {
-                let snap = await db.collection("matka_records").orderBy("date", "desc").limit(10).get();
-                if(snap.empty) {
-                    container.innerHTML = '<p class="text-slate-400 text-center py-2">No records found.</p>';
-                    return;
-                }
-                container.innerHTML = '';
-                snap.forEach(doc => {
-                    let d = doc.data();
-                    let div = document.createElement('div');
-                    div.className = "flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200";
-                    div.innerHTML = `
-                        <div>
-                            <span class="font-bold text-slate-700">${d.date}</span> | <span class="text-blue-600 font-bold">${d.marketName}</span>
-                            <div class="text-[10px] text-slate-500">Open: ${d.openPana || '-'} (${d.openAnk ?? '-'}) | Close: ${d.closePana || '-'} (${d.closeAnk ?? '-'})</div>
-                        </div>
-                        <button onclick="deleteRecord('${doc.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
-                    `;
-                    container.appendChild(div);
-                });
-            } catch(e) { container.innerHTML = '<p class="text-red-400 text-center py-2">Failed to load.</p>'; }
-        }
-        loadRecordsList();
-
-        async function deleteRecord(id) {
-            if(confirm("Are you sure you want to delete this record?")) {
-                await db.collection("matka_records").doc(id).delete();
-                loadRecordsList();
-            }
-        }
-
-        // ================= ANALYSIS LOGIC =================
-        let isMergedMarket = false;
-        let currentAnalysisView = 'Open';
-        let currentMoreSubView = 'FamilyJodi';
-        let selectedFamilyPannaDigit = '0';
-
-        document.getElementById('tabSelectedMarket').addEventListener('click', (e) => {
-            isMergedMarket = false;
-            e.target.className = "py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white shadow-sm transition";
-            document.getElementById('tabMergedMarket').className = "py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
-            document.getElementById('analysisMarketDropdownWrapper').classList.remove('hidden');
-            loadAnalysisData();
-        });
-
-        document.getElementById('tabMergedMarket').addEventListener('click', (e) => {
-            isMergedMarket = true;
-            e.target.className = "py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white shadow-sm transition";
-            document.getElementById('tabSelectedMarket').className = "py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
-            document.getElementById('analysisMarketDropdownWrapper').classList.add('hidden');
-            loadAnalysisData();
-        });
-
-        document.getElementById('analysisMarketSelect').addEventListener('change', loadAnalysisData);
-
-        // Analysis View Tabs
-        const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');
-        const moreSubFiltersContainer = document.getElementById('moreSubFiltersContainer');
-        const standardAnalysisContainer = document.getElementById('standardAnalysisContainer');
-        const familyJodiAnalysisContainer = document.getElementById('familyJodiAnalysisContainer');
-        const familyPannaAnalysisContainer = document.getElementById('familyPannaAnalysisContainer');
-        const oddEvenAnalysisContainer = document.getElementById('oddEvenAnalysisContainer');
-
-        analysisViewBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                analysisViewBtns.forEach(b => b.className = "analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition");
-                e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition";
-                currentAnalysisView = e.target.getAttribute('data-view');
-
-                standardAnalysisContainer.classList.add('hidden');
-                familyJodiAnalysisContainer.classList.add('hidden');
-                familyPannaAnalysisContainer.classList.add('hidden');
-                oddEvenAnalysisContainer.classList.add('hidden');
-                moreSubFiltersContainer.classList.add('hidden');
-
-                if(currentAnalysisView === 'More') {
-                    moreSubFiltersContainer.classList.remove('hidden');
-                    if(currentMoreSubView === 'FamilyJodi') familyJodiAnalysisContainer.classList.remove('hidden');
-                    else if(currentMoreSubView === 'FamilyPanna') familyPannaAnalysisContainer.classList.remove('hidden');
-                    else if(currentMoreSubView === 'OddEven') oddEvenAnalysisContainer.classList.remove('hidden');
-                } else {
-                    standardAnalysisContainer.classList.remove('hidden');
-                }
-                loadAnalysisData();
-            });
-        });
-
-        // More Sub-Views
-        document.querySelectorAll('.more-sub-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.more-sub-btn').forEach(b => b.className = "more-sub-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition");
-                e.target.className = "more-sub-btn bg-indigo-600 text-white py-1.5 rounded-lg shadow-sm text-center transition";
-                currentMoreSubView = e.target.getAttribute('data-subview');
-
-                familyJodiAnalysisContainer.classList.add('hidden');
-                familyPannaAnalysisContainer.classList.add('hidden');
-                oddEvenAnalysisContainer.classList.add('hidden');
-
-                if(currentMoreSubView === 'FamilyJodi') familyJodiAnalysisContainer.classList.remove('hidden');
-                else if(currentMoreSubView === 'FamilyPanna') familyPannaAnalysisContainer.classList.remove('hidden');
-                else if(currentMoreSubView === 'OddEven') oddEvenAnalysisContainer.classList.remove('hidden');
-                loadAnalysisData();
-            });
-        });
-
-        // Family Panna Digits Selection
-        document.querySelectorAll('.fam-panna-digit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.fam-panna-digit-btn').forEach(b => b.className = "fam-panna-digit-btn py-1 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 text-center");
-                e.target.className = "fam-panna-digit-btn py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white text-center";
-                selectedFamilyPannaDigit = e.target.getAttribute('data-digit');
-                loadAnalysisData();
-            });
-        });
-
-        // Family Jodi Mappings
-        const familyJodiGroups = [
-            ["11", "16", "61", "66"],
-            ["12", "17", "21", "26", "62", "67", "71", "76"],
-            ["13", "18", "31", "38", "63", "68", "81", "86"],
-            ["14", "19", "41", "46", "64", "69", "91", "96"],
-            ["15", "60", "51", "06", "65", "01", "56", "10"],
-            ["22", "27", "72", "77"],
-            ["23", "28", "32", "37", "73", "78", "82", "87"],
-            ["24", "29", "42", "47", "74", "79", "92", "97"],
-            ["25", "20", "52", "07", "75", "02", "57", "20"],
-            ["33", "38", "83", "88"],
-            ["34", "39", "43", "48", "84", "89", "93", "98"],
-            ["35", "30", "53", "08", "85", "03", "58", "30"],
-            ["44", "49", "94", "99"],
-            ["45", "40", "54", "09", "95", "04", "59", "40"],
-            ["55", "50", "05", "00"]
-        ];
-
-        function getFamilyJodiKey(jodiStr) {
-            if(!jodiStr || jodiStr.length !== 2) return null;
-            for(let i = 0; i < familyJodiGroups.length; i++) {
-                if(familyJodiGroups[i].includes(jodiStr)) return `Group ${i+1}`;
-            }
-            return null;
-        }
-
-        // Family Panna Mappings per Digit
-        const familyPannaGroupsMap = {
-            "0": ["000", "127", "136", "145", "190", "235", "280", "370", "460", "550", "589", "246"],
-            "1": ["100", "119", "157", "166", "227", "245", "335", "344", "389", "479", "569", "578"],
-            "2": ["200", "118", "128", "137", "146", "155", "236", "245", "254", "263", "272", "281"],
-            "3": ["300", "117", "126", "135", "144", "226", "235", "244", "334", "490", "580", "670"],
-            "4": ["400", "116", "125", "134", "225", "234", "333", "450", "480", "570", "660", "750"],
-            "5": ["500", "115", "124", "133", "224", "233", "332", "555", "560", "590", "680", "770"],
-            "6": ["600", "114", "123", "223", "331", "333", "666", "670", "680", "780", "880", "990"],
-            "7": ["700", "113", "122", "222", "330", "440", "777", "780", "790", "880", "890", "990"],
-            "8": ["800", "112", "221", "339", "449", "559", "669", "779", "888", "890", "990", "000"],
-            "9": ["900", "111", "220", "338", "448", "558", "668", "778", "889", "999", "000", "123"]
-        };
-
-        function getFamilyPannaKey(pannaStr, digit) {
-            if(!pannaStr || pannaStr.length !== 3) return null;
-            let list = familyPannaGroupsMap[digit] || [];
-            for(let i = 0; i < list.length; i++) {
-                if(list[i] === pannaStr) return `Grp ${i+1}`;
-            }
-            return `Grp 1`;
-        }
-
-        // Main Analysis Calculation Function
-        async function loadAnalysisData() {
-            let selectedMarket = document.getElementById('analysisMarketSelect').value;
-            if(!isMergedMarket && !selectedMarket) return;
-
-            try {
-                let snap = await db.collection("matka_records").orderBy("date", "asc").get();
-                let records = [];
-                snap.forEach(doc => {
-                    let d = doc.data();
-                    if(isMergedMarket || d.marketName === selectedMarket) {
-                        if(d.openPana && d.openAnk !== undefined) {
-                            records.push({ date: d.date, marketName: d.marketName, session: 'Open', ank: d.openAnk, panna: d.openPana });
-                        }
-                        if(d.closePana && d.closeAnk !== undefined) {
-                            records.push({ date: d.date, marketName: d.marketName, session: 'Close', ank: d.closeAnk, panna: d.closePana });
-                        }
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Daily Data Logger & Analysis Portal</title>  
+    <script src="https://cdn.tailwindcss.com"></script>  
+</head>  
+<body class="bg-slate-100 p-4 min-h-screen flex flex-col items-center justify-between pb-20">  
+
+<!-- Main Container Card -->  
+<div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-4 my-auto">  
+    <h2 id="pageTitle" class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2>  
+
+    <!-- Alert Box -->  
+    <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center w-full">  
+        ⚠️ <span id="alertMessageText">Entry for this session already exists! Switching to Update mode.</span>  
+    </div>  
+
+    <!-- LOGGER SECTION -->  
+    <div id="loggerSection" class="space-y-4 w-full">  
+        <form id="matkaForm" class="space-y-4 w-full">  
+            <!-- Hidden Record ID field for Update mode tracking -->  
+            <input type="hidden" id="recordId">  
+
+            <!-- Date Field -->  
+            <div class="w-full">  
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Date</label>  
+                <input type="date" id="recordDate" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>  
+            </div>  
+
+            <!-- Market Dropdown & Icon-only Management Button -->  
+            <div class="w-full">  
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Market</label>  
+                <div class="flex items-center gap-2 w-full">  
+                    <select id="marketDropdown" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white h-[42px]" required>  
+                        <option value="">Select Market</option>  
+                    </select>  
+                    <button type="button" id="openModalBtn" class="bg-indigo-600 text-white px-3 h-[42px] rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center justify-center shrink-0" title="Manage Markets">  
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>  
+                    </button>  
+                </div>  
+            </div>  
+
+            <!-- Session Toggle Switch -->  
+            <div class="w-full">  
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Session</label>  
+                <div class="flex items-center bg-slate-200 p-1 rounded-lg w-full">  
+                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="openLabel">  
+                        <input type="radio" name="sessionToggle" value="Open" checked class="hidden"> Open  
+                    </label>  
+                    <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold" id="closeLabel">  
+                        <input type="radio" name="sessionToggle" value="Close" class="hidden"> Close  
+                    </label>  
+                </div>  
+            </div>  
+
+            <!-- Panna Input -->  
+            <div class="w-full">  
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">3-Digit Panna</label>  
+                <input type="text" id="pannaInput" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 126" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" required>  
+            </div>  
+
+            <!-- Auto Calculation Preview -->  
+            <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-lg text-sm text-slate-700 space-y-1.5 shadow-inner w-full">  
+                <div class="flex justify-between items-center">  
+                    <span class="text-slate-500 text-xs font-medium uppercase">Ank:</span>  
+                    <span id="previewAnk" class="font-bold text-slate-900">-</span>  
+                </div>  
+                <div class="flex justify-between items-center">  
+                    <span class="text-slate-500 text-xs font-medium uppercase">Group:</span>  
+                    <span id="previewGroup" class="font-bold text-slate-900">-</span>  
+                </div>  
+                <div class="flex justify-between items-center">  
+                    <span class="text-slate-500 text-xs font-medium uppercase">Family Group:</span>  
+                    <span id="previewFamilyGroup" class="font-bold text-amber-700">-</span>  
+                </div>  
+                <div class="flex justify-between items-center">  
+                    <span class="text-slate-500 text-xs font-medium uppercase">Type:</span>  
+                    <span id="previewPanelType" class="font-bold text-blue-600">-</span>  
+                </div>  
+            </div>  
+
+            <!-- Submit and Red Cancel Button -->  
+            <div class="flex gap-2 pt-1 w-full">  
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button>  
+                <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button>  
+            </div>  
+        </form>  
+    </div>  
+
+    <!-- ANALYSIS SECTION -->  
+    <div id="analysisSection" class="hidden space-y-4 w-full">  
+        <div class="space-y-3">  
+            <!-- Top Main Toggle (Selected Market vs Merged) -->  
+            <div class="flex bg-slate-200 p-1 rounded-lg gap-1">  
+                <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm" id="analysisTabSelected">  
+                    <input type="radio" name="analysisType" value="selected" checked class="hidden"> Selected Market  
+                </label>  
+                <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700" id="analysisTabMerged">  
+                    <input type="radio" name="analysisType" value="merged" class="hidden"> Merged  
+                </label>  
+            </div>  
+
+            <!-- Conditional Market Dropdown -->  
+            <div id="analysisMarketContainer" class="space-y-1">  
+                <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800">  
+                    <option value="">Select Market</option>  
+                </select>  
+            </div>  
+
+            <!-- Minimal Segmented Pill Filters (Open, Close, Total, Diff, More) -->  
+            <div class="grid grid-cols-5 gap-1 text-xs font-bold">  
+                <button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button>  
+                <button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button>  
+                <button type="button" data-view="Total" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Total</button>  
+                <button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button>  
+                <button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button>  
+            </div>  
+
+            <!-- More Sub-Filters Container (Shown only when More is active) -->  
+            <div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1">  
+                <button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button>  
+                <button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button>  
+                <button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">Odd/Even</button>  
+                <button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">Panel Type</button>  
+            </div>  
+
+            <!-- Family Panna Digit Selection Buttons (Shown only when Family Panna subview is active) -->  
+            <div id="familyPannaDigitContainer" class="hidden space-y-1.5 pt-1">  
+                <div class="text-[11px] font-bold text-slate-600 flex justify-between items-center">  
+                    <span>Select Digit (0-9):</span>  
+                    <div class="flex items-center gap-2">  
+                        <label class="cursor-pointer text-[10px] bg-slate-200 px-2 py-0.5 rounded font-semibold text-slate-700" id="fpToggleLabel">  
+                            <input type="checkbox" id="fpCombinedToggle" class="mr-1"> Combined Mode  
+                        </label>  
+                    </div>  
+                </div>  
+                <div class="grid grid-cols-5 gap-1 text-xs font-bold">  
+                    <button type="button" data-digit="1" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">1</button>  
+                    <button type="button" data-digit="2" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">2</button>  
+                    <button type="button" data-digit="3" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">3</button>  
+                    <button type="button" data-digit="4" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">4</button>  
+                    <button type="button" data-digit="5" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">5</button>  
+                    <button type="button" data-digit="6" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">6</button>  
+                    <button type="button" data-digit="7" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">7</button>  
+                    <button type="button" data-digit="8" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">8</button>  
+                    <button type="button" data-digit="9" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">9</button>  
+                    <button type="button" data-digit="0" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition">0</button>  
+                </div>  
+            </div>  
+
+            <!-- Header Info Bar -->  
+            <div class="flex justify-between items-center text-xs font-bold px-1 pt-1 text-slate-700">  
+                <span id="analysisHeaderTitle" class="text-indigo-700">⏳ ALL MARKETS (MERGED) (OPEN)</span>  
+                <span id="openTotalLogs" class="text-slate-500">0 ગેમ્સ ડેટા</span>  
+            </div>  
+
+            <!-- Three Segment Cards (TOP, MID, RECENT) -->  
+            <div class="grid grid-cols-3 gap-2 text-center" id="analysisCardsContainer">  
+                <!-- TOP CARD -->  
+                <div class="bg-white border-2 border-orange-400 rounded-xl p-2 space-y-1 shadow-sm">  
+                    <div class="text-orange-600 font-extrabold text-xs" id="topCardTitle">🔥 TOP</div>  
+                    <div id="topAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>  
+                    <div id="topMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>  
+                    <div id="topListContainer" class="bg-orange-50 border border-orange-200 text-orange-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>  
+                </div>  
+
+                <!-- MID CARD -->  
+                <div class="bg-white border-2 border-indigo-400 rounded-xl p-2 space-y-1 shadow-sm">  
+                    <div class="text-indigo-600 font-extrabold text-xs" id="midCardTitle">💠 MID</div>  
+                    <div id="midAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>  
+                    <div id="midMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>  
+                    <div id="midListContainer" class="bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>  
+                </div>  
+
+                <!-- RECENT CARD -->  
+                <div class="bg-white border-2 border-emerald-400 rounded-xl p-2 space-y-1 shadow-sm">  
+                    <div class="text-emerald-600 font-extrabold text-xs" id="recentCardTitle">⚡ RECENT</div>  
+                    <div id="recentAnkVal" class="text-sm font-black text-slate-800 truncate">0</div>  
+                    <div id="recentMaxVal" class="text-[11px] text-slate-600 font-bold">Max: 0</div>  
+                    <div id="recentListContainer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-mono py-1 px-0.5 rounded font-bold break-words">[]</div>  
+                </div>  
+            </div>  
+
+            <!-- GAP GRID SECTION -->  
+            <div class="space-y-1 pt-1">  
+                <div class="text-xs font-bold text-slate-600" id="gridTitleLabel">📊 Gap:</div>  
+                <div id="gapGridContainer" class="space-y-1.5">  
+                    <!-- Grid items injected dynamically via JS -->  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+
+</div>  
+
+<!-- Family Panna Group Breakdown Popup Modal -->  
+<div id="fpDetailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">  
+    <div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">  
+        <div class="flex justify-between items-center border-b pb-2">  
+            <h3 id="fpModalTitle" class="text-sm font-bold text-slate-800">Group Details</h3>  
+        </div>  
+        <div id="fpModalContent" class="space-y-2 max-h-[60vh] overflow-y-auto text-xs pr-1">  
+            <!-- Individual Panna breakdown injected here -->  
+        </div>  
+        <button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-sm">Close</button>  
+    </div>  
+</div>  
+
+<!-- Bottom Navigation Bar -->  
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg flex justify-around p-2 max-w-md mx-auto z-40 rounded-t-2xl">  
+    <button id="navLoggerBtn" class="flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition">  
+        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>  
+        <span class="text-xs">Logger</span>  
+    </button>  
+    <button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition">  
+        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>  
+        <span class="text-xs">Analysis</span>  
+    </button>  
+</div>  
+
+<!-- Custom Success / Alert Popup Modal -->  
+<div id="customAlertModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">  
+    <div class="bg-white p-6 rounded-2xl max-w-xs w-full space-y-4 shadow-2xl text-center">  
+        <div id="customAlertIcon" class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>  
+        <div class="space-y-1">  
+            <h3 id="customAlertTitle" class="text-lg font-bold text-slate-800">Success</h3>  
+            <p id="customAlertMessage" class="text-base font-medium text-slate-600 leading-relaxed">Operation completed successfully!</p>  
+        </div>  
+        <button type="button" id="customAlertOkBtn" class="w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-base hover:bg-emerald-700 shadow-md transition">OK</button>  
+    </div>  
+</div>  
+
+<!-- Unified Market Management Modal -->  
+<div id="marketModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">  
+    <div class="bg-white p-6 rounded-xl max-w-sm w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">  
+        <h3 class="text-lg font-bold text-slate-800 text-center">Market Management</h3>  
+          
+        <div class="flex bg-slate-200 p-1 rounded-lg">  
+            <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm" id="tabAdd">  
+                <input type="radio" name="marketAction" value="add" checked class="hidden"> Add  
+            </label>  
+            <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700" id="tabEdit">  
+                <input type="radio" name="marketAction" value="edit" class="hidden"> Edit  
+            </label>  
+            <label class="flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700" id="tabDelete">  
+                <input type="radio" name="marketAction" value="delete" class="hidden"> Delete  
+            </label>  
+        </div>  
+
+        <div id="modalSelectMarketDiv" class="hidden space-y-1">  
+            <label class="block text-xs font-semibold text-slate-600 uppercase">Select Market</label>  
+            <select id="modalMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">  
+                <option value="">Select Market</option>  
+            </select>  
+        </div>  
+
+        <div id="modalDetailsDiv" class="space-y-3">  
+            <div>  
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Market Name</label>  
+                <input type="text" id="newMarketName" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white" placeholder="e.g. Kalyan">  
+            </div>  
+            <div>  
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Open Time</label>  
+                <input type="time" id="openTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">  
+            </div>  
+            <div>  
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Close Time</label>  
+                <input type="time" id="closeTime" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white">  
+            </div>  
+            <div>  
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Working Days</label>  
+                <div class="grid grid-cols-2 gap-2 text-xs text-slate-700">  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Mon" checked class="rounded"> Monday</label>  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Tue" checked class="rounded"> Tuesday</label>  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Wed" checked class="rounded"> Wednesday</label>  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Thu" checked class="rounded"> Thursday</label>  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Fri" checked class="rounded"> Friday</label>  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sat" checked class="rounded"> Saturday</label>  
+                    <label class="flex items-center gap-1.5"><input type="checkbox" name="workingDay" value="Sun" checked class="rounded"> Sunday</label>  
+                </div>  
+            </div>  
+        </div>  
+
+        <div id="modalDeleteNotice" class="hidden text-xs text-red-600 font-semibold text-center p-2 bg-red-50 rounded-lg border border-red-200">  
+            ⚠️ Warning: This action will permanently delete the selected market!  
+        </div>  
+
+        <div class="flex gap-2 pt-2">  
+            <button type="button" id="executeMarketActionBtn" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition">Save Market</button>  
+            <button type="button" id="closeModalBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition">Cancel</button>  
+        </div>  
+    </div>  
+</div>  
+
+<script type="module">  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";  
+    import { getFirestore, collection, doc, getDoc, setDoc, deleteDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";  
+
+    const firebaseConfig = {  
+      apiKey: "AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",  
+      authDomain: "m-record-f9c51.firebaseapp.com",  
+      projectId: "m-record-f9c51",  
+      storageBucket: "m-record-f9c51.firebasestorage.app",  
+      messagingSenderId: "479303152172",  
+      appId: "1:479303152172:web:3cc53dcecc9e8ce1ebd789"  
+    };  
+
+    const app = initializeApp(firebaseConfig);  
+    const db = getFirestore(app);  
+
+    const dateInput = document.getElementById('recordDate');  
+    dateInput.value = new Date().toISOString().split('T')[0];  
+
+    let marketsList = [];  
+    const modal = document.getElementById('marketModal');  
+    let currentAnalysisView = 'Open';  
+    let currentMoreSubView = 'FamilyJodi';  
+    let selectedFamilyPannaDigit = "0";  
+    let isFpCombined = false;  
+    let globalAllRecords = [];  
+
+    const navLoggerBtn = document.getElementById('navLoggerBtn');  
+    const navAnalysisBtn = document.getElementById('navAnalysisBtn');  
+    const loggerSection = document.getElementById('loggerSection');  
+    const analysisSection = document.getElementById('analysisSection');  
+    const pageTitle = document.getElementById('pageTitle');  
+
+    navLoggerBtn.addEventListener('click', () => {  
+        loggerSection.classList.remove('hidden');  
+        analysisSection.classList.add('hidden');  
+        pageTitle.innerText = "Daily Activity Logger";  
+        navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";  
+        navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";  
+    });  
+
+    navAnalysisBtn.addEventListener('click', () => {  
+        analysisSection.classList.remove('hidden');  
+        loggerSection.classList.add('hidden');  
+        document.getElementById('entryAlertBox').classList.add('hidden');  
+        pageTitle.innerText = "Data Analysis Portal";  
+        navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition";  
+        navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition";  
+        loadAnalysisData();  
+    });  
+
+    const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');  
+    const moreSubFiltersContainer = document.getElementById('moreSubFiltersContainer');  
+    const familyPannaDigitContainer = document.getElementById('familyPannaDigitContainer');  
+
+    analysisViewBtns.forEach(btn => {  
+        btn.addEventListener('click', (e) => {  
+            analysisViewBtns.forEach(b => {  
+                b.className = "analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition";  
+            });  
+            e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition";  
+            currentAnalysisView = e.target.getAttribute('data-view');  
+
+            if (currentAnalysisView === 'More') {  
+                moreSubFiltersContainer.classList.remove('hidden');  
+                if (currentMoreSubView === 'FamilyPanna') {  
+                    familyPannaDigitContainer.classList.remove('hidden');  
+                }  
+            } else {  
+                moreSubFiltersContainer.classList.add('hidden');  
+                familyPannaDigitContainer.classList.add('hidden');  
+            }  
+
+            loadAnalysisData();  
+        });  
+    });  
+
+    const moreSubBtns = document.querySelectorAll('.more-sub-btn');  
+    moreSubBtns.forEach(btn => {  
+        btn.addEventListener('click', (e) => {  
+            moreSubBtns.forEach(b => {  
+                b.className = "more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition";  
+            });  
+            e.target.className = "more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition";  
+            currentMoreSubView = e.target.getAttribute('data-subview');  
+              
+            if (currentMoreSubView === 'FamilyPanna') {  
+                familyPannaDigitContainer.classList.remove('hidden');  
+            } else {  
+                familyPannaDigitContainer.classList.add('hidden');  
+            }  
+
+            loadAnalysisData();  
+        });  
+    });  
+
+    document.querySelectorAll('.fp-digit-btn').forEach(btn => {  
+        btn.addEventListener('click', (e) => {  
+            document.querySelectorAll('.fp-digit-btn').forEach(b => {  
+                b.className = "fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition";  
+            });  
+            e.target.className = "fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition";  
+            selectedFamilyPannaDigit = e.target.getAttribute('data-digit');  
+            loadAnalysisData();  
+        });  
+    });  
+
+    document.getElementById('fpCombinedToggle').addEventListener('change', (e) => {
+        isFpCombined = e.target.checked;
+        loadAnalysisData();
+    });
+
+    const closeFpModal = () => {  
+        document.getElementById('fpDetailModal').classList.add('hidden');  
+    };  
+    document.getElementById('closeFpModalFooterBtn').addEventListener('click', closeFpModal);  
+
+    const analysisTypeRadios = document.querySelectorAll('input[name="analysisType"]');  
+    const analysisMarketContainer = document.getElementById('analysisMarketContainer');  
+
+    analysisTypeRadios.forEach(radio => {  
+        radio.addEventListener('change', (e) => {  
+            const val = e.target.value;  
+            document.querySelectorAll('.analysis-main-tab').forEach(tab => {  
+                tab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab text-slate-700 bg-transparent";  
+            });  
+            const activeTab = document.getElementById(`analysisTab${val.charAt(0).toUpperCase() + val.slice(1)}`);  
+            activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold analysis-main-tab bg-indigo-600 text-white shadow-sm";  
+
+            if (val === 'selected') {  
+                analysisMarketContainer.classList.remove('hidden');  
+            } else {  
+                analysisMarketContainer.classList.add('hidden');  
+            }  
+            loadAnalysisData();  
+        });  
+    });  
+
+    function showCustomAlert(title, message, type = 'success') {  
+        const alertModal = document.getElementById('customAlertModal');  
+        const alertTitle = document.getElementById('customAlertTitle');  
+        const alertMessage = document.getElementById('customAlertMessage');  
+        const alertIcon = document.getElementById('customAlertIcon');  
+        const okBtn = document.getElementById('customAlertOkBtn');  
+
+        alertTitle.innerText = title;  
+        alertMessage.innerText = message;  
+
+        if (type === 'success') {  
+            alertIcon.className = "w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold";  
+            alertIcon.innerHTML = "✓";  
+            okBtn.className = "w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-base hover:bg-emerald-700 shadow-md transition";  
+        } else {  
+            alertIcon.className = "w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold";  
+            alertIcon.innerHTML = "✕";  
+            okBtn.className = "w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-base hover:bg-red-700 shadow-md transition";  
+        }  
+
+        alertModal.classList.remove('hidden');  
+    }  
+
+    document.getElementById('customAlertOkBtn').addEventListener('click', () => {  
+        document.getElementById('customAlertModal').classList.add('hidden');  
+    });  
+
+    document.getElementById('openModalBtn').addEventListener('click', () => {  
+        document.querySelector('input[name="marketAction"][value="add"]').checked = true;  
+        updateActionTabUI();  
+        modal.classList.remove('hidden');  
+    });  
+
+    document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));  
+
+    const actionRadios = document.querySelectorAll('input[name="marketAction"]');  
+      
+    function updateActionTabUI() {  
+        let currentAction = document.querySelector('input[name="marketAction"]:checked').value;  
+          
+        document.querySelectorAll('.action-tab').forEach(tab => {  
+            tab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab text-slate-700";  
+        });  
+        let activeTab = document.getElementById(`tab${currentAction.charAt(0).toUpperCase() + currentAction.slice(1)}`);  
+        if(currentAction === 'delete') {  
+            activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-red-600 text-white shadow-sm";  
+        } else {  
+            activeTab.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-xs font-bold action-tab bg-emerald-600 text-white shadow-sm";  
+        }  
+
+        const selectDiv = document.getElementById('modalSelectMarketDiv');  
+        const detailsDiv = document.getElementById('modalDetailsDiv');  
+        const deleteNotice = document.getElementById('modalDeleteNotice');  
+        const actionBtn = document.getElementById('executeMarketActionBtn');  
+
+        populateModalDropdown();  
+
+        if (currentAction === 'add') {  
+            selectDiv.classList.add('hidden');  
+            detailsDiv.classList.remove('hidden');  
+            deleteNotice.classList.add('hidden');  
+            actionBtn.innerText = "Save Market";  
+            actionBtn.className = "flex-1 bg-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-emerald-700 transition";  
+              
+            document.getElementById('newMarketName').value = '';  
+            document.getElementById('openTime').value = '';  
+            document.getElementById('closeTime').value = '';  
+            document.querySelectorAll('input[name="workingDay"]').forEach(cb => cb.checked = true);  
+        } else if (currentAction === 'edit') {  
+            selectDiv.classList.remove('hidden');  
+            detailsDiv.classList.remove('hidden');  
+            deleteNotice.classList.add('hidden');  
+            actionBtn.innerText = "Update Market";  
+            actionBtn.className = "flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-blue-700 transition";  
+            loadSelectedMarketDataToModal();  
+        } else if (currentAction === 'delete') {  
+            selectDiv.classList.remove('hidden');  
+            detailsDiv.classList.add('hidden');  
+            deleteNotice.classList.remove('hidden');  
+            actionBtn.innerText = "Delete Market";  
+            actionBtn.className = "flex-1 bg-red-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-red-700 transition";  
+        }  
+    }  
+
+    actionRadios.forEach(radio => {  
+        radio.addEventListener('change', updateActionTabUI);  
+    });  
+
+    function populateModalDropdown() {  
+        const modalSelect = document.getElementById('modalMarketSelect');  
+        modalSelect.innerHTML = '<option value="">Select Market</option>';  
+        marketsList.forEach(m => {  
+            let opt = document.createElement('option');  
+            opt.value = m.name;  
+            opt.textContent = m.name;  
+            modalSelect.appendChild(opt);  
+        });  
+    }  
+
+    document.getElementById('modalMarketSelect').addEventListener('change', loadSelectedMarketDataToModal);  
+
+    function loadSelectedMarketDataToModal() {  
+        let currentAction = document.querySelector('input[name="marketAction"]:checked').value;  
+        if (currentAction === 'add') return;  
+
+        let selectedName = document.getElementById('modalMarketSelect').value;  
+        let marketObj = marketsList.find(m => m.name === selectedName);  
+
+        if (marketObj && currentAction === 'edit') {  
+            document.getElementById('newMarketName').value = marketObj.name;  
+            document.getElementById('openTime').value = marketObj.openTime || '';  
+            document.getElementById('closeTime').value = marketObj.closeTime || '';  
+            let days = marketObj.workingDays || [];  
+            document.querySelectorAll('input[name="workingDay"]').forEach(cb => {  
+                cb.checked = days.includes(cb.value);  
+            });  
+        }  
+    }  
+
+    document.getElementById('executeMarketActionBtn').addEventListener('click', async () => {  
+        let currentAction = document.querySelector('input[name="marketAction"]:checked').value;  
+          
+        if (currentAction === 'add') {  
+            let name = document.getElementById('newMarketName').value.trim();  
+            let openTime = document.getElementById('openTime').value;  
+            let closeTime = document.getElementById('closeTime').value;  
+            let workingDays = [];  
+            document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => workingDays.push(cb.value));  
+
+            if (!name) { showCustomAlert("Error", "Please enter market name!", "error"); return; }  
+            if (marketsList.some(m => m.name.toLowerCase() === name.toLowerCase())) {  
+                showCustomAlert("Error", "Duplicate market error: Market already exists!", "error");  
+                return;  
+            }  
+
+            try {  
+                const marketId = name.replace(/\s+/g, '_').toLowerCase();  
+                await setDoc(doc(db, "markets", marketId), {  
+                    name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays, timestamp: serverTimestamp()  
+                });  
+                showCustomAlert("Success", "Market added successfully!");  
+                modal.classList.add('hidden');  
+                loadMarkets();  
+            } catch (e) { showCustomAlert("Error", e.message, "error"); }  
+
+        } else if (currentAction === 'edit') {  
+            let selectedName = document.getElementById('modalMarketSelect').value;  
+            let marketObj = marketsList.find(m => m.name === selectedName);  
+            if (!marketObj) { showCustomAlert("Error", "Please select a market to edit!", "error"); return; }  
+
+            let name = document.getElementById('newMarketName').value.trim();  
+            let openTime = document.getElementById('openTime').value;  
+            let closeTime = document.getElementById('closeTime').value;  
+            let workingDays = [];  
+            document.querySelectorAll('input[name="workingDay"]:checked').forEach(cb => workingDays.push(cb.value));  
+
+            if (!name) { showCustomAlert("Error", "Please enter market name!", "error"); return; }  
+
+            try {  
+                await setDoc(doc(db, "markets", marketObj.id), {  
+                    name: name, openTime: openTime, closeTime: closeTime, workingDays: workingDays  
+                }, { merge: true });  
+                showCustomAlert("Success", "Market updated successfully!");  
+                modal.classList.add('hidden');  
+                loadMarkets();  
+            } catch (e) { showCustomAlert("Error", e.message, "error"); }  
+
+        } else if (currentAction === 'delete') {  
+            let selectedName = document.getElementById('modalMarketSelect').value;  
+            let marketObj = marketsList.find(m => m.name === selectedName);  
+            if (!marketObj) { showCustomAlert("Error", "Please select a market to delete!", "error"); return; }  
+
+            if (confirm(`Are you sure you want to delete market "${selectedName}"?`)) {  
+                try {  
+                    await deleteDoc(doc(db, "markets", marketObj.id));  
+                    showCustomAlert("Success", "Market deleted successfully!");  
+                    modal.classList.add('hidden');  
+                    loadMarkets();  
+                } catch (e) { showCustomAlert("Error", e.message, "error"); }  
+            }  
+        }  
+    });  
+
+    function selectDefaultMarketByTime() {  
+        if (marketsList.length === 0) return;  
+          
+        const now = new Date();  
+        const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();  
+
+        let selectedMarket = marketsList[0];  
+        let targetSession = "Open";  
+
+        for (let i = 0; i < marketsList.length; i++) {  
+            let market = marketsList[i];  
+            if (!market.openTime || !market.closeTime) continue;  
+
+            let [openH, openM] = market.openTime.split(':').map(Number);  
+            let [closeH, closeM] = market.closeTime.split(':').map(Number);  
+            let openMinutes = openH * 60 + openM;  
+            let closeMinutes = closeH * 60 + closeM;  
+
+            if (currentTimeMinutes >= openMinutes && currentTimeMinutes <= closeMinutes) {  
+                selectedMarket = market;  
+                let midpoint = openMinutes + Math.floor((closeMinutes - openMinutes) / 2);  
+                targetSession = currentTimeMinutes <= midpoint ? "Open" : "Close";  
+                break;  
+            } else if (i < marketsList.length - 1) {  
+                let nextMarket = marketsList[i + 1];  
+                if (nextMarket.openTime) {  
+                    let [nextOpenH, nextOpenM] = nextMarket.openTime.split(':').map(Number);  
+                    let nextOpenMinutes = nextOpenH * 60 + nextOpenM;  
+                    if (currentTimeMinutes > closeMinutes && currentTimeMinutes < nextOpenMinutes) {  
+                        selectedMarket = nextMarket;  
+                        targetSession = "Open";  
+                        break;  
+                    }  
+                }  
+            }  
+        }  
+
+        const marketDropdown = document.getElementById('marketDropdown');  
+        if (selectedMarket && marketDropdown.value === "") {  
+            marketDropdown.value = selectedMarket.name;  
+              
+            const sessionRadio = document.querySelector(`input[name="sessionToggle"][value="${targetSession}"]`);  
+            if (sessionRadio) {  
+                sessionRadio.checked = true;  
+                updateToggleUI();  
+            }  
+
+            marketDropdown.dispatchEvent(new Event('change'));  
+        }  
+    }  
+
+    async function loadMarkets() {  
+        const marketDropdown = document.getElementById('marketDropdown');  
+        const analysisMarketSelect = document.getElementById('analysisMarketSelect');  
+        let currentSelected = marketDropdown.value;  
+        try {  
+            const querySnapshot = await getDocs(collection(db, "markets"));  
+            marketDropdown.innerHTML = '<option value="">Select Market</option>';  
+            analysisMarketSelect.innerHTML = '<option value="">Select Market</option>';  
+            marketsList = [];  
+              
+            querySnapshot.forEach((docSnap) => {  
+                let mData = docSnap.data();  
+                marketsList.push({ id: docSnap.id, ...mData });  
+            });  
+
+            marketsList.sort((a, b) => {  
+                let timeA = a.openTime || "23:59";  
+                let timeB = b.openTime || "23:59";  
+                return timeA.localeCompare(timeB);  
+            });  
+
+            marketsList.forEach(mData => {  
+                let opt1 = document.createElement('option');  
+                opt1.value = mData.name;  
+                opt1.textContent = mData.name;  
+                marketDropdown.appendChild(opt1);  
+
+                let opt2 = document.createElement('option');  
+                opt2.value = mData.name;  
+                opt2.textContent = mData.name;  
+                analysisMarketSelect.appendChild(opt2);  
+            });  
+
+            if (currentSelected) {  
+                marketDropdown.value = currentSelected;  
+            } else {  
+                selectDefaultMarketByTime();  
+            }  
+
+            if (marketsList.length > 0 && analysisMarketSelect.value === "") {  
+                analysisMarketSelect.value = marketsList[0].name;  
+            }  
+              
+            checkValidationAndStatus();  
+        } catch (e) {  
+            console.log("Markets load error:", e);  
+        }  
+    }  
+    loadMarkets();  
+
+    // Load and Compute Analysis Data  
+    async function loadAnalysisData() {  
+        const analysisType = document.querySelector('input[name="analysisType"]:checked').value;  
+        let selectedMarket = document.getElementById('analysisMarketSelect').value;  
+          
+        if (analysisType === 'selected' && !selectedMarket && marketsList.length > 0) {  
+            selectedMarket = marketsList[0].name;  
+            document.getElementById('analysisMarketSelect').value = selectedMarket;  
+        }  
+
+        const analysisHeaderTitle = document.getElementById('analysisHeaderTitle');  
+        const openTotalLogs = document.getElementById('openTotalLogs');  
+        const topCardTitle = document.getElementById('topCardTitle');  
+        const midCardTitle = document.getElementById('midCardTitle');  
+        const recentCardTitle = document.getElementById('recentCardTitle');  
+          
+        const topAnkVal = document.getElementById('topAnkVal');  
+        const topMaxVal = document.getElementById('topMaxVal');  
+        const topListContainer = document.getElementById('topListContainer');  
+
+        const midAnkVal = document.getElementById('midAnkVal');  
+        const midMaxVal = document.getElementById('midMaxVal');  
+        const midListContainer = document.getElementById('midListContainer');  
+
+        const recentAnkVal = document.getElementById('recentAnkVal');  
+        const recentMaxVal = document.getElementById('recentMaxVal');  
+        const recentListContainer = document.getElementById('recentListContainer');  
+
+        const gapGridContainer = document.getElementById('gapGridContainer');  
+        const gridTitleLabel = document.getElementById('gridTitleLabel');  
+
+        if (analysisType === 'selected' && !selectedMarket) {  
+            openTotalLogs.innerText = "0 ગેમ્સ ડેટા";  
+            analysisHeaderTitle.innerText = `SELECT A MARKET (${currentAnalysisView.toUpperCase()})`;  
+            return;  
+        }  
+
+        let marketLabel = (analysisType === 'merged') ? "ALL MARKETS (MERGED)" : selectedMarket.toUpperCase();  
+        analysisHeaderTitle.innerText = `⏳ ${marketLabel} (${currentAnalysisView.toUpperCase()})`;  
+        gridTitleLabel.innerText = `📊 ${currentAnalysisView} Analysis:`;  
+
+        try {  
+            const querySnapshot = await getDocs(collection(db, "matka_records"));  
+            let records = [];  
+
+            const familyPannaGroupsMap = {  
+                "222": ["777", "222", "227", "277"],  
+                "444": ["444", "999", "499", "449"],  
+                "666": ["111", "666", "166", "116"],  
+                "888": ["888", "333", "338", "388"],  
+                "000": ["555", "000", "500", "550"],  
+                "123": ["128", "123", "678", "178", "236", "367", "137", "268"],  
+                "345": ["345", "890", "390", "340", "480", "458", "589", "359"],  
+                "567": ["157", "567", "120", "260", "670", "170", "256", "125"],  
+                "789": ["789", "234", "248", "478", "239", "289", "347", "379"],  
+                "456": ["456", "145", "140", "190", "690", "460", "159", "569"],  
+                "470": ["470", "240", "290", "790", "245", "259", "579", "457"],  
+                "246": ["246", "269", "129", "124", "147", "179", "679", "467"],  
+                "369": ["346", "369", "148", "134", "139", "189", "689", "468"],  
+                "130": ["130", "180", "680", "360", "356", "568", "158", "135"],  
+                "230": ["230", "280", "780", "370", "258", "235", "357", "578"],  
+                "100": ["100", "600", "155", "556", "560", "150"],  
+                "200": ["200", "700", "255", "557", "570", "250"],  
+                "300": ["300", "800", "355", "558", "580", "350"],  
+                "400": ["400", "900", "455", "559", "590", "450"],  
+                "366": ["366", "668", "113", "118", "168", "136"],  
+                "330": ["335", "330", "588", "880", "380", "358"],  
+                "110": ["110", "115", "660", "566", "156", "160"],  
+                "440": ["445", "440", "599", "990", "490", "459"],  
+                "220": ["220", "225", "770", "577", "257", "270"],  
+                "334": ["339", "334", "889", "488", "348", "389"],  
+                "399": ["399", "899", "344", "448", "489", "349"],  
+                "377": ["778", "377", "228", "223", "237", "278"],  
+                "477": ["779", "477", "229", "224", "247", "279"],  
+                "144": ["446", "144", "699", "199", "149", "469"],  
+                "177": ["177", "677", "122", "226", "267", "127"],  
+                "114": ["119", "114", "669", "466", "146", "169"],  
+                "133": ["336", "133", "688", "188", "138", "368"],  
+                "233": ["337", "233", "788", "288", "238", "378"],  
+                "266": ["266", "667", "112", "117", "167", "126"],  
+                "244": ["447", "244", "799", "299", "249", "479"]  
+            };  
+
+            const digitFamilyPannaMap = {  
+                "1": ["222", "123", "470", "100", "330", "399", "114"],  
+                "2": ["444", "345", "246", "200", "110", "377", "133"],  
+                "3": ["666", "567", "369", "300", "440", "477", "233"],  
+                "4": ["888", "789", "130", "400", "220", "144", "266"],  
+                "5": ["000", "456", "230", "366", "334", "177", "244"],  
+                "6": ["222", "123", "470", "100", "330", "399", "114"],  
+                "7": ["444", "345", "246", "200", "110", "377", "133"],  
+                "8": ["666", "567", "369", "300", "440", "477", "233"],  
+                "9": ["888", "789", "130", "400", "220", "144", "266"],  
+                "0": ["000", "456", "230", "366", "334", "177", "244"]  
+            };  
+
+            querySnapshot.forEach((docSnap) => {  
+                let data = docSnap.data();  
+                let matchMarket = (analysisType === 'merged') || (data.marketName === selectedMarket);  
+                if (matchMarket && data.date && data.marketName) {  
+                    let marketObj = marketsList.find(m => m.name === data.marketName);  
+                    let openTime = marketObj ? marketObj.openTime || "00:00" : "00:00";  
+
+                    // Process Open Session if exists
+                    if (data.openAnk !== undefined && data.openAnk !== null && data.openAnk !== '') {  
+                        let openAnkVal = parseInt(data.openAnk);
+                        let targetVal = null;  
+                        if (currentAnalysisView === 'Open') targetVal = openAnkVal;  
+                        else if (currentAnalysisView === 'Close') { /* handled separately */ }  
+                        else if (currentAnalysisView === 'Total' && data.closeAnk !== undefined && data.closeAnk !== '') {  
+                            targetVal = (openAnkVal + parseInt(data.closeAnk)) % 10;  
+                        } else if (currentAnalysisView === 'Diff' && data.closeAnk !== undefined && data.closeAnk !== '') {  
+                            let closeAnkVal = parseInt(data.closeAnk);
+                            targetVal = (10 + closeAnkVal - openAnkVal) % 10;  
+                        }  
+
+                        let fKey = null;  
+                        let fpKey = null;  
+                        let pannaToTest = data.openPana;  
+                          
+                        if (pannaToTest && pannaToTest.length === 3) {  
+                            for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {  
+                                if (pList.includes(pannaToTest)) {  
+                                    fpKey = gKey;  
+                                    break;  
+                                }  
+                            }  
+                        }  
+
+                        if (currentAnalysisView === 'More' && currentMoreSubView === 'FamilyJodi') {  
+                            if (data.closeAnk !== undefined && data.closeAnk !== '' && data.closeAnk !== null) {  
+                                let jodi = `${data.openAnk}${data.closeAnk}`;  
+                                const familyGroupsMap = {  
+                                    "11": ["11", "16", "61", "66"],  
+                                    "12": ["12", "17", "21", "26", "62", "67", "71", "76"],  
+                                    "13": ["13", "18", "31", "36", "63", "68", "81", "86"],  
+                                    "14": ["14", "19", "41", "46", "64", "69", "91", "96"],  
+                                    "15": ["10", "15", "50", "55", "01", "06", "51", "60"],  
+                                    "22": ["22", "27", "72", "77"],  
+                                    "23": ["23", "28", "32", "37", "73", "78", "82", "87"],  
+                                    "24": ["24", "29", "42", "47", "74", "79", "92", "97"],  
+                                    "25": ["20", "25", "52", "57", "70", "75", "02", "07"],  
+                                    "33": ["33", "38", "83", "88"],  
+                                    "34": ["34", "39", "43", "48", "84", "89", "93", "98"],  
+                                    "35": ["30", "35", "53", "58", "80", "85", "03", "08"],  
+                                    "44": ["44", "49", "94", "99"],  
+                                    "45": ["40", "45", "54", "59", "90", "95", "04", "09"],  
+                                    "55": ["00", "05", "50", "55"]  
+                                };  
+                                for (let [gKey, jList] of Object.entries(familyGroupsMap)) {  
+                                    if (jList.includes(jodi)) {  
+                                        fKey = gKey;  
+                                        break;  
+                                    }  
+                                }  
+                            }  
+                        }  
+
+                        records.push({  
+                            date: data.date,  
+                            marketName: data.marketName,  
+                            openTime: openTime,  
+                            session: 'Open',
+                            val: targetVal,  
+                            familyKey: fKey,  
+                            familyPannaKey: fpKey,  
+                            openPana: data.openPana,  
+                            openAnk: data.openAnk,  
+                            closeAnk: data.closeAnk,  
+                            openType: data.openType || '-'  
+                        });  
                     }
-                });
 
-                if(currentAnalysisView === 'Open' || currentAnalysisView === 'Close') {
-                    let filtered = records.filter(r => r.session === currentAnalysisView);
-                    calculateStandardAnalysis(filtered, (item) => item.ank);
-                } else if(currentAnalysisView === 'Total' || currentAnalysisView === 'Diff') {
-                    let mapData = {};
-                    records.forEach(r => {
-                        let key = `${r.date}_${r.marketName}`;
-                        if(!mapData[key]) mapData[key] = {};
-                        mapData[key][r.session] = r.ank;
-                    });
-                    let derivedList = [];
-                    for(let k in mapData) {
-                        let item = mapData[k];
-                        if(item.Open !== undefined && item.Close !== undefined) {
-                            let val = (currentAnalysisView === 'Total') ? (item.Open + item.Close) % 10 : (10 + item.Close - item.Open) % 10;
-                            derivedList.push({ ank: val });
-                        }
+                    // Process Close Session if exists
+                    if (data.closeAnk !== undefined && data.closeAnk !== null && data.closeAnk !== '') {  
+                        let closeAnkVal = parseInt(data.closeAnk);
+                        let targetVal = null;  
+                        if (currentAnalysisView === 'Close') targetVal = closeAnkVal;  
+
+                        let fKey = null;  
+                        let fpKey = null;  
+                        let pannaToTest = data.closePana;  
+                          
+                        if (pannaToTest && pannaToTest.length === 3) {  
+                            for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {  
+                                if (pList.includes(pannaToTest)) {  
+                                    fpKey = gKey;  
+                                    break;  
+                                }  
+                            }  
+                        }  
+
+                        records.push({  
+                            date: data.date,  
+                            marketName: data.marketName,  
+                            openTime: openTime + "_close", // ensures chronological sequence per day
+                            session: 'Close',
+                            val: targetVal,  
+                            familyKey: fKey,  
+                            familyPannaKey: fpKey,  
+                            openPana: data.closePana,  
+                            openAnk: data.closeAnk,  
+                            closeAnk: data.closeAnk,  
+                            openType: data.closeType || '-'  
+                        });  
                     }
-                    calculateStandardAnalysis(derivedList, (item) => item.ank);
-                } else if(currentAnalysisView === 'More') {
-                    if(currentMoreSubView === 'FamilyJodi') {
-                        let mapData = {};
-                        records.forEach(r => {
-                            let key = `${r.date}_${r.marketName}`;
-                            if(!mapData[key]) mapData[key] = {};
-                            mapData[key][r.session] = r.ank;
+                }  
+            });  
+
+            globalAllRecords = records;  
+
+            records.sort((a, b) => {  
+                let dateComp = new Date(a.date) - new Date(b.date);  
+                if (dateComp !== 0) return dateComp;  
+                return a.openTime.localeCompare(b.openTime);  
+            });  
+
+            openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`;  
+
+            // More View Sub-features Handling  
+            if (currentAnalysisView === 'More') {  
+                gridTitleLabel.innerText = `📊 More Analysis (${currentMoreSubView}):`;  
+
+                if (currentMoreSubView === 'FamilyJodi') {  
+                    topCardTitle.innerText = "🔥 TOP";  
+                    midCardTitle.innerText = "💠 MID";  
+                    recentCardTitle.innerText = "⚡ RECENT";  
+
+                    const allGroupKeys = ["11", "12", "13", "14", "15", "22", "23", "24", "25", "33", "34", "35", "44", "45", "55"];  
+                    let groupStats = {};  
+                    allGroupKeys.forEach(k => {  
+                        groupStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 };  
+                    });  
+
+                    records.forEach((rec, idx) => {  
+                        if (rec.familyKey && groupStats[rec.familyKey]) {  
+                            groupStats[rec.familyKey].occurrences.push(idx);  
+                        }  
+                    });  
+
+                    let totalLen = records.length;  
+                    allGroupKeys.forEach(k => {  
+                        let occs = groupStats[k].occurrences;  
+                        let currentDelay = 0;  
+                        if (occs.length === 0) {  
+                            currentDelay = totalLen;  
+                        } else {  
+                            currentDelay = totalLen - 1 - occs[occs.length - 1];  
+                            groupStats[k].lastSeen = occs[occs.length - 1];  
+                        }  
+                        groupStats[k].currentDelay = currentDelay;  
+
+                        let maxDelay = 0;  
+                        if (occs.length > 0) {  
+                            let gaps = [occs[0]];  
+                            for (let j = 1; j < occs.length; j++) {  
+                                gaps.push(occs[j] - occs[j - 1] - 1);  
+                            }  
+                            gaps.push(totalLen - 1 - occs[occs.length - 1]);  
+                            maxDelay = Math.max(...gaps);  
+                        } else {  
+                            maxDelay = totalLen;  
+                        }  
+                        groupStats[k].maxDelay = maxDelay;  
+                    });  
+
+                    let listArr = allGroupKeys.map(k => ({ group: k, ...groupStats[k] }));  
+
+                    let sortedByRecent = [...listArr].sort((a, b) => {  
+                        if (a.currentDelay !== b.currentDelay) return a.currentDelay - b.currentDelay;  
+                        return b.lastSeen - a.lastSeen;  
+                    });  
+                    let recent5 = sortedByRecent.slice(0, 5);  
+
+                    let remainingForTop = listArr.filter(item => !recent5.some(r => r.group === item.group));  
+                    let top5 = [...remainingForTop].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 5);  
+
+                    let usedGroups = new Set([...recent5.map(r => r.group), ...top5.map(t => t.group)]);  
+                    let midGroups = listArr.filter(item => !usedGroups.has(item.group));  
+
+                    topAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    midAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    recentAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+
+                    topListContainer.classList.remove('hidden');  
+                    midListContainer.classList.remove('hidden');  
+                    recentListContainer.classList.remove('hidden');  
+
+                    let topCurrDelay = top5[0] ? top5[0].currentDelay : 0;  
+                    let midCurrDelay = midGroups[0] ? midGroups[0].currentDelay : 0;  
+                    let recentCurrDelay = recent5[0] ? recent5[0].currentDelay : 0;  
+
+                    let topMaxD = top5[0] ? top5[0].maxDelay : 0;  
+                    let midMaxD = midGroups[0] ? midGroups[0].maxDelay : 0;  
+                    let recentMaxD = recent5[0] ? recent5[0].maxDelay : 0;  
+
+                    topAnkVal.innerText = topCurrDelay;  
+                    topMaxVal.innerText = `Max: ${topMaxD}`;  
+                    topListContainer.innerText = `[${top5.map(x => x.group).join(', ')}]`;  
+
+                    midAnkVal.innerText = midCurrDelay;  
+                    midMaxVal.innerText = `Max: ${midMaxD}`;  
+                    midListContainer.innerText = `[${midGroups.map(x => x.group).join(', ')}]`;  
+
+                    recentAnkVal.innerText = recentCurrDelay;  
+                    recentMaxVal.innerText = `Max: ${recentMaxD}`;  
+                    recentListContainer.innerText = `[${recent5.map(x => x.group).join(', ')}]`;  
+
+                    gapGridContainer.innerHTML = '';  
+                    let row1 = document.createElement('div');  
+                    row1.className = "grid grid-cols-3 gap-1.5 text-center";  
+
+                    let row2 = document.createElement('div');  
+                    row2.className = "grid grid-cols-2 gap-1.5 text-center pt-1";  
+
+                    listArr.forEach((item, idx) => {  
+                        let card = document.createElement('div');  
+                        card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";  
+                        card.innerHTML = `  
+                            <div class="text-xs font-bold text-slate-500">${item.group}</div>  
+                            <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
+                            <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
+                        `;  
+                        if (idx < 3) row1.appendChild(card);  
+                        else row2.appendChild(card);  
+                    });  
+                    gapGridContainer.appendChild(row1);  
+                    gapGridContainer.appendChild(row2);  
+
+                } else if (currentMoreSubView === 'FamilyPanna') {  
+                    topCardTitle.innerText = "🔥 TOP";  
+                    midCardTitle.innerText = "💠 MID";  
+                    recentCardTitle.innerText = "⚡ RECENT";  
+
+                    let allowedGroups = [];
+                    if (isFpCombined) {
+                        let d = selectedFamilyPannaDigit;
+                        let partner = (parseInt(d) + 5) % 10;
+                        let setGroups = new Set([
+                            ...(digitFamilyPannaMap[d] || []),
+                            ...(digitFamilyPannaMap[String(partner)] || [])
+                        ]);
+                        allowedGroups = Array.from(setGroups);
+                    } else {
+                        allowedGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];  
+                    }
+
+                    let fpStats = {};  
+                    allowedGroups.forEach(k => {  
+                        fpStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 };  
+                    });  
+
+                    records.forEach((rec, idx) => {  
+                        if (rec.familyPannaKey && fpStats[rec.familyPannaKey]) {  
+                            fpStats[rec.familyPannaKey].occurrences.push(idx);  
+                        }  
+                    });  
+
+                    let totalLen = records.length;  
+                    allowedGroups.forEach(k => {  
+                        let occs = fpStats[k].occurrences;  
+                        let currentDelay = 0;  
+                        if (occs.length === 0) {  
+                            currentDelay = totalLen;  
+                        } else {  
+                            currentDelay = totalLen - 1 - occs[occs.length - 1];  
+                            fpStats[k].lastSeen = occs[occs.length - 1];  
+                        }  
+                        fpStats[k].currentDelay = currentDelay;  
+
+                        let maxDelay = 0;  
+                        if (occs.length > 0) {  
+                            let gaps = [occs[0]];  
+                            for (let j = 1; j < occs.length; j++) {  
+                                gaps.push(occs[j] - occs[j - 1] - 1);  
+                            }  
+                            gaps.push(totalLen - 1 - occs[occs.length - 1]);  
+                            maxDelay = Math.max(...gaps);  
+                        } else {  
+                            maxDelay = totalLen;  
+                        }  
+                        fpStats[k].maxDelay = maxDelay;  
+                    });  
+
+                    let fpListArr = allowedGroups.map(k => ({ group: k, ...fpStats[k] }));  
+
+                    // Sorting for Top (2), Mid (3), Recent (2) when 7 groups
+                    let sortedByRecent = [...fpListArr].sort((a, b) => {  
+                        if (a.currentDelay !== b.currentDelay) return a.currentDelay - b.currentDelay;  
+                        return b.lastSeen - a.lastSeen;  
+                    });  
+                    
+                    let fpRecent2 = sortedByRecent.slice(0, 2);  
+                    let remainingForTop = fpListArr.filter(item => !fpRecent2.some(r => r.group === item.group));  
+                    let fpTop2 = [...remainingForTop].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 2);  
+
+                    let fpUsed = new Set([...fpRecent2.map(x => x.group), ...fpTop2.map(x => x.group)]);  
+                    let fpMid3 = fpListArr.filter(x => !fpUsed.has(x.group));  
+
+                    topAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    midAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    recentAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+
+                    topListContainer.classList.remove('hidden');  
+                    midListContainer.classList.remove('hidden');  
+                    recentListContainer.classList.remove('hidden');  
+
+                    topAnkVal.innerText = fpTop2[0] ? fpTop2[0].currentDelay : 0;  
+                    topMaxVal.innerText = `Max: ${fpTop2[0] ? fpTop2[0].maxDelay : 0}`;  
+                    topListContainer.innerText = `[${fpTop2.map(x => x.group).join(', ')}]`;  
+
+                    midAnkVal.innerText = fpMid3[0] ? fpMid3[0].currentDelay : 0;  
+                    midMaxVal.innerText = `Max: ${fpMid3[0] ? fpMid3[0].maxDelay : 0}`;  
+                    midListContainer.innerText = `[${fpMid3.map(x => x.group).join(', ')}]`;  
+
+                    recentAnkVal.innerText = fpRecent2[0] ? fpRecent2[0].currentDelay : 0;  
+                    recentMaxVal.innerText = `Max: ${fpRecent2[0] ? fpRecent2[0].maxDelay : 0}`;  
+                    recentListContainer.innerText = `[${fpRecent2.map(x => x.group).join(', ')}]`;  
+
+                    gapGridContainer.innerHTML = '';  
+                    let row1 = document.createElement('div');  
+                    row1.className = "grid grid-cols-2 gap-1.5 text-center";  
+
+                    let row2 = document.createElement('div');  
+                    row2.className = "grid grid-cols-3 gap-1.5 text-center pt-1";  
+
+                    let row3 = document.createElement('div');  
+                    row3.className = "grid grid-cols-2 gap-1.5 text-center pt-1";  
+
+                    fpListArr.forEach((item, idx) => {  
+                        let card = document.createElement('div');  
+                        card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";  
+                        card.innerHTML = `  
+                            <div class="text-xs font-bold text-slate-500">${item.group}</div>  
+                            <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
+                            <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
+                        `;  
+                        card.addEventListener('click', () => showFamilyPannaDetails(item.group));  
+
+                        if (idx < 2) row1.appendChild(card);  
+                        else if (idx < 5) row2.appendChild(card);  
+                        else row3.appendChild(card);  
+                    });  
+
+                    if (fpListArr.length === 7) {
+                        gapGridContainer.appendChild(row1);  
+                        gapGridContainer.appendChild(row2);  
+                        gapGridContainer.appendChild(row3);  
+                    } else {
+                        let flexibleGrid = document.createElement('div');
+                        flexibleGrid.className = "grid grid-cols-4 gap-1.5 text-center";
+                        fpListArr.forEach(item => {
+                            let card = document.createElement('div');  
+                            card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";  
+                            card.innerHTML = `  
+                                <div class="text-xs font-bold text-slate-500">${item.group}</div>  
+                                <div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>  
+                                <div class="text-[10px] font-bold text-slate-600">Max: ${item.maxDelay}</div>  
+                            `;  
+                            card.addEventListener('click', () => showFamilyPannaDetails(item.group));
+                            flexibleGrid.appendChild(card);
                         });
-                        let jodiList = [];
-                        for(let k in mapData) {
-                            let item = mapData[k];
-                            if(item.Open !== undefined && item.Close !== undefined) {
-                                let jodiStr = `${item.Open}${item.Close}`;
-                                let fKey = getFamilyJodiKey(jodiStr);
-                                if(fKey) jodiList.push({ group: fKey });
-                            }
-                        }
-                        calculateFamilyJodiAnalysis(jodiList);
-                    } else if(currentMoreSubView === 'FamilyPanna') {
-                        let pannaList = records.filter(r => r.panna && r.panna.length === 3).map(r => ({ panna: r.panna }));
-                        calculateFamilyPannaAnalysis(pannaList);
-                    } else if(currentMoreSubView === 'OddEven') {
-                        // Odd/Even Combo Analysis (Open & Close session based Jodi or individual ank combination)
-                        let mapData = {};
-                        records.forEach(r => {
-                            let key = `${r.date}_${r.marketName}`;
-                            if(!mapData[key]) mapData[key] = {};
-                            mapData[key][r.session] = r.ank;
-                        });
-                        let oeList = [];
-                        for(let k in mapData) {
-                            let item = mapData[k];
-                            if(item.Open !== undefined && item.Close !== undefined) {
-                                let isFirstOdd = item.Open % 2 !== 0;
-                                let isSecondOdd = item.Close % 2 !== 0;
-                                let combo = "";
-                                if(isFirstOdd && isSecondOdd) combo = "Odd-Odd";
-                                else if(!isFirstOdd && !isSecondOdd) combo = "Even-Even";
-                                else if(isFirstOdd && !isSecondOdd) combo = "Odd-Even";
-                                else combo = "Even-Odd";
-                                oeList.push({ combo: combo });
-                            }
-                        }
-                        calculateOddEvenAnalysis(oeList);
+                        gapGridContainer.appendChild(flexibleGrid);
                     }
-                }
 
-            } catch(e) {
-                console.log("Analysis Error: ", e);
-            }
-        }
+                } else if (currentMoreSubView === 'OddEven') {  
+                    topCardTitle.innerText = "🔥 Odd Count";  
+                    midCardTitle.innerText = "💠 Even Count";  
+                    recentCardTitle.innerText = "⚡ Ratio";  
 
-        function calculateStandardAnalysis(list, getValFn) {
-            let stats = {};
-            for(let i=0; i<=9; i++) stats[i] = { currentDelay: 0, maxDelay: 0 };
+                    let oddCount = 0, evenCount = 0;  
+                    records.forEach(r => {  
+                        if (r.val !== null && !isNaN(r.val)) {  
+                            if (r.val % 2 === 0) evenCount++;  
+                            else oddCount++;  
+                        }  
+                    });  
 
-            let lastSeen = {};
-            list.forEach((item, idx) => {
-                let val = getValFn(item);
-                if(val !== undefined && val !== null) {
-                    if(lastSeen[val] !== undefined) {
-                        let diff = idx - lastSeen[val];
-                        if(diff > stats[val].maxDelay) stats[val].maxDelay = diff;
-                    } else {
-                        stats[val].maxDelay = idx;
-                    }
-                    lastSeen[val] = idx;
-                }
-            });
+                    let total = oddCount + evenCount;  
+                    let oddPct = total > 0 ? Math.round((oddCount / total) * 100) : 0;  
+                    let evenPct = total > 0 ? Math.round((evenCount / total) * 100) : 0;  
 
-            let totalLen = list.length;
-            for(let i=0; i<=9; i++) {
-                if(lastSeen[i] !== undefined) {
-                    stats[i].currentDelay = (totalLen - 1) - lastSeen[i];
-                } else {
-                    stats[i].currentDelay = totalLen;
-                }
-                if(stats[i].currentDelay > stats[i].maxDelay) stats[i].maxDelay = stats[i].currentDelay;
-            }
+                    topAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    midAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    recentAnkVal.className = "text-sm font-black text-slate-800 truncate";  
 
-            let sorted = [];
-            for(let i=0; i<=9; i++) sorted.push({ ank: i, ...stats[i] });
-            sorted.sort((a,b) => b.currentDelay - a.currentDelay);
+                    topListContainer.classList.remove('hidden');  
+                    midListContainer.classList.remove('hidden');  
+                    recentListContainer.classList.remove('hidden');  
 
-            let top4 = sorted.slice(0, 4);
-            let mid2 = sorted.slice(4, 6);
-            let recent4 = sorted.slice(6, 10);
+                    topAnkVal.innerText = oddCount;  
+                    topMaxVal.innerText = `Max: ${oddPct}%`;  
+                    topListContainer.innerText = `[Odd Stats]`;  
 
-            document.getElementById('topAnkVal').innerText = top4.map(x => x.ank).join(', ');
-            document.getElementById('topMaxVal').innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;
+                    midAnkVal.innerText = evenCount;  
+                    midMaxVal.innerText = `Max: ${evenPct}%`;  
+                    midListContainer.innerText = `[Even Stats]`;  
 
-            document.getElementById('midAnkVal').innerText = mid2.map(x => x.ank).join(', ');
-            document.getElementById('midMaxVal').innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;
+                    recentAnkVal.innerText = `${oddPct}:${evenPct}`;  
+                    recentMaxVal.innerText = "Max: Ratio";  
+                    recentListContainer.innerText = `[Comparative]`;  
 
-            document.getElementById('recentAnkVal').innerText = recent4.map(x => x.ank).join(', ');
-            document.getElementById('recentMaxVal').innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;
+                    gapGridContainer.innerHTML = `  
+                        <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">  
+                            <div class="text-xs font-bold text-slate-600">Distribution Overview</div>  
+                            <div class="text-sm font-black text-blue-600">Odd: ${oddCount} (${oddPct}%) | Even: ${evenCount} (${evenPct}%)</div>  
+                        </div>  
+                    `;  
 
-            let grid = document.getElementById('gapGridContainer');
-            grid.innerHTML = '';
-            sorted.forEach(item => {
-                let card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
-                card.innerHTML = `
-                    <div class="text-xs font-bold text-slate-500">${item.ank}</div>
-                    <div class="text-sm font-extrabold text-blue-600">${item.currentDelay}</div>
-                    <div class="text-[9px] text-slate-400">Max: ${item.maxDelay}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+                } else if (currentMoreSubView === 'PanelType') {  
+                    topCardTitle.innerText = "🔥 Single (SP)";  
+                    midCardTitle.innerText = "💠 Double (DP)";  
+                    recentCardTitle.innerText = "⚡ Triple (TP)";  
 
-        function calculateFamilyJodiAnalysis(list) {
-            let stats = {};
-            for(let i=1; i<=15; i++) stats[`Group ${i}`] = { currentDelay: 0, maxDelay: 0 };
+                    let spCount = 0, dpCount = 0, tpCount = 0;  
+                    records.forEach(r => {  
+                        if (r.openType.includes("SP")) spCount++;  
+                        else if (r.openType.includes("DP")) dpCount++;  
+                        else if (r.openType.includes("TP")) tpCount++;  
+                    });  
 
-            let lastSeen = {};
-            list.forEach((item, idx) => {
-                let g = item.group;
-                if(g) {
-                    if(lastSeen[g] !== undefined) {
-                        let diff = idx - lastSeen[g];
-                        if(diff > stats[g].maxDelay) stats[g].maxDelay = diff;
-                    } else {
-                        stats[g].maxDelay = idx;
-                    }
-                    lastSeen[g] = idx;
-                }
-            });
+                    topAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    midAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+                    recentAnkVal.className = "text-sm font-black text-slate-800 truncate";  
 
-            let totalLen = list.length;
-            for(let i=1; i<=15; i++) {
-                let g = `Group ${i}`;
-                if(lastSeen[g] !== undefined) {
-                    stats[g].currentDelay = (totalLen - 1) - lastSeen[g];
-                } else {
-                    stats[g].currentDelay = totalLen;
-                }
-                if(stats[g].currentDelay > stats[g].maxDelay) stats[g].maxDelay = stats[g].currentDelay;
-            }
+                    topListContainer.classList.remove('hidden');  
+                    midListContainer.classList.remove('hidden');  
+                    recentListContainer.classList.remove('hidden');  
 
-            let sorted = [];
-            for(let i=1; i<=15; i++) sorted.push({ group: `Group ${i}`, ...stats[`Group ${i}`] });
-            sorted.sort((a,b) => b.currentDelay - a.currentDelay);
+                    topAnkVal.innerText = spCount;  
+                    topMaxVal.innerText = "Max: SP";  
+                    topListContainer.innerText = `[Single Panna]`;  
 
-            let top5 = sorted.slice(0, 5);
-            let mid5 = sorted.slice(5, 10);
-            let recent5 = sorted.slice(10, 15);
+                    midAnkVal.innerText = dpCount;  
+                    midMaxVal.innerText = "Max: DP";  
+                    midListContainer.innerText = `[Double Panna]`;  
 
-            document.getElementById('fjTopVal').innerText = top5.map(x => x.group).join(', ');
-            document.getElementById('fjTopMax').innerText = `Max: ${top5[0] ? top5[0].maxDelay : 0}`;
-            document.getElementById('fjTopList').innerText = `[${top5.map(x => familyJodiGroups[parseInt(x.group.replace('Group ',''))-1].join(', ')).join(' | ')}]`;
+                    recentAnkVal.innerText = tpCount;  
+                    recentMaxVal.innerText = "Max: TP";  
+                    recentListContainer.innerText = `[Triple Panna]`;  
 
-            document.getElementById('fjMidVal').innerText = mid5.map(x => x.group).join(', ');
-            document.getElementById('fjMidMax').innerText = `Max: ${mid5[0] ? mid5[0].maxDelay : 0}`;
-            document.getElementById('fjMidList').innerText = `[${mid5.map(x => familyJodiGroups[parseInt(x.group.replace('Group ',''))-1].join(', ')).join(' | ')}]`;
+                    gapGridContainer.innerHTML = `  
+                        <div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1">  
+                            <div class="text-xs font-bold text-slate-600">Panel Types Breakdown</div>  
+                            <div class="text-xs font-bold text-slate-700">SP: ${spCount} | DP: ${dpCount} | TP: ${tpCount}</div>  
+                        </div>  
+                    `;  
+                }  
+                return;  
+            } else {  
+                topCardTitle.innerText = "🔥 TOP";  
+                midCardTitle.innerText = "💠 MID";  
+                recentCardTitle.innerText = "⚡ RECENT";  
+            }  
 
-            document.getElementById('fjRecentVal').innerText = recent5.map(x => x.group).join(', ');
-            document.getElementById('fjRecentMax').innerText = `Max: ${recent5[0] ? recent5[0].maxDelay : 0}`;
-            document.getElementById('fjRecentList').innerText = `[${recent5.map(x => familyJodiGroups[parseInt(x.group.replace('Group ',''))-1].join(', ')).join(' | ')}]`;
+            let ankStats = {};  
+            for (let i = 0; i <= 9; i++) {  
+                ankStats[i] = { occurrences: [], maxDelay: 0 };  
+            }  
 
-            let grid = document.getElementById('fjGridContainer');
-            grid.innerHTML = '';
-            let row1 = document.createElement('div'); row1.className = "grid grid-cols-3 gap-1.5";
-            let row2 = document.createElement('div'); row2.className = "grid grid-cols-2 gap-1.5 pt-1.5";
+            records.forEach((rec, idx) => {  
+                let ank = rec.val;  
+                if (ank >= 0 && ank <= 9) {  
+                    ankStats[ank].occurrences.push(idx);  
+                }  
+            });  
 
-            sorted.forEach((item, idx) => {
-                let card = document.createElement('div');
-                card.className = "bg-slate-50 border border-slate-200 rounded-xl p-2 text-center shadow-sm text-xs";
-                card.innerHTML = `
-                    <div class="font-bold text-slate-700">${item.group}</div>
-                    <div class="font-extrabold text-blue-600">${item.currentDelay} (Max: ${item.maxDelay})</div>
-                `;
-                if(idx < 3) row1.appendChild(card);
-                else row2.appendChild(card);
-            });
-            grid.appendChild(row1);
-            grid.appendChild(row2);
-        }
+            let totalLen = records.length;  
+            let ankLastSeen = {};  
+            for (let i = 0; i <= 9; i++) {  
+                let occs = ankStats[i].occurrences;  
+                let currentDelay = 0;  
+                if (occs.length === 0) {  
+                    currentDelay = totalLen;  
+                    ankLastSeen[i] = -1;  
+                } else {  
+                    currentDelay = totalLen - 1 - occs[occs.length - 1];  
+                    ankLastSeen[i] = occs[occs.length - 1];  
+                }  
+                ankStats[i].currentDelay = currentDelay;  
+            }  
 
-        function calculateFamilyPannaAnalysis(list) {
-            let groupList = familyPannaGroupsMap[selectedFamilyPannaDigit] || [];
-            let stats = {};
-            groupList.forEach((grp, idx) => stats[`Grp ${idx+1}`] = { currentDelay: 0, maxDelay: 0, panna: grp });
+            let ankList = [];  
+            for (let i = 0; i <= 9; i++) {  
+                let occs = ankStats[i].occurrences;  
+                let maxDelay = 0;  
+                if (occs.length > 0) {  
+                    let gaps = [occs[0]];  
+                    for (let j = 1; j < occs.length; j++) {  
+                        gaps.push(occs[j] - occs[j - 1] - 1);  
+                    }  
+                    gaps.push(totalLen - 1 - occs[occs.length - 1]);  
+                    maxDelay = Math.max(...gaps);  
+                } else {  
+                    maxDelay = totalLen;  
+                }  
+                ankList.push({   
+                    ank: i,   
+                    currentDelay: ankStats[i].currentDelay,   
+                    maxDelay: maxDelay,  
+                    lastSeen: ankLastSeen[i]   
+                });  
+            }  
 
-            let lastSeen = {};
-            list.forEach((item, idx) => {
-                let p = item.panna;
-                let gKey = getFamilyPannaKey(p, selectedFamilyPannaDigit);
-                if(gKey && stats[gKey]) {
-                    if(lastSeen[gKey] !== undefined) {
-                        let diff = idx - lastSeen[gKey];
-                        if(diff > stats[gKey].maxDelay) stats[gKey].maxDelay = diff;
-                    } else {
-                        stats[gKey].maxDelay = idx;
-                    }
-                    lastSeen[gKey] = idx;
-                }
-            });
+            let sortedByRecent = [...ankList].sort((a, b) => {  
+                if (a.currentDelay !== b.currentDelay) {  
+                    return a.currentDelay - b.currentDelay;  
+                }  
+                return b.lastSeen - a.lastSeen;  
+            });  
+            let recent4 = sortedByRecent.slice(0, 4);  
 
-            let totalLen = list.length;
-            groupList.forEach((grp, idx) => {
-                let gKey = `Grp ${idx+1}`;
-                if(lastSeen[gKey] !== undefined) {
-                    stats[gKey].currentDelay = (totalLen - 1) - lastSeen[gKey];
-                } else {
-                    stats[gKey].currentDelay = totalLen;
-                }
-                if(stats[gKey].currentDelay > stats[gKey].maxDelay) stats[gKey].maxDelay = stats[gKey].currentDelay;
-            });
+            let remainingList = ankList.filter(item => !recent4.some(r => r.ank === item.ank));  
+            let top4 = [...remainingList].sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 4);  
 
-            let sorted = [];
-            groupList.forEach((grp, idx) => sorted.push({ groupKey: `Grp ${idx+1}`, panna: grp, ...stats[`Grp ${idx+1}`] }));
-            sorted.sort((a,b) => b.currentDelay - a.currentDelay);
+            let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]);  
+            let mid2 = ankList.filter(item => !usedAnks.has(item.ank));  
 
-            let top2 = sorted.slice(0, 2);
-            let mid3 = sorted.slice(2, 5);
-            let recent2 = sorted.slice(5, 7);
+            topAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+            midAnkVal.className = "text-sm font-black text-slate-800 truncate";  
+            recentAnkVal.className = "text-sm font-black text-slate-800 truncate";  
 
-            document.getElementById('fpTopVal').innerText = top2.map(x => `${x.groupKey}(${x.panna})`).join(', ');
-            document.getElementById('fpTopMax').innerText = `Max: ${top2[0] ? top2[0].maxDelay : 0}`;
-            document.getElementById('fpTopList').innerText = `[${top2.map(x => x.panna).join(', ')}]`;
+            topListContainer.classList.remove('hidden');  
+            midListContainer.classList.remove('hidden');  
+            recentListContainer.classList.remove('hidden');  
 
-            document.getElementById('fpMidVal').innerText = mid3.map(x => `${x.groupKey}(${x.panna})`).join(', ');
-            document.getElementById('fpMidMax').innerText = `Max: ${mid3[0] ? mid3[0].maxDelay : 0}`;
-            document.getElementById('fpMidList').innerText = `[${mid3.map(x => x.panna).join(', ')}]`;
+            topAnkVal.innerText = top4[0] ? top4[0].currentDelay : 0;  
+            topMaxVal.innerText = `Max: ${top4[0] ? top4[0].maxDelay : 0}`;  
+            topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`;  
 
-            document.getElementById('fpRecentVal').innerText = recent2.map(x => `${x.groupKey}(${x.panna})`).join(', ');
-            document.getElementById('fpRecentMax').innerText = `Max: ${recent2[0] ? recent2[0].maxDelay : 0}`;
-            document.getElementById('fpRecentList').innerText = `[${recent2.map(x => x.panna).join(', ')}]`;
+            midAnkVal.innerText = mid2[0] ? mid2[0].currentDelay : 0;  
+            midMaxVal.innerText = `Max: ${mid2[0] ? mid2[0].maxDelay : 0}`;  
+            midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`;  
 
-            let layout = document.getElementById('fpGroupsLayout');
-            layout.innerHTML = '';
-            let r1 = document.createElement('div'); r1.className = "grid grid-cols-2 gap-1.5";
-            let r2 = document.createElement('div'); r2.className = "grid grid-cols-3 gap-1.5 pt-1.5";
-            let r3 = document.createElement('div'); r3.className = "grid grid-cols-2 gap-1.5 pt-1.5";
+            recentAnkVal.innerText = recent4[0] ? recent4[0].currentDelay : 0;  
+            recentMaxVal.innerText = `Max: ${recent4[0] ? recent4[0].maxDelay : 0}`;  
+            recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`;  
 
-            sorted.forEach((item, idx) => {
-                let card = document.createElement('div');
-                card.className = "bg-slate-50 border border-slate-200 rounded-xl p-2 text-center shadow-sm text-xs cursor-pointer hover:bg-blue-50 transition";
-                card.innerHTML = `
-                    <div class="font-bold text-slate-700">${item.groupKey} (${item.panna})</div>
-                    <div class="font-extrabold text-blue-600">${item.currentDelay} (Max: ${item.maxDelay})</div>
-                `;
-                card.addEventListener('click', () => showPannaDetails(item.groupKey, item.panna));
+            // Render Open, Close, Total, Diff Grid cleanly into 5-5 rows (two rows of 5 items each)  
+            gapGridContainer.innerHTML = '';  
+            let gridRowsWrapper = document.createElement('div');  
+            gridRowsWrapper.className = "space-y-1.5";  
 
-                if(idx < 2) r1.appendChild(card);
-                else if(idx < 5) r2.appendChild(card);
-                else r3.appendChild(card);
-            });
-            layout.appendChild(r1);
-            layout.appendChild(r2);
-            layout.appendChild(r3);
-        }
+            let row1 = document.createElement('div');  
+            row1.className = "grid grid-cols-5 gap-1.5 text-center";  
 
-        function calculateOddEvenAnalysis(list) {
-            let comboTypes = ["Odd-Odd", "Even-Even", "Odd-Even", "Even-Odd"];
-            let stats = {};
-            comboTypes.forEach(c => stats[c] = { currentDelay: 0, maxDelay: 0 });
+            let row2 = document.createElement('div');  
+            row2.className = "grid grid-cols-5 gap-1.5 text-center";  
 
-            let lastSeen = {};
-            list.forEach((item, idx) => {
-                let c = item.combo;
-                if(c && stats[c]) {
-                    if(lastSeen[c] !== undefined) {
-                        let diff = idx - lastSeen[c];
-                        if(diff > stats[c].maxDelay) stats[c].maxDelay = diff;
-                    } else {
-                        stats[c].maxDelay = idx;
-                    }
-                    lastSeen[c] = idx;
-                }
-            });
+            for (let i = 0; i <= 9; i++) {  
+                let found = ankList.find(item => item.ank === i);  
+                let delayVal = found ? found.currentDelay : 0;  
+                let maxVal = found ? found.maxDelay : 0;  
+                  
+                let card = document.createElement('div');  
+                card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";  
+                card.innerHTML = `  
+                    <div class="text-xs font-bold text-slate-500">${i}</div>  
+                    <div class="text-sm font-extrabold text-blue-600">${delayVal}</div>  
+                    <div class="text-[10px] font-bold text-slate-600">Max: ${maxVal}</div>  
+                `;  
 
-            let totalLen = list.length;
-            comboTypes.forEach(c => {
-                if(lastSeen[c] !== undefined) {
-                    stats[c].currentDelay = (totalLen - 1) - lastSeen[c];
-                } else {
-                    stats[c].currentDelay = totalLen;
-                }
-                if(stats[c].currentDelay > stats[c].maxDelay) stats[c].maxDelay = stats[c].currentDelay;
-            });
+                if (i < 5) {  
+                    row1.appendChild(card);  
+                } else {  
+                    row2.appendChild(card);  
+                }  
+            }  
 
-            let sorted = [];
-            comboTypes.forEach(c => sorted.push({ combo: c, ...stats[c] }));
-            sorted.sort((a,b) => b.currentDelay - a.currentDelay);
+            gridRowsWrapper.appendChild(row1);  
+            gridRowsWrapper.appendChild(row2);  
+            gapGridContainer.appendChild(gridRowsWrapper);  
 
-            let top2 = sorted.slice(0, 2);
-            let mid1 = sorted.slice(2, 3);
-            let recent1 = sorted.slice(3, 4);
+        } catch (e) {  
+            console.log("Analysis render error:", e);  
+        }  
+    }  
 
-            document.getElementById('oeTopVal').innerText = top2.map(x => x.combo).join(', ');
-            document.getElementById('oeTopMax').innerText = `Max: ${top2[0] ? top2[0].maxDelay : 0}`;
+    function showFamilyPannaDetails(groupKey) {  
+        const familyPannaGroupsMap = {  
+            "222": ["777", "222", "227", "277"],  
+            "444": ["444", "999", "499", "449"],  
+            "666": ["111", "666", "166", "116"],  
+            "888": ["888", "333", "338", "388"],  
+            "000": ["555", "000", "500", "550"],  
+            "123": ["128", "123", "678", "178", "236", "367", "137", "268"],  
+            "345": ["345", "890", "390", "340", "480", "458", "589", "359"],  
+            "567": ["157", "567", "120", "260", "670", "170", "256", "125"],  
+            "789": ["789", "234", "248", "478", "239", "289", "347", "379"],  
+            "456": ["456", "145", "140", "190", "690", "460", "159", "569"],  
+            "470": ["470", "240", "290", "790", "245", "259", "579", "457"],  
+            "246": ["246", "269", "129", "124", "147", "179", "679", "467"],  
+            "369": ["346", "369", "148", "134", "139", "189", "689", "468"],  
+            "130": ["130", "180", "680", "360", "356", "568", "158", "135"],  
+            "230": ["230", "280", "780", "370", "258", "235", "357", "578"],  
+            "100": ["100", "600", "155", "556", "560", "150"],  
+            "200": ["200", "700", "255", "557", "570", "250"],  
+            "300": ["300", "800", "355", "558", "580", "350"],  
+            "400": ["400", "900", "455", "559", "590", "450"],  
+            "366": ["366", "668", "113", "118", "168", "136"],  
+            "330": ["335", "330", "588", "880", "380", "358"],  
+            "110": ["110", "115", "660", "566", "156", "160"],  
+            "440": ["445", "440", "599", "990", "490", "459"],  
+            "220": ["220", "225", "770", "577", "257", "270"],  
+            "334": ["339", "334", "889", "488", "348", "389"],  
+            "399": ["399", "899", "344", "448", "489", "349"],  
+            "377": ["778", "377", "228", "223", "237", "278"],  
+            "477": ["779", "477", "229", "224", "247", "279"],  
+            "144": ["446", "144", "699", "199", "149", "469"],  
+            "177": ["177", "677", "122", "226", "267", "127"],  
+            "114": ["119", "114", "669", "466", "146", "169"],  
+            "133": ["336", "133", "688", "188", "138", "368"],  
+            "233": ["337", "233", "788", "288", "238", "378"],  
+            "266": ["266", "667", "112", "117", "167", "126"],  
+            "244": ["447", "244", "799", "299", "249", "479"]  
+        };  
 
-            document.getElementById('oeMidVal').innerText = mid1.map(x => x.combo).join(', ');
-            document.getElementById('oeMidMax').innerText = `Max: ${mid1[0] ? mid1[0].maxDelay : 0}`;
+        const analysisType = document.querySelector('input[name="analysisType"]:checked').value;  
+        const selectedMarket = document.getElementById('analysisMarketSelect').value;  
 
-            document.getElementById('oeRecentVal').innerText = recent1.map(x => x.combo).join(', ');
-            document.getElementById('oeRecentMax').innerText = `Max: ${recent1[0] ? recent1[0].maxDelay : 0}`;
+        const filteredRecords = globalAllRecords.filter(r => {  
+            return analysisType === 'merged' || r.marketName === selectedMarket;  
+        });  
 
-            let grid = document.getElementById('oeGridContainer');
-            grid.innerHTML = '';
-            sorted.forEach(item => {
-                let card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm";
-                card.innerHTML = `
-                    <div class="text-xs font-bold text-slate-500">${item.combo}</div>
-                    <div class="text-sm font-extrabold text-blue-600">${item.currentDelay}</div>
-                    <div class="text-[9px] text-slate-400">Max: ${item.maxDelay}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+        const totalLen = filteredRecords.length;  
+        const groupPannas = familyPannaGroupsMap[groupKey] || [groupKey];  
 
-        function showPannaDetails(grpName, panna) {
-            document.getElementById('modalGroupName').innerText = `${grpName} - Panna: ${panna}`;
-            let container = document.getElementById('modalPannasContainer');
-            container.innerHTML = `<div class="bg-slate-50 p-2 rounded-lg border text-center font-bold text-blue-600">Selected Panna: ${panna}</div>`;
-            document.getElementById('pannaDetailModal').classList.remove('hidden');
-        }
+        const pannaList = groupPannas.filter(panna => {  
+            const digits = String(panna).split('').map(Number);  
+            const ank = digits.reduce((sum, digit) => sum + digit, 0) % 10;  
+            return String(ank) === String(selectedFamilyPannaDigit) || (isFpCombined && String((ank+5)%10) === String(selectedFamilyPannaDigit));  
+        });  
 
-        document.getElementById('closePannaModalBtn').addEventListener('click', () => {
-            document.getElementById('pannaDetailModal').classList.add('hidden');
+        const contentDiv = document.getElementById('fpModalContent');  
+        contentDiv.innerHTML = '';  
+        document.getElementById('fpModalTitle').innerText = `Group ${groupKey} Details`;  
+
+        if (pannaList.length === 0) {  
+            contentDiv.innerHTML = `  
+                <div class="bg-amber-50 border border-amber-200 text-amber-700 rounded-xl p-4 text-center">  
+                    <div class="font-bold text-sm">No Panna found</div>  
+                    <div class="text-[11px] mt-1">Group ${groupKey} has no Panna for Digit ${selectedFamilyPannaDigit}</div>  
+                </div>  
+            `;  
+            document.getElementById('fpDetailModal').classList.remove('hidden');  
+            return;  
+        }  
+
+        let pannaDetailsArray = [];
+
+        pannaList.forEach(panna => {  
+            let occurrences = [];
+            filteredRecords.forEach((r, idx) => {  
+                if (String(r.openPana || '') === String(panna)) {  
+                    occurrences.push(idx);  
+                }  
+            });  
+
+            let lastIdx = occurrences.length > 0 ? occurrences[occurrences.length - 1] : -1;  
+            const delay = lastIdx === -1 ? totalLen : totalLen - 1 - lastIdx;  
+
+            let maxDelay = 0;  
+            if (occurrences.length > 0) {  
+                let gaps = [occurrences[0]];  
+                for (let j = 1; j < occurrences.length; j++) {  
+                    gaps.push(occurrences[j] - occurrences[j - 1] - 1);  
+                }  
+                gaps.push(totalLen - 1 - occurrences[occurrences.length - 1]);  
+                maxDelay = Math.max(...gaps);  
+            } else {  
+                maxDelay = totalLen;  
+            }  
+
+            pannaDetailsArray.push({ panna, delay, maxDelay });
+        });  
+
+        // Sort descending by delay
+        pannaDetailsArray.sort((a, b) => b.delay - a.delay);
+
+        pannaDetailsArray.forEach(item => {
+            const row = document.createElement('div');  
+            row.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-3 rounded-xl font-mono shadow-sm text-sm";  
+            row.innerHTML = `  
+                <div class="font-bold text-slate-900 text-base">  
+                    ${item.panna}  
+                </div>  
+                <div class="text-right text-xs font-semibold text-slate-700 space-x-3">  
+                    <span>Max: <strong class="text-indigo-600 text-sm">${item.maxDelay}</strong></span>  
+                    <span>Delay: <strong class="text-emerald-600 text-sm">${item.delay}</strong></span>  
+                </div>  
+            `;  
+            contentDiv.appendChild(row);  
         });
-    </script>
-</body>
+
+        document.getElementById('fpDetailModal').classList.remove('hidden');  
+    }  
+
+    document.getElementById('analysisMarketSelect').addEventListener('change', loadAnalysisData);  
+
+    const radioButtons = document.querySelectorAll('input[name="sessionToggle"]');  
+    const openLabel = document.getElementById('openLabel');  
+    const closeLabel = document.getElementById('closeLabel');  
+
+    function updateToggleUI() {  
+        if(document.querySelector('input[name="sessionToggle"]:checked').value === 'Open') {  
+            openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm";  
+            closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";  
+        } else {  
+            closeLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold bg-blue-600 text-white shadow-sm";  
+            openLabel.className = "flex-1 text-center cursor-pointer py-1.5 rounded-md transition-all text-sm font-semibold text-slate-600";  
+        }  
+    }  
+    updateToggleUI();  
+
+    radioButtons.forEach(radio => {  
+        radio.addEventListener('change', () => {  
+            updateToggleUI();  
+            checkValidationAndStatus();  
+        });  
+    });  
+
+    document.getElementById('marketDropdown').addEventListener('change', checkValidationAndStatus);  
+    document.getElementById('recordDate').addEventListener('change', checkValidationAndStatus);  
+
+    async function checkValidationAndStatus() {  
+        let marketName = document.getElementById('marketDropdown').value;  
+        let dateStr = document.getElementById('recordDate').value;  
+        let session = document.querySelector('input[name="sessionToggle"]:checked').value;  
+        let alertBox = document.getElementById('entryAlertBox');  
+        let alertText = document.getElementById('alertMessageText');  
+        let submitBtn = document.getElementById('submitBtn');  
+        let pannaInput = document.getElementById('pannaInput');  
+
+        if (!marketName || !dateStr) return;  
+
+        const d = new Date(dateStr);  
+        const daysMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];  
+        const selectedDayShort = daysMap[d.getDay()];  
+
+        let selectedMarketObj = marketsList.find(m => m.name === marketName);  
+        if (selectedMarketObj && selectedMarketObj.workingDays) {  
+            if (!selectedMarketObj.workingDays.includes(selectedDayShort)) {  
+                alertBox.classList.remove('hidden');  
+                alertText.innerText = "Market is closed on this day (Non-working day)!";  
+                submitBtn.disabled = true;  
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');  
+                pannaInput.disabled = true;  
+                pannaInput.value = '';  
+                return;  
+            }  
+        }  
+
+        submitBtn.disabled = false;  
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');  
+        pannaInput.disabled = false;  
+
+        try {  
+            const docId = `${dateStr}_${marketName.replace(/\s+/g, '_')}`;  
+            const docRef = doc(db, "matka_records", docId);  
+            const docSnap = await getDoc(docRef);  
+
+            if (docSnap.exists()) {  
+                let data = docSnap.data();  
+                let panaVal = session === 'Open' ? data.openPana : data.closePana;  
+
+                if (panaVal) {  
+                    alertBox.classList.remove('hidden');  
+                    alertText.innerText = `Entry available: Record for this ${session} session already exists! Switched to Update mode.`;  
+                    document.getElementById('recordId').value = docId;  
+                    submitBtn.innerText = "Update Record";  
+                    submitBtn.classList.replace('bg-blue-600', 'bg-emerald-600');  
+                    document.getElementById('cancelEditBtn').classList.remove('hidden');  
+
+                    pannaInput.value = panaVal;  
+                    pannaInput.dispatchEvent(new Event('input'));  
+                } else {  
+                    alertBox.classList.add('hidden');  
+                    document.getElementById('recordId').value = docId;  
+                    submitBtn.innerText = "Save Record";  
+                    submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');  
+                    document.getElementById('cancelEditBtn').classList.add('hidden');  
+                    pannaInput.value = '';  
+                    document.getElementById('previewAnk').innerText = '-';  
+                    document.getElementById('previewGroup').innerText = '-';  
+                    document.getElementById('previewFamilyGroup').innerText = '-';  
+                    document.getElementById('previewPanelType').innerText = '-';  
+                }  
+            } else {  
+                alertBox.classList.add('hidden');  
+                document.getElementById('recordId').value = '';  
+                submitBtn.innerText = "Save Record";  
+                submitBtn.classList.replace('bg-emerald-600', 'bg-blue-600');  
+                document.getElementById('cancelEditBtn').classList.add('hidden');  
+                pannaInput.value = '';  
+                document.getElementById('previewAnk').innerText = '-';  
+                document.getElementById('previewGroup').innerText = '-';  
+                document.getElementById('previewFamilyGroup').innerText = '-';  
+                document.getElementById('previewPanelType').innerText = '-';  
+            }  
+        } catch (err) {  
+            console.log("Check error:", err);  
+        }  
+    }  
+
+    let calculatedAnk = '';  
+    let detectedPanelType = '';  
+    let detectedFamilyGroup = '';  
+
+    function getFamilyGroup(panna) {  
+        const familyPannaGroupsMap = {  
+            "222": ["777", "222", "227", "277"],  
+            "444": ["444", "999", "499", "449"],  
+            "666": ["111", "666", "166", "116"],  
+            "888": ["888", "333", "338", "388"],  
+            "000": ["555", "000", "500", "550"],  
+            "123": ["128", "123", "678", "178", "236", "367", "137", "268"],  
+            "345": ["345", "890", "390", "340", "480", "458", "589", "359"],  
+            "567": ["157", "567", "120", "260", "670", "170", "256", "125"],  
+            "789": ["789", "234", "248", "478", "239", "289", "347", "379"],  
+            "456": ["456", "145", "140", "190", "690", "460", "159", "569"],  
+            "470": ["470", "240", "290", "790", "245", "259", "579", "457"],  
+            "246": ["246", "269", "129", "124", "147", "179", "679", "467"],  
+            "369": ["346", "369", "148", "134", "139", "189", "689", "468"],  
+            "130": ["130", "180", "680", "360", "356", "568", "158", "135"],  
+            "230": ["230", "280", "780", "370", "258", "235", "357", "578"],  
+            "100": ["100", "600", "155", "556", "560", "150"],  
+            "200": ["200", "700", "255", "557", "570", "250"],  
+            "300": ["300", "800", "355", "558", "580", "350"],  
+            "400": ["400", "900", "455", "559", "590", "450"],  
+            "366": ["366", "668", "113", "118", "168", "136"],  
+            "330": ["335", "330", "588", "880", "380", "358"],  
+            "110": ["110", "115", "660", "566", "156", "160"],  
+            "440": ["445", "440", "599", "990", "490", "459"],  
+            "220": ["220", "225", "770", "577", "257", "270"],  
+            "334": ["339", "334", "889", "488", "348", "389"],  
+            "399": ["399", "899", "344", "448", "489", "349"],  
+            "377": ["778", "377", "228", "223", "237", "278"],  
+            "477": ["779", "477", "229", "224", "247", "279"],  
+            "144": ["446", "144", "699", "199", "149", "469"],  
+            "177": ["177", "677", "122", "226", "267", "127"],  
+            "114": ["119", "114", "669", "466", "146", "169"],  
+            "133": ["336", "133", "688", "188", "138", "368"],  
+            "233": ["337", "233", "788", "288", "238", "378"],  
+            "266": ["266", "667", "112", "117", "167", "126"],  
+            "244": ["447", "244", "799", "299", "249", "479"]  
+        };  
+
+        for (let [groupKey, pannaList] of Object.entries(familyPannaGroupsMap)) {  
+            if (pannaList.includes(panna)) {  
+                return groupKey;  
+            }  
+        }  
+        return panna.split('').sort().join('');  
+    }  
+
+    document.getElementById('pannaInput').addEventListener('input', function(e) {  
+        let panna = e.target.value;  
+        if (panna.length === 3 && !isNaN(panna)) {  
+            let sum = parseInt(panna[0]) + parseInt(panna[1]) + parseInt(panna[2]);  
+            calculatedAnk = sum % 10;   
+              
+            if (panna[0] === panna[1] && panna[1] === panna[2]) {  
+                detectedPanelType = "TP (Triple Panna)";  
+            } else if (panna[0] === panna[1] || panna[1] === panna[2] || panna[0] === panna[2]) {  
+                detectedPanelType = "DP (Double Panna)";  
+            } else {  
+                detectedPanelType = "SP (Single Panna)";  
+            }  
+
+            detectedFamilyGroup = getFamilyGroup(panna);  
+
+            document.getElementById('previewAnk').innerText = calculatedAnk;  
+            document.getElementById('previewGroup').innerText = panna;   
+            document.getElementById('previewFamilyGroup').innerText = detectedFamilyGroup;  
+            document.getElementById('previewPanelType').innerText = detectedPanelType;  
+        } else {  
+            calculatedAnk = '';  
+            detectedPanelType = '';  
+            detectedFamilyGroup = '';  
+            document.getElementById('previewAnk').innerText = '-';  
+            document.getElementById('previewGroup').innerText = '-';  
+            document.getElementById('previewFamilyGroup').innerText = '-';  
+            document.getElementById('previewPanelType').innerText = '-';  
+        }  
+    });  
+
+    document.getElementById('matkaForm').addEventListener('submit', async function(e) {  
+        e.preventDefault();  
+          
+        let session = document.querySelector('input[name="sessionToggle"]:checked').value;  
+        let panna = document.getElementById('pannaInput').value;  
+        let date = document.getElementById('recordDate').value;  
+        let marketName = document.getElementById('marketDropdown').value;  
+
+        if (!marketName) {  
+            showCustomAlert("Error", "Please select a market!", "error");  
+            return;  
+        }  
+
+        if (panna.length !== 3 || calculatedAnk === '') {  
+            showCustomAlert("Error", "Please enter a valid 3-digit panna!", "error");  
+            return;  
+        }  
+
+        const docId = `${date}_${marketName.replace(/\s+/g, '_')}`;  
+        const docRef = doc(db, "matka_records", docId);  
+
+        try {  
+            let existingDoc = await getDoc(docRef);  
+            let recordData = existingDoc.exists() ? existingDoc.data() : {  
+                date: date,  
+                marketName: marketName,  
+                timestamp: serverTimestamp()  
+            };  
+
+            if (session === "Open") {  
+                recordData.openPana = panna;  
+                recordData.openAnk = calculatedAnk;  
+                recordData.openGroup = panna;   
+                recordData.openFamilyGroup = detectedFamilyGroup;  
+                recordData.openType = detectedPanelType;  
+            } else {  
+                recordData.closePana = panna;  
+                recordData.closeAnk = calculatedAnk;  
+                recordData.closeGroup = panna;   
+                recordData.closeFamilyGroup = detectedFamilyGroup;  
+                recordData.closeType = detectedPanelType;  
+            }  
+
+            await setDoc(docRef, recordData, { merge: true });  
+            showCustomAlert("Success", "Record saved successfully!");  
+
+            document.getElementById('matkaForm').reset();  
+            document.getElementById('recordDate').value = date;   
+            document.getElementById('submitBtn').innerText = "Save Record";  
+            document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');  
+            document.getElementById('cancelEditBtn').classList.add('hidden');  
+            document.getElementById('entryAlertBox').classList.add('hidden');  
+              
+            if (session === "Open") {  
+                document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true;  
+            } else {  
+                document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true;  
+            }  
+            updateToggleUI();  
+
+            document.getElementById('previewAnk').innerText = '-';  
+            document.getElementById('previewGroup').innerText = '-';  
+            document.getElementById('previewFamilyGroup').innerText = '-';  
+            document.getElementById('previewPanelType').innerText = '-';  
+        } catch (error) {  
+            showCustomAlert("Error", error.message, "error");  
+        }  
+    });  
+</script>  
+
+</body>  
 </html>
