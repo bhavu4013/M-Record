@@ -140,7 +140,7 @@
 </div> 
 <div class="space-y-3 pt-1"> 
 <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl shadow-sm space-y-1.5"> 
-<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Top 4 Common Open Anks (Rules Applied)</div> 
+<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Top 4 Open Digits (Rules 1-4 Applied)</div> 
 <div id="bestCommonAnkOutput" class="text-xl font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 </div> 
@@ -531,7 +531,7 @@ shortlistMarketSelect.appendChild(opt);
 }); 
 } 
 
-// SHORTLIST RULES CALCULATION LOGIC ACCORDING TO USER'S 4 RULES
+// SHORTLIST RULES CALCULATION LOGIC (RULES 1 TO 4 APPLIED)
 document.getElementById('generateShortlistBtn').addEventListener('click', async () => { 
 const selectedMarket = document.getElementById('shortlistMarketSelect').value; 
 let bestCommonAnkOutput = document.getElementById('bestCommonAnkOutput'); 
@@ -557,11 +557,7 @@ return;
 
 let fetchedAnks = []; 
 
-const digitFamilyPannaMap = { 
-"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
-}; 
-
-// --- RULE 1: Open View ---
+// --- RULE 1: Open View (Compare TOP vs RECENT, ignore MID, fetch delayed group digits) ---
 let openAnksList = rawRecords.filter(r => r.openAnk !== undefined && r.openAnk !== "").map(r => parseInt(r.openAnk)); 
 let openAnkStats = {}; 
 for(let i=0; i<=9; i++) openAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -574,12 +570,11 @@ let sortedOpenAnks = Object.keys(openAnkStats).sort((a,b) => openAnkStats[b].del
 if(sortedOpenAnks.length > 0) { 
 let topOpen = sortedOpenAnks[0]; 
 let recentOpen = sortedOpenAnks[sortedOpenAnks.length - 1]; 
-let r1TargetGroupAnk = openAnkStats[topOpen].delay >= openAnkStats[recentOpen].delay ? topOpen : recentOpen; 
-let groupDigits = digitFamilyPannaMap[r1TargetGroupAnk] ? digitFamilyPannaMap[r1TargetGroupAnk][0].split('').map(Number) : [parseInt(r1TargetGroupAnk)]; 
-groupDigits.forEach(d => fetchedAnks.push(d)); 
+let r1TargetAnk = openAnkStats[topOpen].delay >= openAnkStats[recentOpen].delay ? topOpen : recentOpen; 
+fetchedAnks.push(parseInt(r1TargetAnk)); 
 } 
 
-// --- RULE 2: Close View ---
+// --- RULE 2: Close View (Compare TOP 4 vs RECENT 4 groups, form jodis, fetch open from 4 most delayed jodis) ---
 let closeAnksList = rawRecords.filter(r => r.closeAnk !== undefined && r.closeAnk !== "").map(r => parseInt(r.closeAnk)); 
 let closeAnkStats = {}; 
 for(let i=0; i<=9; i++) closeAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -609,7 +604,7 @@ let mostDelayed4Jodis = validJodis.slice(0, 4);
 mostDelayed4Jodis.forEach(j => fetchedAnks.push(parseInt(j[0]))); 
 } 
 
-// --- RULE 3: Total View ---
+// --- RULE 3: Total View (Compare TOP vs RECENT in Total, pick 4 most delayed Jodis, fetch Open Anks) ---
 let totalStats = {}; 
 for(let i=0; i<=9; i++) totalStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -642,7 +637,7 @@ let sortedTotalJodis = Object.keys(jodiTotalCounts).sort((a,b) => jodiTotalCount
 sortedTotalJodis.forEach(j => fetchedAnks.push(parseInt(j[0]))); 
 } 
 
-// --- RULE 4: Diff View ---
+// --- RULE 4: Diff View (Compare TOP vs RECENT in Diff, pick 4 most delayed Jodis, fetch Open Anks) ---
 let diffStats = {}; 
 for(let i=0; i<=9; i++) diffStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -675,13 +670,13 @@ let sortedDiffJodis = Object.keys(jodiDiffCounts).sort((a,b) => jodiDiffCounts[a
 sortedDiffJodis.forEach(j => fetchedAnks.push(parseInt(j[0]))); 
 } 
 
-// --- FINAL SELECTION: Most Common 4 Digits ---
+// --- FINAL SELECTION: Top 4 Common Digits across all rules ---
 if(fetchedAnks.length > 0) { 
 let ankFrequencyMap = {}; 
 fetchedAnks.forEach(ank => { ankFrequencyMap[ank] = (ankFrequencyMap[ank] || 0) + 1; }); 
 let finalSortedAnks = Object.keys(ankFrequencyMap).sort((a, b) => ankFrequencyMap[b] - ankFrequencyMap[a]); 
-let topCommonAnks = finalSortedAnks.slice(0, 4).join(', '); 
-bestCommonAnkOutput.innerText = `[ Top Common Open Anks: ${topCommonAnks} ]`; 
+let top4CommonAnks = finalSortedAnks.slice(0, 4).join(', '); 
+bestCommonAnkOutput.innerText = `[ ${top4CommonAnks} ]`; 
 } else { 
 bestCommonAnkOutput.innerText = "[ No matching records found ]"; 
 } 
