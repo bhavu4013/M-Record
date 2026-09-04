@@ -298,8 +298,10 @@ const shortlistSection = document.getElementById('shortlistSection');
 const pageTitle = document.getElementById('pageTitle'); 
 
 navLoggerBtn.addEventListener('click', () => { 
-loggerSection.classList.remove('hidden'); analysisSection.classList.add('hidden'); shortlistSection.classList.add('hidden'); 
-document.getElementById('entryAlertBox').classList.remove('hidden'); 
+loggerSection.classList.remove('hidden'); 
+analysisSection.classList.add('hidden'); 
+shortlistSection.classList.add('hidden'); 
+document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Daily Activity Logger"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
@@ -308,7 +310,9 @@ checkValidationAndStatus();
 }); 
 
 navAnalysisBtn.addEventListener('click', () => { 
-analysisSection.classList.remove('hidden'); loggerSection.classList.add('hidden'); shortlistSection.classList.add('hidden'); 
+analysisSection.classList.remove('hidden'); 
+loggerSection.classList.add('hidden'); 
+shortlistSection.classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Data Analysis Portal"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
@@ -318,7 +322,9 @@ loadAnalysisData();
 }); 
 
 navShortlistBtn.addEventListener('click', () => { 
-shortlistSection.classList.remove('hidden'); loggerSection.classList.add('hidden'); analysisSection.classList.add('hidden'); 
+shortlistSection.classList.remove('hidden'); 
+loggerSection.classList.add('hidden'); 
+analysisSection.classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Game Shortlist Portal"; 
 navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
@@ -340,7 +346,8 @@ if (currentAnalysisView === 'More') {
 moreSubFiltersContainer.classList.remove('hidden'); 
 if (currentMoreSubView === 'FamilyPanna') familyPannaDigitContainer.classList.remove('hidden'); 
 } else { 
-moreSubFiltersContainer.classList.add('hidden'); familyPannaDigitContainer.classList.add('hidden'); 
+moreSubFiltersContainer.classList.add('hidden'); 
+familyPannaDigitContainer.classList.add('hidden'); 
 } 
 loadAnalysisData(); 
 }); 
@@ -571,10 +578,10 @@ shortlistMarketSelect.appendChild(opt);
 // SHORTLIST RULES CALCULATION LOGIC 
 document.getElementById('generateShortlistBtn').addEventListener('click', async () => { 
 const selectedMarket = document.getElementById('shortlistMarketSelect').value; 
-let rule1Out = document.getElementById('rule1Output');
-let rule2Out = document.getElementById('rule2Output');
-let rule3Out = document.getElementById('rule3Output');
-let rule4Out = document.getElementById('rule4Output');
+let rule1Out = document.getElementById('rule1Output'); 
+let rule2Out = document.getElementById('rule2Output'); 
+let rule3Out = document.getElementById('rule3Output'); 
+let rule4Out = document.getElementById('rule4Output'); 
 
 rule1Out.innerText = "Calculating..."; 
 rule2Out.innerText = "Calculating..."; 
@@ -603,7 +610,7 @@ const digitFamilyPannaMap = {
 "1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
 }; 
 
-// --- RULE 1 ---
+// --- RULE 1: Open View ---
 let openAnksList = rawRecords.filter(r => r.openAnk !== undefined && r.openAnk !== "").map(r => parseInt(r.openAnk)); 
 let openAnkStats = {}; 
 for(let i=0; i<=9; i++) openAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -613,17 +620,17 @@ let occs = openAnkStats[i].occ;
 if(occs.length > 0) openAnkStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
 } 
 let sortedOpenAnks = Object.keys(openAnkStats).sort((a,b) => openAnkStats[b].delay - openAnkStats[a].delay); 
-let r1Digits = [];
+let r1Digits = []; 
 if(sortedOpenAnks.length > 0) { 
 let topOpen = sortedOpenAnks[0]; 
 let recentOpen = sortedOpenAnks[sortedOpenAnks.length - 1]; 
 let r1TargetAnk = openAnkStats[topOpen].delay >= openAnkStats[recentOpen].delay ? topOpen : recentOpen; 
 r1Digits = digitFamilyPannaMap[r1TargetAnk] ? digitFamilyPannaMap[r1TargetAnk][0].split('').map(Number) : [parseInt(r1TargetAnk)]; 
-r1Digits.sort((a, b) => openAnkStats[b].delay - openAnkStats[a].delay);
+r1Digits.sort((a, b) => openAnkStats[b].delay - openAnkStats[a].delay); 
 } 
-rule1Out.innerText = r1Digits.length > 0 ? `[ ${r1Digits.join(', ')} ]` : "N/A";
+rule1Out.innerText = r1Digits.length > 0 ? `[ ${r1Digits.join(', ')} ]` : "N/A"; 
 
-// --- RULE 2 ---
+// --- RULE 2: Close View ---
 let closeAnksList = rawRecords.filter(r => r.closeAnk !== undefined && r.closeAnk !== "").map(r => parseInt(r.closeAnk)); 
 let closeAnkStats = {}; 
 for(let i=0; i<=9; i++) closeAnkStats[i] = {occ: [], delay: totalLen}; 
@@ -633,7 +640,7 @@ let occs = closeAnkStats[i].occ;
 if(occs.length > 0) closeAnkStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
 } 
 let sortedClose = Object.keys(closeAnkStats).sort((a,b) => closeAnkStats[b].delay - closeAnkStats[a].delay); 
-let r2Digits = [];
+let r2Digits = []; 
 if(sortedClose.length >= 4) { 
 let top4Close = sortedClose.slice(0, 4); 
 let recent4Close = sortedClose.slice(sortedClose.length - 4); 
@@ -642,7 +649,7 @@ let recent4Delay = Math.max(...recent4Close.map(x => closeAnkStats[x].delay));
 let targetCloseGroup = top4Delay >= recent4Delay ? top4Close : recent4Close; 
 
 let jodiCounts = {}; 
-let jodiLastSeen = {};
+let jodiLastSeen = {}; 
 rawRecords.forEach((r, idx) => { 
 if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
 let j = `${r.openAnk}${r.closeAnk}`; 
@@ -651,17 +658,17 @@ jodiLastSeen[j] = idx;
 } 
 }); 
 let validJodis = Object.keys(jodiCounts).filter(j => targetCloseGroup.includes(j[1])); 
-validJodis.sort((a,b) => {
-let delayA = jodiLastSeen[a] !== undefined ? totalLen - 1 - jodiLastSeen[a] : totalLen;
-let delayB = jodiLastSeen[b] !== undefined ? totalLen - 1 - jodiLastSeen[b] : totalLen;
+validJodis.sort((a,b) => { 
+let delayA = jodiLastSeen[a] !== undefined ? totalLen - 1 - jodiLastSeen[a] : totalLen; 
+let delayB = jodiLastSeen[b] !== undefined ? totalLen - 1 - jodiLastSeen[b] : totalLen; 
 return delayB - delayA; 
 }); 
 let mostDelayed4Jodis = validJodis.slice(0, 4); 
 r2Digits = mostDelayed4Jodis.map(j => parseInt(j[0])); 
 } 
-rule2Out.innerText = r2Digits.length > 0 ? `[ ${r2Digits.join(', ')} ]` : "N/A";
+rule2Out.innerText = r2Digits.length > 0 ? `[ ${r2Digits.join(', ')} ]` : "N/A"; 
 
-// --- RULE 3 ---
+// --- RULE 3: Total View ---
 let totalStats = {}; 
 for(let i=0; i<=9; i++) totalStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -675,14 +682,14 @@ let occs = totalStats[i].occ;
 if(occs.length > 0) totalStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
 } 
 let sortedTotals = Object.keys(totalStats).sort((a,b) => totalStats[b].delay - totalStats[a].delay); 
-let r3Digits = [];
+let r3Digits = []; 
 if(sortedTotals.length > 0) { 
 let tTop = sortedTotals[0]; 
 let tRecent = sortedTotals[sortedTotals.length - 1]; 
 let targetTotal = totalStats[tTop].delay >= totalStats[tRecent].delay ? tTop : tRecent; 
 
 let jodiTotalCounts = {}; 
-let jodiTotalLastSeen = {};
+let jodiTotalLastSeen = {}; 
 rawRecords.forEach((r, idx) => { 
 if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
 let t = (parseInt(r.openAnk) + parseInt(r.closeAnk)) % 10; 
@@ -693,18 +700,18 @@ jodiTotalLastSeen[j] = idx;
 } 
 } 
 }); 
-let validTotalJodis = Object.keys(jodiTotalCounts);
-validTotalJodis.sort((a,b) => {
-let delayA = jodiTotalLastSeen[a] !== undefined ? totalLen - 1 - jodiTotalLastSeen[a] : totalLen;
-let delayB = jodiTotalLastSeen[b] !== undefined ? totalLen - 1 - jodiTotalLastSeen[b] : totalLen;
+let validTotalJodis = Object.keys(jodiTotalCounts); 
+validTotalJodis.sort((a,b) => { 
+let delayA = jodiTotalLastSeen[a] !== undefined ? totalLen - 1 - jodiTotalLastSeen[a] : totalLen; 
+let delayB = jodiTotalLastSeen[b] !== undefined ? totalLen - 1 - jodiTotalLastSeen[b] : totalLen; 
 return delayB - delayA; 
-});
+}); 
 let sortedTotalJodis = validTotalJodis.slice(0, 4); 
 r3Digits = sortedTotalJodis.map(j => parseInt(j[0])); 
 } 
-rule3Out.innerText = r3Digits.length > 0 ? `[ ${r3Digits.join(', ')} ]` : "N/A";
+rule3Out.innerText = r3Digits.length > 0 ? `[ ${r3Digits.join(', ')} ]` : "N/A"; 
 
-// --- RULE 4 ---
+// --- RULE 4: Diff View ---
 let diffStats = {}; 
 for(let i=0; i<=9; i++) diffStats[i] = {occ: [], delay: totalLen}; 
 rawRecords.forEach((r, idx) => { 
@@ -718,14 +725,14 @@ let occs = diffStats[i].occ;
 if(occs.length > 0) diffStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
 } 
 let sortedDiffs = Object.keys(diffStats).sort((a,b) => diffStats[b].delay - diffStats[a].delay); 
-let r4Digits = [];
+let r4Digits = []; 
 if(sortedDiffs.length > 0) { 
 let dTop = sortedDiffs[0]; 
 let dRecent = sortedDiffs[sortedDiffs.length - 1]; 
 let targetDiff = diffStats[dTop].delay >= diffStats[dRecent].delay ? dTop : dRecent; 
 
 let jodiDiffCounts = {}; 
-let jodiDiffLastSeen = {};
+let jodiDiffLastSeen = {}; 
 rawRecords.forEach((r, idx) => { 
 if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
 let d = (10 + parseInt(r.closeAnk) - parseInt(r.openAnk)) % 10; 
@@ -736,16 +743,16 @@ jodiDiffLastSeen[j] = idx;
 } 
 } 
 }); 
-let validDiffJodis = Object.keys(jodiDiffCounts);
-validDiffJodis.sort((a,b) => {
-let delayA = jodiDiffLastSeen[a] !== undefined ? totalLen - 1 - jodiDiffLastSeen[a] : totalLen;
-let delayB = jodiDiffLastSeen[b] !== undefined ? totalLen - 1 - jodiDiffLastSeen[b] : totalLen;
+let validDiffJodis = Object.keys(jodiDiffCounts); 
+validDiffJodis.sort((a,b) => { 
+let delayA = jodiDiffLastSeen[a] !== undefined ? totalLen - 1 - jodiDiffLastSeen[a] : totalLen; 
+let delayB = jodiDiffLastSeen[b] !== undefined ? totalLen - 1 - jodiDiffLastSeen[b] : totalLen; 
 return delayB - delayA; 
-});
+}); 
 let sortedDiffJodis = validDiffJodis.slice(0, 4); 
 r4Digits = sortedDiffJodis.map(j => parseInt(j[0])); 
 } 
-rule4Out.innerText = r4Digits.length > 0 ? `[ ${r4Digits.join(', ')} ]` : "N/A";
+rule4Out.innerText = r4Digits.length > 0 ? `[ ${r4Digits.join(', ')} ]` : "N/A"; 
 
 } catch (e) { 
 rule1Out.innerText = rule2Out.innerText = rule3Out.innerText = rule4Out.innerText = "Error calculating rules"; 
@@ -753,7 +760,7 @@ console.log("Rule calculation error details:", e);
 } 
 }); 
 
-// --- GROUP-WISE DELAY SIMULATION & COLOR HIGHLIGHTING ---
+// --- DYNAMIC GROUP-WISE DELAY SIMULATION WITH REAL-TIME HIT DETECTION & COLOR HIGHLIGHTING ---
 async function loadAnalysisData() { 
 const analysisType = document.querySelector('input[name="analysisType"]:checked').value; 
 let selectedMarket = document.getElementById('analysisMarketSelect').value; 
@@ -775,9 +782,9 @@ const recentListContainer = document.getElementById('recentListContainer');
 const gapGridContainer = document.getElementById('gapGridContainer'); 
 const gridTitleLabel = document.getElementById('gridTitleLabel'); 
 
-const topCardBox = document.getElementById('topCardBox');
-const midCardBox = document.getElementById('midCardBox');
-const recentCardBox = document.getElementById('recentCardBox');
+const topCardBox = document.getElementById('topCardBox'); 
+const midCardBox = document.getElementById('midCardBox'); 
+const recentCardBox = document.getElementById('recentCardBox'); 
 
 if (analysisType === 'selected' && !selectedMarket) { 
 openTotalLogs.innerText = "0 ગેમ્સ ડેટા"; 
@@ -792,13 +799,6 @@ gridTitleLabel.innerText = `📊 ${currentAnalysisView} Analysis:`;
 try { 
 const querySnapshot = await getDocs(collection(db, "matka_records")); 
 let records = []; 
-const familyPannaGroupsMap = { 
-"222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
-"123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
-}; 
-const digitFamilyPannaMap = { 
-"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
-}; 
 
 querySnapshot.forEach((docSnap) => { 
 let data = docSnap.data(); 
@@ -809,26 +809,11 @@ let openTime = marketObj ? marketObj.openTime || "00:00" : "00:00";
 let targetVal = null; 
 if (currentAnalysisView === 'Open' && data.openAnk !== undefined && data.openAnk !== '') targetVal = parseInt(data.openAnk); 
 else if (currentAnalysisView === 'Close' && data.closeAnk !== undefined && data.closeAnk !== '') targetVal = parseInt(data.closeAnk); 
-else if (currentAnalysisView === 'Total' && data.openAnk !== undefined && data.closeAnk !== undefined) targetVal = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10; 
-else if (currentAnalysisView === 'Diff' && data.openAnk !== undefined && data.closeAnk !== undefined) targetVal = (10 + parseInt(data.closeAnk) - parseInt(data.openAnk)) % 10; 
+else if (currentAnalysisView === 'Total' && data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') targetVal = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10; 
+else if (currentAnalysisView === 'Diff' && data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') targetVal = (10 + parseInt(data.closeAnk) - parseInt(data.openAnk)) % 10; 
 
-if (targetVal !== null && !isNaN(targetVal) || currentAnalysisView === 'More') { 
-let fKey = null, fpKey = null, pannaToTest = data.openPana; 
-if (pannaToTest && pannaToTest.length === 3) { 
-for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) { 
-if (pList.includes(pannaToTest)) { fpKey = gKey; break; } 
-} 
-} 
-if (currentAnalysisView === 'More' && currentMoreSubView === 'FamilyJodi' && data.openAnk !== undefined && data.closeAnk !== undefined) { 
-let jodi = `${data.openAnk}${data.closeAnk}`; 
-const familyGroupsMap = { 
-"11": ["11", "16", "61", "66"], "12": ["12", "17", "21", "26", "62", "67", "71", "76"], "13": ["13", "18", "31", "36", "63", "68", "81", "86"], "14": ["14", "19", "41", "46", "64", "69", "91", "96"], "15": ["10", "15", "50", "55", "01", "06", "51", "60"], "22": ["22", "27", "72", "77"], "23": ["23", "28", "32", "37", "73", "78", "82", "87"], "24": ["24", "29", "42", "47", "74", "79", "92", "97"], "25": ["20", "25", "52", "57", "70", "75", "02", "07"], "33": ["33", "38", "83", "88"], "34": ["34", "39", "43", "48", "84", "89", "93", "98"], "35": ["30", "35", "53", "58", "80", "85", "03", "08"], "44": ["44", "49", "94", "99"], "45": ["40", "45", "54", "59", "90", "95", "04", "09"], "55": ["00", "05", "50", "55"] 
-}; 
-for (let [gKey, jList] of Object.entries(familyGroupsMap)) { 
-if (jList.includes(jodi)) { fKey = gKey; break; } 
-} 
-} 
-records.push({ date: data.date, marketName: data.marketName, openTime, val: targetVal, familyKey: fKey, familyPannaKey: fpKey, openPana: data.openPana, openAnk: data.openAnk, closeAnk: data.closeAnk, openType: data.openType || '-' }); 
+if (targetVal !== null && !isNaN(targetVal)) { 
+records.push({ date: data.date, marketName: data.marketName, openTime, val: targetVal }); 
 } 
 } 
 }); 
@@ -837,93 +822,155 @@ globalAllRecords = records;
 records.sort((a, b) => new Date(a.date) - new Date(b.date) || a.openTime.localeCompare(b.openTime)); 
 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`; 
 
-if (currentAnalysisView === 'More') { 
-return; 
-} 
+if (records.length === 0) {
+topAnkVal.innerText = 0; topMaxVal.innerText = "Max: 0"; topListContainer.innerText = "[]";
+midAnkVal.innerText = 0; midMaxVal.innerText = "Max: 0"; midListContainer.innerText = "[]";
+recentAnkVal.innerText = 0; recentMaxVal.innerText = "Max: 0"; recentListContainer.innerText = "[]";
+gapGridContainer.innerHTML = '';
+return;
+}
 
-let ankStats = {}; 
-for (let i = 0; i <= 9; i++) ankStats[i] = { occurrences: [] }; 
-records.forEach((rec, idx) => { if (rec.val >= 0 && rec.val <= 9) ankStats[rec.val].occurrences.push(idx); }); 
-let totalLen = records.length; 
-let ankList = []; 
+// State tracker for digits (0-9)
+let digitDelays = {}; 
+let digitLastSeen = {}; 
 for (let i = 0; i <= 9; i++) { 
-let occs = ankStats[i].occurrences; 
-let currentDelay = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1]; 
-let lastSeen = occs.length === 0 ? -1 : occs[occs.length - 1]; 
-let gaps = occs.length > 0 ? [occs[0]] : [totalLen]; 
-for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1); 
-if (occs.length > 0) gaps.push(totalLen - 1 - occs[occs.length - 1]); 
-ankList.push({ ank: i, currentDelay, maxDelay: Math.max(...gaps), lastSeen }); 
+digitDelays[i] = 0; 
+digitLastSeen[i] = -1; 
 } 
 
-let sortedByRecent = [...ankList].sort((a, b) => a.currentDelay - b.currentDelay || b.lastSeen - a.lastSeen); 
-let recent4 = sortedByRecent.slice(0, 4); 
-let top4 = ankList.filter(item => !recent4.some(r => r.ank === item.ank)).sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 4); 
-let usedAnks = new Set([...recent4.map(r => r.ank), ...top4.map(t => t.ank)]); 
-let mid2 = ankList.filter(item => !usedAnks.has(item.ank)); 
+let topGroupDelay = 0, topGroupMaxDelay = 0; 
+let midGroupDelay = 0, midGroupMaxDelay = 0; 
+let recentGroupDelay = 0, recentGroupMaxDelay = 0; 
 
-let topGroupDelay = 0, topGroupMaxDelay = 0;
-let midGroupDelay = 0, midGroupMaxDelay = 0;
-let recentGroupDelay = 0, recentGroupMaxDelay = 0;
+// Historical Chronological Loop to check hits and reset accurately
+records.forEach((rec, idx) => { 
+let val = rec.val; 
 
-let topAnksSet = new Set(top4.map(x => x.ank));
-let midAnksSet = new Set(mid2.map(x => x.ank));
-let recentAnksSet = new Set(recent4.map(x => x.ank));
+// Formulate pre-game groups based on delays BEFORE this game
+let dList = []; 
+for (let i = 0; i <= 9; i++) { 
+dList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] }); 
+} 
 
-records.forEach(rec => {
-let val = rec.val;
-if (topAnksSet.has(val)) { topGroupDelay = 0; } else { topGroupDelay++; }
-if (topGroupDelay > topGroupMaxDelay) topGroupMaxDelay = topGroupDelay;
+let sortedRecent = [...dList].sort((a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen); 
+let rec4 = sortedRecent.slice(0, 4); 
+let rec4Set = new Set(rec4.map(x => x.ank)); 
 
-if (midAnksSet.has(val)) { midGroupDelay = 0; } else { midGroupDelay++; }
-if (midGroupDelay > midGroupMaxDelay) midGroupMaxDelay = midGroupDelay;
+let remaining = dList.filter(x => !rec4Set.has(x.ank)); 
+let sortedTop = [...remaining].sort((a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen); 
+let tp4 = sortedTop.slice(0, 4); 
+let tp4Set = new Set(tp4.map(x => x.ank)); 
 
-if (recentAnksSet.has(val)) { recentGroupDelay = 0; } else { recentGroupDelay++; }
-if (recentGroupDelay > recentGroupMaxDelay) recentGroupMaxDelay = recentGroupDelay;
-});
+let md2 = remaining.filter(x => !tp4Set.has(x.ank)); 
+let md2Set = new Set(md2.map(x => x.ank)); 
+
+// Reset group on hit, increment other groups
+if (tp4Set.has(val)) { 
+topGroupDelay = 0; 
+midGroupDelay++; 
+recentGroupDelay++; 
+} else if (md2Set.has(val)) { 
+midGroupDelay = 0; 
+topGroupDelay++; 
+recentGroupDelay++; 
+} else if (rec4Set.has(val)) { 
+recentGroupDelay = 0; 
+topGroupDelay++; 
+midGroupDelay++; 
+} else { 
+topGroupDelay++; 
+midGroupDelay++; 
+recentGroupDelay++; 
+} 
+
+if (topGroupDelay > topGroupMaxDelay) topGroupMaxDelay = topGroupDelay; 
+if (midGroupDelay > midGroupMaxDelay) midGroupMaxDelay = midGroupDelay; 
+if (recentGroupDelay > recentGroupMaxDelay) recentGroupMaxDelay = recentGroupDelay; 
+
+// Update individual digit delays
+for (let i = 0; i <= 9; i++) { 
+if (i === val) { 
+digitDelays[i] = 0; 
+digitLastSeen[i] = idx; 
+} else { 
+digitDelays[i]++; 
+} 
+} 
+}); 
+
+// Form Current Groups for Next Game Output
+let currentDList = []; 
+for (let i = 0; i <= 9; i++) { 
+currentDList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] }); 
+} 
+let curSortedRecent = [...currentDList].sort((a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen); 
+let curRecent4 = curSortedRecent.slice(0, 4); 
+let curRecentSet = new Set(curRecent4.map(x => x.ank)); 
+
+let curRemaining = currentDList.filter(x => !curRecentSet.has(x.ank)); 
+let curSortedTop = [...curRemaining].sort((a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen); 
+let curTop4 = curSortedTop.slice(0, 4); 
+let curTopSet = new Set(curTop4.map(x => x.ank)); 
+
+let curMid2 = curRemaining.filter(x => !curTopSet.has(x.ank)); 
 
 topAnkVal.innerText = topGroupDelay; 
 topMaxVal.innerText = `Max: ${topGroupMaxDelay}`; 
-topListContainer.innerText = `[${top4.map(i => i.ank).join(',')}]`; 
+topListContainer.innerText = `[${curTop4.map(i => i.ank).join(',')}]`; 
 
 midAnkVal.innerText = midGroupDelay; 
 midMaxVal.innerText = `Max: ${midGroupMaxDelay}`; 
-midListContainer.innerText = `[${mid2.map(i => i.ank).join(',')}]`; 
+midListContainer.innerText = `[${curMid2.map(i => i.ank).join(',')}]`; 
 
 recentAnkVal.innerText = recentGroupDelay; 
 recentMaxVal.innerText = `Max: ${recentGroupMaxDelay}`; 
-recentListContainer.innerText = `[${recent4.map(i => i.ank).join(',')}]`; 
+recentListContainer.innerText = `[${curRecent4.map(i => i.ank).join(',')}]`; 
 
-let delays = [
-{ box: topCardBox, delay: topGroupDelay },
-{ box: midCardBox, delay: midGroupDelay },
-{ box: recentCardBox, delay: recentGroupDelay }
-];
-delays.sort((a, b) => b.delay - a.delay);
+// Color Highlights: Green if delay is 0 (Hit!), Red if maximum delay
+let maxDel = Math.max(topGroupDelay, midGroupDelay, recentGroupDelay); 
+let cards = [ 
+{ box: topCardBox, delay: topGroupDelay, defaultBorder: 'border-orange-400' }, 
+{ box: midCardBox, delay: midGroupDelay, defaultBorder: 'border-indigo-400' }, 
+{ box: recentCardBox, delay: recentGroupDelay, defaultBorder: 'border-emerald-400' } 
+]; 
 
-[topCardBox, midCardBox, recentCardBox].forEach(box => {
-box.className = "bg-white border-2 rounded-xl p-2 space-y-1 shadow-sm transition";
-});
+cards.forEach(c => { 
+if (c.delay === 0) { 
+c.box.className = "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 space-y-1 shadow-sm transition"; 
+} else if (c.delay === maxDel && maxDel > 0) { 
+c.box.className = "bg-red-50 border-2 border-red-500 rounded-xl p-2 space-y-1 shadow-sm transition"; 
+} else { 
+c.box.className = `bg-white border-2 ${c.defaultBorder} rounded-xl p-2 space-y-1 shadow-sm transition`; 
+} 
+}); 
 
-delays[0].box.classList.add('border-red-500', 'bg-red-50/30');
-delays[2].box.classList.add('border-emerald-500', 'bg-emerald-50/30');
-delays[1].box.classList.add('border-indigo-400');
-
+// Bottom 0-9 Individual Digit Grid
 gapGridContainer.innerHTML = ''; 
-let gridRowsWrapper = document.createElement('div'); gridRowsWrapper.className = "space-y-1.5"; 
-let row1 = document.createElement('div'); row1.className = "grid grid-cols-5 gap-1.5 text-center"; 
-let row2 = document.createElement('div'); row2.className = "grid grid-cols-5 gap-1.5 text-center"; 
+let gridRowsWrapper = document.createElement('div'); 
+gridRowsWrapper.className = "space-y-1.5"; 
+let row1 = document.createElement('div'); 
+row1.className = "grid grid-cols-5 gap-1.5 text-center"; 
+let row2 = document.createElement('div'); 
+row2.className = "grid grid-cols-5 gap-1.5 text-center"; 
+
 for (let i = 0; i <= 9; i++) { 
-let found = ankList.find(item => item.ank === i); 
-let card = document.createElement('div'); card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm"; 
-card.innerHTML = `<div class="text-xs font-bold text-slate-500">${i}</div><div class="text-sm font-extrabold text-blue-600">${found ? found.currentDelay : 0}</div>`; 
+let del = digitDelays[i]; 
+let card = document.createElement('div'); 
+let isHit = (del === 0); 
+card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm"; 
+card.innerHTML = `<div class="text-xs font-bold text-slate-500">${i}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-blue-600'}">${del}</div>`; 
 if (i < 5) row1.appendChild(card); else row2.appendChild(card); 
 } 
-gridRowsWrapper.appendChild(row1); gridRowsWrapper.appendChild(row2); gapGridContainer.appendChild(gridRowsWrapper); 
-} catch (e) { console.log("Analysis error:", e); } 
+gridRowsWrapper.appendChild(row1); 
+gridRowsWrapper.appendChild(row2); 
+gapGridContainer.appendChild(gridRowsWrapper); 
+
+} catch (e) { 
+console.log("Analysis error:", e); 
+} 
 } 
 
-// --- LOGGER FORM & SESSION TOGGLE LOGIC ---
+// --- LOGGER FORM & DUPLICATE VALIDATION LOGIC ---
 const radioButtons = document.querySelectorAll('input[name="sessionToggle"]'); 
 const openLabel = document.getElementById('openLabel'); 
 const closeLabel = document.getElementById('closeLabel'); 
@@ -1068,18 +1115,18 @@ document.getElementById('previewPanelType').innerText = '-';
 } 
 }); 
 
-document.getElementById('cancelEditBtn').addEventListener('click', () => {
-document.getElementById('matkaForm').reset();
-document.getElementById('recordDate').value = new Date().toISOString().split('T')[0];
-document.getElementById('submitBtn').innerText = "Save Record";
-document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600');
-document.getElementById('cancelEditBtn').classList.add('hidden');
-document.getElementById('entryAlertBox').classList.add('hidden');
+document.getElementById('cancelEditBtn').addEventListener('click', () => { 
+document.getElementById('matkaForm').reset(); 
+document.getElementById('recordDate').value = new Date().toISOString().split('T')[0]; 
+document.getElementById('submitBtn').innerText = "Save Record"; 
+document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600'); 
+document.getElementById('cancelEditBtn').classList.add('hidden'); 
+document.getElementById('entryAlertBox').classList.add('hidden'); 
 document.getElementById('previewAnk').innerText = '-'; 
 document.getElementById('previewGroup').innerText = '-'; 
 document.getElementById('previewFamilyGroup').innerText = '-'; 
-document.getElementById('previewPanelType').innerText = '-';
-});
+document.getElementById('previewPanelType').innerText = '-'; 
+}); 
 
 document.getElementById('matkaForm').addEventListener('submit', async function(e) { 
 e.preventDefault(); 
@@ -1135,7 +1182,7 @@ document.getElementById('previewAnk').innerText = '-';
 document.getElementById('previewGroup').innerText = '-'; 
 document.getElementById('previewFamilyGroup').innerText = '-'; 
 document.getElementById('previewPanelType').innerText = '-'; 
-checkValidationAndStatus();
+checkValidationAndStatus(); 
 } catch (error) { 
 showCustomAlert("Error", error.message, "error"); 
 } 
