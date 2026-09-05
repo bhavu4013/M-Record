@@ -149,93 +149,73 @@
 </div> 
 </div> 
 
-<!-- SHORTLIST SECTION --> 
-<div id="shortlistSection" class="hidden space-y-4 w-full"> 
-<div class="space-y-3"> 
-<div class="space-y-1"> 
-<label class="block text-xs font-semibold text-slate-600 uppercase">Select Market</label> 
-<select id="shortlistMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"> 
-<option value="">All Markets (Merged)</option> 
-</select> 
-</div> 
-<div class="space-y-2.5 pt-1"> 
-<div class="bg-indigo-50 border border-indigo-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-indigo-700 uppercase">🔥 Rule 1 Output (Most Delayed Open)</div> 
-<div id="rule1Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
-</div> 
-<div class="bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-blue-700 uppercase">🔥 Rule 2 Output (4 Open Digits)</div> 
-<div id="rule2Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
-</div> 
-<div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-emerald-700 uppercase">🔥 Rule 3 Output (4 Open Digits)</div> 
-<div id="rule3Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
-</div> 
-<div class="bg-amber-50 border border-amber-200 p-3 rounded-xl shadow-sm space-y-1"> 
-<div class="text-xs font-bold text-amber-700 uppercase">🔥 Rule 4 Output (4 Open Digits)</div> 
-<div id="rule4Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
-</div> 
-</div> 
-<div class="flex gap-2 pt-1">
-<button type="button" id="generateShortlistBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-md transition">Apply Rules & Generate</button>
-<button type="button" id="commonDigitsBtn" class="shrink-0 bg-purple-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-purple-700 shadow-md transition" title="Find Common Digits">Common 3</button>
-<button type="button" id="strongEngineBtn" class="shrink-0 bg-rose-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-rose-700 shadow-md transition" title="Open/Close Strong Ank and Jodi Ranking">Strong</button>
-<button type="button" id="strongSupportBtn" class="shrink-0 bg-rose-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-rose-700 shadow-md transition" title="Find Strong 5 and Support 5">Strong 5</button>
-</div> 
-</div> 
-</div> 
-
-</div> 
-
-<!-- Common Digits Popup Modal -->
-<div id="strongSupportModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
-<div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
-<div class="flex justify-between items-center border-b pb-2">
-<h3 class="text-sm font-bold text-slate-800">Strong 5 & Support 5 Jodi</h3>
-</div>
-<div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center space-y-2">
-<div class="text-xs font-bold text-rose-700 uppercase">🔥 Best Strong 5</div>
-<div id="strong5Output" class="text-2xl font-black tracking-wider text-rose-800">-</div>
-<div id="strong5Details" class="text-[10px] font-semibold text-slate-500">Apply Rules & Generate first</div>
-</div>
-<div class="bg-sky-50 border border-sky-200 rounded-xl p-3 text-center space-y-2">
-<div class="text-xs font-bold text-sky-700 uppercase">🛡 Support 5</div>
-<div id="support5Output" class="text-2xl font-black tracking-wider text-sky-800">-</div>
-<div id="support5Details" class="text-[10px] font-semibold text-slate-500">-</div>
-</div>
-<div id="strongSupportScoreDetails" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[10px] text-slate-600 space-y-1"></div>
-<button type="button" id="closeStrongSupportModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
-</div>
-</div>
-
-<div id="commonDigitsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
-<div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
-<div class="flex justify-between items-center border-b pb-2">
-<h3 class="text-sm font-bold text-slate-800">Common 3 Digits</h3>
-</div>
-<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center space-y-2">
-<div class="text-xs font-bold text-purple-700 uppercase">Top Common Digits</div>
-<div id="commonDigitsOutput" class="text-3xl font-black tracking-[0.35em] text-purple-800">-</div>
-<div id="commonDigitsDetails" class="text-xs font-semibold text-slate-500">Apply Rules & Generate first</div>
-</div>
-<button type="button" id="closeCommonDigitsModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
-</div>
-</div>
-
-<!-- Strong Signal Engine Modal -->
-<div id="strongEngineModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
- <div class="bg-white p-5 rounded-2xl max-w-md w-full space-y-3 shadow-2xl max-h-[88vh] overflow-y-auto">
-  <div class="flex justify-between items-center border-b pb-2"><h3 class="text-sm font-bold text-slate-800">Strong Signal Engine</h3></div>
-  <div class="grid grid-cols-2 gap-2">
-   <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center"><div class="text-[10px] font-bold text-blue-700 uppercase">Open Strong 2</div><div id="strongOpenOutput" class="text-2xl font-black text-blue-800">-</div><div id="strongOpenDetails" class="text-[10px] text-slate-500"></div></div>
-   <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center"><div class="text-[10px] font-bold text-emerald-700 uppercase">Close Strong 2</div><div id="strongCloseOutput" class="text-2xl font-black text-emerald-800">-</div><div id="strongCloseDetails" class="text-[10px] text-slate-500"></div></div>
+<!-- SHORTLIST SECTION -->
+<div id="shortlistSection" class="hidden space-y-2 w-full">
+  <div class="flex items-center justify-between">
+    <div>
+      <div class="text-sm font-extrabold text-slate-800">Shortlist Ranking</div>
+      <div class="text-[9px] text-slate-400">Historical ranking • Delay + Recent + Frequency + Relation + Cross-check</div>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button id="refreshShortlistBtn" class="border border-slate-300 bg-white rounded-lg px-2 py-1.5 text-[10px] font-bold text-slate-700">↻ Refresh</button>
+      <select id="shortlistMarketSelect" class="border border-slate-300 rounded-lg px-2 py-1.5 text-[10px] bg-white font-semibold text-slate-700 max-w-[125px]">
+        <option value="ALL_MERGED">All Markets</option>
+      </select>
+    </div>
   </div>
-  <div class="bg-purple-50 border border-purple-200 rounded-xl p-3 text-center"><div class="text-[10px] font-bold text-purple-700 uppercase">Common 3</div><div id="engineCommonOutput" class="text-2xl font-black tracking-[0.3em] text-purple-800">-</div><div id="engineCommonDetails" class="text-[10px] text-slate-500"></div></div>
-  <div class="bg-rose-50 border border-rose-200 rounded-xl p-3"><div class="text-xs font-bold text-rose-700 uppercase mb-2">🔥 Strong 5 Jodis</div><div id="strong5EngineOutput" class="space-y-1"></div></div>
-  <div class="bg-amber-50 border border-amber-200 rounded-xl p-3"><div class="text-xs font-bold text-amber-700 uppercase mb-2">Support 5 Jodis</div><div id="support5EngineOutput" class="space-y-1"></div></div>
-  <div class="bg-slate-50 border border-slate-200 rounded-xl p-3"><div class="text-xs font-bold text-slate-700 uppercase mb-1">Signal Status</div><div id="engineSignalStatus" class="text-xs font-semibold text-slate-600"></div><div class="text-[10px] text-slate-400 mt-1">Historical ranking only; not a guaranteed prediction.</div></div>
-  <button type="button" id="closeStrongEngineModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
- </div>
+
+  <div class="grid grid-cols-2 gap-2">
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-2">
+      <div class="text-[9px] font-bold text-blue-700 uppercase">Top 3 Open</div>
+      <div id="finalOpenTop3" class="text-lg font-black text-blue-900 mt-1">-</div>
+      <div id="finalOpenDetails" class="text-[8px] text-slate-500 mt-0.5"></div>
+    </div>
+    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2">
+      <div class="text-[9px] font-bold text-emerald-700 uppercase">Top 3 Close</div>
+      <div id="finalCloseTop3" class="text-lg font-black text-emerald-900 mt-1">-</div>
+      <div id="finalCloseDetails" class="text-[8px] text-slate-500 mt-0.5"></div>
+    </div>
+  </div>
+
+  <div class="bg-violet-50 border border-violet-200 rounded-xl p-2">
+    <div class="flex justify-between items-center">
+      <div class="text-[9px] font-bold text-violet-700 uppercase">Jodi Odd / Even Focus</div>
+      <div id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</div>
+    </div>
+    <div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-1"></div>
+  </div>
+
+  <div class="bg-rose-50 border border-rose-200 rounded-xl p-2">
+    <div class="text-[9px] font-bold text-rose-700 uppercase mb-1">🔥 Strong Jodi 5</div>
+    <div id="finalJodiStrong" class="space-y-1"></div>
+  </div>
+
+  <div class="bg-sky-50 border border-sky-200 rounded-xl p-2">
+    <div class="text-[9px] font-bold text-sky-700 uppercase mb-1">🛡 Support Jodi 5</div>
+    <div id="finalJodiSupport" class="space-y-1"></div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-1.5">
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-2 text-center"><div class="text-[8px] font-bold text-amber-700">Family</div><div id="finalFamilyStrong" class="text-[10px] font-black text-amber-900 mt-1">-</div></div>
+    <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center"><div class="text-[8px] font-bold text-indigo-700">Panna</div><div id="finalPannaStrong" class="text-[10px] font-black text-indigo-900 mt-1">-</div></div>
+    <div class="bg-purple-50 border border-purple-200 rounded-xl p-2 text-center"><div class="text-[8px] font-bold text-purple-700">Family Jodi</div><div id="finalFamilyJodiStrong" class="text-[10px] font-black text-purple-900 mt-1">-</div></div>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-2">
+    <div class="flex items-center justify-between mb-1">
+      <div class="text-[9px] font-bold text-slate-700 uppercase">Share / Copy</div>
+      <button id="copyShortlistBtn" class="border border-slate-300 rounded-lg px-2 py-1 text-[9px] font-bold bg-slate-50">Copy Game</button>
+    </div>
+    <textarea id="shortlistShareText" readonly class="w-full h-28 resize-none border border-slate-200 rounded-lg p-2 text-[9px] leading-4 text-slate-700 bg-slate-50" placeholder="Ranking તૈયાર થયા પછી share text અહીં આવશે..."></textarea>
+  </div>
+
+  <div class="bg-slate-50 border border-slate-200 rounded-xl p-2">
+    <div class="flex justify-between items-center"><div class="text-[9px] font-bold text-slate-700 uppercase">Signal Check</div><span id="finalSignalStatus" class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">-</span></div>
+    <div id="finalOddEven" class="text-[8px] text-slate-500 mt-1"></div>
+    <div id="finalConflict" class="text-[8px] font-semibold text-slate-600 mt-1"></div>
+  </div>
+
+  <div class="text-[8px] text-slate-400 text-center">Ranking only; no guaranteed prediction. Delay is one signal, not the decision.</div>
 </div>
 
 <!-- Family Panna Group Breakdown Popup Modal with Bottom Red Close Button --> 
@@ -675,454 +655,146 @@ checkValidationAndStatus();
 } 
 loadMarkets(); 
 
-// --- SHORTLIST RULES CALCULATION LOGIC ---
-// Rules use the same TOP / MID / RECENT 4-digit grouping logic as the
-// Open, Total and Diff analysis views. MID is intentionally ignored.
-document.getElementById('generateShortlistBtn').addEventListener('click', async () => {
-    const selectedMarket = document.getElementById('shortlistMarketSelect').value;
-    const rule1Out = document.getElementById('rule1Output');
-    const rule2Out = document.getElementById('rule2Output');
-    const rule3Out = document.getElementById('rule3Output');
-    const rule4Out = document.getElementById('rule4Output');
+// --- FINAL INDEPENDENT SHORTLIST RANKING ENGINE ---
+// Independent historical ranking. Rule 1-4 / old Common / old Strong outputs are not used.
+const FAMILY_DIGITS = {0:[0,5],1:[1,6],2:[2,7],3:[3,8],4:[4,9],5:[0,5],6:[1,6],7:[2,7],8:[3,8],9:[4,9]};
+const FAMILY_JODI_GROUPS = {
+  "11":["11","16","61","66"],"12":["12","17","21","26","62","67","71","76"],"13":["13","18","31","36","63","68","81","86"],"14":["14","19","41","46","64","69","91","96"],"15":["10","15","50","55","01","06","51","60"],
+  "22":["22","27","72","77"],"23":["23","28","32","37","73","78","82","87"],"24":["24","29","42","47","74","79","92","97"],"25":["20","25","52","57","70","75","02","07"],
+  "33":["33","38","83","88"],"34":["34","39","43","48","84","89","93","98"],"35":["30","35","53","58","80","85","03","08"],
+  "44":["44","49","94","99"],"45":["40","45","54","59","90","95","04","09"],"55":["00","05","50","55"]
+};
+const FAMILY_PANNA_GROUPS = {
+  "222":["777","222","227","277"],"444":["444","999","499","449"],"666":["111","666","166","116"],"888":["888","333","338","388"],"000":["555","000","500","550"],
+  "123":["128","123","678","178","236","367","137","268"],"345":["345","890","390","340","480","458","589","359"],"567":["157","567","120","260","670","170","256","125"],"789":["789","234","248","478","239","289","347","379"],"456":["456","145","140","190","690","460","159","569"],
+  "470":["470","240","290","790","245","259","579","457"],"246":["246","269","129","124","147","179","679","467"],"369":["346","369","148","134","139","189","689","468"],"130":["130","180","680","360","356","568","158","135"],"230":["230","280","780","370","258","235","357","578"],
+  "100":["100","600","155","556","560","150"],"200":["200","700","255","557","570","250"],"300":["300","800","355","558","580","350"],"400":["400","900","455","559","590","450"],
+  "366":["366","668","113","118","168","136"],"330":["335","330","588","880","380","358"],"110":["110","115","660","566","156","160"],"440":["445","440","599","990","490","459"],"220":["220","225","770","577","257","270"],"334":["339","334","889","488","348","389"],"399":["399","899","344","448","489","349"],"377":["778","377","228","223","237","278"],"477":["779","477","229","224","247","279"],"144":["446","144","699","199","149","469"],"177":["177","677","122","226","267","127"],"114":["119","114","669","466","146","169"],"133":["336","133","688","188","138","368"],"233":["337","233","788","288","238","378"],"266":["266","667","112","117","167","126"],"244":["447","244","799","299","249","479"]
+};
+const PANNA_TO_GROUP=(()=>{const m={};Object.entries(FAMILY_PANNA_GROUPS).forEach(([g,a])=>a.forEach(p=>m[p]=g));return m;})();
+const JODI_TO_FAMILY=(()=>{const m={};Object.entries(FAMILY_JODI_GROUPS).forEach(([g,a])=>a.forEach(j=>m[j]=g));return m;})();
+const validDigit=v=>v!==undefined&&v!==null&&v!==''&&!isNaN(parseInt(v));
+const digitOf=v=>validDigit(v)?parseInt(v):null;
+const numP=v=>{const s=String(v??'').replace(/\D/g,'');return s.length===3?s:null;};
+const oddEvenType=(o,c)=>(o%2?'O':'E')+(c%2?'O':'E');
+const pannaParity=p=>{p=numP(p);if(!p)return null;return [...p].map(x=>parseInt(x)%2?'O':'E').join('');};
+function lastSeenDelay(records,getter,size=10){const n=records.length,last=Array(size).fill(-1);records.forEach((r,i)=>{const d=getter(r);if(d!==null&&d>=0&&d<size)last[d]=i;});return last.map((x,d)=>({digit:d,delay:x<0?n:n-1-x,last:x}));}
+function freqIn(records,getter,windowSize,key){const a=records.slice(-windowSize);let count=0;for(const r of a)if(getter(r)===key)count++;return count;}
+function categoryDelay(records,keyFn,keys){const n=records.length,last=Object.fromEntries(keys.map(k=>[k,-1]));records.forEach((r,i)=>{const k=keyFn(r);if(k&&last[k]!==undefined)last[k]=i;});return Object.fromEntries(keys.map(k=>[k,last[k]<0?n:n-1-last[k]]));}
+function maxDelayForKeys(map,keys){return Math.max(0,...keys.map(k=>map[k]??0));}
+function rankWithTies(arr){return [...arr].sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);}
+function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>`<div class="grid grid-cols-[28px_1fr_auto] items-center bg-white border border-slate-200 rounded-lg px-2 py-1"><span class="font-black text-slate-800 text-[10px]">${i+1}. ${x.jodi}</span><span class="text-[8px] text-slate-500">${x.type} • T${x.total} D${x.diff} • F${x.fam||'-'}</span><span class="font-black text-rose-700 text-[9px]">${x.score.toFixed(1)} / D${x.delay}</span></div>`).join('');}
 
-    [rule1Out, rule2Out, rule3Out, rule4Out].forEach(el => el.innerText = "Calculating...");
-
-    try {
-        const querySnapshot = await getDocs(collection(db, "matka_records"));
-        let rawRecords = [];
-
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            const matchMarket = (
-                selectedMarket === "ALL_MERGED" ||
-                selectedMarket === "" ||
-                data.marketName === selectedMarket
-            );
-            if (matchMarket && data.date && data.marketName) rawRecords.push(data);
-        });
-
-        // Keep the same chronological ordering used by the Analysis page.
-        rawRecords.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        if (rawRecords.length === 0) {
-            [rule1Out, rule2Out, rule3Out, rule4Out]
-                .forEach(el => el.innerText = "No data available");
-            return;
-        }
-
-        const validAnk = value => value !== undefined && value !== null && value !== "" && !isNaN(parseInt(value));
-        const getOpen = r => validAnk(r.openAnk) ? parseInt(r.openAnk) : null;
-        const getClose = r => validAnk(r.closeAnk) ? parseInt(r.closeAnk) : null;
-
-        // Returns the exact TOP and RECENT 4-digit groups and their current
-        // group delays using the same dynamic method as the Analysis page.
-        function getViewGroups(view) {
-            const records = rawRecords.map(r => {
-                const o = getOpen(r), c = getClose(r);
-                let val = null;
-
-                if (view === "Open") val = o;
-                else if (view === "Total" && o !== null && c !== null) val = (o + c) % 10;
-                else if (view === "Diff" && o !== null && c !== null) val = (10 + c - o) % 10;
-
-                return { ...r, val };
-            });
-
-            const totalLen = records.length;
-            if (totalLen === 0) return { top: [], recent: [], topDelay: 0, recentDelay: 0 };
-
-            let digitDelays = {};
-            let digitLastSeen = {};
-            for (let i = 0; i <= 9; i++) {
-                digitDelays[i] = 0;
-                digitLastSeen[i] = -1;
-            }
-
-            let topGroupDelay = 0;
-            let recentGroupDelay = 0;
-
-            records.forEach((rec, idx) => {
-                const dList = [];
-                for (let i = 0; i <= 9; i++) {
-                    dList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] });
-                }
-
-                const sortedRecent = [...dList].sort(
-                    (a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen
-                );
-                const recent4 = sortedRecent.slice(0, 4);
-                const recentSet = new Set(recent4.map(x => x.ank));
-
-                const remaining = dList.filter(x => !recentSet.has(x.ank));
-                const sortedTop = [...remaining].sort(
-                    (a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen
-                );
-                const top4 = sortedTop.slice(0, 4);
-                const topSet = new Set(top4.map(x => x.ank));
-
-                if (topSet.has(rec.val)) {
-                    topGroupDelay = 0;
-                    recentGroupDelay++;
-                } else if (recentSet.has(rec.val)) {
-                    recentGroupDelay = 0;
-                    topGroupDelay++;
-                } else {
-                    topGroupDelay++;
-                    recentGroupDelay++;
-                }
-
-                for (let i = 0; i <= 9; i++) {
-                    if (i === rec.val) {
-                        digitDelays[i] = 0;
-                        digitLastSeen[i] = idx;
-                    } else {
-                        digitDelays[i]++;
-                    }
-                }
-            });
-
-            // Final TOP / RECENT 4 digits, exactly as Analysis does.
-            const currentDList = [];
-            for (let i = 0; i <= 9; i++) {
-                currentDList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] });
-            }
-
-            const curSortedRecent = [...currentDList].sort(
-                (a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen
-            );
-            const recent4 = curSortedRecent.slice(0, 4);
-            const recentSet = new Set(recent4.map(x => x.ank));
-
-            const curRemaining = currentDList.filter(x => !recentSet.has(x.ank));
-            const curSortedTop = [...curRemaining].sort(
-                (a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen
-            );
-            const top4 = curSortedTop.slice(0, 4);
-
-            return {
-                top: top4.map(x => x.ank),
-                recent: recent4.map(x => x.ank),
-                topDelay: topGroupDelay,
-                recentDelay: recentGroupDelay
-            };
-        }
-
-        function selectMoreDelayedGroup(view) {
-            const groups = getViewGroups(view);
-            // If equal, TOP is selected consistently with the existing code.
-            const useTop = groups.topDelay >= groups.recentDelay;
-            return {
-                digits: useTop ? groups.top : groups.recent,
-                delay: useTop ? groups.topDelay : groups.recentDelay,
-                source: useTop ? "TOP" : "RECENT"
-            };
-        }
-
-        // Delay of a specific Jodi. IMPORTANT: unseen Jodis are included and
-        // receive delay = number of games, so they can correctly rank as most delayed.
-        function jodiDelay(openDigit, closeDigit) {
-            const target = `${openDigit}${closeDigit}`;
-            let lastSeen = -1;
-
-            rawRecords.forEach((r, idx) => {
-                const o = getOpen(r), c = getClose(r);
-                if (o !== null && c !== null && `${o}${c}` === target) lastSeen = idx;
-            });
-
-            return lastSeen === -1 ? rawRecords.length : rawRecords.length - 1 - lastSeen;
-        }
-
-        function rankJodis(jodis) {
-            return jodis.map(j => ({
-                ...j,
-                delay: jodiDelay(j.open, j.close)
-            })).sort((a, b) =>
-                b.delay - a.delay || a.open - b.open || a.close - b.close
-            );
-        }
-
-        // RULE 1 — Open View:
-        // Compare TOP and RECENT groups, ignore MID, and return the 4 digits
-        // belonging to the more delayed group.
-        const openGroup = selectMoreDelayedGroup("Open");
-        const r1Digits = openGroup.digits.slice(0, 4);
-        rule1Out.innerText = `[ ${r1Digits.join(', ')} ]`;
-
-        // RULE 2 — Close View:
-        // Use the more delayed TOP/RECENT group from TOTAL VIEW as CLOSE digits.
-        // Form every possible Jodi (open 0-9 × selected close digits), then
-        // select the 4 most delayed Jodis and fetch their OPEN digits.
-        const totalGroupForRule2 = selectMoreDelayedGroup("Total");
-        const rule2Candidates = [];
-        for (let open = 0; open <= 9; open++) {
-            totalGroupForRule2.digits.forEach(close => {
-                rule2Candidates.push({ open, close });
-            });
-        }
-        const rule2Top4 = rankJodis(rule2Candidates).slice(0, 4);
-        const r2Digits = rule2Top4.map(j => j.open);
-        rule2Out.innerText = r2Digits.length ? `[ ${r2Digits.join(', ')} ]` : "N/A";
-
-        // RULE 3 — Total View:
-        // Take the more delayed TOP/RECENT TOTAL group. For each selected total,
-        // generate every Jodi whose (open + close) % 10 equals that total.
-        // Rank all such Jodis by delay, take 4, and return their OPEN anks.
-        const totalGroupForRule3 = selectMoreDelayedGroup("Total");
-        const rule3Candidates = [];
-        totalGroupForRule3.digits.forEach(total => {
-            for (let open = 0; open <= 9; open++) {
-                const close = (total - open + 10) % 10;
-                rule3Candidates.push({ open, close, total });
-            }
-        });
-        const rule3Top4 = rankJodis(rule3Candidates).slice(0, 4);
-        const r3Digits = rule3Top4.map(j => j.open);
-        rule3Out.innerText = r3Digits.length ? `[ ${r3Digits.join(', ')} ]` : "N/A";
-
-        // RULE 4 — Diff View:
-        // Take the more delayed TOP/RECENT DIFF group. For each selected diff,
-        // generate every Jodi whose (close - open + 10) % 10 equals that diff.
-        // Rank all such Jodis by delay, take 4, and return their OPEN anks.
-        const diffGroup = selectMoreDelayedGroup("Diff");
-        const rule4Candidates = [];
-        diffGroup.digits.forEach(diff => {
-            for (let open = 0; open <= 9; open++) {
-                const close = (open + diff) % 10;
-                rule4Candidates.push({ open, close, diff });
-            }
-        });
-        const rule4Top4 = rankJodis(rule4Candidates).slice(0, 4);
-        const r4Digits = rule4Top4.map(j => j.open);
-        rule4Out.innerText = r4Digits.length ? `[ ${r4Digits.join(', ')} ]` : "N/A";
-
-    } catch (e) {
-        rule1Out.innerText = rule2Out.innerText = rule3Out.innerText = rule4Out.innerText = "Error calculating rules";
-        console.log("Rule calculation error details:", e);
-    }
-});
-
-// --- COMMON 3 DIGITS FROM ALL 4 RULE OUTPUTS ---
-const commonDigitsModal = document.getElementById('commonDigitsModal');
-const commonDigitsOutput = document.getElementById('commonDigitsOutput');
-const commonDigitsDetails = document.getElementById('commonDigitsDetails');
-
-document.getElementById('commonDigitsBtn').addEventListener('click', () => {
-  const ruleOutputs = [
-    document.getElementById('rule1Output').innerText,
-    document.getElementById('rule2Output').innerText,
-    document.getElementById('rule3Output').innerText,
-    document.getElementById('rule4Output').innerText
-  ];
-  const frequency = {};
-  ruleOutputs.forEach(output => {
-    const digitsInRule = [...new Set((output || '').match(/[0-9]/g) || [])];
-    digitsInRule.forEach(digit => frequency[digit] = (frequency[digit] || 0) + 1);
-  });
-  const ranked = Object.entries(frequency).sort((a,b) => b[1] - a[1] || Number(a[0]) - Number(b[0]));
-  const top3 = ranked.slice(0, 3);
-  commonDigitsOutput.innerText = top3.length ? top3.map(([digit]) => digit).join('  ') : '-';
-  commonDigitsDetails.innerText = top3.length ? top3.map(([digit,count]) => `${digit} = ${count}/4 Rules`).join('   •   ') : 'No rule digits available. Apply Rules & Generate first.';
-  commonDigitsModal.classList.remove('hidden');
-});
-
-document.getElementById('closeCommonDigitsModalBtn').addEventListener('click', () => commonDigitsModal.classList.add('hidden'));
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') commonDigitsModal.classList.add('hidden'); });
-
-// --- STRONG 5 + SUPPORT 5 JODI RANKING ---
-const strongSupportModal = document.getElementById('strongSupportModal');
-const strong5Output = document.getElementById('strong5Output');
-const support5Output = document.getElementById('support5Output');
-const strong5Details = document.getElementById('strong5Details');
-const support5Details = document.getElementById('support5Details');
-const strongSupportScoreDetails = document.getElementById('strongSupportScoreDetails');
-
-function getRuleDigitsForScoring() {
-  const outputs = [1,2,3,4].map(n => document.getElementById(`rule${n}Output`).innerText || '');
-  return outputs.map(output => new Set((output.match(/[0-9]/g) || [])));
-}
-
-function getCommon3ForScoring() {
-  const ruleSets = getRuleDigitsForScoring();
-  const freq = {};
-  ruleSets.forEach(set => set.forEach(d => freq[d] = (freq[d] || 0) + 1));
-  return Object.entries(freq)
-    .sort((a,b) => b[1] - a[1] || Number(a[0]) - Number(b[0]))
-    .slice(0,3)
-    .map(([d]) => Number(d));
-}
-
-function calculateStrongSupport(rawRecords, common3, ruleSets) {
-  const totalGames = rawRecords.length;
-  const lastSeen = {};
-  for (let o=0;o<=9;o++) for (let c=0;c<=9;c++) lastSeen[`${o}${c}`] = -1;
-  rawRecords.forEach((r,idx) => {
-    const o = r.openAnk !== undefined && r.openAnk !== '' && !isNaN(parseInt(r.openAnk)) ? parseInt(r.openAnk) : null;
-    const c = r.closeAnk !== undefined && r.closeAnk !== '' && !isNaN(parseInt(r.closeAnk)) ? parseInt(r.closeAnk) : null;
-    if (o !== null && c !== null) lastSeen[`${o}${c}`] = idx;
-  });
-
-  const freqMap = {};
-  ruleSets.forEach(set => set.forEach(d => freqMap[d] = (freqMap[d] || 0) + 1));
-  const commonSet = new Set(common3);
-
-  const candidates = [];
-  for (let open=0; open<=9; open++) {
-    for (let close=0; close<=9; close++) {
-      const key = `${open}${close}`;
-      const delay = lastSeen[key] === -1 ? totalGames : totalGames - 1 - lastSeen[key];
-      const openCommon = commonSet.has(open);
-      const closeCommon = commonSet.has(close);
-      const commonCount = (openCommon ? 1 : 0) + (closeCommon ? 1 : 0);
-      const commonStrength = (freqMap[open] || 0) + (freqMap[close] || 0);
-      const ruleSupport = ruleSets.reduce((n,set) => n + (set.has(String(open)) ? 1 : 0) + (set.has(String(close)) ? 1 : 0), 0);
-      const delayScore = Math.min(delay, 10);
-      const score = (commonCount * 6) + (commonStrength * 2) + (ruleSupport * 2) + delayScore;
-      candidates.push({ open, close, jodi:key, delay, commonCount, commonStrength, ruleSupport, score });
-    }
-  }
-
-  const sortCandidates = (a,b) => b.score-a.score || b.delay-a.delay || b.commonStrength-a.commonStrength || a.open-b.open || a.close-b.close;
-  const strong = candidates.filter(x => x.commonCount === 2).sort(sortCandidates).slice(0,5);
-  const strongKeys = new Set(strong.map(x => x.jodi));
-  const support = candidates
-    .filter(x => x.commonCount === 1 && !strongKeys.has(x.jodi))
-    .sort(sortCandidates)
-    .slice(0,5);
-
-  return { strong, support, totalGames };
-}
-
-document.getElementById('strongSupportBtn').addEventListener('click', async () => {
-  const selectedMarket = document.getElementById('shortlistMarketSelect').value;
-  const ruleOutputs = [1,2,3,4].map(n => document.getElementById(`rule${n}Output`).innerText || '');
-  if (ruleOutputs.some(x => !/[0-9]/.test(x))) {
-    strong5Output.innerText = support5Output.innerText = '-';
-    strong5Details.innerText = 'Apply Rules & Generate first';
-    support5Details.innerText = 'No rule data available';
-    strongSupportScoreDetails.innerHTML = '';
-    strongSupportModal.classList.remove('hidden');
-    return;
-  }
-
-  strong5Output.innerText = support5Output.innerText = 'Calculating...';
-  try {
-    const querySnapshot = await getDocs(collection(db, 'matka_records'));
-    const rawRecords = [];
-    querySnapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      const matchMarket = selectedMarket === 'ALL_MERGED' || selectedMarket === '' || data.marketName === selectedMarket;
-      if (matchMarket && data.date && data.marketName) rawRecords.push(data);
-    });
-    rawRecords.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-    const ruleSets = getRuleDigitsForScoring();
-    const common3 = getCommon3ForScoring();
-    const result = calculateStrongSupport(rawRecords, common3, ruleSets);
-
-    strong5Output.innerText = result.strong.length ? result.strong.map(x => x.jodi).join('  ') : 'N/A';
-    support5Output.innerText = result.support.length ? result.support.map(x => x.jodi).join('  ') : 'N/A';
-    strong5Details.innerText = result.strong.length ? result.strong.map(x => `${x.jodi}: ${x.score} pts / ${x.delay} delay`).join(' • ') : 'No strong Jodis';
-    support5Details.innerText = result.support.length ? result.support.map(x => `${x.jodi}: ${x.score} pts / ${x.delay} delay`).join(' • ') : 'No support Jodis';
-    strongSupportScoreDetails.innerHTML = `<div class="font-bold text-slate-700">Common 3: ${common3.join(', ') || '-'}</div><div>Score = Common × 6 + Rule Strength × 2 + Rule Hits × 2 + Delay (max 10)</div><div class="pt-1">Strong = both Jodi digits in Common 3. Support = exactly one Common 3 digit. Historical ranking only.</div>`;
-    strongSupportModal.classList.remove('hidden');
-  } catch (e) {
-    strong5Output.innerText = support5Output.innerText = 'Error';
-    strong5Details.innerText = support5Details.innerText = 'Calculation error';
-    strongSupportScoreDetails.innerText = e.message || 'Unknown error';
-    strongSupportModal.classList.remove('hidden');
-    console.log('Strong/Support calculation error:', e);
-  }
-});
-
-document.getElementById('closeStrongSupportModalBtn').addEventListener('click', () => strongSupportModal.classList.add('hidden'));
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') strongSupportModal.classList.add('hidden'); });
-
-// --- MULTI-SIGNAL STRONG ENGINE ---
-const strongEngineModal = document.getElementById('strongEngineModal');
-const engineCommonOutput = document.getElementById('engineCommonOutput');
-const engineCommonDetails = document.getElementById('engineCommonDetails');
-
-function engineRuleDigits() {
-  return [1,2,3,4].map(i => new Set((document.getElementById(`rule${i}Output`).innerText.match(/[0-9]/g) || [])));
-}
-function engineCommon3(ruleSets) {
-  const f = {}; ruleSets.forEach(set => set.forEach(d => f[d]=(f[d]||0)+1));
-  return Object.entries(f).sort((a,b)=>b[1]-a[1]||Number(a[0])-Number(b[0])).slice(0,3);
-}
-function engineValid(v){ return v!==undefined && v!==null && v!=='' && !isNaN(parseInt(v)); }
-function engineOpen(r){ return engineValid(r.openAnk)?parseInt(r.openAnk):null; }
-function engineClose(r){ return engineValid(r.closeAnk)?parseInt(r.closeAnk):null; }
-function engineDelayMap(records, getter){
-  const n=records.length, last=Array(10).fill(-1);
-  records.forEach((r,i)=>{const v=getter(r); if(v!==null) last[v]=i;});
-  return Array.from({length:10},(_,d)=>({digit:d,delay:last[d]<0?n:n-1-last[d],last:last[d]}));
-}
-function engineGroupInfo(records, view){
-  const getter = r => { const o=engineOpen(r), c=engineClose(r); if(view==='Open') return o; if(o===null||c===null)return null; return view==='Total'?(o+c)%10:(10+c-o)%10; };
-  const n=records.length, delays=Array(10).fill(0), last=Array(10).fill(-1); let topDelay=0,recentDelay=0;
-  records.forEach((r,idx)=>{
-    const list=Array.from({length:10},(_,d)=>({d,delay:delays[d],last:last[d]}));
-    const recent=list.slice().sort((a,b)=>a.delay-b.delay||b.last-a.last).slice(0,4); const rs=new Set(recent.map(x=>x.d));
-    const top=list.filter(x=>!rs.has(x.d)).sort((a,b)=>b.delay-a.delay||a.last-b.last).slice(0,4); const ts=new Set(top.map(x=>x.d));
-    const v=getter(r); if(ts.has(v)){topDelay=0;recentDelay++;} else if(rs.has(v)){recentDelay=0;topDelay++;} else {topDelay++;recentDelay++;}
-    for(let d=0;d<10;d++){if(d===v){delays[d]=0;last[d]=idx;}else delays[d]++;}
-  });
-  const list=Array.from({length:10},(_,d)=>({d,delay:delays[d],last:last[d]}));
-  const recent=list.slice().sort((a,b)=>a.delay-b.delay||b.last-a.last).slice(0,4); const rs=new Set(recent.map(x=>x.d));
-  const top=list.filter(x=>!rs.has(x.d)).sort((a,b)=>b.delay-a.delay||a.last-b.last).slice(0,4);
-  return {top:top.map(x=>x.d),recent:recent.map(x=>x.d),topDelay,recentDelay};
-}
-function engineJodiDelay(records,o,c){ let last=-1; records.forEach((r,i)=>{if(engineOpen(r)===o&&engineClose(r)===c)last=i;}); return last<0?records.length:records.length-1-last; }
-function engineDelayRank(records, getter){
-  return engineDelayMap(records,getter).sort((a,b)=>b.delay-a.delay||a.digit-b.digit).map((x,i)=>({...x,rank:10-i}));
-}
-function engineRenderRows(el,arr){ el.innerHTML=arr.map((x,i)=>`<div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs"><span class="font-black text-slate-800">${i+1}. ${x.jodi}</span><span class="font-bold text-rose-700">Score ${x.score}</span><span class="text-slate-500">D${x.delay}</span></div>`).join(''); }
-
-async function runStrongEngine(){
+async function runFinalShortlist(){
   const selectedMarket=document.getElementById('shortlistMarketSelect').value;
   try{
-    const snap=await getDocs(collection(db,'matka_records')); let records=[];
-    snap.forEach(ds=>{const r=ds.data(); if((selectedMarket==='ALL_MERGED'||!selectedMarket||r.marketName===selectedMarket)&&r.date&&r.marketName)records.push(r);});
+    const snap=await getDocs(collection(db,'matka_records'));let records=[];
+    snap.forEach(ds=>{const r=ds.data();if((selectedMarket==='ALL_MERGED'||!selectedMarket||r.marketName===selectedMarket)&&r.date&&r.marketName)records.push(r);});
     records.sort((a,b)=>new Date(a.date)-new Date(b.date));
-    if(!records.length){showCustomAlert('Strong Engine','No data available.','error');return;}
-    const ruleSets=engineRuleDigits(), common=engineCommon3(ruleSets), commonMap=Object.fromEntries(common);
-    const openDelay=engineDelayMap(records,engineOpen), closeDelay=engineDelayMap(records,engineClose);
-    const openRank=engineDelayRank(records,engineOpen), closeRank=engineDelayRank(records,engineClose);
-    const totalInfo=engineGroupInfo(records,'Total'), diffInfo=engineGroupInfo(records,'Diff');
-    const totalSet=new Set([...totalInfo.top,...totalInfo.recent].map(String)), diffSet=new Set([...diffInfo.top,...diffInfo.recent].map(String));
-    const commonSet=new Set(common.map(x=>x[0]));
-    const openScores=Array.from({length:10},(_,d)=>{let ruleSupport=ruleSets.reduce((n,s)=>n+(s.has(String(d))?1:0),0); let cd=commonMap[d]||0; let rank=(openRank.find(x=>x.digit===d)||{}).rank||0; return {d,score:ruleSupport*3+cd*4+rank};}).sort((a,b)=>b.score-a.score||a.d-b.d);
-    const strongOpen=openScores.slice(0,2).map(x=>x.d);
-    const closeScores=Array.from({length:10},(_,d)=>{let ruleSupport=ruleSets.reduce((n,s)=>n+(s.has(String(d))?1:0),0); let cd=commonMap[d]||0; let rank=(closeRank.find(x=>x.digit===d)||{}).rank||0; let rel=(totalSet.has(String(d))?2:0)+(diffSet.has(String(d))?1:0); return {d,score:ruleSupport*2+cd*4+rank+rel};}).sort((a,b)=>b.score-a.score||a.d-b.d);
-    const strongClose=closeScores.slice(0,2).map(x=>x.d);
-    const candidates=[];
+    if(!records.length){showCustomAlert('Shortlist','No data available.','error');return;}
+    const n=records.length;
+    const openDelay=lastSeenDelay(records,r=>digitOf(r.openAnk)),closeDelay=lastSeenDelay(records,r=>digitOf(r.closeAnk));
+    const totalDelay=lastSeenDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10});
+    const diffDelay=lastSeenDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10});
+    const oeKeys=['OO','OE','EO','EE'];
+    const oeDelay=categoryDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:oddEvenType(o,c)},oeKeys);
+    const pannaOEKeys=['OOO','OOE','OEO','OEE','EOO','EOE','EEO','EEE'];
+    const openPannaOE=categoryDelay(records,r=>pannaParity(r.openPana),pannaOEKeys),closePannaOE=categoryDelay(records,r=>pannaParity(r.closePana),pannaOEKeys);
+    const fjDelay=categoryDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:JODI_TO_FAMILY[`${o}${c}`]||null},Object.keys(FAMILY_JODI_GROUPS));
+    const openFamilyDelay=categoryDelay(records,r=>{const o=digitOf(r.openAnk);return o===null?null:String(Math.min(...FAMILY_DIGITS[o]))},['0','1','2','3','4']);
+    const closeFamilyDelay=categoryDelay(records,r=>{const c=digitOf(r.closeAnk);return c===null?null:String(Math.min(...FAMILY_DIGITS[c]))},['0','1','2','3','4']);
+    const openPannaDelay=categoryDelay(records,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+    const closePannaDelay=categoryDelay(records,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+
+    const openScores=rankWithTies(openDelay.map(x=>{
+      const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
+      const pKeys=Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g);
+      const recent20=freqIn(records,r=>digitOf(r.openAnk),20,x.digit),recent10=freqIn(records,r=>digitOf(r.openAnk),10,x.digit);
+      const totalRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20, x.digit);
+      const diffRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
+      const family=openFamilyDelay[f]||0,panna=maxDelayForKeys(openPannaDelay,pKeys),pOE=Math.max(...pannaOEKeys.map(k=>openPannaOE[k]||0));
+      return {...x,score:x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*0.8+Math.min(diffRel,6)*0.8+family*0.7+Math.min(panna,20)*0.45+Math.min(pOE,20)*0.25};
+    }));
+    const closeScores=rankWithTies(closeDelay.map(x=>{
+      const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
+      const pKeys=Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g);
+      const recent20=freqIn(records,r=>digitOf(r.closeAnk),20,x.digit),recent10=freqIn(records,r=>digitOf(r.closeAnk),10,x.digit);
+      const totalRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20,x.digit);
+      const diffRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
+      const family=closeFamilyDelay[f]||0,panna=maxDelayForKeys(closePannaDelay,pKeys),pOE=Math.max(...pannaOEKeys.map(k=>closePannaOE[k]||0));
+      return {...x,score:x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*0.8+Math.min(diffRel,6)*0.8+family*0.7+Math.min(panna,20)*0.45+Math.min(pOE,20)*0.25};
+    }));
+    const topOpen=openScores.slice(0,3),topClose=closeScores.slice(0,3);
+
+    const jodiCandidates=[];
     for(let o=0;o<=9;o++)for(let c=0;c<=9;c++){
-      const os=openScores.find(x=>x.d===o), cs=closeScores.find(x=>x.d===c), commonCount=(commonSet.has(String(o))?1:0)+(commonSet.has(String(c))?1:0);
-      const ruleSupport=ruleSets.reduce((n,s)=>n+(s.has(String(o))?1:0)+(s.has(String(c))?1:0),0);
-      const d=engineJodiDelay(records,o,c), delayScore=Math.min(10,d), both=(strongOpen.includes(o)&&strongClose.includes(c))?10:0;
-      const total=(o+c)%10, diff=(10+c-o)%10;
-      let score=(os?.score||0)+(cs?.score||0)+both+commonCount*4+ruleSupport+delayScore+(totalSet.has(String(total))?2:0)+(diffSet.has(String(diff))?2:0);
-      candidates.push({jodi:`${o}${c}`,open:o,close:c,delay:d,commonCount,score});
+      const j=`${o}${c}`,fam=JODI_TO_FAMILY[j],total=(o+c)%10,diff=(10+c-o)%10,type=oddEvenType(o,c);
+      let last=-1;records.forEach((r,i)=>{if(digitOf(r.openAnk)===o&&digitOf(r.closeAnk)===c)last=i;});
+      const delay=last<0?n:n-1-last;
+      const recent10=freqIn(records,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},10,j);
+      const recent20=freqIn(records,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},20,j);
+      const totalD=totalDelay[total]?.delay??n,diffD=diffDelay[diff]?.delay??n,oeD=oeDelay[type]??n,fjD=fam?(fjDelay[fam]??n):n;
+      const opP=pannaParity(records.at(-1)?.openPana),clP=pannaParity(records.at(-1)?.closePana);
+      const pannaCompatibility=(opP&&clP&&oddEvenType(o,c)===((opP[0]+opP[1]===2?'OO':opP[0]+opP[1]===1?'OE':'EE')))?1:0;
+      const familyMix=fam?Math.min(fjD,25)*1.0:0;
+      const totalSupport=Math.min(totalD,25)*0.7,diffSupport=Math.min(diffD,25)*0.7,oeSupport=Math.min(oeD,25)*0.55;
+      const frequency=recent20*2.2+recent10*1.5;
+      const score=delay*1.2+frequency+oeSupport+familyMix+totalSupport+diffSupport+pannaCompatibility*1.5;
+      const conflict=(totalD<2?1:0)+(diffD<2?1:0)+(oeD<2?1:0)+(fjD<2?1:0);
+      jodiCandidates.push({jodi:j,open:o,close:c,delay,type,fam,total,diff,score,conflict,totalD,diffD,oeD,fjD});
     }
-    candidates.sort((a,b)=>b.score-a.score||b.delay-a.delay||a.open-b.open||a.close-b.close);
-    const strong5=candidates.filter(x=>x.commonCount>=1).slice(0,5);
-    const strongSet=new Set(strong5.map(x=>x.jodi));
-    const support5=candidates.filter(x=>!strongSet.has(x.jodi)&&((strongOpen.includes(x.open)||strongClose.includes(x.close))||x.commonCount===1)).slice(0,5);
-    document.getElementById('strongOpenOutput').innerText=strongOpen.join('  ');
-    document.getElementById('strongOpenDetails').innerText=openScores.slice(0,2).map(x=>`S${x.score}`).join(' • ');
-    document.getElementById('strongCloseOutput').innerText=strongClose.join('  ');
-    document.getElementById('strongCloseDetails').innerText=closeScores.slice(0,2).map(x=>`S${x.score}`).join(' • ');
-    engineCommonOutput.innerText=common.length?common.map(x=>x[0]).join('  '):'-';
-    engineCommonDetails.innerText=common.length?common.map(x=>`${x[0]}=${x[1]}/4`).join(' • '):'-';
-    engineRenderRows(document.getElementById('strong5EngineOutput'),strong5);
-    engineRenderRows(document.getElementById('support5EngineOutput'),support5);
-    const topSupport=strong5[0]?.score||0, second=strong5[1]?.score||0;
-    document.getElementById('engineSignalStatus').innerText=(common.filter(x=>x[1]>=3).length>=2&&topSupport-second>=3)?'STRONG CONSENSUS':'MODERATE / MIXED SIGNAL';
-    strongEngineModal.classList.remove('hidden');
-  }catch(e){console.log('Strong engine error',e);showCustomAlert('Strong Engine','Calculation error. Check console.','error');}
+    jodiCandidates.sort((a,b)=>b.score-a.score||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
+    const strong5=jodiCandidates.slice(0,5),strongSet=new Set(strong5.map(x=>x.jodi));
+    // Support is intentionally independent: it is selected from the next ranked candidates using structural diversity, not only Open Strong/Close Strong.
+    const supportPool=jodiCandidates.filter(x=>!strongSet.has(x.jodi));
+    const support5=[];const usedTypes=new Set();const usedFamilies=new Set();
+    for(const x of supportPool){if(support5.length>=5)break;const diverse=!usedTypes.has(x.type)||!usedFamilies.has(x.fam);if(diverse){support5.push(x);usedTypes.add(x.type);if(x.fam)usedFamilies.add(x.fam);}}
+    for(const x of supportPool)if(support5.length<5&&!support5.includes(x))support5.push(x);
+
+    const familyStrong=[...new Set([...topOpen,...topClose].map(x=>String(Math.min(...FAMILY_DIGITS[x.digit]))) )];
+    const pannaStrong=[...new Set([...topOpen,...topClose].flatMap(x=>Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g)))].slice(0,4);
+    const familyJodiStrong=[...new Set([...strong5,...support5].map(x=>x.fam).filter(Boolean))].slice(0,4);
+    const pannaOESorted=[...pannaOEKeys].sort((a,b)=>(Math.min(openPannaOE[b],closePannaOE[b]))-(Math.min(openPannaOE[a],closePannaOE[a])));const bestPannaOE=pannaOESorted[0];
+    const bestJodiConflict=strong5.filter(x=>x.conflict>=2).length;
+    const status=bestJodiConflict>=2?'MIXED SIGNAL':(strong5.filter(x=>x.conflict===0).length>=3?'HIGH CONSENSUS':'MODERATE');
+
+    document.getElementById('finalOpenTop3').innerText=topOpen.map(x=>x.digit).join(' • ');
+    document.getElementById('finalOpenDetails').innerText=topOpen.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
+    document.getElementById('finalCloseTop3').innerText=topClose.map(x=>x.digit).join(' • ');
+    document.getElementById('finalCloseDetails').innerText=topClose.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
+    document.getElementById('finalFamilyStrong').innerText=familyStrong.join(' • ')||'-';
+    document.getElementById('finalPannaStrong').innerText=pannaStrong.join(' • ')||'-';
+    document.getElementById('finalFamilyJodiStrong').innerText=familyJodiStrong.join(' • ')||'-';
+    renderFinalRows(document.getElementById('finalJodiStrong'),strong5);renderFinalRows(document.getElementById('finalJodiSupport'),support5);
+    const bestType=[...oeKeys].sort((a,b)=>oeDelay[b]-oeDelay[a])[0];
+    document.getElementById('finalOddEvenBadge').innerText=bestType;
+    document.getElementById('finalOddEvenFocus').innerText=`OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`;
+    document.getElementById('finalConflict').innerText=bestJodiConflict?`⚠️ ${bestJodiConflict} Strong Jodiમાં 2+ conflict signals છે. Conflict Jodiને Strong તરીકે blindly ન લો.`:`✅ Strong Jodiમાં major conflict ઓછો છે.`;
+    const shareText = [
+      `📊 ${selectedMarket==='ALL_MERGED'?'ALL MARKETS':selectedMarket} — GAME RANKING`,
+      `Open Top 3: ${topOpen.map(x=>x.digit).join(' • ')}`,
+      `Close Top 3: ${topClose.map(x=>x.digit).join(' • ')}`,
+      `Jodi O/E Focus: ${bestType} | OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`,
+      `🔥 Strong Jodi 5: ${strong5.map(x=>x.jodi).join(' • ')}`,
+      `🛡 Support Jodi 5: ${support5.map(x=>x.jodi).join(' • ')}`,
+      `Family: ${familyStrong.join(' • ')||'-'}`,
+      `Panna Group: ${pannaStrong.join(' • ')||'-'}`,
+      `Family Jodi: ${familyJodiStrong.join(' • ')||'-'}`,
+      `Signal: ${status}`,
+      `Note: Historical ranking only — not a guaranteed prediction.`
+    ].join('\n');
+    document.getElementById('shortlistShareText').value=shareText;
+    const statusEl=document.getElementById('finalSignalStatus');statusEl.innerText=status;statusEl.className=`text-[8px] font-black px-1.5 py-0.5 rounded ${status==='HIGH CONSENSUS'?'bg-emerald-100 text-emerald-700':status==='MODERATE'?'bg-amber-100 text-amber-700':'bg-rose-100 text-rose-700'}`;
+  }catch(e){console.log('Final shortlist error',e);showCustomAlert('Shortlist','Calculation error. Check console.','error');}
 }
-document.getElementById('strongEngineBtn').addEventListener('click',runStrongEngine);
-document.getElementById('closeStrongEngineModalBtn').addEventListener('click',()=>strongEngineModal.classList.add('hidden'));
+document.getElementById('refreshShortlistBtn')?.addEventListener('click',runFinalShortlist);
+document.getElementById('shortlistMarketSelect')?.addEventListener('change',runFinalShortlist);
+document.getElementById('copyShortlistBtn')?.addEventListener('click',async()=>{
+  const ta=document.getElementById('shortlistShareText');
+  if(!ta.value)return;
+  try{await navigator.clipboard.writeText(ta.value);showCustomAlert('Share Text','Game ranking copied.','success');}
+  catch(e){ta.select();document.execCommand('copy');showCustomAlert('Share Text','Game ranking copied.','success');}
+});
 
 // --- DYNAMIC GROUP-WISE DELAY SIMULATION & ANALYSIS ---
 async function loadAnalysisData() { 
