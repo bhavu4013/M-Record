@@ -889,7 +889,7 @@ gridWrapper.appendChild(card);
 }); 
 gapGridContainer.appendChild(gridWrapper); 
 } else if (currentMoreSubView === 'FamilyPanna') { 
-topCardTitle.innerText = "🔥 TOP (2)"; midCardTitle.innerText = "💠 MID (3)"; recentCardTitle.innerText = "⚡ RECENT (2)"; 
+topCardTitle.innerText = "🔥 TOP "; midCardTitle.innerText = "💠 MID "; recentCardTitle.innerText = "⚡ RECENT "; 
 let activeGroups = [];
 const digitFamilyPannaMap = { 
 "1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
@@ -931,7 +931,7 @@ gapGridContainer.innerHTML = '';
 let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-3 gap-1.5 text-center"; 
 fpListArr.forEach((item) => { 
 let card = document.createElement('div'); card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition"; 
-card.innerHTML = `<div class="text-xs font-bold text-slate-500">Grp ${item.group}</div><div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>`; 
+card.innerHTML = `<div class="text-xs font-bold text-slate-500"> ${item.group}</div><div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>`; 
 card.addEventListener('click', () => showFamilyPannaDetails(item.group)); 
 gridWrapper.appendChild(card); 
 }); 
