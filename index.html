@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <title>Daily Data Logger & Analysis Portal</title> 
 <script src="https://cdn.tailwindcss.com"></script> 
+<style>
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 </head> 
 <body class="bg-slate-100 p-4 min-h-screen flex flex-col items-center justify-between pb-20"> 
 
@@ -79,19 +85,16 @@
 </select> 
 </div> 
 
-<div class="grid grid-cols-5 gap-1 text-xs font-bold"> 
-<button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition">Open</button> 
-<button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Close</button> 
-<button type="button" data-view="Total" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Total</button> 
-<button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">Diff</button> 
-<button type="button" data-view="More" class="analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition">More ▾</button> 
-</div> 
-
-<div id="moreSubFiltersContainer" class="hidden grid grid-cols-4 gap-1 text-[11px] font-bold pt-1"> 
-<button type="button" data-subview="FamilyJodi" class="more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition">Family Jodi</button> 
-<button type="button" data-subview="FamilyPanna" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Family Panna</button> 
-<button type="button" data-subview="OddEven" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Odd/Even</button> 
-<button type="button" data-subview="PanelType" class="more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition">Panel Type</button> 
+<!-- Single Line Scrollable Navigation for All Analysis Views --> 
+<div class="flex overflow-x-auto gap-1.5 pb-1 no-scrollbar text-xs font-bold whitespace-nowrap"> 
+<button type="button" data-view="Open" class="analysis-view-btn bg-blue-600 text-white px-3 py-1.5 rounded-lg shadow-sm text-center transition shrink-0">Open</button> 
+<button type="button" data-view="Close" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Close</button> 
+<button type="button" data-view="Total" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Total</button> 
+<button type="button" data-view="Diff" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Diff</button> 
+<button type="button" data-view="FamilyJodi" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Family Jodi</button> 
+<button type="button" data-view="FamilyPanna" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Family Panna</button> 
+<button type="button" data-view="OddEven" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Odd/Even</button> 
+<button type="button" data-view="PanelType" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Panel Type</button> 
 </div> 
 
 <!-- Family Panna Toggle & Digit Selection --> 
@@ -100,18 +103,17 @@
 <button type="button" id="fpToggleSingle" class="flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition">Single Digit</button> 
 <button type="button" id="fpToggleMerge" class="flex-1 py-1 rounded text-xs font-bold text-slate-700 transition">Cut / Merge (1-6)</button> 
 </div> 
-<div class="grid grid-cols-5 gap-1 text-xs font-bold pt-1" id="fpDigitButtonsGrid"> 
-<button type="button" data-digit="1" class="fp-digit-btn bg-indigo-600 text-white py-1 rounded text-center transition">1</button> 
-<button type="button" data-digit="2" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">2</button> 
-<button type="button" data-digit="3" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">3</button> 
-<button type="button" data-digit="4" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">4</button> 
-<button type="button" data-digit="5" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">5</button> 
-<button type="button" data-digit="6" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">6</button> 
-<button type="button" data-digit="7" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">7</button> 
-<button type="button" data-digit="8" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">8</button> 
-<button type="button" data-digit="9" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">9</button> 
-<button type="button" data-digit="0" class="fp-digit-btn bg-slate-200 text-slate-700 py-1 rounded text-center transition">0</button> 
+<div class="grid grid-cols-5 gap-1 text-xs font-bold pt-1" id="fpDigitButtonsGrid"></div> 
 </div> 
+
+<!-- Odd / Even Custom Sub-view Options --> 
+<div id="oddEvenOptionsContainer" class="hidden space-y-2 pt-1"> 
+<div class="grid grid-cols-3 gap-1 text-xs font-bold"> 
+<button type="button" id="oeBtn4Jodis" class="py-2 px-1 rounded-lg bg-indigo-600 text-white text-center transition shadow-sm">Merge</button> 
+<button type="button" id="oeBtnOdd" class="py-2 px-1 rounded-lg bg-slate-200 text-slate-700 text-center transition">ODD</button> 
+<button type="button" id="oeBtnEven" class="py-2 px-1 rounded-lg bg-slate-200 text-slate-700 text-center transition">EVEN</button> 
+</div> 
+<div id="oeDigitSelectorRow" class="hidden grid grid-cols-5 gap-1 text-xs font-bold pt-1"></div> 
 </div> 
 
 <div class="flex justify-between items-center text-xs font-bold px-1 pt-1 text-slate-700"> 
@@ -278,9 +280,10 @@ dateInput.value = new Date().toISOString().split('T')[0];
 let marketsList = []; 
 const modal = document.getElementById('marketModal'); 
 let currentAnalysisView = 'Open'; 
-let currentMoreSubView = 'FamilyJodi'; 
 let selectedFamilyPannaDigit = "1"; 
 let isFamilyPannaMergeMode = false; 
+let oddEvenMode = 'Merge'; 
+let selectedOddEvenDigit = "1";
 let globalAllRecords = []; 
 
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
@@ -329,35 +332,27 @@ loadShortlistMarkets();
 }); 
 
 const analysisViewBtns = document.querySelectorAll('.analysis-view-btn'); 
-const moreSubFiltersContainer = document.getElementById('moreSubFiltersContainer'); 
 const familyPannaOptionsContainer = document.getElementById('familyPannaOptionsContainer'); 
+const oddEvenOptionsContainer = document.getElementById('oddEvenOptionsContainer'); 
+const analysisCardsContainer = document.getElementById('analysisCardsContainer'); 
 
 analysisViewBtns.forEach(btn => { 
 btn.addEventListener('click', (e) => { 
-analysisViewBtns.forEach(b => b.className = "analysis-view-btn bg-slate-200 text-slate-700 py-1.5 rounded-lg text-center hover:bg-slate-300 transition"); 
-e.target.className = "analysis-view-btn bg-blue-600 text-white py-1.5 rounded-lg shadow-sm text-center transition"; 
+analysisViewBtns.forEach(b => b.className = "analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0"); 
+e.target.className = "analysis-view-btn bg-blue-600 text-white px-3 py-1.5 rounded-lg shadow-sm text-center transition shrink-0"; 
 currentAnalysisView = e.target.getAttribute('data-view'); 
-if (currentAnalysisView === 'More') { 
-moreSubFiltersContainer.classList.remove('hidden'); 
-if (currentMoreSubView === 'FamilyPanna') familyPannaOptionsContainer.classList.remove('hidden'); 
-} else { 
-moreSubFiltersContainer.classList.add('hidden'); 
-familyPannaOptionsContainer.classList.add('hidden'); 
-} 
-loadAnalysisData(); 
-}); 
-}); 
 
-const moreSubBtns = document.querySelectorAll('.more-sub-btn'); 
-moreSubBtns.forEach(btn => { 
-btn.addEventListener('click', (e) => { 
-moreSubBtns.forEach(b => b.className = "more-sub-btn bg-slate-200 text-slate-700 py-1 rounded text-center hover:bg-slate-300 transition"); 
-e.target.className = "more-sub-btn bg-indigo-600 text-white py-1 rounded shadow-sm text-center transition"; 
-currentMoreSubView = e.target.getAttribute('data-subview'); 
-if (currentMoreSubView === 'FamilyPanna') { 
-familyPannaOptionsContainer.classList.remove('hidden'); 
-} else { 
 familyPannaOptionsContainer.classList.add('hidden'); 
+oddEvenOptionsContainer.classList.add('hidden'); 
+analysisCardsContainer.classList.remove('hidden'); 
+document.getElementById('topCardBox').classList.remove('hidden');
+document.getElementById('midCardBox').classList.remove('hidden');
+document.getElementById('recentCardBox').classList.remove('hidden');
+
+if (currentAnalysisView === 'FamilyPanna') { 
+familyPannaOptionsContainer.classList.remove('hidden'); 
+} else if (currentAnalysisView === 'OddEven') { 
+oddEvenOptionsContainer.classList.remove('hidden'); 
 } 
 loadAnalysisData(); 
 }); 
@@ -405,6 +400,44 @@ fpDigitButtonsGrid.appendChild(btn);
 });
 }
 renderFpDigitButtons();
+
+// Odd/Even Sub-modes Setup
+const oeBtn4Jodis = document.getElementById('oeBtn4Jodis');
+const oeBtnOdd = document.getElementById('oeBtnOdd');
+const oeBtnEven = document.getElementById('oeBtnEven');
+const oeDigitSelectorRow = document.getElementById('oeDigitSelectorRow');
+
+function updateOeSubButtonsUI() {
+oeBtn4Jodis.className = `py-2 px-1 rounded-lg text-center transition text-xs font-bold ${oddEvenMode === 'Merge' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-200 text-slate-700'}`;
+oeBtnOdd.className = `py-2 px-1 rounded-lg text-center transition text-xs font-bold ${oddEvenMode === 'Odd' ? 'bg-orange-600 text-white shadow-sm' : 'bg-slate-200 text-slate-700'}`;
+oeBtnEven.className = `py-2 px-1 rounded-lg text-center transition text-xs font-bold ${oddEvenMode === 'Even' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-200 text-slate-700'}`;
+
+if (oddEvenMode === 'Merge') {
+oeDigitSelectorRow.classList.add('hidden');
+} else {
+oeDigitSelectorRow.classList.remove('hidden');
+oeDigitSelectorRow.innerHTML = '';
+let digits = oddEvenMode === 'Odd' ? ["1", "3", "5", "7", "9"] : ["0", "2", "4", "6", "8"];
+if (!digits.includes(selectedOddEvenDigit)) selectedOddEvenDigit = digits[0];
+
+digits.forEach(d => {
+let btn = document.createElement('button');
+btn.type = "button";
+btn.className = `py-1 rounded text-center transition text-xs font-bold ${selectedOddEvenDigit === d ? (oddEvenMode === 'Odd' ? 'bg-orange-600 text-white shadow-sm' : 'bg-blue-600 text-white shadow-sm') : 'bg-slate-200 text-slate-700'}`;
+btn.innerText = d;
+btn.addEventListener('click', () => {
+selectedOddEvenDigit = d;
+updateOeSubButtonsUI();
+loadAnalysisData();
+});
+oeDigitSelectorRow.appendChild(btn);
+});
+}
+}
+
+oeBtn4Jodis.addEventListener('click', () => { oddEvenMode = 'Merge'; updateOeSubButtonsUI(); loadAnalysisData(); });
+oeBtnOdd.addEventListener('click', () => { oddEvenMode = 'Odd'; updateOeSubButtonsUI(); loadAnalysisData(); });
+oeBtnEven.addEventListener('click', () => { oddEvenMode = 'Even'; updateOeSubButtonsUI(); loadAnalysisData(); });
 
 const closeFpModal = () => document.getElementById('fpDetailModal').classList.add('hidden'); 
 document.getElementById('closeFpModalFooterBtn').addEventListener('click', closeFpModal); 
@@ -777,7 +810,7 @@ console.log("Rule calculation error details:", e);
 } 
 }); 
 
-// --- DYNAMIC GROUP-WISE DELAY SIMULATION & MORE SUB-VIEWS SUPPORT ---
+// --- DYNAMIC GROUP-WISE DELAY SIMULATION & ANALYSIS ---
 async function loadAnalysisData() { 
 let selectedMarketVal = document.getElementById('analysisMarketSelect').value; 
 const analysisHeaderTitle = document.getElementById('analysisHeaderTitle'); 
@@ -850,10 +883,9 @@ globalAllRecords = records;
 records.sort((a, b) => new Date(a.date) - new Date(b.date) || a.openTime.localeCompare(b.openTime)); 
 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`; 
 
-// --- MORE SUB-VIEWS LOGIC (Family Jodi, Family Panna, Odd/Even, Panel Type) ---
-if (currentAnalysisView === 'More') { 
-gridTitleLabel.innerText = `📊 More Analysis (${currentMoreSubView}):`; 
-if (currentMoreSubView === 'FamilyJodi') { 
+// --- SUB-VIEWS LOGIC ---
+if (currentAnalysisView === 'FamilyJodi') { 
+gridTitleLabel.innerText = `📊 More Analysis (FamilyJodi):`; 
 topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT"; 
 const allGroupKeys = ["11", "12", "13", "14", "15", "22", "23", "24", "25", "33", "34", "35", "44", "45", "55"]; 
 let groupStats = {}; 
@@ -883,13 +915,16 @@ recentAnkVal.innerText = recent5[0] ? recent5[0].currentDelay : 0; recentMaxVal.
 gapGridContainer.innerHTML = ''; 
 let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-5 gap-1.5 text-center"; 
 listArr.forEach(item => { 
-let card = document.createElement('div'); card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm"; 
-card.innerHTML = `<div class="text-xs font-bold text-slate-500">${item.group}</div><div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>`; 
+let isHit = (item.currentDelay === 0);
+let card = document.createElement('div'); card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm"; 
+card.innerHTML = `<div class="text-xs font-bold text-slate-500">${item.group}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-indigo-600'}">${item.currentDelay}</div>`; 
 gridWrapper.appendChild(card); 
 }); 
 gapGridContainer.appendChild(gridWrapper); 
-} else if (currentMoreSubView === 'FamilyPanna') { 
-topCardTitle.innerText = "🔥 TOP "; midCardTitle.innerText = "💠 MID "; recentCardTitle.innerText = "⚡ RECENT "; 
+return; 
+} else if (currentAnalysisView === 'FamilyPanna') { 
+gridTitleLabel.innerText = `📊 More Analysis (FamilyPanna):`; 
+topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT"; 
 let activeGroups = [];
 const digitFamilyPannaMap = { 
 "1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
@@ -930,22 +965,129 @@ recentAnkVal.innerText = fpRecent2[0] ? fpRecent2[0].currentDelay : 0; recentMax
 gapGridContainer.innerHTML = ''; 
 let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-3 gap-1.5 text-center"; 
 fpListArr.forEach((item) => { 
-let card = document.createElement('div'); card.className = "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition"; 
-card.innerHTML = `<div class="text-xs font-bold text-slate-500"> ${item.group}</div><div class="text-sm font-extrabold text-indigo-600">${item.currentDelay}</div>`; 
+let isHit = (item.currentDelay === 0);
+let card = document.createElement('div'); card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm cursor-pointer" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition"; 
+card.innerHTML = `<div class="text-xs font-bold text-slate-500">Grp ${item.group}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-indigo-600'}">${item.currentDelay}</div>`; 
 card.addEventListener('click', () => showFamilyPannaDetails(item.group)); 
 gridWrapper.appendChild(card); 
 }); 
 gapGridContainer.appendChild(gridWrapper); 
-} else if (currentMoreSubView === 'OddEven') { 
-topCardTitle.innerText = "🔥 Odd Count"; midCardTitle.innerText = "💠 Even Count"; recentCardTitle.innerText = "⚡ Ratio"; 
-let oddCount = 0, evenCount = 0; 
-records.forEach(r => { if (r.val !== null && !isNaN(r.val)) { if (r.val % 2 === 0) evenCount++; else oddCount++; } }); 
-let total = oddCount + evenCount, oddPct = total > 0 ? Math.round((oddCount / total) * 100) : 0, evenPct = total > 0 ? Math.round((evenCount / total) * 100) : 0; 
-topAnkVal.innerText = oddCount; topMaxVal.innerText = `Max: ${oddPct}%`; topListContainer.innerText = `[Odd Stats]`; 
-midAnkVal.innerText = evenCount; midMaxVal.innerText = `Max: ${evenPct}%`; midListContainer.innerText = `[Even Stats]`; 
-recentAnkVal.innerText = `${oddPct}:${evenPct}`; recentMaxVal.innerText = "Max: Ratio"; recentListContainer.innerText = `[Comparative]`; 
-gapGridContainer.innerHTML = `<div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1"><div class="text-xs font-bold text-slate-600">Distribution Overview</div><div class="text-sm font-black text-blue-600">Odd: ${oddCount} (${oddPct}%) | Even: ${evenCount} (${evenPct}%)</div></div>`; 
-} else if (currentMoreSubView === 'PanelType') { 
+return; 
+} else if (currentAnalysisView === 'OddEven') { 
+gridTitleLabel.innerText = `📊 More Analysis (OddEven):`; 
+topCardBox.classList.add('hidden');
+midCardBox.classList.add('hidden');
+recentCardBox.classList.add('hidden');
+analysisCardsContainer.classList.add('hidden');
+
+gapGridContainer.innerHTML = '';
+let oeWrapper = document.createElement('div');
+oeWrapper.className = "space-y-3 pt-1";
+
+if (oddEvenMode === 'Merge') {
+let jodiTypes = [
+{ code: "OO", title: "OO (Odd-Odd)", sub: "એકી-એકી" },
+{ code: "OE", title: "OE (Odd-Even)", sub: "એકી-બેકી" },
+{ code: "EE", title: "EE (Even-Even)", sub: "બેકી-બેકી" },
+{ code: "EO", title: "EO (Even-Odd)", sub: "બેકી-એકી" }
+];
+
+let jodiStats = {};
+jodiTypes.forEach(jt => jodiStats[jt.code] = { occurrences: [], currentDelay: 0, maxDelay: 0 });
+
+records.forEach((rec, idx) => {
+if (rec.openAnk !== undefined && rec.closeAnk !== undefined && !isNaN(rec.openAnk) && !isNaN(rec.closeAnk)) {
+let openIsOdd = (parseInt(rec.openAnk) % 2 !== 0);
+let closeIsOdd = (parseInt(rec.closeAnk) % 2 !== 0);
+let type = (openIsOdd ? "O" : "E") + (closeIsOdd ? "O" : "E");
+if (jodiStats[type]) jodiStats[type].occurrences.push(idx);
+}
+});
+
+let totalLen = records.length;
+let gridDiv = document.createElement('div');
+gridDiv.className = "grid grid-cols-2 gap-2";
+
+jodiTypes.forEach(jt => {
+let stat = jodiStats[jt.code];
+let occs = stat.occurrences;
+stat.currentDelay = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1];
+let gaps = occs.length > 0 ? [occs[0]] : [totalLen];
+for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1);
+if (occs.length > 0) gaps.push(totalLen - 1 - occs[occs.length - 1]);
+stat.maxDelay = Math.max(...gaps);
+
+let isPass = (stat.currentDelay === 0);
+let card = document.createElement('div');
+card.className = isPass ? "bg-emerald-50 border-2 border-emerald-500 p-3 rounded-2xl text-center space-y-1 shadow-md" : "bg-white border border-slate-200 p-3 rounded-2xl text-center space-y-1 shadow-md";
+card.innerHTML = `
+<div class="text-xs font-bold text-slate-600">${jt.title}</div>
+<div class="text-[10px] text-slate-400">${jt.sub}</div>
+<div class="text-xl font-black ${isPass ? 'text-emerald-700' : 'text-slate-800'} pt-1">${stat.currentDelay}</div>
+<div class="text-[11px] text-slate-500 font-semibold">Max: ${stat.maxDelay}</div>
+<div class="text-xs font-bold pt-1 ${isPass ? 'text-emerald-600' : 'text-red-600'}">${isPass ? '✔ PASS' : `✕ ${stat.currentDelay} ફેલ`}</div>
+`;
+gridDiv.appendChild(card);
+});
+oeWrapper.appendChild(gridDiv);
+} else {
+let isOddFilter = (oddEvenMode === 'Odd');
+let filterDigit = parseInt(selectedOddEvenDigit);
+
+let filteredByOpen = records.filter(r => r.openAnk !== undefined && !isNaN(r.openAnk) && parseInt(r.openAnk) === filterDigit);
+let subLen = filteredByOpen.length;
+
+let closeOddOcc = [], closeEvenOcc = [];
+filteredByOpen.forEach((rec, idx) => {
+let cAnk = parseInt(rec.closeAnk);
+if (!isNaN(cAnk)) {
+if (cAnk % 2 !== 0) closeOddOcc.push(idx);
+else closeEvenOcc.push(idx);
+}
+});
+
+let closeOddDelay = closeOddOcc.length === 0 ? subLen : subLen - 1 - closeOddOcc[closeOddOcc.length - 1];
+let closeEvenDelay = closeEvenOcc.length === 0 ? subLen : subLen - 1 - closeEvenOcc[closeEvenOcc.length - 1];
+
+let oddGaps = closeOddOcc.length > 0 ? [closeOddOcc[0]] : [subLen];
+for(let j=1; j<closeOddOcc.length; j++) oddGaps.push(closeOddOcc[j] - closeOddOcc[j-1] - 1);
+if(closeOddOcc.length > 0) oddGaps.push(subLen - 1 - closeOddOcc[closeOddOcc.length - 1]);
+let closeOddMax = Math.max(...oddGaps);
+
+let evenGaps = closeEvenOcc.length > 0 ? [closeEvenOcc[0]] : [subLen];
+for(let j=1; j<closeEvenOcc.length; j++) evenGaps.push(closeEvenOcc[j] - closeEvenOcc[j-1] - 1);
+if(closeEvenOcc.length > 0) evenGaps.push(subLen - 1 - closeEvenOcc[closeEvenOcc.length - 1]);
+let closeEvenMax = Math.max(...evenGaps);
+
+let headerBox = document.createElement('div');
+headerBox.className = "bg-white border border-slate-200 p-3 rounded-xl text-center font-bold text-sm text-indigo-700 flex items-center justify-center gap-2 shadow-sm";
+headerBox.innerHTML = `<span>${isOddFilter ? '🔴' : '🔵'} WHEN OPEN IS ${isOddFilter ? 'ODD' : 'EVEN'} (${filterDigit})</span>`;
+oeWrapper.appendChild(headerBox);
+
+let isOddPass = (closeOddDelay === 0);
+let isEvenPass = (closeEvenDelay === 0);
+
+let boxesGrid = document.createElement('div');
+boxesGrid.className = "grid grid-cols-2 gap-3 pt-1";
+boxesGrid.innerHTML = `
+<div class="${isOddPass ? 'bg-emerald-50 border-2 border-emerald-500' : 'bg-white border border-slate-200'} p-3 rounded-2xl text-center space-y-1 shadow-sm">
+<div class="text-xs font-bold text-slate-600">Close ODD</div>
+<div class="text-2xl font-black ${isOddPass ? 'text-emerald-700' : 'text-orange-600'}">${closeOddDelay}</div>
+<div class="text-[11px] text-slate-500">Max: ${closeOddMax}</div>
+</div>
+<div class="${isEvenPass ? 'bg-emerald-50 border-2 border-emerald-500' : 'bg-white border border-slate-200'} p-3 rounded-2xl text-center space-y-1 shadow-sm">
+<div class="text-xs font-bold text-slate-600">Close EVEN</div>
+<div class="text-2xl font-black ${isEvenPass ? 'text-emerald-700' : 'text-blue-600'}">${closeEvenDelay}</div>
+<div class="text-[11px] text-slate-500">Max: ${closeEvenMax}</div>
+</div>
+`;
+oeWrapper.appendChild(boxesGrid);
+}
+
+gapGridContainer.appendChild(oeWrapper);
+return; 
+} else if (currentAnalysisView === 'PanelType') { 
+gridTitleLabel.innerText = `📊 More Analysis (PanelType):`; 
 topCardTitle.innerText = "🔥 Single (SP)"; midCardTitle.innerText = "💠 Double (DP)"; recentCardTitle.innerText = "⚡ Triple (TP)"; 
 let spCount = 0, dpCount = 0, tpCount = 0; 
 records.forEach(r => { if (r.openType.includes("SP")) spCount++; else if (r.openType.includes("DP")) dpCount++; else if (r.openType.includes("TP")) tpCount++; }); 
@@ -953,13 +1095,16 @@ topAnkVal.innerText = spCount; topMaxVal.innerText = "Max: SP"; topListContainer
 midAnkVal.innerText = dpCount; midMaxVal.innerText = "Max: DP"; midListContainer.innerText = `[Double Panna]`; 
 recentAnkVal.innerText = tpCount; recentMaxVal.innerText = "Max: TP"; recentListContainer.innerText = `[Triple Panna]`; 
 gapGridContainer.innerHTML = `<div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1"><div class="text-xs font-bold text-slate-600">Panel Types Breakdown</div><div class="text-xs font-bold text-slate-700">SP: ${spCount} | DP: ${dpCount} | TP: ${tpCount}</div></div>`; 
-} 
 return; 
 } 
 
+topCardBox.classList.remove('hidden');
+midCardBox.classList.remove('hidden');
+recentCardBox.classList.remove('hidden');
+analysisCardsContainer.classList.remove('hidden');
+
 topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT"; 
 
-// --- DYNAMIC GROUP-WISE DELAY SIMULATION WITH CORRECT HIT RESET ---
 let digitDelays = {}; 
 let digitLastSeen = {}; 
 for (let i = 0; i <= 9; i++) { 
@@ -1111,7 +1256,7 @@ const contentDiv = document.getElementById('fpModalContent');
 contentDiv.innerHTML = ''; 
 document.getElementById('fpModalTitle').innerText = `Group ${groupKey} Details`; 
 
-pannaList.forEach(panna => { 
+groupPannas.forEach(panna => { 
 let lastIdx = -1; 
 for (let i = filteredRecords.length - 1; i >= 0; i--) { 
 if (String(filteredRecords[i].openPana || '') === String(panna)) { lastIdx = i; break; } 
