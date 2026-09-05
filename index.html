@@ -748,7 +748,7 @@ async function runFinalShortlist(){
     const openPannaText=openPannaData.map(x=>`${x.digit}: ${x.pannas.join(' • ')||'-'}`).join(' | ');
     const closePannaText=closePannaData.map(x=>`${x.digit}: ${x.pannas.join(' • ')||'-'}`).join(' | ');
     const digitBox=(x,i)=>`<div class=\"rounded-lg border ${i===0?'border-emerald-300 bg-emerald-100 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center\"><div class=\"text-2xl font-black leading-none tracking-widest\">${x.digit}</div><div class=\"text-[7px] font-bold mt-1 opacity-70\">${i===0?'STRONG':'TOP'}</div></div>`;
-    const pannaBox=(x,i)=>`<div class=\"rounded-md border ${i===0?'border-emerald-200 bg-emerald-50':'border-slate-200 bg-white'} px-1.5 py-1 text-center\"><div class=\"text-[7px] font-bold text-slate-400\">${x.digit}</div><div class=\"text-base font-black tracking-wider leading-none text-slate-800\">${x.pannas[0]||'-'} <span class=\"text-slate-300\">/</span> ${x.pannas[1]||'-'}</div></div>`;
+    const pannaBox=(x,i)=>`<div class=\"rounded-md border ${i===0?'border-emerald-200 bg-emerald-50':'border-slate-200 bg-white'} px-1.5 py-1 text-center\"><div class=\"text-[7px] font-bold text-slate-400\">${x.digit}</div><div class=\"text-base font-black tracking-wider leading-none text-slate-800\">${x.pannas[0]||'-'} &nbsp;&nbsp; ${x.pannas[1]||'-'}</div></div>`;
     document.getElementById('finalOpenTop3').innerHTML=openPannaData.map(digitBox).join('');
     document.getElementById('finalOpenPannas').innerHTML=openPannaData.map(pannaBox).join('');
     document.getElementById('finalCloseTop3').innerHTML=closePannaData.map(digitBox).join('');
