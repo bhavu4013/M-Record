@@ -150,72 +150,35 @@
 </div> 
 
 <!-- SHORTLIST SECTION -->
-<div id="shortlistSection" class="hidden space-y-2 w-full">
-  <div class="flex items-center justify-between">
+<div id="shortlistSection" class="hidden space-y-1.5 w-full">
+  <div class="mb-1.5">
+    <div class="text-xs font-extrabold text-slate-800 leading-none mb-1">Shortlist Ranking</div>
+    <div class="flex items-center gap-2">
+      <select id="shortlistMarketSelect" class="flex-1 min-w-0 border border-slate-300 rounded-md px-2 py-1.5 text-[10px] bg-white font-semibold h-8"><option value="ALL_MERGED">All Markets</option></select>
+      <button id="refreshShortlistBtn" type="button" title="Refresh Ranking" class="h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[10px] font-extrabold shadow-sm">Refresh</button>
+    </div>
+  </div>
+  <div id="shortlistGameCard" class="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm space-y-2">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">GAME RANKING</span><span id="finalSignalStatus" class="text-[8px] font-black px-2 py-1 rounded-full">-</span></div>
     <div>
-      <div class="text-sm font-extrabold text-slate-800">Shortlist Ranking</div>
-      <div class="text-[9px] text-slate-400">Historical ranking • Delay + Recent + Frequency + Relation + Cross-check</div>
+      <div class="text-[9px] font-black text-slate-500 mb-1">OPEN</div>
+      <div id="finalOpenTop3" class="grid grid-cols-3 gap-1.5">-</div>
+      <div id="finalOpenPannas" class="grid grid-cols-3 gap-1.5 mt-1.5"></div>
+      <div id="finalOpenDetails" class="hidden"></div>
     </div>
-    <div class="flex items-center gap-1.5">
-      <button id="refreshShortlistBtn" class="border border-slate-300 bg-white rounded-lg px-2 py-1.5 text-[10px] font-bold text-slate-700">↻ Refresh</button>
-      <select id="shortlistMarketSelect" class="border border-slate-300 rounded-lg px-2 py-1.5 text-[10px] bg-white font-semibold text-slate-700 max-w-[125px]">
-        <option value="ALL_MERGED">All Markets</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-2 gap-2">
-    <div class="bg-blue-50 border border-blue-200 rounded-xl p-2">
-      <div class="text-[9px] font-bold text-blue-700 uppercase">Top 3 Open</div>
-      <div id="finalOpenTop3" class="text-lg font-black text-blue-900 mt-1">-</div>
-      <div id="finalOpenDetails" class="text-[8px] text-slate-500 mt-0.5"></div>
-    </div>
-    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2">
-      <div class="text-[9px] font-bold text-emerald-700 uppercase">Top 3 Close</div>
-      <div id="finalCloseTop3" class="text-lg font-black text-emerald-900 mt-1">-</div>
-      <div id="finalCloseDetails" class="text-[8px] text-slate-500 mt-0.5"></div>
+    <div class="border-t border-slate-100 pt-2">
+      <div class="text-[9px] font-black text-slate-500 mb-1">CLOSE</div>
+      <div id="finalCloseTop3" class="grid grid-cols-3 gap-1.5">-</div>
+      <div id="finalClosePannas" class="grid grid-cols-3 gap-1.5 mt-1.5"></div>
+      <div id="finalCloseDetails" class="hidden"></div>
     </div>
   </div>
-
-  <div class="bg-violet-50 border border-violet-200 rounded-xl p-2">
-    <div class="flex justify-between items-center">
-      <div class="text-[9px] font-bold text-violet-700 uppercase">Jodi Odd / Even Focus</div>
-      <div id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</div>
-    </div>
-    <div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-1"></div>
-  </div>
-
-  <div class="bg-rose-50 border border-rose-200 rounded-xl p-2">
-    <div class="text-[9px] font-bold text-rose-700 uppercase mb-1">🔥 Strong Jodi 5</div>
-    <div id="finalJodiStrong" class="space-y-1"></div>
-  </div>
-
-  <div class="bg-sky-50 border border-sky-200 rounded-xl p-2">
-    <div class="text-[9px] font-bold text-sky-700 uppercase mb-1">🛡 Support Jodi 5</div>
-    <div id="finalJodiSupport" class="space-y-1"></div>
-  </div>
-
-  <div class="grid grid-cols-3 gap-1.5">
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-2 text-center"><div class="text-[8px] font-bold text-amber-700">Family</div><div id="finalFamilyStrong" class="text-[10px] font-black text-amber-900 mt-1">-</div></div>
-    <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-2 text-center"><div class="text-[8px] font-bold text-indigo-700">Panna</div><div id="finalPannaStrong" class="text-[10px] font-black text-indigo-900 mt-1">-</div></div>
-    <div class="bg-purple-50 border border-purple-200 rounded-xl p-2 text-center"><div class="text-[8px] font-bold text-purple-700">Family Jodi</div><div id="finalFamilyJodiStrong" class="text-[10px] font-black text-purple-900 mt-1">-</div></div>
-  </div>
-
-  <div class="bg-white border border-slate-200 rounded-xl p-2">
-    <div class="flex items-center justify-between mb-1">
-      <div class="text-[9px] font-bold text-slate-700 uppercase">Share / Copy</div>
-      <button id="copyShortlistBtn" class="border border-slate-300 rounded-lg px-2 py-1 text-[9px] font-bold bg-slate-50">Copy Game</button>
-    </div>
-    <textarea id="shortlistShareText" readonly class="w-full h-28 resize-none border border-slate-200 rounded-lg p-2 text-[9px] leading-4 text-slate-700 bg-slate-50" placeholder="Ranking તૈયાર થયા પછી share text અહીં આવશે..."></textarea>
-  </div>
-
-  <div class="bg-slate-50 border border-slate-200 rounded-xl p-2">
-    <div class="flex justify-between items-center"><div class="text-[9px] font-bold text-slate-700 uppercase">Signal Check</div><span id="finalSignalStatus" class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">-</span></div>
-    <div id="finalOddEven" class="text-[8px] text-slate-500 mt-1"></div>
-    <div id="finalConflict" class="text-[8px] font-semibold text-slate-600 mt-1"></div>
-  </div>
-
-  <div class="text-[8px] text-slate-400 text-center">Ranking only; no guaranteed prediction. Delay is one signal, not the decision.</div>
+  <div class="rounded-xl border border-violet-200 bg-violet-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-violet-700">JODI ODD / EVEN</span><span id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</span></div><div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-0.5"></div></div>
+  <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 5</div><div id="finalJodiStrong" class="grid grid-cols-5 gap-1"></div></div>
+  <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 5</div><div id="finalJodiSupport" class="grid grid-cols-5 gap-1"></div></div>
+  <div class="flex justify-end pt-0.5"><button id="copyShortlistBtn" class="border border-slate-300 rounded-lg px-4 py-1.5 text-[10px] font-black bg-white hover:bg-slate-50 shadow-sm">Copy Game</button></div>
+  <textarea id="shortlistShareText" class="hidden" aria-hidden="true"></textarea>
+  <div id="finalOddEven" class="hidden"></div><div id="finalConflict" class="hidden"></div>
 </div>
 
 <!-- Family Panna Group Breakdown Popup Modal with Bottom Red Close Button --> 
@@ -650,7 +613,9 @@ let opt3 = document.createElement('option'); opt3.value = mData.name; opt3.textC
 }); 
 if (currentSelected) marketDropdown.value = currentSelected; 
 else selectDefaultMarketByTime(); 
-checkValidationAndStatus(); 
+checkValidationAndStatus();
+// Auto-refresh shortlist once market data is loaded.
+setTimeout(() => runFinalShortlist(), 0);
 } catch (e) { console.log(e); } 
 } 
 loadMarkets(); 
@@ -683,7 +648,7 @@ function freqIn(records,getter,windowSize,key){const a=records.slice(-windowSize
 function categoryDelay(records,keyFn,keys){const n=records.length,last=Object.fromEntries(keys.map(k=>[k,-1]));records.forEach((r,i)=>{const k=keyFn(r);if(k&&last[k]!==undefined)last[k]=i;});return Object.fromEntries(keys.map(k=>[k,last[k]<0?n:n-1-last[k]]));}
 function maxDelayForKeys(map,keys){return Math.max(0,...keys.map(k=>map[k]??0));}
 function rankWithTies(arr){return [...arr].sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);}
-function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>`<div class="grid grid-cols-[28px_1fr_auto] items-center bg-white border border-slate-200 rounded-lg px-2 py-1"><span class="font-black text-slate-800 text-[10px]">${i+1}. ${x.jodi}</span><span class="text-[8px] text-slate-500">${x.type} • T${x.total} D${x.diff} • F${x.fam||'-'}</span><span class="font-black text-rose-700 text-[9px]">${x.score.toFixed(1)} / D${x.delay}</span></div>`).join('');}
+function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>`<div class="rounded-lg ${el.id==='finalJodiStrong'?'bg-emerald-100 border-emerald-300 text-emerald-950':'bg-amber-50 border-amber-200 text-amber-950'} border px-1.5 py-2 text-center"><div class="text-base font-black tracking-wider leading-none">${x.jodi}</div><div class="text-[7px] font-bold mt-1 opacity-70">${x.type}</div></div>`).join('');}
 
 async function runFinalShortlist(){
   const selectedMarket=document.getElementById('shortlistMarketSelect').value;
@@ -691,7 +656,27 @@ async function runFinalShortlist(){
     const snap=await getDocs(collection(db,'matka_records'));let records=[];
     snap.forEach(ds=>{const r=ds.data();if((selectedMarket==='ALL_MERGED'||!selectedMarket||r.marketName===selectedMarket)&&r.date&&r.marketName)records.push(r);});
     records.sort((a,b)=>new Date(a.date)-new Date(b.date));
-    if(!records.length){showCustomAlert('Shortlist','No data available.','error');return;}
+    if(!records.length){
+      document.getElementById('shortlistGameCard').innerHTML='<div class="py-3 text-center text-[10px] font-bold text-slate-500">No game data found for this market.</div>';
+      document.getElementById('finalJodiStrong').innerHTML='';
+      document.getElementById('finalJodiSupport').innerHTML='';
+      document.getElementById('shortlistShareText').value='';
+      return;
+    }
+    // If the latest game has Open but no Close, do not calculate the next-game ranking yet.
+    const latestRecord=records[records.length-1];
+    const latestOpen=digitOf(latestRecord.openAnk), latestClose=digitOf(latestRecord.closeAnk);
+    if(latestOpen!==null && latestClose===null){
+      document.getElementById('shortlistGameCard').innerHTML=`<div class="py-4 text-center"><div class="text-sm font-black text-amber-700">⏳ CURRENT GAME PENDING</div><div class="text-[10px] font-semibold text-slate-600 mt-1">Open entry is available for ${latestRecord.date}, but Close entry is still pending.</div><div class="text-[9px] text-slate-400 mt-1">Next-game shortlist will appear after this game is completed.</div></div>`;
+      document.getElementById('finalJodiStrong').innerHTML='';
+      document.getElementById('finalJodiSupport').innerHTML='';
+      document.getElementById('finalOddEvenBadge').innerText='-';
+      document.getElementById('finalOddEvenFocus').innerText='';
+      document.getElementById('finalOpenPannas').innerText='';
+      document.getElementById('finalClosePannas').innerText='';
+      document.getElementById('shortlistShareText').value=`${selectedMarket==='ALL_MERGED'?'All Markets':selectedMarket}\n\nCURRENT GAME PENDING\nOpen ${latestOpen} entered • Close pending\nNext-game ranking will appear after Close entry.`;
+      return;
+    }
     const n=records.length;
     const openDelay=lastSeenDelay(records,r=>digitOf(r.openAnk)),closeDelay=lastSeenDelay(records,r=>digitOf(r.closeAnk));
     const totalDelay=lastSeenDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10});
@@ -750,41 +735,41 @@ async function runFinalShortlist(){
     const support5=[];const usedTypes=new Set();const usedFamilies=new Set();
     for(const x of supportPool){if(support5.length>=5)break;const diverse=!usedTypes.has(x.type)||!usedFamilies.has(x.fam);if(diverse){support5.push(x);usedTypes.add(x.type);if(x.fam)usedFamilies.add(x.fam);}}
     for(const x of supportPool)if(support5.length<5&&!support5.includes(x))support5.push(x);
-
-    const familyStrong=[...new Set([...topOpen,...topClose].map(x=>String(Math.min(...FAMILY_DIGITS[x.digit]))) )];
-    const pannaStrong=[...new Set([...topOpen,...topClose].flatMap(x=>Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g)))].slice(0,4);
-    const familyJodiStrong=[...new Set([...strong5,...support5].map(x=>x.fam).filter(Boolean))].slice(0,4);
-    const pannaOESorted=[...pannaOEKeys].sort((a,b)=>(Math.min(openPannaOE[b],closePannaOE[b]))-(Math.min(openPannaOE[a],closePannaOE[a])));const bestPannaOE=pannaOESorted[0];
     const bestJodiConflict=strong5.filter(x=>x.conflict>=2).length;
     const status=bestJodiConflict>=2?'MIXED SIGNAL':(strong5.filter(x=>x.conflict===0).length>=3?'HIGH CONSENSUS':'MODERATE');
 
-    document.getElementById('finalOpenTop3').innerText=topOpen.map(x=>x.digit).join(' • ');
-    document.getElementById('finalOpenDetails').innerText=topOpen.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
-    document.getElementById('finalCloseTop3').innerText=topClose.map(x=>x.digit).join(' • ');
-    document.getElementById('finalCloseDetails').innerText=topClose.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
-    document.getElementById('finalFamilyStrong').innerText=familyStrong.join(' • ')||'-';
-    document.getElementById('finalPannaStrong').innerText=pannaStrong.join(' • ')||'-';
-    document.getElementById('finalFamilyJodiStrong').innerText=familyJodiStrong.join(' • ')||'-';
+    const bestPannasForDigit=(digit,side)=>{
+      const key=side==='open'?'openPana':'closePana',stats={};
+      records.forEach((r,i)=>{const p=numP(r[key]);if(!p||!p.includes(String(digit)))return;if(!stats[p])stats[p]={p,count:0,last:-1};stats[p].count++;stats[p].last=i;});
+      return Object.values(stats).map(x=>({...x,delay:n-1-x.last,recent20:records.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:records.slice(-10).filter(r=>numP(r[key])===x.p).length})).sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*0.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*0.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
+    };
+    const openPannaData=topOpen.map(x=>({digit:x.digit,pannas:bestPannasForDigit(x.digit,'open'),score:x.score,delay:x.delay}));
+    const closePannaData=topClose.map(x=>({digit:x.digit,pannas:bestPannasForDigit(x.digit,'close'),score:x.score,delay:x.delay}));
+    const openPannaText=openPannaData.map(x=>`${x.digit}: ${x.pannas.join(' • ')||'-'}`).join(' | ');
+    const closePannaText=closePannaData.map(x=>`${x.digit}: ${x.pannas.join(' • ')||'-'}`).join(' | ');
+    const digitBox=(x,i)=>`<div class=\"rounded-lg border ${i===0?'border-emerald-300 bg-emerald-100 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center\"><div class=\"text-2xl font-black leading-none tracking-widest\">${x.digit}</div><div class=\"text-[7px] font-bold mt-1 opacity-70\">${i===0?'STRONG':'TOP'}</div></div>`;
+    const pannaBox=(x,i)=>`<div class=\"rounded-md border ${i===0?'border-emerald-200 bg-emerald-50':'border-slate-200 bg-white'} px-1.5 py-1 text-center\"><div class=\"text-[7px] font-bold text-slate-400\">${x.digit}</div><div class=\"text-base font-black tracking-wider leading-none text-slate-800\">${x.pannas[0]||'-'} <span class=\"text-slate-300\">/</span> ${x.pannas[1]||'-'}</div></div>`;
+    document.getElementById('finalOpenTop3').innerHTML=openPannaData.map(digitBox).join('');
+    document.getElementById('finalOpenPannas').innerHTML=openPannaData.map(pannaBox).join('');
+    document.getElementById('finalCloseTop3').innerHTML=closePannaData.map(digitBox).join('');
+    document.getElementById('finalClosePannas').innerHTML=closePannaData.map(pannaBox).join('');
+    document.getElementById('finalOpenDetails').innerText=openPannaData.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
+    document.getElementById('finalCloseDetails').innerText=closePannaData.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
     renderFinalRows(document.getElementById('finalJodiStrong'),strong5);renderFinalRows(document.getElementById('finalJodiSupport'),support5);
     const bestType=[...oeKeys].sort((a,b)=>oeDelay[b]-oeDelay[a])[0];
     document.getElementById('finalOddEvenBadge').innerText=bestType;
     document.getElementById('finalOddEvenFocus').innerText=`OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`;
     document.getElementById('finalConflict').innerText=bestJodiConflict?`⚠️ ${bestJodiConflict} Strong Jodiમાં 2+ conflict signals છે. Conflict Jodiને Strong તરીકે blindly ન લો.`:`✅ Strong Jodiમાં major conflict ઓછો છે.`;
     const shareText = [
-      `📊 ${selectedMarket==='ALL_MERGED'?'ALL MARKETS':selectedMarket} — GAME RANKING`,
-      `Open Top 3: ${topOpen.map(x=>x.digit).join(' • ')}`,
-      `Close Top 3: ${topClose.map(x=>x.digit).join(' • ')}`,
-      `Jodi O/E Focus: ${bestType} | OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`,
-      `🔥 Strong Jodi 5: ${strong5.map(x=>x.jodi).join(' • ')}`,
-      `🛡 Support Jodi 5: ${support5.map(x=>x.jodi).join(' • ')}`,
-      `Family: ${familyStrong.join(' • ')||'-'}`,
-      `Panna Group: ${pannaStrong.join(' • ')||'-'}`,
-      `Family Jodi: ${familyJodiStrong.join(' • ')||'-'}`,
-      `Signal: ${status}`,
-      `Note: Historical ranking only — not a guaranteed prediction.`
+      `OPEN  ${topOpen.map(x=>x.digit).join(' - ')}`,
+      `PANNA  ${openPannaText}`,
+      `CLOSE ${topClose.map(x=>x.digit).join(' - ')}`,
+      `PANNA  ${closePannaText}`,
+      `STRONG JODI  ${strong5.map(x=>x.jodi).join(' • ')}`,
+      `SUPPORT JODI ${support5.map(x=>x.jodi).join(' • ')}`
     ].join('\n');
     document.getElementById('shortlistShareText').value=shareText;
-    const statusEl=document.getElementById('finalSignalStatus');statusEl.innerText=status;statusEl.className=`text-[8px] font-black px-1.5 py-0.5 rounded ${status==='HIGH CONSENSUS'?'bg-emerald-100 text-emerald-700':status==='MODERATE'?'bg-amber-100 text-amber-700':'bg-rose-100 text-rose-700'}`;
+    const statusEl=document.getElementById('finalSignalStatus');statusEl.innerText=status==='HIGH CONSENSUS'?'STRONG GAME':status==='MODERATE'?'WATCH':'NOT STRONG';statusEl.className=`text-[8px] font-black px-1.5 py-0.5 rounded ${status==='HIGH CONSENSUS'?'bg-emerald-100 text-emerald-700':status==='MODERATE'?'bg-amber-100 text-amber-700':'bg-rose-100 text-rose-700'}`;
   }catch(e){console.log('Final shortlist error',e);showCustomAlert('Shortlist','Calculation error. Check console.','error');}
 }
 document.getElementById('refreshShortlistBtn')?.addEventListener('click',runFinalShortlist);
