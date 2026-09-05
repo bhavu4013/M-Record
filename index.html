@@ -179,6 +179,7 @@
 <div class="flex gap-2 pt-1">
 <button type="button" id="generateShortlistBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-md transition">Apply Rules & Generate</button>
 <button type="button" id="commonDigitsBtn" class="shrink-0 bg-purple-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-purple-700 shadow-md transition" title="Find Common Digits">Common 3</button>
+<button type="button" id="strongEngineBtn" class="shrink-0 bg-rose-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-rose-700 shadow-md transition" title="Open/Close Strong Ank and Jodi Ranking">Strong</button>
 <button type="button" id="strongSupportBtn" class="shrink-0 bg-rose-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-rose-700 shadow-md transition" title="Find Strong 5 and Support 5">Strong 5</button>
 </div> 
 </div> 
@@ -219,6 +220,22 @@
 </div>
 <button type="button" id="closeCommonDigitsModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
 </div>
+</div>
+
+<!-- Strong Signal Engine Modal -->
+<div id="strongEngineModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
+ <div class="bg-white p-5 rounded-2xl max-w-md w-full space-y-3 shadow-2xl max-h-[88vh] overflow-y-auto">
+  <div class="flex justify-between items-center border-b pb-2"><h3 class="text-sm font-bold text-slate-800">Strong Signal Engine</h3></div>
+  <div class="grid grid-cols-2 gap-2">
+   <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center"><div class="text-[10px] font-bold text-blue-700 uppercase">Open Strong 2</div><div id="strongOpenOutput" class="text-2xl font-black text-blue-800">-</div><div id="strongOpenDetails" class="text-[10px] text-slate-500"></div></div>
+   <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center"><div class="text-[10px] font-bold text-emerald-700 uppercase">Close Strong 2</div><div id="strongCloseOutput" class="text-2xl font-black text-emerald-800">-</div><div id="strongCloseDetails" class="text-[10px] text-slate-500"></div></div>
+  </div>
+  <div class="bg-purple-50 border border-purple-200 rounded-xl p-3 text-center"><div class="text-[10px] font-bold text-purple-700 uppercase">Common 3</div><div id="engineCommonOutput" class="text-2xl font-black tracking-[0.3em] text-purple-800">-</div><div id="engineCommonDetails" class="text-[10px] text-slate-500"></div></div>
+  <div class="bg-rose-50 border border-rose-200 rounded-xl p-3"><div class="text-xs font-bold text-rose-700 uppercase mb-2">🔥 Strong 5 Jodis</div><div id="strong5EngineOutput" class="space-y-1"></div></div>
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-3"><div class="text-xs font-bold text-amber-700 uppercase mb-2">Support 5 Jodis</div><div id="support5EngineOutput" class="space-y-1"></div></div>
+  <div class="bg-slate-50 border border-slate-200 rounded-xl p-3"><div class="text-xs font-bold text-slate-700 uppercase mb-1">Signal Status</div><div id="engineSignalStatus" class="text-xs font-semibold text-slate-600"></div><div class="text-[10px] text-slate-400 mt-1">Historical ranking only; not a guaranteed prediction.</div></div>
+  <button type="button" id="closeStrongEngineModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
+ </div>
 </div>
 
 <!-- Family Panna Group Breakdown Popup Modal with Bottom Red Close Button --> 
@@ -1019,6 +1036,93 @@ document.getElementById('strongSupportBtn').addEventListener('click', async () =
 
 document.getElementById('closeStrongSupportModalBtn').addEventListener('click', () => strongSupportModal.classList.add('hidden'));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') strongSupportModal.classList.add('hidden'); });
+
+// --- MULTI-SIGNAL STRONG ENGINE ---
+const strongEngineModal = document.getElementById('strongEngineModal');
+const engineCommonOutput = document.getElementById('engineCommonOutput');
+const engineCommonDetails = document.getElementById('engineCommonDetails');
+
+function engineRuleDigits() {
+  return [1,2,3,4].map(i => new Set((document.getElementById(`rule${i}Output`).innerText.match(/[0-9]/g) || [])));
+}
+function engineCommon3(ruleSets) {
+  const f = {}; ruleSets.forEach(set => set.forEach(d => f[d]=(f[d]||0)+1));
+  return Object.entries(f).sort((a,b)=>b[1]-a[1]||Number(a[0])-Number(b[0])).slice(0,3);
+}
+function engineValid(v){ return v!==undefined && v!==null && v!=='' && !isNaN(parseInt(v)); }
+function engineOpen(r){ return engineValid(r.openAnk)?parseInt(r.openAnk):null; }
+function engineClose(r){ return engineValid(r.closeAnk)?parseInt(r.closeAnk):null; }
+function engineDelayMap(records, getter){
+  const n=records.length, last=Array(10).fill(-1);
+  records.forEach((r,i)=>{const v=getter(r); if(v!==null) last[v]=i;});
+  return Array.from({length:10},(_,d)=>({digit:d,delay:last[d]<0?n:n-1-last[d],last:last[d]}));
+}
+function engineGroupInfo(records, view){
+  const getter = r => { const o=engineOpen(r), c=engineClose(r); if(view==='Open') return o; if(o===null||c===null)return null; return view==='Total'?(o+c)%10:(10+c-o)%10; };
+  const n=records.length, delays=Array(10).fill(0), last=Array(10).fill(-1); let topDelay=0,recentDelay=0;
+  records.forEach((r,idx)=>{
+    const list=Array.from({length:10},(_,d)=>({d,delay:delays[d],last:last[d]}));
+    const recent=list.slice().sort((a,b)=>a.delay-b.delay||b.last-a.last).slice(0,4); const rs=new Set(recent.map(x=>x.d));
+    const top=list.filter(x=>!rs.has(x.d)).sort((a,b)=>b.delay-a.delay||a.last-b.last).slice(0,4); const ts=new Set(top.map(x=>x.d));
+    const v=getter(r); if(ts.has(v)){topDelay=0;recentDelay++;} else if(rs.has(v)){recentDelay=0;topDelay++;} else {topDelay++;recentDelay++;}
+    for(let d=0;d<10;d++){if(d===v){delays[d]=0;last[d]=idx;}else delays[d]++;}
+  });
+  const list=Array.from({length:10},(_,d)=>({d,delay:delays[d],last:last[d]}));
+  const recent=list.slice().sort((a,b)=>a.delay-b.delay||b.last-a.last).slice(0,4); const rs=new Set(recent.map(x=>x.d));
+  const top=list.filter(x=>!rs.has(x.d)).sort((a,b)=>b.delay-a.delay||a.last-b.last).slice(0,4);
+  return {top:top.map(x=>x.d),recent:recent.map(x=>x.d),topDelay,recentDelay};
+}
+function engineJodiDelay(records,o,c){ let last=-1; records.forEach((r,i)=>{if(engineOpen(r)===o&&engineClose(r)===c)last=i;}); return last<0?records.length:records.length-1-last; }
+function engineDelayRank(records, getter){
+  return engineDelayMap(records,getter).sort((a,b)=>b.delay-a.delay||a.digit-b.digit).map((x,i)=>({...x,rank:10-i}));
+}
+function engineRenderRows(el,arr){ el.innerHTML=arr.map((x,i)=>`<div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs"><span class="font-black text-slate-800">${i+1}. ${x.jodi}</span><span class="font-bold text-rose-700">Score ${x.score}</span><span class="text-slate-500">D${x.delay}</span></div>`).join(''); }
+
+async function runStrongEngine(){
+  const selectedMarket=document.getElementById('shortlistMarketSelect').value;
+  try{
+    const snap=await getDocs(collection(db,'matka_records')); let records=[];
+    snap.forEach(ds=>{const r=ds.data(); if((selectedMarket==='ALL_MERGED'||!selectedMarket||r.marketName===selectedMarket)&&r.date&&r.marketName)records.push(r);});
+    records.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    if(!records.length){showCustomAlert('Strong Engine','No data available.','error');return;}
+    const ruleSets=engineRuleDigits(), common=engineCommon3(ruleSets), commonMap=Object.fromEntries(common);
+    const openDelay=engineDelayMap(records,engineOpen), closeDelay=engineDelayMap(records,engineClose);
+    const openRank=engineDelayRank(records,engineOpen), closeRank=engineDelayRank(records,engineClose);
+    const totalInfo=engineGroupInfo(records,'Total'), diffInfo=engineGroupInfo(records,'Diff');
+    const totalSet=new Set([...totalInfo.top,...totalInfo.recent].map(String)), diffSet=new Set([...diffInfo.top,...diffInfo.recent].map(String));
+    const commonSet=new Set(common.map(x=>x[0]));
+    const openScores=Array.from({length:10},(_,d)=>{let ruleSupport=ruleSets.reduce((n,s)=>n+(s.has(String(d))?1:0),0); let cd=commonMap[d]||0; let rank=(openRank.find(x=>x.digit===d)||{}).rank||0; return {d,score:ruleSupport*3+cd*4+rank};}).sort((a,b)=>b.score-a.score||a.d-b.d);
+    const strongOpen=openScores.slice(0,2).map(x=>x.d);
+    const closeScores=Array.from({length:10},(_,d)=>{let ruleSupport=ruleSets.reduce((n,s)=>n+(s.has(String(d))?1:0),0); let cd=commonMap[d]||0; let rank=(closeRank.find(x=>x.digit===d)||{}).rank||0; let rel=(totalSet.has(String(d))?2:0)+(diffSet.has(String(d))?1:0); return {d,score:ruleSupport*2+cd*4+rank+rel};}).sort((a,b)=>b.score-a.score||a.d-b.d);
+    const strongClose=closeScores.slice(0,2).map(x=>x.d);
+    const candidates=[];
+    for(let o=0;o<=9;o++)for(let c=0;c<=9;c++){
+      const os=openScores.find(x=>x.d===o), cs=closeScores.find(x=>x.d===c), commonCount=(commonSet.has(String(o))?1:0)+(commonSet.has(String(c))?1:0);
+      const ruleSupport=ruleSets.reduce((n,s)=>n+(s.has(String(o))?1:0)+(s.has(String(c))?1:0),0);
+      const d=engineJodiDelay(records,o,c), delayScore=Math.min(10,d), both=(strongOpen.includes(o)&&strongClose.includes(c))?10:0;
+      const total=(o+c)%10, diff=(10+c-o)%10;
+      let score=(os?.score||0)+(cs?.score||0)+both+commonCount*4+ruleSupport+delayScore+(totalSet.has(String(total))?2:0)+(diffSet.has(String(diff))?2:0);
+      candidates.push({jodi:`${o}${c}`,open:o,close:c,delay:d,commonCount,score});
+    }
+    candidates.sort((a,b)=>b.score-a.score||b.delay-a.delay||a.open-b.open||a.close-b.close);
+    const strong5=candidates.filter(x=>x.commonCount>=1).slice(0,5);
+    const strongSet=new Set(strong5.map(x=>x.jodi));
+    const support5=candidates.filter(x=>!strongSet.has(x.jodi)&&((strongOpen.includes(x.open)||strongClose.includes(x.close))||x.commonCount===1)).slice(0,5);
+    document.getElementById('strongOpenOutput').innerText=strongOpen.join('  ');
+    document.getElementById('strongOpenDetails').innerText=openScores.slice(0,2).map(x=>`S${x.score}`).join(' • ');
+    document.getElementById('strongCloseOutput').innerText=strongClose.join('  ');
+    document.getElementById('strongCloseDetails').innerText=closeScores.slice(0,2).map(x=>`S${x.score}`).join(' • ');
+    engineCommonOutput.innerText=common.length?common.map(x=>x[0]).join('  '):'-';
+    engineCommonDetails.innerText=common.length?common.map(x=>`${x[0]}=${x[1]}/4`).join(' • '):'-';
+    engineRenderRows(document.getElementById('strong5EngineOutput'),strong5);
+    engineRenderRows(document.getElementById('support5EngineOutput'),support5);
+    const topSupport=strong5[0]?.score||0, second=strong5[1]?.score||0;
+    document.getElementById('engineSignalStatus').innerText=(common.filter(x=>x[1]>=3).length>=2&&topSupport-second>=3)?'STRONG CONSENSUS':'MODERATE / MIXED SIGNAL';
+    strongEngineModal.classList.remove('hidden');
+  }catch(e){console.log('Strong engine error',e);showCustomAlert('Strong Engine','Calculation error. Check console.','error');}
+}
+document.getElementById('strongEngineBtn').addEventListener('click',runStrongEngine);
+document.getElementById('closeStrongEngineModalBtn').addEventListener('click',()=>strongEngineModal.classList.add('hidden'));
 
 // --- DYNAMIC GROUP-WISE DELAY SIMULATION & ANALYSIS ---
 async function loadAnalysisData() { 
