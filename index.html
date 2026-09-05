@@ -176,11 +176,50 @@
 <div id="rule4Output" class="text-sm font-black text-slate-800 tracking-wider">-</div> 
 </div> 
 </div> 
-<button type="button" id="generateShortlistBtn" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-md transition">Apply Rules & Generate</button> 
+<div class="flex gap-2 pt-1">
+<button type="button" id="generateShortlistBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-md transition">Apply Rules & Generate</button>
+<button type="button" id="commonDigitsBtn" class="shrink-0 bg-purple-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-purple-700 shadow-md transition" title="Find Common Digits">Common 3</button>
+<button type="button" id="strongSupportBtn" class="shrink-0 bg-rose-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-rose-700 shadow-md transition" title="Find Strong 5 and Support 5">Strong 5</button>
+</div> 
 </div> 
 </div> 
 
 </div> 
+
+<!-- Common Digits Popup Modal -->
+<div id="strongSupportModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
+<div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+<div class="flex justify-between items-center border-b pb-2">
+<h3 class="text-sm font-bold text-slate-800">Strong 5 & Support 5 Jodi</h3>
+</div>
+<div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center space-y-2">
+<div class="text-xs font-bold text-rose-700 uppercase">🔥 Best Strong 5</div>
+<div id="strong5Output" class="text-2xl font-black tracking-wider text-rose-800">-</div>
+<div id="strong5Details" class="text-[10px] font-semibold text-slate-500">Apply Rules & Generate first</div>
+</div>
+<div class="bg-sky-50 border border-sky-200 rounded-xl p-3 text-center space-y-2">
+<div class="text-xs font-bold text-sky-700 uppercase">🛡 Support 5</div>
+<div id="support5Output" class="text-2xl font-black tracking-wider text-sky-800">-</div>
+<div id="support5Details" class="text-[10px] font-semibold text-slate-500">-</div>
+</div>
+<div id="strongSupportScoreDetails" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[10px] text-slate-600 space-y-1"></div>
+<button type="button" id="closeStrongSupportModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
+</div>
+</div>
+
+<div id="commonDigitsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
+<div class="bg-white p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
+<div class="flex justify-between items-center border-b pb-2">
+<h3 class="text-sm font-bold text-slate-800">Common 3 Digits</h3>
+</div>
+<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center space-y-2">
+<div class="text-xs font-bold text-purple-700 uppercase">Top Common Digits</div>
+<div id="commonDigitsOutput" class="text-3xl font-black tracking-[0.35em] text-purple-800">-</div>
+<div id="commonDigitsDetails" class="text-xs font-semibold text-slate-500">Apply Rules & Generate first</div>
+</div>
+<button type="button" id="closeCommonDigitsModalBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button>
+</div>
+</div>
 
 <!-- Family Panna Group Breakdown Popup Modal with Bottom Red Close Button --> 
 <div id="fpDetailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50"> 
@@ -597,17 +636,20 @@ marketDropdown.dispatchEvent(new Event('change'));
 async function loadMarkets() { 
 const marketDropdown = document.getElementById('marketDropdown'); 
 const analysisMarketSelect = document.getElementById('analysisMarketSelect'); 
+const shortlistMarketSelect = document.getElementById('shortlistMarketSelect');
 let currentSelected = marketDropdown.value; 
 try { 
 const querySnapshot = await getDocs(collection(db, "markets")); 
 marketDropdown.innerHTML = '<option value="">Select Market</option>'; 
 analysisMarketSelect.innerHTML = '<option value="ALL_MERGED">All Markets (Merged)</option>'; 
+shortlistMarketSelect.innerHTML = '<option value="ALL_MERGED">All Markets (Merged)</option>';
 marketsList = []; 
 querySnapshot.forEach((docSnap) => marketsList.push({ id: docSnap.id, ...docSnap.data() })); 
 marketsList.sort((a, b) => (a.openTime || "23:59").localeCompare(b.openTime || "23:59")); 
 marketsList.forEach(mData => { 
 let opt1 = document.createElement('option'); opt1.value = mData.name; opt1.textContent = mData.name; marketDropdown.appendChild(opt1); 
 let opt2 = document.createElement('option'); opt2.value = mData.name; opt2.textContent = mData.name; analysisMarketSelect.appendChild(opt2); 
+let opt3 = document.createElement('option'); opt3.value = mData.name; opt3.textContent = mData.name; shortlistMarketSelect.appendChild(opt3);
 }); 
 if (currentSelected) marketDropdown.value = currentSelected; 
 else selectDefaultMarketByTime(); 
@@ -616,199 +658,367 @@ checkValidationAndStatus();
 } 
 loadMarkets(); 
 
-async function loadShortlistMarkets() { 
-const shortlistMarketSelect = document.getElementById('shortlistMarketSelect'); 
-shortlistMarketSelect.innerHTML = '<option value="">All Markets (Merged)</option>'; 
-marketsList.forEach(m => { 
-let opt = document.createElement('option'); opt.value = m.name; opt.textContent = m.name; 
-shortlistMarketSelect.appendChild(opt); 
-}); 
-} 
+// --- SHORTLIST RULES CALCULATION LOGIC ---
+// Rules use the same TOP / MID / RECENT 4-digit grouping logic as the
+// Open, Total and Diff analysis views. MID is intentionally ignored.
+document.getElementById('generateShortlistBtn').addEventListener('click', async () => {
+    const selectedMarket = document.getElementById('shortlistMarketSelect').value;
+    const rule1Out = document.getElementById('rule1Output');
+    const rule2Out = document.getElementById('rule2Output');
+    const rule3Out = document.getElementById('rule3Output');
+    const rule4Out = document.getElementById('rule4Output');
 
-// SHORTLIST RULES CALCULATION LOGIC 
-document.getElementById('generateShortlistBtn').addEventListener('click', async () => { 
-const selectedMarket = document.getElementById('shortlistMarketSelect').value; 
-let rule1Out = document.getElementById('rule1Output'); 
-let rule2Out = document.getElementById('rule2Output'); 
-let rule3Out = document.getElementById('rule3Output'); 
-let rule4Out = document.getElementById('rule4Output'); 
+    [rule1Out, rule2Out, rule3Out, rule4Out].forEach(el => el.innerText = "Calculating...");
 
-rule1Out.innerText = "Calculating..."; 
-rule2Out.innerText = "Calculating..."; 
-rule3Out.innerText = "Calculating..."; 
-rule4Out.innerText = "Calculating..."; 
+    try {
+        const querySnapshot = await getDocs(collection(db, "matka_records"));
+        let rawRecords = [];
 
-try { 
-const querySnapshot = await getDocs(collection(db, "matka_records")); 
-let rawRecords = []; 
-querySnapshot.forEach((docSnap) => { 
-let data = docSnap.data(); 
-let matchMarket = (selectedMarket === "" || data.marketName === selectedMarket); 
-if (matchMarket && data.date && data.marketName) { 
-rawRecords.push(data); 
-} 
-}); 
+        querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const matchMarket = (
+                selectedMarket === "ALL_MERGED" ||
+                selectedMarket === "" ||
+                data.marketName === selectedMarket
+            );
+            if (matchMarket && data.date && data.marketName) rawRecords.push(data);
+        });
 
-rawRecords.sort((a, b) => new Date(a.date) - new Date(b.date)); 
-let totalLen = rawRecords.length; 
-if (totalLen === 0) { 
-rule1Out.innerText = rule2Out.innerText = rule3Out.innerText = rule4Out.innerText = "No data available"; 
-return; 
-} 
+        // Keep the same chronological ordering used by the Analysis page.
+        rawRecords.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-const digitFamilyPannaMap = { 
-"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
-}; 
+        if (rawRecords.length === 0) {
+            [rule1Out, rule2Out, rule3Out, rule4Out]
+                .forEach(el => el.innerText = "No data available");
+            return;
+        }
 
-// --- RULE 1 ---
-let openAnksList = rawRecords.filter(r => r.openAnk !== undefined && r.openAnk !== "").map(r => parseInt(r.openAnk)); 
-let openAnkStats = {}; 
-for(let i=0; i<=9; i++) openAnkStats[i] = {occ: [], delay: totalLen}; 
-openAnksList.forEach((val, idx) => { if(val>=0 && val<=9) openAnkStats[val].occ.push(idx); }); 
-for(let i=0; i<=9; i++) { 
-let occs = openAnkStats[i].occ; 
-if(occs.length > 0) openAnkStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
-} 
-let sortedOpenAnks = Object.keys(openAnkStats).sort((a,b) => openAnkStats[b].delay - openAnkStats[a].delay); 
-let r1Digits = []; 
-if(sortedOpenAnks.length > 0) { 
-let topOpen = sortedOpenAnks[0]; 
-let recentOpen = sortedOpenAnks[sortedOpenAnks.length - 1]; 
-let r1TargetAnk = openAnkStats[topOpen].delay >= openAnkStats[recentOpen].delay ? topOpen : recentOpen; 
-r1Digits = digitFamilyPannaMap[r1TargetAnk] ? digitFamilyPannaMap[r1TargetAnk][0].split('').map(Number) : [parseInt(r1TargetAnk)]; 
-r1Digits.sort((a, b) => openAnkStats[b].delay - openAnkStats[a].delay); 
-} 
-rule1Out.innerText = r1Digits.length > 0 ? `[ ${r1Digits.join(', ')} ]` : "N/A"; 
+        const validAnk = value => value !== undefined && value !== null && value !== "" && !isNaN(parseInt(value));
+        const getOpen = r => validAnk(r.openAnk) ? parseInt(r.openAnk) : null;
+        const getClose = r => validAnk(r.closeAnk) ? parseInt(r.closeAnk) : null;
 
-// --- RULE 2 ---
-let closeAnksList = rawRecords.filter(r => r.closeAnk !== undefined && r.closeAnk !== "").map(r => parseInt(r.closeAnk)); 
-let closeAnkStats = {}; 
-for(let i=0; i<=9; i++) closeAnkStats[i] = {occ: [], delay: totalLen}; 
-closeAnksList.forEach((val, idx) => { if(val>=0 && val<=9) closeAnkStats[val].occ.push(idx); }); 
-for(let i=0; i<=9; i++) { 
-let occs = closeAnkStats[i].occ; 
-if(occs.length > 0) closeAnkStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
-} 
-let sortedClose = Object.keys(closeAnkStats).sort((a,b) => closeAnkStats[b].delay - closeAnkStats[a].delay); 
-let r2Digits = []; 
-if(sortedClose.length >= 4) { 
-let top4Close = sortedClose.slice(0, 4); 
-let recent4Close = sortedClose.slice(sortedClose.length - 4); 
-let top4Delay = Math.max(...top4Close.map(x => closeAnkStats[x].delay)); 
-let recent4Delay = Math.max(...recent4Close.map(x => closeAnkStats[x].delay)); 
-let targetCloseGroup = top4Delay >= recent4Delay ? top4Close : recent4Close; 
+        // Returns the exact TOP and RECENT 4-digit groups and their current
+        // group delays using the same dynamic method as the Analysis page.
+        function getViewGroups(view) {
+            const records = rawRecords.map(r => {
+                const o = getOpen(r), c = getClose(r);
+                let val = null;
 
-let jodiCounts = {}; 
-let jodiLastSeen = {}; 
-rawRecords.forEach((r, idx) => { 
-if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
-let j = `${r.openAnk}${r.closeAnk}`; 
-jodiCounts[j] = (jodiCounts[j] || 0) + 1; 
-jodiLastSeen[j] = idx; 
-} 
-}); 
-let validJodis = Object.keys(jodiCounts).filter(j => targetCloseGroup.includes(j[1])); 
-validJodis.sort((a,b) => { 
-let delayA = jodiLastSeen[a] !== undefined ? totalLen - 1 - jodiLastSeen[a] : totalLen; 
-let delayB = jodiLastSeen[b] !== undefined ? totalLen - 1 - jodiLastSeen[b] : totalLen; 
-return delayB - delayA; 
-}); 
-let mostDelayed4Jodis = validJodis.slice(0, 4); 
-r2Digits = mostDelayed4Jodis.map(j => parseInt(j[0])); 
-} 
-rule2Out.innerText = r2Digits.length > 0 ? `[ ${r2Digits.join(', ')} ]` : "N/A"; 
+                if (view === "Open") val = o;
+                else if (view === "Total" && o !== null && c !== null) val = (o + c) % 10;
+                else if (view === "Diff" && o !== null && c !== null) val = (10 + c - o) % 10;
 
-// --- RULE 3 ---
-let totalStats = {}; 
-for(let i=0; i<=9; i++) totalStats[i] = {occ: [], delay: totalLen}; 
-rawRecords.forEach((r, idx) => { 
-if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
-let t = (parseInt(r.openAnk) + parseInt(r.closeAnk)) % 10; 
-totalStats[t].occ.push(idx); 
-} 
-}); 
-for(let i=0; i<=9; i++) { 
-let occs = totalStats[i].occ; 
-if(occs.length > 0) totalStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
-} 
-let sortedTotals = Object.keys(totalStats).sort((a,b) => totalStats[b].delay - totalStats[a].delay); 
-let r3Digits = []; 
-if(sortedTotals.length > 0) { 
-let tTop = sortedTotals[0]; 
-let tRecent = sortedTotals[sortedTotals.length - 1]; 
-let targetTotal = totalStats[tTop].delay >= totalStats[tRecent].delay ? tTop : tRecent; 
+                return { ...r, val };
+            });
 
-let jodiTotalCounts = {}; 
-let jodiTotalLastSeen = {}; 
-rawRecords.forEach((r, idx) => { 
-if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
-let t = (parseInt(r.openAnk) + parseInt(r.closeAnk)) % 10; 
-if(t.toString() === targetTotal.toString()) { 
-let j = `${r.openAnk}${r.closeAnk}`; 
-jodiTotalCounts[j] = (jodiTotalCounts[j] || 0) + 1; 
-jodiTotalLastSeen[j] = idx; 
-} 
-} 
-}); 
-let validTotalJodis = Object.keys(jodiTotalCounts); 
-validTotalJodis.sort((a,b) => { 
-let delayA = jodiTotalLastSeen[a] !== undefined ? totalLen - 1 - jodiTotalLastSeen[a] : totalLen; 
-let delayB = jodiTotalLastSeen[b] !== undefined ? totalLen - 1 - jodiTotalLastSeen[b] : totalLen; 
-return delayB - delayA; 
-}); 
-let sortedTotalJodis = validTotalJodis.slice(0, 4); 
-r3Digits = sortedTotalJodis.map(j => parseInt(j[0])); 
-} 
-rule3Out.innerText = r3Digits.length > 0 ? `[ ${r3Digits.join(', ')} ]` : "N/A"; 
+            const totalLen = records.length;
+            if (totalLen === 0) return { top: [], recent: [], topDelay: 0, recentDelay: 0 };
 
-// --- RULE 4 ---
-let diffStats = {}; 
-for(let i=0; i<=9; i++) diffStats[i] = {occ: [], delay: totalLen}; 
-rawRecords.forEach((r, idx) => { 
-if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
-let d = (10 + parseInt(r.closeAnk) - parseInt(r.openAnk)) % 10; 
-diffStats[d].occ.push(idx); 
-} 
-}); 
-for(let i=0; i<=9; i++) { 
-let occs = diffStats[i].occ; 
-if(occs.length > 0) diffStats[i].delay = totalLen - 1 - occs[occs.length - 1]; 
-} 
-let sortedDiffs = Object.keys(diffStats).sort((a,b) => diffStats[b].delay - diffStats[a].delay); 
-let r4Digits = []; 
-if(sortedDiffs.length > 0) { 
-let dTop = sortedDiffs[0]; 
-let dRecent = sortedDiffs[sortedDiffs.length - 1]; 
-let targetDiff = diffStats[dTop].delay >= diffStats[dRecent].delay ? dTop : dRecent; 
+            let digitDelays = {};
+            let digitLastSeen = {};
+            for (let i = 0; i <= 9; i++) {
+                digitDelays[i] = 0;
+                digitLastSeen[i] = -1;
+            }
 
-let jodiDiffCounts = {}; 
-let jodiDiffLastSeen = {}; 
-rawRecords.forEach((r, idx) => { 
-if(r.openAnk !== undefined && r.closeAnk !== undefined && r.openAnk !== "" && r.closeAnk !== "") { 
-let d = (10 + parseInt(r.closeAnk) - parseInt(r.openAnk)) % 10; 
-if(d.toString() === targetDiff.toString()) { 
-let j = `${r.openAnk}${r.closeAnk}`; 
-jodiDiffCounts[j] = (jodiDiffCounts[j] || 0) + 1; 
-jodiDiffLastSeen[j] = idx; 
-} 
-} 
-}); 
-let validDiffJodis = Object.keys(jodiDiffCounts); 
-validDiffJodis.sort((a,b) => { 
-let delayA = jodiDiffLastSeen[a] !== undefined ? totalLen - 1 - jodiDiffLastSeen[a] : totalLen; 
-let delayB = jodiDiffLastSeen[b] !== undefined ? totalLen - 1 - jodiDiffLastSeen[b] : totalLen; 
-return delayB - delayA; 
-}); 
-let sortedDiffJodis = validDiffJodis.slice(0, 4); 
-r4Digits = sortedDiffJodis.map(j => parseInt(j[0])); 
-} 
-rule4Out.innerText = r4Digits.length > 0 ? `[ ${r4Digits.join(', ')} ]` : "N/A"; 
+            let topGroupDelay = 0;
+            let recentGroupDelay = 0;
 
-} catch (e) { 
-rule1Out.innerText = rule2Out.innerText = rule3Out.innerText = rule4Out.innerText = "Error calculating rules"; 
-console.log("Rule calculation error details:", e); 
-} 
-}); 
+            records.forEach((rec, idx) => {
+                const dList = [];
+                for (let i = 0; i <= 9; i++) {
+                    dList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] });
+                }
+
+                const sortedRecent = [...dList].sort(
+                    (a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen
+                );
+                const recent4 = sortedRecent.slice(0, 4);
+                const recentSet = new Set(recent4.map(x => x.ank));
+
+                const remaining = dList.filter(x => !recentSet.has(x.ank));
+                const sortedTop = [...remaining].sort(
+                    (a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen
+                );
+                const top4 = sortedTop.slice(0, 4);
+                const topSet = new Set(top4.map(x => x.ank));
+
+                if (topSet.has(rec.val)) {
+                    topGroupDelay = 0;
+                    recentGroupDelay++;
+                } else if (recentSet.has(rec.val)) {
+                    recentGroupDelay = 0;
+                    topGroupDelay++;
+                } else {
+                    topGroupDelay++;
+                    recentGroupDelay++;
+                }
+
+                for (let i = 0; i <= 9; i++) {
+                    if (i === rec.val) {
+                        digitDelays[i] = 0;
+                        digitLastSeen[i] = idx;
+                    } else {
+                        digitDelays[i]++;
+                    }
+                }
+            });
+
+            // Final TOP / RECENT 4 digits, exactly as Analysis does.
+            const currentDList = [];
+            for (let i = 0; i <= 9; i++) {
+                currentDList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] });
+            }
+
+            const curSortedRecent = [...currentDList].sort(
+                (a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen
+            );
+            const recent4 = curSortedRecent.slice(0, 4);
+            const recentSet = new Set(recent4.map(x => x.ank));
+
+            const curRemaining = currentDList.filter(x => !recentSet.has(x.ank));
+            const curSortedTop = [...curRemaining].sort(
+                (a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen
+            );
+            const top4 = curSortedTop.slice(0, 4);
+
+            return {
+                top: top4.map(x => x.ank),
+                recent: recent4.map(x => x.ank),
+                topDelay: topGroupDelay,
+                recentDelay: recentGroupDelay
+            };
+        }
+
+        function selectMoreDelayedGroup(view) {
+            const groups = getViewGroups(view);
+            // If equal, TOP is selected consistently with the existing code.
+            const useTop = groups.topDelay >= groups.recentDelay;
+            return {
+                digits: useTop ? groups.top : groups.recent,
+                delay: useTop ? groups.topDelay : groups.recentDelay,
+                source: useTop ? "TOP" : "RECENT"
+            };
+        }
+
+        // Delay of a specific Jodi. IMPORTANT: unseen Jodis are included and
+        // receive delay = number of games, so they can correctly rank as most delayed.
+        function jodiDelay(openDigit, closeDigit) {
+            const target = `${openDigit}${closeDigit}`;
+            let lastSeen = -1;
+
+            rawRecords.forEach((r, idx) => {
+                const o = getOpen(r), c = getClose(r);
+                if (o !== null && c !== null && `${o}${c}` === target) lastSeen = idx;
+            });
+
+            return lastSeen === -1 ? rawRecords.length : rawRecords.length - 1 - lastSeen;
+        }
+
+        function rankJodis(jodis) {
+            return jodis.map(j => ({
+                ...j,
+                delay: jodiDelay(j.open, j.close)
+            })).sort((a, b) =>
+                b.delay - a.delay || a.open - b.open || a.close - b.close
+            );
+        }
+
+        // RULE 1 — Open View:
+        // Compare TOP and RECENT groups, ignore MID, and return the 4 digits
+        // belonging to the more delayed group.
+        const openGroup = selectMoreDelayedGroup("Open");
+        const r1Digits = openGroup.digits.slice(0, 4);
+        rule1Out.innerText = `[ ${r1Digits.join(', ')} ]`;
+
+        // RULE 2 — Close View:
+        // Use the more delayed TOP/RECENT group from TOTAL VIEW as CLOSE digits.
+        // Form every possible Jodi (open 0-9 × selected close digits), then
+        // select the 4 most delayed Jodis and fetch their OPEN digits.
+        const totalGroupForRule2 = selectMoreDelayedGroup("Total");
+        const rule2Candidates = [];
+        for (let open = 0; open <= 9; open++) {
+            totalGroupForRule2.digits.forEach(close => {
+                rule2Candidates.push({ open, close });
+            });
+        }
+        const rule2Top4 = rankJodis(rule2Candidates).slice(0, 4);
+        const r2Digits = rule2Top4.map(j => j.open);
+        rule2Out.innerText = r2Digits.length ? `[ ${r2Digits.join(', ')} ]` : "N/A";
+
+        // RULE 3 — Total View:
+        // Take the more delayed TOP/RECENT TOTAL group. For each selected total,
+        // generate every Jodi whose (open + close) % 10 equals that total.
+        // Rank all such Jodis by delay, take 4, and return their OPEN anks.
+        const totalGroupForRule3 = selectMoreDelayedGroup("Total");
+        const rule3Candidates = [];
+        totalGroupForRule3.digits.forEach(total => {
+            for (let open = 0; open <= 9; open++) {
+                const close = (total - open + 10) % 10;
+                rule3Candidates.push({ open, close, total });
+            }
+        });
+        const rule3Top4 = rankJodis(rule3Candidates).slice(0, 4);
+        const r3Digits = rule3Top4.map(j => j.open);
+        rule3Out.innerText = r3Digits.length ? `[ ${r3Digits.join(', ')} ]` : "N/A";
+
+        // RULE 4 — Diff View:
+        // Take the more delayed TOP/RECENT DIFF group. For each selected diff,
+        // generate every Jodi whose (close - open + 10) % 10 equals that diff.
+        // Rank all such Jodis by delay, take 4, and return their OPEN anks.
+        const diffGroup = selectMoreDelayedGroup("Diff");
+        const rule4Candidates = [];
+        diffGroup.digits.forEach(diff => {
+            for (let open = 0; open <= 9; open++) {
+                const close = (open + diff) % 10;
+                rule4Candidates.push({ open, close, diff });
+            }
+        });
+        const rule4Top4 = rankJodis(rule4Candidates).slice(0, 4);
+        const r4Digits = rule4Top4.map(j => j.open);
+        rule4Out.innerText = r4Digits.length ? `[ ${r4Digits.join(', ')} ]` : "N/A";
+
+    } catch (e) {
+        rule1Out.innerText = rule2Out.innerText = rule3Out.innerText = rule4Out.innerText = "Error calculating rules";
+        console.log("Rule calculation error details:", e);
+    }
+});
+
+// --- COMMON 3 DIGITS FROM ALL 4 RULE OUTPUTS ---
+const commonDigitsModal = document.getElementById('commonDigitsModal');
+const commonDigitsOutput = document.getElementById('commonDigitsOutput');
+const commonDigitsDetails = document.getElementById('commonDigitsDetails');
+
+document.getElementById('commonDigitsBtn').addEventListener('click', () => {
+  const ruleOutputs = [
+    document.getElementById('rule1Output').innerText,
+    document.getElementById('rule2Output').innerText,
+    document.getElementById('rule3Output').innerText,
+    document.getElementById('rule4Output').innerText
+  ];
+  const frequency = {};
+  ruleOutputs.forEach(output => {
+    const digitsInRule = [...new Set((output || '').match(/[0-9]/g) || [])];
+    digitsInRule.forEach(digit => frequency[digit] = (frequency[digit] || 0) + 1);
+  });
+  const ranked = Object.entries(frequency).sort((a,b) => b[1] - a[1] || Number(a[0]) - Number(b[0]));
+  const top3 = ranked.slice(0, 3);
+  commonDigitsOutput.innerText = top3.length ? top3.map(([digit]) => digit).join('  ') : '-';
+  commonDigitsDetails.innerText = top3.length ? top3.map(([digit,count]) => `${digit} = ${count}/4 Rules`).join('   •   ') : 'No rule digits available. Apply Rules & Generate first.';
+  commonDigitsModal.classList.remove('hidden');
+});
+
+document.getElementById('closeCommonDigitsModalBtn').addEventListener('click', () => commonDigitsModal.classList.add('hidden'));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') commonDigitsModal.classList.add('hidden'); });
+
+// --- STRONG 5 + SUPPORT 5 JODI RANKING ---
+const strongSupportModal = document.getElementById('strongSupportModal');
+const strong5Output = document.getElementById('strong5Output');
+const support5Output = document.getElementById('support5Output');
+const strong5Details = document.getElementById('strong5Details');
+const support5Details = document.getElementById('support5Details');
+const strongSupportScoreDetails = document.getElementById('strongSupportScoreDetails');
+
+function getRuleDigitsForScoring() {
+  const outputs = [1,2,3,4].map(n => document.getElementById(`rule${n}Output`).innerText || '');
+  return outputs.map(output => new Set((output.match(/[0-9]/g) || [])));
+}
+
+function getCommon3ForScoring() {
+  const ruleSets = getRuleDigitsForScoring();
+  const freq = {};
+  ruleSets.forEach(set => set.forEach(d => freq[d] = (freq[d] || 0) + 1));
+  return Object.entries(freq)
+    .sort((a,b) => b[1] - a[1] || Number(a[0]) - Number(b[0]))
+    .slice(0,3)
+    .map(([d]) => Number(d));
+}
+
+function calculateStrongSupport(rawRecords, common3, ruleSets) {
+  const totalGames = rawRecords.length;
+  const lastSeen = {};
+  for (let o=0;o<=9;o++) for (let c=0;c<=9;c++) lastSeen[`${o}${c}`] = -1;
+  rawRecords.forEach((r,idx) => {
+    const o = r.openAnk !== undefined && r.openAnk !== '' && !isNaN(parseInt(r.openAnk)) ? parseInt(r.openAnk) : null;
+    const c = r.closeAnk !== undefined && r.closeAnk !== '' && !isNaN(parseInt(r.closeAnk)) ? parseInt(r.closeAnk) : null;
+    if (o !== null && c !== null) lastSeen[`${o}${c}`] = idx;
+  });
+
+  const freqMap = {};
+  ruleSets.forEach(set => set.forEach(d => freqMap[d] = (freqMap[d] || 0) + 1));
+  const commonSet = new Set(common3);
+
+  const candidates = [];
+  for (let open=0; open<=9; open++) {
+    for (let close=0; close<=9; close++) {
+      const key = `${open}${close}`;
+      const delay = lastSeen[key] === -1 ? totalGames : totalGames - 1 - lastSeen[key];
+      const openCommon = commonSet.has(open);
+      const closeCommon = commonSet.has(close);
+      const commonCount = (openCommon ? 1 : 0) + (closeCommon ? 1 : 0);
+      const commonStrength = (freqMap[open] || 0) + (freqMap[close] || 0);
+      const ruleSupport = ruleSets.reduce((n,set) => n + (set.has(String(open)) ? 1 : 0) + (set.has(String(close)) ? 1 : 0), 0);
+      const delayScore = Math.min(delay, 10);
+      const score = (commonCount * 6) + (commonStrength * 2) + (ruleSupport * 2) + delayScore;
+      candidates.push({ open, close, jodi:key, delay, commonCount, commonStrength, ruleSupport, score });
+    }
+  }
+
+  const sortCandidates = (a,b) => b.score-a.score || b.delay-a.delay || b.commonStrength-a.commonStrength || a.open-b.open || a.close-b.close;
+  const strong = candidates.filter(x => x.commonCount === 2).sort(sortCandidates).slice(0,5);
+  const strongKeys = new Set(strong.map(x => x.jodi));
+  const support = candidates
+    .filter(x => x.commonCount === 1 && !strongKeys.has(x.jodi))
+    .sort(sortCandidates)
+    .slice(0,5);
+
+  return { strong, support, totalGames };
+}
+
+document.getElementById('strongSupportBtn').addEventListener('click', async () => {
+  const selectedMarket = document.getElementById('shortlistMarketSelect').value;
+  const ruleOutputs = [1,2,3,4].map(n => document.getElementById(`rule${n}Output`).innerText || '');
+  if (ruleOutputs.some(x => !/[0-9]/.test(x))) {
+    strong5Output.innerText = support5Output.innerText = '-';
+    strong5Details.innerText = 'Apply Rules & Generate first';
+    support5Details.innerText = 'No rule data available';
+    strongSupportScoreDetails.innerHTML = '';
+    strongSupportModal.classList.remove('hidden');
+    return;
+  }
+
+  strong5Output.innerText = support5Output.innerText = 'Calculating...';
+  try {
+    const querySnapshot = await getDocs(collection(db, 'matka_records'));
+    const rawRecords = [];
+    querySnapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const matchMarket = selectedMarket === 'ALL_MERGED' || selectedMarket === '' || data.marketName === selectedMarket;
+      if (matchMarket && data.date && data.marketName) rawRecords.push(data);
+    });
+    rawRecords.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+    const ruleSets = getRuleDigitsForScoring();
+    const common3 = getCommon3ForScoring();
+    const result = calculateStrongSupport(rawRecords, common3, ruleSets);
+
+    strong5Output.innerText = result.strong.length ? result.strong.map(x => x.jodi).join('  ') : 'N/A';
+    support5Output.innerText = result.support.length ? result.support.map(x => x.jodi).join('  ') : 'N/A';
+    strong5Details.innerText = result.strong.length ? result.strong.map(x => `${x.jodi}: ${x.score} pts / ${x.delay} delay`).join(' • ') : 'No strong Jodis';
+    support5Details.innerText = result.support.length ? result.support.map(x => `${x.jodi}: ${x.score} pts / ${x.delay} delay`).join(' • ') : 'No support Jodis';
+    strongSupportScoreDetails.innerHTML = `<div class="font-bold text-slate-700">Common 3: ${common3.join(', ') || '-'}</div><div>Score = Common × 6 + Rule Strength × 2 + Rule Hits × 2 + Delay (max 10)</div><div class="pt-1">Strong = both Jodi digits in Common 3. Support = exactly one Common 3 digit. Historical ranking only.</div>`;
+    strongSupportModal.classList.remove('hidden');
+  } catch (e) {
+    strong5Output.innerText = support5Output.innerText = 'Error';
+    strong5Details.innerText = support5Details.innerText = 'Calculation error';
+    strongSupportScoreDetails.innerText = e.message || 'Unknown error';
+    strongSupportModal.classList.remove('hidden');
+    console.log('Strong/Support calculation error:', e);
+  }
+});
+
+document.getElementById('closeStrongSupportModalBtn').addEventListener('click', () => strongSupportModal.classList.add('hidden'));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') strongSupportModal.classList.add('hidden'); });
 
 // --- DYNAMIC GROUP-WISE DELAY SIMULATION & ANALYSIS ---
 async function loadAnalysisData() { 
