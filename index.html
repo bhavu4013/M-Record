@@ -673,18 +673,20 @@ try {
 const querySnapshot = await getDocs(collection(db, "markets")); 
 marketDropdown.innerHTML = '<option value="">Select Market</option>'; 
 analysisMarketSelect.innerHTML = '<option value="ALL_MERGED">All Markets (Merged)</option>'; 
-shortlistMarketSelect.innerHTML = '<option value="ALL_MERGED">All Markets (Merged)</option>';
+shortlistMarketSelect.innerHTML = '<option value="ALL_MERGED">All Markets</option>';
 marketsList = []; 
 querySnapshot.forEach((docSnap) => marketsList.push({ id: docSnap.id, ...docSnap.data() })); 
 marketsList.sort((a, b) => (a.openTime || "23:59").localeCompare(b.openTime || "23:59")); 
 marketsList.forEach(mData => { 
 let opt1 = document.createElement('option'); opt1.value = mData.name; opt1.textContent = mData.name; marketDropdown.appendChild(opt1); 
 let opt2 = document.createElement('option'); opt2.value = mData.name; opt2.textContent = mData.name; analysisMarketSelect.appendChild(opt2); 
-let opt3 = document.createElement('option'); opt3.value = mData.name; opt3.textContent = mData.name; shortlistMarketSelect.appendChild(opt3);
+
 }); 
 if (currentSelected) marketDropdown.value = currentSelected; 
 else selectDefaultMarketByTime();
-if (shortlistSelected && [...shortlistMarketSelect.options].some(o => o.value === shortlistSelected)) shortlistMarketSelect.value = shortlistSelected; 
+refreshShortlistMarketOptions(true);
+if (shortlistSelected && [...shortlistMarketSelect.options].some(o => o.value === shortlistSelected)) shortlistMarketSelect.value = shortlistSelected;
+else shortlistMarketSelect.value = 'ALL_MERGED';
 checkValidationAndStatus();
 // Do not run the shortlist/popup on initial page load. It is triggered when the Shortlist page is opened.
 } catch (e) { console.log(e); } 
@@ -757,6 +759,28 @@ function marketWorksOnDate(market,dateObj){
   if(!market.workingDays) return true;
   const daysMap=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   return market.workingDays.includes(daysMap[dateObj.getDay()]);
+}
+
+// Shortlist market selector: show only markets that RUN on the selected date.
+// ALL MARKETS is intentionally NOT filtered: it always means the complete
+// historical database used for ranking/calculation.
+function refreshShortlistMarketOptions(preserveValue=true){
+  const select=document.getElementById('shortlistMarketSelect');
+  const dateEl=document.getElementById('shortlistDate');
+  if(!select || !dateEl) return;
+  const selectedDate=dateEl.value || localDateKey(new Date());
+  const dateObj=new Date(`${selectedDate}T12:00:00`);
+  const oldValue=preserveValue ? select.value : 'ALL_MERGED';
+  select.innerHTML='<option value="ALL_MERGED">All Markets</option>';
+  const ordered=marketsList.slice().sort((a,b)=>(timeToMinutes(a.openTime)??1439)-(timeToMinutes(b.openTime)??1439));
+  ordered.filter(m=>marketWorksOnDate(m,dateObj)).forEach(m=>{
+    const opt=document.createElement('option');
+    opt.value=m.name;
+    opt.textContent=m.name;
+    select.appendChild(opt);
+  });
+  const stillValid=Array.from(select.options).some(o=>o.value===oldValue);
+  select.value=stillValid ? oldValue : 'ALL_MERGED';
 }
 function timeToMinutes(t){
   if(!t) return null;
@@ -1122,7 +1146,10 @@ document.getElementById('savePerformancePlayBtn')?.addEventListener('click',asyn
   showCustomAlert('Saved','My play and market rates saved.','success');renderPerformanceSummary(await calculatePerformanceRows());
 });
 
-document.getElementById('shortlistDate')?.addEventListener('change',()=>runFinalShortlist(false));
+document.getElementById('shortlistDate')?.addEventListener('change',()=>{
+  refreshShortlistMarketOptions(false);
+  runFinalShortlist(false);
+});
 document.getElementById('refreshShortlistBtn')?.addEventListener('click',()=>runFinalShortlist(false));
 document.getElementById('shortlistMarketSelect')?.addEventListener('change',()=>runFinalShortlist(false));
 const shortlistDateEl=document.getElementById('shortlistDate');
@@ -1883,6 +1910,9 @@ showCustomAlert("Error", error.message, "error");
   }
 })();
 </script>
+
+
+
 
 </body> 
 </html>
