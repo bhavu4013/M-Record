@@ -10,21 +10,21 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 </style>
 </head> 
-<body class="bg-slate-100 p-4 min-h-screen flex flex-col items-center justify-between pb-20"> 
+<body class="bg-slate-100 p-4 min-h-screen flex flex-col items-center justify-between pb-24"> 
 
 <!-- Main Container Card --> 
 <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-4 my-auto"> 
-<h2 id="pageTitle" class="text-xl font-bold text-center text-slate-800 tracking-wide">Daily Activity Logger</h2> 
+<div class="text-center pb-1"><div id="pageTitle" class="text-xl font-bold text-slate-800 tracking-wide">M RECORD</div><div class="text-[9px] font-bold tracking-widest text-slate-500 mt-1">PERSONAL ANALYTICS PORTAL</div></div> 
 
-<!-- Alert Box --> 
+<!-- LOGGER SECTION --> 
+<div id="loggerSection" class="hidden space-y-4 w-full">
+<!-- Logger-only Alert Box --> 
 <div id="entryAlertBox" class="hidden bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700 font-semibold text-center w-full"> 
 ⚠️ <span id="alertMessageText">Entry for this session already exists! Switching to Update mode.</span> 
 </div> 
-
-<!-- LOGGER SECTION --> 
-<div id="loggerSection" class="space-y-4 w-full"> 
 <form id="matkaForm" class="space-y-4 w-full"> 
 <input type="hidden" id="recordId"> 
 
@@ -150,13 +150,18 @@
 </div> 
 
 <!-- SHORTLIST SECTION -->
-<div id="shortlistSection" class="hidden space-y-1.5 w-full">
+<div id="shortlistSection" class="space-y-1.5 w-full">
   <div class="mb-1.5">
     <div class="text-xs font-extrabold text-slate-800 leading-none mb-1">Shortlist Ranking</div>
-    <div class="flex items-center gap-2">
-      <select id="shortlistMarketSelect" class="flex-1 min-w-0 border border-slate-300 rounded-md px-2 py-1.5 text-[10px] bg-white font-semibold h-8"><option value="ALL_MERGED">All Markets</option></select>
-      <button id="refreshShortlistBtn" type="button" title="Refresh Ranking" class="h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[10px] font-extrabold shadow-sm">Refresh</button>
+    <div class="grid grid-cols-2 gap-2">
+      <label class="text-[8px] font-black text-slate-500 uppercase">Selected Date
+        <input id="shortlistDate" type="date" class="w-full border border-slate-300 rounded-md px-2 py-1.5 text-[10px] bg-white font-semibold h-8">
+      </label>
+      <label class="text-[8px] font-black text-slate-500 uppercase">Market
+        <select id="shortlistMarketSelect" class="w-full border border-slate-300 rounded-md px-2 py-1.5 text-[10px] bg-white font-semibold h-8"><option value="ALL_MERGED">All Markets</option></select>
+      </label>
     </div>
+    <button id="refreshShortlistBtn" type="button" title="Refresh Ranking" class="w-full h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[10px] font-extrabold shadow-sm">Refresh Shortlist</button>
   </div>
   <div id="shortlistGameCard" class="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm space-y-2">
     <div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">GAME RANKING</span><span id="finalSignalStatus" class="text-[8px] font-black px-2 py-1 rounded-full">-</span></div>
@@ -167,7 +172,7 @@
       <div id="finalOpenPannas" class="grid grid-cols-3 gap-1.5 mt-1.5"></div>
       <div id="finalOpenDetails" class="hidden"></div>
     </div>
-    <div class="border-t border-slate-100 pt-2">
+    <div id="finalCloseSection" class="border-t border-slate-100 pt-2 hidden">
       <div class="text-[9px] font-black text-slate-500 mb-1">CLOSE</div>
       <div id="finalCloseTop3" class="grid grid-cols-3 gap-1.5">-</div>
       <div id="finalClosePannas" class="grid grid-cols-3 gap-1.5 mt-1.5"></div>
@@ -177,9 +182,42 @@
   <div class="rounded-xl border border-violet-200 bg-violet-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-violet-700">JODI ODD / EVEN</span><span id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</span></div><div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-0.5"></div></div>
   <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 5</div><div id="finalJodiStrong" class="grid grid-cols-5 gap-1"></div></div>
   <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 5</div><div id="finalJodiSupport" class="grid grid-cols-5 gap-1"></div></div>
-  <div class="flex items-center justify-end gap-2 pt-0.5"><button id="recentGamesBtn" type="button" class="border border-indigo-300 text-indigo-700 rounded-lg px-4 py-1.5 text-[10px] font-black bg-indigo-50 hover:bg-indigo-100 shadow-sm">Recent Games</button><button id="copyShortlistBtn" class="border border-slate-300 rounded-lg px-4 py-1.5 text-[10px] font-black bg-white hover:bg-slate-50 shadow-sm">Copy Game</button></div>
+  <div class="flex items-center justify-end gap-2 pt-0.5"><button id="performanceBtn" type="button" class="border border-emerald-300 text-emerald-700 rounded-lg px-4 py-1.5 text-[10px] font-black bg-emerald-50 hover:bg-emerald-100 shadow-sm">Performance</button><button id="recentGamesBtn" type="button" class="border border-indigo-300 text-indigo-700 rounded-lg px-4 py-1.5 text-[10px] font-black bg-indigo-50 hover:bg-indigo-100 shadow-sm">Recent Games</button><button id="copyShortlistBtn" class="border border-slate-300 rounded-lg px-4 py-1.5 text-[10px] font-black bg-white hover:bg-slate-50 shadow-sm">Copy Game</button></div>
   <textarea id="shortlistShareText" class="hidden" aria-hidden="true"></textarea>
   <div id="finalOddEven" class="hidden"></div><div id="finalConflict" class="hidden"></div>
+</div>
+
+<!-- PERFORMANCE / MY PLAY POPUP -->
+<div id="performanceModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-3 z-[70]">
+  <div class="bg-white p-3 rounded-2xl max-w-md w-full shadow-2xl space-y-2 max-h-[92vh] overflow-y-auto">
+    <div class="flex justify-between items-center border-b pb-2"><h3 class="text-sm font-black text-slate-800">PERFORMANCE & MY PLAY</h3><button id="closePerformanceBtn" type="button" class="text-slate-400 hover:text-slate-700 text-lg font-black">×</button></div>
+    <div id="performanceSummary" class="grid grid-cols-2 gap-1.5"></div>
+    <div class="rounded-xl border border-blue-200 bg-blue-50 p-2 space-y-1.5">
+      <div class="text-[9px] font-black text-blue-700">RECORD MY PLAY FOR CURRENT RANKING</div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <label class="text-[8px] font-bold text-slate-600">Market<input id="perfMarket" class="w-full border rounded-md px-2 py-1 text-[10px] bg-white" readonly></label>
+        <label class="text-[8px] font-bold text-slate-600">Game Date<input id="perfDate" type="date" class="w-full border rounded-md px-2 py-1 text-[10px] bg-white"></label>
+      </div>
+      <div class="text-[8px] font-bold text-slate-500">Amount is total stake for all displayed selections in that category; winnings are calculated per winning selection.</div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <label class="text-[8px] font-bold text-slate-600">Jodi Total ₹<input id="perfJodiStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+        <label class="text-[8px] font-bold text-slate-600">Panna Total ₹<input id="perfPannaStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+        <label class="text-[8px] font-bold text-slate-600">Open Total ₹<input id="perfOpenStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+        <label class="text-[8px] font-bold text-slate-600">Close Total ₹<input id="perfCloseStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+      </div>
+      <div class="text-[9px] font-black text-slate-600 pt-1">MARKET RATES (₹ RETURN PER ₹1 STAKE)</div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <label class="text-[8px] font-bold text-slate-600">Jodi Rate<input id="perfJodiRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+        <label class="text-[8px] font-bold text-slate-600">Panna Rate<input id="perfPannaRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+        <label class="text-[8px] font-bold text-slate-600">Open Rate<input id="perfOpenRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+        <label class="text-[8px] font-bold text-slate-600">Close Rate<input id="perfCloseRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
+      </div>
+      <div id="perfPredictionPreview" class="rounded-lg bg-white border border-blue-100 p-2 text-[8px] font-bold text-slate-600"></div>
+      <button id="savePerformancePlayBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-[10px] font-black">Save My Play</button>
+    </div>
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-2"><div class="text-[9px] font-black text-slate-700 mb-1">RECORDED GAMES</div><div id="performanceHistory" class="space-y-1"></div></div>
+    <button id="closePerformanceFooterBtn" type="button" class="w-full bg-slate-800 text-white py-2 rounded-xl text-xs font-black">Close</button>
+  </div>
 </div>
 
 <!-- Recent Games Popup -->
@@ -206,18 +244,22 @@
 </div> 
 
 <!-- Bottom Navigation Bar --> 
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg flex justify-around p-2 max-w-md mx-auto z-40 rounded-t-2xl"> 
-<button id="navLoggerBtn" class="flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"> 
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg> 
-<span class="text-xs">Logger</span> 
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg flex justify-around p-1.5 max-w-md mx-auto z-40"> 
+<button id="navShortlistBtn" class="flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"> 
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> 
+<span class="text-[10px]">Shortlist</span> 
 </button> 
-<button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"> 
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> 
-<span class="text-xs">Analysis</span> 
+<button id="navLoggerBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"> 
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg> 
+<span class="text-[10px]">Logger</span> 
 </button> 
-<button id="navShortlistBtn" class="flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"> 
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> 
-<span class="text-xs">Shortlist</span> 
+<button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"> 
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> 
+<span class="text-[10px]">Analysis</span> 
+</button> 
+<button id="navPerformanceBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"> 
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 16l4-5 3 3 6-8"></path></svg> 
+<span class="text-[10px]">Performance</span> 
 </button> 
 </div> 
 
@@ -300,7 +342,8 @@ let globalAllRecords = [];
 
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
 const navAnalysisBtn = document.getElementById('navAnalysisBtn'); 
-const navShortlistBtn = document.getElementById('navShortlistBtn'); 
+const navShortlistBtn = document.getElementById('navShortlistBtn');
+const navPerformanceBtn = document.getElementById('navPerformanceBtn'); 
 
 const loggerSection = document.getElementById('loggerSection'); 
 const analysisSection = document.getElementById('analysisSection'); 
@@ -312,10 +355,10 @@ loggerSection.classList.remove('hidden');
 analysisSection.classList.add('hidden'); 
 shortlistSection.classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
-pageTitle.innerText = "Daily Activity Logger"; 
-navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
-navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
-navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+pageTitle.innerText = "M RECORD"; 
+navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
+navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-500 font-semibold transition"; 
 checkValidationAndStatus(); 
 }); 
 
@@ -325,9 +368,9 @@ loggerSection.classList.add('hidden');
 shortlistSection.classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Data Analysis Portal"; 
-navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
-navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
-navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
+navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-500 font-semibold transition"; 
 loadAnalysisData(); 
 }); 
 
@@ -337,11 +380,25 @@ loggerSection.classList.add('hidden');
 analysisSection.classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Game Shortlist Portal"; 
-navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-blue-600 font-bold transition"; 
-navLoggerBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
-navAnalysisBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-400 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
+navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
+navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
 loadMarkets().then(()=>runFinalShortlist(true)).catch(e=>console.error('Shortlist market load error',e));
 }); 
+
+// Performance is the fourth main navigation destination; the existing performance modal remains the data/UI layer.
+navPerformanceBtn.addEventListener('click', () => {
+shortlistSection.classList.remove('hidden');
+loggerSection.classList.add('hidden');
+analysisSection.classList.add('hidden');
+document.getElementById('entryAlertBox').classList.add('hidden');
+pageTitle.innerText = "Performance & My Play";
+navPerformanceBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition";
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+loadMarkets().then(()=>{ runFinalShortlist(false); openPerformanceModal(); }).catch(e=>console.error('Performance market load error',e));
+});
 
 const analysisViewBtns = document.querySelectorAll('.analysis-view-btn'); 
 const familyPannaOptionsContainer = document.getElementById('familyPannaOptionsContainer'); 
@@ -691,12 +748,124 @@ function renderRecentGames(records,selectedMarket){
   modal.classList.remove('hidden');
 }
 
+function localDateKey(dateObj=new Date()){
+  const y=dateObj.getFullYear(),m=String(dateObj.getMonth()+1).padStart(2,'0'),d=String(dateObj.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function marketWorksOnDate(market,dateObj){
+  if(!market) return false;
+  if(!market.workingDays) return true;
+  const daysMap=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  return market.workingDays.includes(daysMap[dateObj.getDay()]);
+}
+function timeToMinutes(t){
+  if(!t) return null;
+  const parts=String(t).split(':').map(Number);
+  if(parts.length<2 || Number.isNaN(parts[0]) || Number.isNaN(parts[1])) return null;
+  return parts[0]*60+parts[1];
+}
+function getScheduleState(record, nowMinutes){
+  const hasOpen=digitOf(record?.openAnk)!==null;
+  const hasClose=digitOf(record?.closeAnk)!==null;
+  if(hasOpen && !hasClose) return 'CLOSE_PENDING';
+  if(hasOpen && hasClose) return 'COMPLETED';
+  return nowMinutes===null?'OPEN':(nowMinutes>=0?'OPEN':'OPEN');
+}
+
+// Automatically choose the market/session that should be on the Shortlist Home.
+// Priority: pending Close -> next unplayed Open -> next working day's first Open.
+// This is intentionally independent of the last manually selected market so a
+// completed Milan game can never leave stale Shridevi data on the Home screen.
+async function autoSelectShortlistMarket(allRecords){
+  if(!marketsList.length) return null;
+  const dateInput=document.getElementById('shortlistDate');
+  const dropdown=document.getElementById('shortlistMarketSelect');
+  const now=new Date();
+  const todayKey=localDateKey(now);
+  const selectedDate=dateInput?.value || todayKey;
+  const selectedDateObj=new Date(`${selectedDate}T00:00:00`);
+  const isToday=selectedDate===todayKey;
+  const nowMinutes=now.getHours()*60+now.getMinutes();
+  const ordered=marketsList.slice().sort((a,b)=>(timeToMinutes(a.openTime)??1439)-(timeToMinutes(b.openTime)??1439));
+  const dateMarkets=ordered.filter(m=>marketWorksOnDate(m,selectedDateObj));
+  const dateRecords=new Map();
+  allRecords.filter(r=>r.date===selectedDate && r.marketName).forEach(r=>dateRecords.set(r.marketName,r));
+
+  // IMPORTANT: this function only identifies the target game internally.
+  // It NEVER changes the user's Market selection or Selected Date.
+  // Therefore ALL_MERGED always remains ALL_MERGED.
+  for(const m of dateMarkets){
+    const r=dateRecords.get(m.name);
+    if(getScheduleState(r,isToday?nowMinutes:null)==='CLOSE_PENDING'){
+      return {market:m.name,date:selectedDate,session:'Close',reason:'pending-close',marketObj:m};
+    }
+  }
+
+  // First uncompleted market for the selected date.
+  for(const m of dateMarkets){
+    const r=dateRecords.get(m.name);
+    if(getScheduleState(r,isToday?nowMinutes:null)!=='COMPLETED'){
+      return {market:m.name,date:selectedDate,session:'Open',reason:'next-open',marketObj:m};
+    }
+  }
+
+  // Only for TODAY, if everything is complete, identify next working day.
+  // Do not change the selected date automatically; only report the next target.
+  if(isToday){
+    for(let offset=1;offset<=14;offset++){
+      const next=new Date(now);
+      next.setDate(now.getDate()+offset);
+      const nextMarkets=ordered.filter(m=>marketWorksOnDate(m,next));
+      if(nextMarkets.length){
+        const target=nextMarkets[0];
+        return {market:target.name,date:localDateKey(next),session:'Open',reason:'next-day',marketObj:target};
+      }
+    }
+  }
+  return {market:null,date:selectedDate,session:'Open',reason:'date-complete',marketObj:null};
+}
+function formatMarketTime(t){
+  if(!t) return '--';
+  const [h,m]=String(t).split(':').map(Number);
+  if(Number.isNaN(h)||Number.isNaN(m)) return String(t);
+  const d=new Date(); d.setHours(h,m,0,0);
+  return d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+}
+
 async function runFinalShortlist(showPendingPopup=false){
-  const selectedMarket=document.getElementById('shortlistMarketSelect').value;
   try{
-    const snap=await getDocs(collection(db,'matka_records'));let records=[];
-    snap.forEach(ds=>{const r=ds.data();if((selectedMarket==='ALL_MERGED'||!selectedMarket||r.marketName===selectedMarket)&&r.date&&r.marketName)records.push(r);});
+    // Always inspect the full schedule/history first. The Home screen must
+    // follow the real market sequence instead of preserving a stale selection.
+    const allSnap=await getDocs(collection(db,'matka_records'));let allRecords=[];
+    allSnap.forEach(ds=>{const r=ds.data();if(r.date&&r.marketName)allRecords.push(r);});
+    allRecords.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    // The selected date controls ONLY the target game. Historical ranking data
+    // must remain available across previous dates; otherwise a new/opening game
+    // has no history to calculate from.
+    const dateEl=document.getElementById('shortlistDate');
+    if(dateEl && !dateEl.value) dateEl.value=localDateKey(new Date());
+    const selectedDate=dateEl?.value || localDateKey(new Date());
+    const autoState=await autoSelectShortlistMarket(allRecords);
+    const selectedMarket=document.getElementById('shortlistMarketSelect').value || 'ALL_MERGED';
+
+    // Target records are locked to the selected date.
+    const targetRecords=allRecords.filter(r=>r.date===selectedDate && r.marketName &&
+      (selectedMarket==='ALL_MERGED'||r.marketName===selectedMarket));
+
+    // Historical records are used for ranking. Exclude the selected-date
+    // current/pending game so today's new game does not contaminate history.
+    let records=allRecords.filter(r=>r.marketName &&
+      (selectedMarket==='ALL_MERGED'||r.marketName===selectedMarket));
     records.sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+    // For All Markets, autoState identifies the actual target market while the
+    // dropdown remains All Markets so merged-history ranking still works.
+    const targetMarket=autoState?.market || (selectedMarket!=='ALL_MERGED'?selectedMarket:null);
+    const currentTargetRecords=targetRecords.filter(r=>!targetMarket || r.marketName===targetMarket);
+    const targetRecord=currentTargetRecords.slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).at(-1) || null;
+
+    // If the selected market/date has no entry yet, we still calculate the
+    // opening shortlist from historical completed games.
     if(!records.length){
       document.getElementById('shortlistGameCard').innerHTML='<div class="py-3 text-center text-[10px] font-bold text-slate-500">No game data found for this market.</div>';
       document.getElementById('finalJodiStrong').innerHTML='';
@@ -708,18 +877,19 @@ async function runFinalShortlist(showPendingPopup=false){
     // For ALL_MERGED, detect the newest pending game from any market and
     // recalculate that market's Close ranking (rather than treating the
     // whole merged history as one current game).
-    const pendingRecords=records.filter(r=>digitOf(r.openAnk)!==null && digitOf(r.closeAnk)===null);
-    const latestRecord=records[records.length-1];
-    const latestPending=pendingRecords.length ? pendingRecords[pendingRecords.length-1] : null;
-    const currentRecord=(selectedMarket==='ALL_MERGED' && latestPending) ? latestPending : latestRecord;
+    const currentRecord=targetRecord;
     const latestOpen=currentRecord ? digitOf(currentRecord.openAnk) : null;
     const latestClose=currentRecord ? digitOf(currentRecord.closeAnk) : null;
+    // OPEN screen stays clean: show CLOSE section only after an Open result exists
+    // and the same selected-date game is waiting for its Close result.
+    const closeSection=document.getElementById('finalCloseSection');
+    if(closeSection) closeSection.classList.toggle('hidden', !(latestOpen!==null && latestClose===null));
     if(latestOpen!==null && latestClose===null){
       const pendingMarket=currentRecord.marketName;
       // Market-specific mode uses only that market's completed history.
       // All Markets (Merged) mode intentionally uses the full merged history,
       // so its Close ranking is independent from the individual market ranking.
-      const calcRecords=selectedMarket==='ALL_MERGED' ? records : records;
+      const calcRecords=selectedMarket==='ALL_MERGED' ? records : records.filter(r=>r.marketName===pendingMarket);
       const completed=calcRecords.filter(r=>digitOf(r.openAnk)!==null && digitOf(r.closeAnk)!==null);
       const cn=completed.length;
       if(cn===0){
@@ -766,8 +936,10 @@ async function runFinalShortlist(showPendingPopup=false){
         return Object.values(stats).map(x=>({...x,delay:cn-1-x.last,recent20:completed.slice(-20).filter(r=>numP(r.closePana)===x.p).length,recent10:completed.slice(-10).filter(r=>numP(r.closePana)===x.p).length}))
           .sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
       };
+      const pendingPannaMap=currentCloseTop3.map(x=>bestPannasForCurrentClose(x.digit));
+      saveCurrentPredictionSnapshot(selectedMarket,{market:pendingMarket,targetMarket:pendingMarket,targetDate:currentRecord.date,openTop3:[String(latestOpen)],closeTop3:currentCloseTop3.map(x=>String(x.digit)),openPannas:[],closePannas:pendingPannaMap.flat(),strongJodi:[],supportJodi:[]});
       const closePannaCards=currentCloseTop3.map((x,i)=>{
-        const pannas=bestPannasForCurrentClose(x.digit);
+        const pannas=pendingPannaMap[i];
         return `<div class="rounded-lg border ${i===0?'border-emerald-300 bg-emerald-100 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center"><div class="text-2xl font-black leading-none">${x.digit}</div><div class="text-[7px] font-black mt-1">${i===0?'BEST CLOSE':'TOP CLOSE'}</div><div class="mt-1 text-[7px] font-bold text-slate-500">BEST 2 PANNA</div><div class="text-sm font-black tracking-wider text-slate-800 mt-0.5">${pannas[0]||'-'}&nbsp;&nbsp;${pannas[1]||'-'}</div><div class="mt-1 text-[7px] text-slate-500">Open ${latestOpen} → ${x.digit} • ${x.conditionalCount} historical</div></div>`;
       }).join('');
       document.getElementById('shortlistGameCard').innerHTML=`<div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">CURRENT GAME</span><span class="text-[8px] font-black px-2 py-1 rounded-full bg-amber-100 text-amber-700">CLOSE PENDING</span></div><div class="rounded-lg border border-blue-200 bg-blue-50 px-2 py-1.5"><div class="text-[8px] font-black text-blue-700">MARKET: ${pendingMarket} • DATE: ${currentRecord.date}</div><div class="text-[11px] font-black text-slate-900 mt-0.5">OPEN ${latestOpen} → CLOSE RANKING</div><div class="text-[7px] font-semibold text-slate-500 mt-0.5">આ ranking માત્ર આ current gameના Close માટે છે.</div></div><div><div class="text-[9px] font-black text-slate-500 mb-1">OPEN — CURRENT GAME</div><div class="rounded-lg border border-blue-300 bg-blue-50 px-2 py-2 text-center"><div class="text-[7px] font-black text-blue-600">CURRENT OPEN</div><div class="text-3xl font-black leading-none text-blue-900">${latestOpen}</div></div></div><div class="border-t border-slate-100 pt-2"><div class="text-[9px] font-black text-slate-500 mb-1">CLOSE — RECALCULATED FROM OPEN ${latestOpen}</div><div class="grid grid-cols-3 gap-1.5">${closePannaCards}</div></div>`;
@@ -866,6 +1038,7 @@ async function runFinalShortlist(showPendingPopup=false){
     document.getElementById('finalOddEvenBadge').innerText=bestType;
     document.getElementById('finalOddEvenFocus').innerText=`OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`;
     document.getElementById('finalConflict').innerText=bestJodiConflict?`⚠️ ${bestJodiConflict} Strong Jodiમાં 2+ conflict signals છે. Conflict Jodiને Strong તરીકે blindly ન લો.`:`✅ Strong Jodiમાં major conflict ઓછો છે.`;
+    saveCurrentPredictionSnapshot(selectedMarket,{market:selectedMarket,targetMarket:selectedMarket==='ALL_MERGED'?null:selectedMarket,targetDate:'',openTop3:topOpen.map(x=>String(x.digit)),closeTop3:topClose.map(x=>String(x.digit)),openPannas:openPannaData.flatMap(x=>x.pannas),closePannas:closePannaData.flatMap(x=>x.pannas),strongJodi:strong5.map(x=>x.jodi),supportJodi:support5.map(x=>x.jodi)});
     const shareText = [
       `OPEN  ${topOpen.map(x=>x.digit).join(' - ')}`,
       `PANNA  ${openPannaText}`,
@@ -876,15 +1049,97 @@ async function runFinalShortlist(showPendingPopup=false){
     ].join('\n');
     document.getElementById('shortlistShareText').value=shareText;
     const targetEl=document.getElementById('shortlistTargetGame');
-    if(targetEl) targetEl.innerText=`NEXT GAME • MARKET: ${selectedMarket==='ALL_MERGED'?'ALL MARKETS':(selectedMarket||'—')} • THIS RANKING IS FOR THE NEXT GAME`;
+    if(targetEl){
+      const targetMarketObj=autoState?.marketObj || marketsList.find(m=>m.name===selectedMarket);
+      const autoLabel=autoState?.date?`DATE: ${autoState.date}`:`DATE: ${selectedDate}`;
+      const timing=targetMarketObj ? ` • OPEN ${formatMarketTime(targetMarketObj.openTime)} • CLOSE ${formatMarketTime(targetMarketObj.closeTime)}` : '';
+      const sessionLabel=autoState?.session ? ` • ${String(autoState.session).toUpperCase()} SHORTLIST` : '';
+      targetEl.innerText=`${autoLabel} • MARKET: ${selectedMarket==='ALL_MERGED'?'ALL MARKETS':(selectedMarket||'—')}${timing}${sessionLabel}`;
+    }
     // Keep the latest completed prediction available for Recent Games review when a prediction was generated before its result.
     const latestCompleted=records.filter(r=>digitOf(r.openAnk)!==null&&digitOf(r.closeAnk)!==null).at(-1);
     if(latestCompleted){const existing=getShortlistPrediction(latestCompleted.marketName,latestCompleted.date);if(!existing) saveShortlistPrediction(latestCompleted.marketName,latestCompleted.date,{market:latestCompleted.marketName,date:latestCompleted.date,open:String(digitOf(latestCompleted.openAnk)),closeTop3:[]});}
     const statusEl=document.getElementById('finalSignalStatus');statusEl.innerText=status==='HIGH CONSENSUS'?'STRONG GAME':status==='MODERATE'?'WATCH':'NOT STRONG';statusEl.className=`text-[8px] font-black px-1.5 py-0.5 rounded ${status==='HIGH CONSENSUS'?'bg-emerald-100 text-emerald-700':status==='MODERATE'?'bg-amber-100 text-amber-700':'bg-rose-100 text-rose-700'}`;
   }catch(e){console.error('Final shortlist error',e); const box=document.getElementById('shortlistGameCard'); if(box) box.innerHTML=`<div class="py-4 text-center"><div class="text-sm font-black text-rose-700">Shortlist calculation unavailable</div><div class="text-[10px] font-semibold text-slate-500 mt-1">Data calculationમાં સમસ્યા આવી. Please tap Refresh and try again.</div></div>`;}
 }
+// --- PERFORMANCE / MY PLAY TRACKER ---
+const perfPlayKeyPrefix='shortlist_play_v1::';
+const perfCurrentKey=market=>`shortlist_current_prediction_v3::${market||'ALL_MERGED'}`;
+const perfRateKey=market=>`shortlist_rates_v1::${market||'ALL_MERGED'}`;
+function saveCurrentPredictionSnapshot(market,data){try{localStorage.setItem(perfCurrentKey(market),JSON.stringify({...data,savedAt:Date.now()}));}catch(e){console.warn('Current prediction snapshot skipped',e);}}
+function getCurrentPredictionSnapshot(market){try{const raw=localStorage.getItem(perfCurrentKey(market));return raw?JSON.parse(raw):null;}catch(e){return null;}}
+function getPerfPlays(){const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(perfPlayKeyPrefix)){try{out.push(JSON.parse(localStorage.getItem(k)));}catch(e){}}}return out.sort((a,b)=>String(b.date).localeCompare(String(a.date))||((b.savedAt||0)-(a.savedAt||0)));}
+function savePerfPlay(play){localStorage.setItem(`${perfPlayKeyPrefix}${play.market}::${play.date}`,JSON.stringify(play));}
+function getPerfRates(market){try{const raw=localStorage.getItem(perfRateKey(market));return raw?JSON.parse(raw):{};}catch(e){return {};}}
+function savePerfRates(market,r){try{localStorage.setItem(perfRateKey(market),JSON.stringify(r));}catch(e){}}
+function money(v){return `₹${Number(v||0).toFixed(2)}`;}
+function predictionCounts(p){return {open:(p?.openTop3||[]).length,close:(p?.closeTop3||[]).length,jodi:(p?.strongJodi||[]).length+(p?.supportJodi||[]).length,panna:(p?.openPannas||[]).length+(p?.closePannas||[]).length};}
+async function calculatePerformanceRows(){
+  const plays=getPerfPlays();
+  if(!plays.length)return [];
+  let records=[];try{const snap=await getDocs(collection(db,'matka_records'));snap.forEach(ds=>{const r=ds.data();if(r.date&&r.marketName)records.push(r);});}catch(e){console.warn('Performance result load failed',e);}
+  return plays.map(play=>{
+    const rec=records.find(r=>r.marketName===play.market&&r.date===play.date);
+    const open=digitOf(rec?.openAnk),close=digitOf(rec?.closeAnk),actualJodi=(open!==null&&close!==null)?`${open}${close}`:null;
+    const openP=numP(rec?.openPana),closeP=numP(rec?.closePana);
+    const p=play.prediction||{};const jodis=[...(p.strongJodi||[]),...(p.supportJodi||[])];
+    const openPannas=(p.openPannas||[]),closePannas=(p.closePannas||[]);
+    const c=predictionCounts(p);const inv=Number(play.jodiStake||0)+Number(play.pannaStake||0)+Number(play.openStake||0)+Number(play.closeStake||0);
+    let win=0;let jodiHit=false,pannaHit=false,openHit=false,closeHit=false;
+    if(actualJodi&&jodis.includes(actualJodi)&&c.jodi>0){jodiHit=true;win+=(Number(play.jodiStake||0)/c.jodi)*Number(play.jodiRate||0);}
+    if(openP&&openPannas.includes(openP)&&c.panna>0){pannaHit=true;win+=(Number(play.pannaStake||0)/c.panna)*Number(play.pannaRate||0);}
+    if(closeP&&closePannas.includes(closeP)&&c.panna>0){if(!pannaHit)win+=(Number(play.pannaStake||0)/c.panna)*Number(play.pannaRate||0);pannaHit=true;}
+    if(open!==null&&(p.openTop3||[]).map(String).includes(String(open))&&c.open>0){openHit=true;win+=(Number(play.openStake||0)/c.open)*Number(play.openRate||0);}
+    if(close!==null&&(p.closeTop3||[]).map(String).includes(String(close))&&c.close>0){closeHit=true;win+=(Number(play.closeStake||0)/c.close)*Number(play.closeRate||0);}
+    const complete=open!==null&&close!==null;const net=complete?win-inv:0;
+    return {...play,complete,actualOpen:open,actualClose:close,actualJodi,jodiHit,pannaHit,openHit,closeHit,investment:inv,winning:win,net};
+  });
+}
+function renderPerformanceSummary(rows){
+  const done=rows.filter(x=>x.complete),inv=done.reduce((s,x)=>s+x.investment,0),win=done.reduce((s,x)=>s+x.winning,0),net=win-inv;
+  const hits=(key)=>done.filter(x=>x[key]).length,pass=done.length?((hits('jodiHit')+hits('pannaHit')+hits('openHit')+hits('closeHit'))>0?done.filter(x=>x.jodiHit||x.pannaHit||x.openHit||x.closeHit).length/done.length*100:0):0;
+  const box=(t,v,c='slate')=>`<div class="rounded-lg border border-${c}-200 bg-${c}-50 px-2 py-1.5"><div class="text-[7px] font-black text-${c}-600">${t}</div><div class="text-sm font-black text-${c}-900">${v}</div></div>`;
+  document.getElementById('performanceSummary').innerHTML=box('GAMES',done.length)+box('PASS %',`${pass.toFixed(1)}%`,'blue')+box('INVESTMENT',money(inv))+box('WINNING',money(win),'emerald')+box('NET P/L',money(net),net>=0?'emerald':'rose')+box('JODI / PANNA / O / C',`${hits('jodiHit')} / ${hits('pannaHit')} / ${hits('openHit')} / ${hits('closeHit')}`,'violet');
+  document.getElementById('performanceHistory').innerHTML=rows.slice(0,15).map(x=>`<div class="rounded-lg border ${x.complete?(x.net>=0?'border-emerald-200':'border-rose-200'):'border-amber-200'} bg-white px-2 py-1.5 text-[8px]"><div class="flex justify-between font-black"><span>${x.market} • ${x.date}</span><span>${x.complete?(x.net>=0?'+':'')+money(x.net):'PENDING'}</span></div><div class="text-slate-500 mt-0.5">Invest ${money(x.investment)} • Win ${money(x.winning)} • ${x.complete?`Actual ${x.actualOpen}${x.actualClose} • ${[x.jodiHit?'JODI HIT':'',x.pannaHit?'PANNA HIT':'',x.openHit?'OPEN HIT':'',x.closeHit?'CLOSE HIT':''].filter(Boolean).join(' | ')||'MISS'}`:'Result not entered yet'}</div></div>`).join('')||'<div class="text-[8px] text-slate-400">No plays recorded yet.</div>';
+}
+async function openPerformanceModal(){
+  const market=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED';const snap=getCurrentPredictionSnapshot(market);const rates=getPerfRates(market);
+  document.getElementById('perfMarket').value=market==='ALL_MERGED'?'ALL MARKETS':market;
+  document.getElementById('perfDate').value=snap?.targetDate||new Date().toISOString().split('T')[0];
+  ['Jodi','Panna','Open','Close'].forEach(k=>{const el=document.getElementById(`perf${k}Rate`);el.value=rates[k.toLowerCase()]??0;});
+  document.getElementById('perfPredictionPreview').innerText=snap?`OPEN: ${(snap.openTop3||[]).join(' - ')||'-'} | CLOSE: ${(snap.closeTop3||[]).join(' - ')||'-'} | JODI: ${(snap.strongJodi||[]).concat(snap.supportJodi||[]).join(' • ')||'-'} | PANNA: ${(snap.openPannas||[]).concat(snap.closePannas||[]).join(' • ')||'-'}`:'Current ranking snapshot not available. Tap Refresh first.';
+  document.getElementById('performanceModal').classList.remove('hidden');
+  renderPerformanceSummary(await calculatePerformanceRows());
+}
+document.getElementById('performanceBtn')?.addEventListener('click',openPerformanceModal);
+document.getElementById('closePerformanceBtn')?.addEventListener('click',()=>document.getElementById('performanceModal')?.classList.add('hidden'));
+document.getElementById('closePerformanceFooterBtn')?.addEventListener('click',()=>document.getElementById('performanceModal')?.classList.add('hidden'));
+document.getElementById('savePerformancePlayBtn')?.addEventListener('click',async()=>{
+  const market=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED',date=document.getElementById('perfDate').value;if(!date)return showCustomAlert('Error','Please select game date.','error');
+  const snap=getCurrentPredictionSnapshot(market);if(!snap)return showCustomAlert('Error','Current ranking snapshot not available. Tap Refresh and try again.','error');
+  const nums=id=>Number(document.getElementById(id)?.value||0);const rates={jodi:nums('perfJodiRate'),panna:nums('perfPannaRate'),open:nums('perfOpenRate'),close:nums('perfCloseRate')};
+  savePerfRates(market,rates);savePerfPlay({market,date,prediction:snap,jodiStake:nums('perfJodiStake'),pannaStake:nums('perfPannaStake'),openStake:nums('perfOpenStake'),closeStake:nums('perfCloseStake'),jodiRate:rates.jodi,pannaRate:rates.panna,openRate:rates.open,closeRate:rates.close,savedAt:Date.now()});
+  showCustomAlert('Saved','My play and market rates saved.','success');renderPerformanceSummary(await calculatePerformanceRows());
+});
+
+document.getElementById('shortlistDate')?.addEventListener('change',()=>runFinalShortlist(false));
 document.getElementById('refreshShortlistBtn')?.addEventListener('click',()=>runFinalShortlist(false));
 document.getElementById('shortlistMarketSelect')?.addEventListener('change',()=>runFinalShortlist(false));
+const shortlistDateEl=document.getElementById('shortlistDate');
+if(shortlistDateEl && !shortlistDateEl.value) shortlistDateEl.value=localDateKey(new Date());
+
+// Keep Shortlist date aligned with the Logger date when the user changes it.
+document.getElementById('recordDate')?.addEventListener('change',()=>{
+  const sd=document.getElementById('shortlistDate');
+  const rd=document.getElementById('recordDate');
+  if(sd && rd?.value){ sd.value=rd.value; if(!document.getElementById('shortlistSection')?.classList.contains('hidden')) runFinalShortlist(false); }
+});
+
+(function initShortlistDate(){
+  const sd=document.getElementById('shortlistDate');
+  const rd=document.getElementById('recordDate');
+  if(sd) sd.value=rd?.value || localDateKey(new Date());
+})();
 document.getElementById('recentGamesBtn')?.addEventListener('click',async()=>{
   try{
     const selectedMarket=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED';
@@ -1594,5 +1849,40 @@ showCustomAlert("Error", error.message, "error");
 } 
 }); 
 </script> 
+
+<script>
+(function () {
+  // Auto-load the Shortlist as soon as the page finishes loading.
+  // No "Refresh Shortlist" click is required.
+  function autoLoadShortlist() {
+    try {
+      if (typeof loadData === 'function') loadData();
+    } catch (e) {
+      console.warn('Shortlist auto-load: loadData()', e);
+    }
+
+    // Run after the existing data initialization has had a chance to finish.
+    setTimeout(function () {
+      try {
+        if (typeof autoSelectShortlistMarket === 'function') {
+          autoSelectShortlistMarket();
+        }
+        if (typeof runFinalShortlist === 'function') {
+          runFinalShortlist();
+        }
+      } catch (e) {
+        console.warn('Shortlist auto-load:', e);
+      }
+    }, 150);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoLoadShortlist, { once: true });
+  } else {
+    autoLoadShortlist();
+  }
+})();
+</script>
+
 </body> 
 </html>
