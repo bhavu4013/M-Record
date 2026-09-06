@@ -12,6 +12,11 @@
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 </style>
+
+<style id="shortlist-ui-clean">
+#shortlistSection select,#shortlistSection button{font-family:inherit;}
+</style>
+
 </head> 
 <body class="bg-slate-100 p-4 min-h-screen flex flex-col items-center justify-between pb-24"> 
 
@@ -77,7 +82,8 @@
 </div> 
 
 <!-- ANALYSIS SECTION --> 
-<div id="analysisSection" class="hidden space-y-4 w-full"> 
+<div id="analysisSection" class="hidden space-y-4 w-full">
+
 <div class="space-y-3"> 
 <div id="analysisMarketContainer" class="space-y-1"> 
 <select id="analysisMarketSelect" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800"> 
@@ -153,17 +159,17 @@
 <div id="shortlistSection" class="space-y-1.5 w-full">
   <div class="mb-1.5">
     <div class="text-xs font-extrabold text-slate-800 leading-none mb-1">Shortlist Ranking</div>
-    <div class="grid grid-cols-2 gap-2">
-      <label class="text-[8px] font-black text-slate-500 uppercase">Selected Date
-        <input id="shortlistDate" type="date" class="w-full border border-slate-300 rounded-md px-2 py-1.5 text-[10px] bg-white font-semibold h-8">
+    <div class="flex items-end gap-2 w-full">
+      <label class="flex-1 min-w-0 text-xs font-semibold text-slate-600 uppercase tracking-wider">Selected Date
+        <input id="shortlistDate" type="date" class="mt-1 block w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white h-[42px]">
       </label>
-      <label class="text-[8px] font-black text-slate-500 uppercase">Market
-        <select id="shortlistMarketSelect" class="w-full border border-slate-300 rounded-md px-2 py-1.5 text-[10px] bg-white font-semibold h-8"><option value="ALL_MERGED">All Markets</option></select>
+      <label class="flex-1 min-w-0 text-xs font-semibold text-slate-600 uppercase tracking-wider">Market
+        <select id="shortlistMarketSelect" class="mt-1 block w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none bg-white font-semibold text-slate-800 h-[42px]"><option value="ALL_MERGED">All Markets</option></select>
       </label>
     </div>
-    <button id="refreshShortlistBtn" type="button" title="Refresh Ranking" class="w-full h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[10px] font-extrabold shadow-sm">Refresh Shortlist</button>
+    <button id="refreshShortlistBtn" type="button" title="Refresh Ranking" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Refresh Shortlist</button>
   </div>
-  <div id="shortlistGameCard" class="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm space-y-2">
+  <div id="shortlistGameCard" class="bg-white p-2.5 space-y-2">
     <div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">GAME RANKING</span><span id="finalSignalStatus" class="text-[8px] font-black px-2 py-1 rounded-full">-</span></div>
     <div>
       <div id="shortlistTargetGame" class="mb-1 rounded-lg border border-blue-200 bg-blue-50 px-2 py-1.5 text-[8px] font-black text-blue-700">NEXT GAME • MARKET: -</div>
@@ -182,42 +188,9 @@
   <div class="rounded-xl border border-violet-200 bg-violet-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-violet-700">JODI ODD / EVEN</span><span id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</span></div><div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-0.5"></div></div>
   <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 5</div><div id="finalJodiStrong" class="grid grid-cols-5 gap-1"></div></div>
   <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 5</div><div id="finalJodiSupport" class="grid grid-cols-5 gap-1"></div></div>
-  <div class="flex items-center justify-end gap-2 pt-0.5"><button id="performanceBtn" type="button" class="border border-emerald-300 text-emerald-700 rounded-lg px-4 py-1.5 text-[10px] font-black bg-emerald-50 hover:bg-emerald-100 shadow-sm">Performance</button><button id="recentGamesBtn" type="button" class="border border-indigo-300 text-indigo-700 rounded-lg px-4 py-1.5 text-[10px] font-black bg-indigo-50 hover:bg-indigo-100 shadow-sm">Recent Games</button><button id="copyShortlistBtn" class="border border-slate-300 rounded-lg px-4 py-1.5 text-[10px] font-black bg-white hover:bg-slate-50 shadow-sm">Copy Game</button></div>
+  <div class="flex items-center gap-2 pt-1"><button id="recentGamesBtn" type="button" class="flex-1 bg-slate-700 hover:bg-slate-800 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Recent Games</button><button id="copyShortlistBtn" type="button" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Copy</button></div>
   <textarea id="shortlistShareText" class="hidden" aria-hidden="true"></textarea>
   <div id="finalOddEven" class="hidden"></div><div id="finalConflict" class="hidden"></div>
-</div>
-
-<!-- PERFORMANCE / MY PLAY POPUP -->
-<div id="performanceModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-3 z-[70]">
-  <div class="bg-white p-3 rounded-2xl max-w-md w-full shadow-2xl space-y-2 max-h-[92vh] overflow-y-auto">
-    <div class="flex justify-between items-center border-b pb-2"><h3 class="text-sm font-black text-slate-800">PERFORMANCE & MY PLAY</h3><button id="closePerformanceBtn" type="button" class="text-slate-400 hover:text-slate-700 text-lg font-black">×</button></div>
-    <div id="performanceSummary" class="grid grid-cols-2 gap-1.5"></div>
-    <div class="rounded-xl border border-blue-200 bg-blue-50 p-2 space-y-1.5">
-      <div class="text-[9px] font-black text-blue-700">RECORD MY PLAY FOR CURRENT RANKING</div>
-      <div class="grid grid-cols-2 gap-1.5">
-        <label class="text-[8px] font-bold text-slate-600">Market<input id="perfMarket" class="w-full border rounded-md px-2 py-1 text-[10px] bg-white" readonly></label>
-        <label class="text-[8px] font-bold text-slate-600">Game Date<input id="perfDate" type="date" class="w-full border rounded-md px-2 py-1 text-[10px] bg-white"></label>
-      </div>
-      <div class="text-[8px] font-bold text-slate-500">Amount is total stake for all displayed selections in that category; winnings are calculated per winning selection.</div>
-      <div class="grid grid-cols-2 gap-1.5">
-        <label class="text-[8px] font-bold text-slate-600">Jodi Total ₹<input id="perfJodiStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-        <label class="text-[8px] font-bold text-slate-600">Panna Total ₹<input id="perfPannaStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-        <label class="text-[8px] font-bold text-slate-600">Open Total ₹<input id="perfOpenStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-        <label class="text-[8px] font-bold text-slate-600">Close Total ₹<input id="perfCloseStake" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-      </div>
-      <div class="text-[9px] font-black text-slate-600 pt-1">MARKET RATES (₹ RETURN PER ₹1 STAKE)</div>
-      <div class="grid grid-cols-2 gap-1.5">
-        <label class="text-[8px] font-bold text-slate-600">Jodi Rate<input id="perfJodiRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-        <label class="text-[8px] font-bold text-slate-600">Panna Rate<input id="perfPannaRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-        <label class="text-[8px] font-bold text-slate-600">Open Rate<input id="perfOpenRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-        <label class="text-[8px] font-bold text-slate-600">Close Rate<input id="perfCloseRate" type="number" min="0" step="0.01" value="0" class="w-full border rounded-md px-2 py-1 text-[10px]"></label>
-      </div>
-      <div id="perfPredictionPreview" class="rounded-lg bg-white border border-blue-100 p-2 text-[8px] font-bold text-slate-600"></div>
-      <button id="savePerformancePlayBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-[10px] font-black">Save My Play</button>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-slate-50 p-2"><div class="text-[9px] font-black text-slate-700 mb-1">RECORDED GAMES</div><div id="performanceHistory" class="space-y-1"></div></div>
-    <button id="closePerformanceFooterBtn" type="button" class="w-full bg-slate-800 text-white py-2 rounded-xl text-xs font-black">Close</button>
-  </div>
 </div>
 
 <!-- Recent Games Popup -->
@@ -256,10 +229,6 @@
 <button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"> 
 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> 
 <span class="text-[10px]">Analysis</span> 
-</button> 
-<button id="navPerformanceBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"> 
-<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 16l4-5 3 3 6-8"></path></svg> 
-<span class="text-[10px]">Performance</span> 
 </button> 
 </div> 
 
@@ -343,7 +312,6 @@ let globalAllRecords = [];
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
 const navAnalysisBtn = document.getElementById('navAnalysisBtn'); 
 const navShortlistBtn = document.getElementById('navShortlistBtn');
-const navPerformanceBtn = document.getElementById('navPerformanceBtn'); 
 
 const loggerSection = document.getElementById('loggerSection'); 
 const analysisSection = document.getElementById('analysisSection'); 
@@ -384,20 +352,6 @@ navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
 loadMarkets().then(()=>runFinalShortlist(true)).catch(e=>console.error('Shortlist market load error',e));
-}); 
-
-// Performance is the fourth main navigation destination; the existing performance modal remains the data/UI layer.
-navPerformanceBtn.addEventListener('click', () => {
-shortlistSection.classList.remove('hidden');
-loggerSection.classList.add('hidden');
-analysisSection.classList.add('hidden');
-document.getElementById('entryAlertBox').classList.add('hidden');
-pageTitle.innerText = "Performance & My Play";
-navPerformanceBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition";
-navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
-navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
-navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
-loadMarkets().then(()=>{ runFinalShortlist(false); openPerformanceModal(); }).catch(e=>console.error('Performance market load error',e));
 });
 
 const analysisViewBtns = document.querySelectorAll('.analysis-view-btn'); 
@@ -961,12 +915,11 @@ async function runFinalShortlist(showPendingPopup=false){
           .sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
       };
       const pendingPannaMap=currentCloseTop3.map(x=>bestPannasForCurrentClose(x.digit));
-      saveCurrentPredictionSnapshot(selectedMarket,{market:pendingMarket,targetMarket:pendingMarket,targetDate:currentRecord.date,openTop3:[String(latestOpen)],closeTop3:currentCloseTop3.map(x=>String(x.digit)),openPannas:[],closePannas:pendingPannaMap.flat(),strongJodi:[],supportJodi:[]});
       const closePannaCards=currentCloseTop3.map((x,i)=>{
         const pannas=pendingPannaMap[i];
         return `<div class="rounded-lg border ${i===0?'border-emerald-300 bg-emerald-100 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center"><div class="text-2xl font-black leading-none">${x.digit}</div><div class="text-[7px] font-black mt-1">${i===0?'BEST CLOSE':'TOP CLOSE'}</div><div class="mt-1 text-[7px] font-bold text-slate-500">BEST 2 PANNA</div><div class="text-sm font-black tracking-wider text-slate-800 mt-0.5">${pannas[0]||'-'}&nbsp;&nbsp;${pannas[1]||'-'}</div><div class="mt-1 text-[7px] text-slate-500">Open ${latestOpen} → ${x.digit} • ${x.conditionalCount} historical</div></div>`;
       }).join('');
-      document.getElementById('shortlistGameCard').innerHTML=`<div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">CURRENT GAME</span><span class="text-[8px] font-black px-2 py-1 rounded-full bg-amber-100 text-amber-700">CLOSE PENDING</span></div><div class="rounded-lg border border-blue-200 bg-blue-50 px-2 py-1.5"><div class="text-[8px] font-black text-blue-700">MARKET: ${pendingMarket} • DATE: ${currentRecord.date}</div><div class="text-[11px] font-black text-slate-900 mt-0.5">OPEN ${latestOpen} → CLOSE RANKING</div><div class="text-[7px] font-semibold text-slate-500 mt-0.5">આ ranking માત્ર આ current gameના Close માટે છે.</div></div><div><div class="text-[9px] font-black text-slate-500 mb-1">OPEN — CURRENT GAME</div><div class="rounded-lg border border-blue-300 bg-blue-50 px-2 py-2 text-center"><div class="text-[7px] font-black text-blue-600">CURRENT OPEN</div><div class="text-3xl font-black leading-none text-blue-900">${latestOpen}</div></div></div><div class="border-t border-slate-100 pt-2"><div class="text-[9px] font-black text-slate-500 mb-1">CLOSE — RECALCULATED FROM OPEN ${latestOpen}</div><div class="grid grid-cols-3 gap-1.5">${closePannaCards}</div></div>`;
+      document.getElementById('shortlistGameCard').innerHTML=`<div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">CURRENT GAME</span><span class="text-[8px] font-black px-2 py-1 rounded-full bg-amber-100 text-amber-700">CLOSE PENDING</span></div><div class="rounded-lg border border-blue-200 bg-blue-50 px-2 py-1.5"><div class="text-[8px] font-black text-blue-700">MARKET: ${pendingMarket} • DATE: ${currentRecord.date}</div><div class="text-[11px] font-black text-slate-900 mt-0.5">OPEN ${latestOpen} → CLOSE RANKING</div><div class="text-[7px] font-semibold text-slate-500 mt-0.5">આ ranking માત્ર આ current gameના Close માટે છે.</div></div><div class="border-t border-slate-100 pt-2"><div class="text-[9px] font-black text-slate-500 mb-1">CLOSE — RECALCULATED FROM OPEN ${latestOpen}</div><div class="grid grid-cols-3 gap-1.5">${closePannaCards}</div></div>`;
       document.getElementById('finalJodiStrong').innerHTML='';
       document.getElementById('finalJodiSupport').innerHTML='';
       document.getElementById('shortlistShareText').value=`${pendingMarket}\n\nCURRENT OPEN ${latestOpen}\nBEST CLOSE ${currentCloseTop3.map(x=>x.digit).join(' - ')}`;
@@ -1062,7 +1015,6 @@ async function runFinalShortlist(showPendingPopup=false){
     document.getElementById('finalOddEvenBadge').innerText=bestType;
     document.getElementById('finalOddEvenFocus').innerText=`OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`;
     document.getElementById('finalConflict').innerText=bestJodiConflict?`⚠️ ${bestJodiConflict} Strong Jodiમાં 2+ conflict signals છે. Conflict Jodiને Strong તરીકે blindly ન લો.`:`✅ Strong Jodiમાં major conflict ઓછો છે.`;
-    saveCurrentPredictionSnapshot(selectedMarket,{market:selectedMarket,targetMarket:selectedMarket==='ALL_MERGED'?null:selectedMarket,targetDate:'',openTop3:topOpen.map(x=>String(x.digit)),closeTop3:topClose.map(x=>String(x.digit)),openPannas:openPannaData.flatMap(x=>x.pannas),closePannas:closePannaData.flatMap(x=>x.pannas),strongJodi:strong5.map(x=>x.jodi),supportJodi:support5.map(x=>x.jodi)});
     const shareText = [
       `OPEN  ${topOpen.map(x=>x.digit).join(' - ')}`,
       `PANNA  ${openPannaText}`,
@@ -1086,66 +1038,6 @@ async function runFinalShortlist(showPendingPopup=false){
     const statusEl=document.getElementById('finalSignalStatus');statusEl.innerText=status==='HIGH CONSENSUS'?'STRONG GAME':status==='MODERATE'?'WATCH':'NOT STRONG';statusEl.className=`text-[8px] font-black px-1.5 py-0.5 rounded ${status==='HIGH CONSENSUS'?'bg-emerald-100 text-emerald-700':status==='MODERATE'?'bg-amber-100 text-amber-700':'bg-rose-100 text-rose-700'}`;
   }catch(e){console.error('Final shortlist error',e); const box=document.getElementById('shortlistGameCard'); if(box) box.innerHTML=`<div class="py-4 text-center"><div class="text-sm font-black text-rose-700">Shortlist calculation unavailable</div><div class="text-[10px] font-semibold text-slate-500 mt-1">Data calculationમાં સમસ્યા આવી. Please tap Refresh and try again.</div></div>`;}
 }
-// --- PERFORMANCE / MY PLAY TRACKER ---
-const perfPlayKeyPrefix='shortlist_play_v1::';
-const perfCurrentKey=market=>`shortlist_current_prediction_v3::${market||'ALL_MERGED'}`;
-const perfRateKey=market=>`shortlist_rates_v1::${market||'ALL_MERGED'}`;
-function saveCurrentPredictionSnapshot(market,data){try{localStorage.setItem(perfCurrentKey(market),JSON.stringify({...data,savedAt:Date.now()}));}catch(e){console.warn('Current prediction snapshot skipped',e);}}
-function getCurrentPredictionSnapshot(market){try{const raw=localStorage.getItem(perfCurrentKey(market));return raw?JSON.parse(raw):null;}catch(e){return null;}}
-function getPerfPlays(){const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(perfPlayKeyPrefix)){try{out.push(JSON.parse(localStorage.getItem(k)));}catch(e){}}}return out.sort((a,b)=>String(b.date).localeCompare(String(a.date))||((b.savedAt||0)-(a.savedAt||0)));}
-function savePerfPlay(play){localStorage.setItem(`${perfPlayKeyPrefix}${play.market}::${play.date}`,JSON.stringify(play));}
-function getPerfRates(market){try{const raw=localStorage.getItem(perfRateKey(market));return raw?JSON.parse(raw):{};}catch(e){return {};}}
-function savePerfRates(market,r){try{localStorage.setItem(perfRateKey(market),JSON.stringify(r));}catch(e){}}
-function money(v){return `₹${Number(v||0).toFixed(2)}`;}
-function predictionCounts(p){return {open:(p?.openTop3||[]).length,close:(p?.closeTop3||[]).length,jodi:(p?.strongJodi||[]).length+(p?.supportJodi||[]).length,panna:(p?.openPannas||[]).length+(p?.closePannas||[]).length};}
-async function calculatePerformanceRows(){
-  const plays=getPerfPlays();
-  if(!plays.length)return [];
-  let records=[];try{const snap=await getDocs(collection(db,'matka_records'));snap.forEach(ds=>{const r=ds.data();if(r.date&&r.marketName)records.push(r);});}catch(e){console.warn('Performance result load failed',e);}
-  return plays.map(play=>{
-    const rec=records.find(r=>r.marketName===play.market&&r.date===play.date);
-    const open=digitOf(rec?.openAnk),close=digitOf(rec?.closeAnk),actualJodi=(open!==null&&close!==null)?`${open}${close}`:null;
-    const openP=numP(rec?.openPana),closeP=numP(rec?.closePana);
-    const p=play.prediction||{};const jodis=[...(p.strongJodi||[]),...(p.supportJodi||[])];
-    const openPannas=(p.openPannas||[]),closePannas=(p.closePannas||[]);
-    const c=predictionCounts(p);const inv=Number(play.jodiStake||0)+Number(play.pannaStake||0)+Number(play.openStake||0)+Number(play.closeStake||0);
-    let win=0;let jodiHit=false,pannaHit=false,openHit=false,closeHit=false;
-    if(actualJodi&&jodis.includes(actualJodi)&&c.jodi>0){jodiHit=true;win+=(Number(play.jodiStake||0)/c.jodi)*Number(play.jodiRate||0);}
-    if(openP&&openPannas.includes(openP)&&c.panna>0){pannaHit=true;win+=(Number(play.pannaStake||0)/c.panna)*Number(play.pannaRate||0);}
-    if(closeP&&closePannas.includes(closeP)&&c.panna>0){if(!pannaHit)win+=(Number(play.pannaStake||0)/c.panna)*Number(play.pannaRate||0);pannaHit=true;}
-    if(open!==null&&(p.openTop3||[]).map(String).includes(String(open))&&c.open>0){openHit=true;win+=(Number(play.openStake||0)/c.open)*Number(play.openRate||0);}
-    if(close!==null&&(p.closeTop3||[]).map(String).includes(String(close))&&c.close>0){closeHit=true;win+=(Number(play.closeStake||0)/c.close)*Number(play.closeRate||0);}
-    const complete=open!==null&&close!==null;const net=complete?win-inv:0;
-    return {...play,complete,actualOpen:open,actualClose:close,actualJodi,jodiHit,pannaHit,openHit,closeHit,investment:inv,winning:win,net};
-  });
-}
-function renderPerformanceSummary(rows){
-  const done=rows.filter(x=>x.complete),inv=done.reduce((s,x)=>s+x.investment,0),win=done.reduce((s,x)=>s+x.winning,0),net=win-inv;
-  const hits=(key)=>done.filter(x=>x[key]).length,pass=done.length?((hits('jodiHit')+hits('pannaHit')+hits('openHit')+hits('closeHit'))>0?done.filter(x=>x.jodiHit||x.pannaHit||x.openHit||x.closeHit).length/done.length*100:0):0;
-  const box=(t,v,c='slate')=>`<div class="rounded-lg border border-${c}-200 bg-${c}-50 px-2 py-1.5"><div class="text-[7px] font-black text-${c}-600">${t}</div><div class="text-sm font-black text-${c}-900">${v}</div></div>`;
-  document.getElementById('performanceSummary').innerHTML=box('GAMES',done.length)+box('PASS %',`${pass.toFixed(1)}%`,'blue')+box('INVESTMENT',money(inv))+box('WINNING',money(win),'emerald')+box('NET P/L',money(net),net>=0?'emerald':'rose')+box('JODI / PANNA / O / C',`${hits('jodiHit')} / ${hits('pannaHit')} / ${hits('openHit')} / ${hits('closeHit')}`,'violet');
-  document.getElementById('performanceHistory').innerHTML=rows.slice(0,15).map(x=>`<div class="rounded-lg border ${x.complete?(x.net>=0?'border-emerald-200':'border-rose-200'):'border-amber-200'} bg-white px-2 py-1.5 text-[8px]"><div class="flex justify-between font-black"><span>${x.market} • ${x.date}</span><span>${x.complete?(x.net>=0?'+':'')+money(x.net):'PENDING'}</span></div><div class="text-slate-500 mt-0.5">Invest ${money(x.investment)} • Win ${money(x.winning)} • ${x.complete?`Actual ${x.actualOpen}${x.actualClose} • ${[x.jodiHit?'JODI HIT':'',x.pannaHit?'PANNA HIT':'',x.openHit?'OPEN HIT':'',x.closeHit?'CLOSE HIT':''].filter(Boolean).join(' | ')||'MISS'}`:'Result not entered yet'}</div></div>`).join('')||'<div class="text-[8px] text-slate-400">No plays recorded yet.</div>';
-}
-async function openPerformanceModal(){
-  const market=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED';const snap=getCurrentPredictionSnapshot(market);const rates=getPerfRates(market);
-  document.getElementById('perfMarket').value=market==='ALL_MERGED'?'ALL MARKETS':market;
-  document.getElementById('perfDate').value=snap?.targetDate||new Date().toISOString().split('T')[0];
-  ['Jodi','Panna','Open','Close'].forEach(k=>{const el=document.getElementById(`perf${k}Rate`);el.value=rates[k.toLowerCase()]??0;});
-  document.getElementById('perfPredictionPreview').innerText=snap?`OPEN: ${(snap.openTop3||[]).join(' - ')||'-'} | CLOSE: ${(snap.closeTop3||[]).join(' - ')||'-'} | JODI: ${(snap.strongJodi||[]).concat(snap.supportJodi||[]).join(' • ')||'-'} | PANNA: ${(snap.openPannas||[]).concat(snap.closePannas||[]).join(' • ')||'-'}`:'Current ranking snapshot not available. Tap Refresh first.';
-  document.getElementById('performanceModal').classList.remove('hidden');
-  renderPerformanceSummary(await calculatePerformanceRows());
-}
-document.getElementById('performanceBtn')?.addEventListener('click',openPerformanceModal);
-document.getElementById('closePerformanceBtn')?.addEventListener('click',()=>document.getElementById('performanceModal')?.classList.add('hidden'));
-document.getElementById('closePerformanceFooterBtn')?.addEventListener('click',()=>document.getElementById('performanceModal')?.classList.add('hidden'));
-document.getElementById('savePerformancePlayBtn')?.addEventListener('click',async()=>{
-  const market=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED',date=document.getElementById('perfDate').value;if(!date)return showCustomAlert('Error','Please select game date.','error');
-  const snap=getCurrentPredictionSnapshot(market);if(!snap)return showCustomAlert('Error','Current ranking snapshot not available. Tap Refresh and try again.','error');
-  const nums=id=>Number(document.getElementById(id)?.value||0);const rates={jodi:nums('perfJodiRate'),panna:nums('perfPannaRate'),open:nums('perfOpenRate'),close:nums('perfCloseRate')};
-  savePerfRates(market,rates);savePerfPlay({market,date,prediction:snap,jodiStake:nums('perfJodiStake'),pannaStake:nums('perfPannaStake'),openStake:nums('perfOpenStake'),closeStake:nums('perfCloseStake'),jodiRate:rates.jodi,pannaRate:rates.panna,openRate:rates.open,closeRate:rates.close,savedAt:Date.now()});
-  showCustomAlert('Saved','My play and market rates saved.','success');renderPerformanceSummary(await calculatePerformanceRows());
-});
-
 document.getElementById('shortlistDate')?.addEventListener('change',()=>{
   refreshShortlistMarketOptions(false);
   runFinalShortlist(false);
@@ -1913,6 +1805,44 @@ showCustomAlert("Error", error.message, "error");
 
 
 
+
+
+<script id="nav-state-fix-v32">
+(function(){
+  function activatePage(name){
+    const sections={
+      logger:'loggerSection',
+      analysis:'analysisSection',
+      shortlist:'shortlistSection'
+    };
+    Object.values(sections).forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.classList.toggle('hidden', id!==sections[name]);
+    });
+
+    const buttons={
+      logger:'navLoggerBtn',
+      analysis:'navAnalysisBtn',
+      shortlist:'navShortlistBtn',
+    };
+    Object.entries(buttons).forEach(([key,id])=>{
+      const b=document.getElementById(id);
+      if(!b) return;
+      const active=(key===name);
+      b.className=active
+        ? "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"
+        : "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+    });
+  }
+
+  const analysisBtn=document.getElementById('navAnalysisBtn');
+  if(analysisBtn){
+    analysisBtn.addEventListener('click',function(){
+      setTimeout(()=>activatePage('analysis'),0);
+    },true);
+  }
+})();
+</script>
 
 </body> 
 </html>
