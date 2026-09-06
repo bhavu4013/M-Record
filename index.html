@@ -106,6 +106,10 @@
 <!-- Family Panna Toggle & Digit Selection --> 
 <div id="familyPannaOptionsContainer" class="hidden space-y-2 pt-1"> 
 <div class="flex justify-between items-center bg-slate-200 p-1 rounded-lg"> 
+<button type="button" id="fpSessionOpen" class="flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition">Open Panna</button> 
+<button type="button" id="fpSessionClose" class="flex-1 py-1 rounded text-xs font-bold text-slate-700 transition">Close Panna</button> 
+</div>
+<div class="flex justify-between items-center bg-slate-200 p-1 rounded-lg"> 
 <button type="button" id="fpToggleSingle" class="flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition">Single Digit</button> 
 <button type="button" id="fpToggleMerge" class="flex-1 py-1 rounded text-xs font-bold text-slate-700 transition">Cut / Merge (1-6)</button> 
 </div> 
@@ -185,6 +189,7 @@
       <div id="finalCloseDetails" class="hidden"></div>
     </div>
   </div>
+  <div id="finalConfidenceCard" class="rounded-xl border border-sky-200 bg-sky-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-sky-700">SIGNAL QUALITY</span><span id="finalSignalQuality" class="text-[9px] font-black text-sky-800">-</span></div><div id="finalSignalReason" class="text-[8px] text-slate-500 mt-0.5">-</div></div>
   <div class="rounded-xl border border-violet-200 bg-violet-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-violet-700">JODI ODD / EVEN</span><span id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</span></div><div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-0.5"></div></div>
   <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 5</div><div id="finalJodiStrong" class="grid grid-cols-5 gap-1"></div></div>
   <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 5</div><div id="finalJodiSupport" class="grid grid-cols-5 gap-1"></div></div>
@@ -304,6 +309,7 @@ let marketsList = [];
 const modal = document.getElementById('marketModal'); 
 let currentAnalysisView = 'Open'; 
 let selectedFamilyPannaDigit = "1"; 
+let selectedFamilyPannaSession = "Open";
 let isFamilyPannaMergeMode = false; 
 let oddEvenMode = 'Merge'; 
 let selectedOddEvenDigit = "1";
@@ -382,9 +388,25 @@ loadAnalysisData();
 }); 
 
 // Family Panna Toggle & Digit Grid Setup
+const fpSessionOpen = document.getElementById('fpSessionOpen');
+const fpSessionClose = document.getElementById('fpSessionClose');
 const fpToggleSingle = document.getElementById('fpToggleSingle');
 const fpToggleMerge = document.getElementById('fpToggleMerge');
 const fpDigitButtonsGrid = document.getElementById('fpDigitButtonsGrid');
+
+fpSessionOpen.addEventListener('click', () => {
+selectedFamilyPannaSession = 'Open';
+fpSessionOpen.className = "flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition";
+fpSessionClose.className = "flex-1 py-1 rounded text-xs font-bold text-slate-700 transition";
+loadAnalysisData();
+});
+
+fpSessionClose.addEventListener('click', () => {
+selectedFamilyPannaSession = 'Close';
+fpSessionClose.className = "flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition";
+fpSessionOpen.className = "flex-1 py-1 rounded text-xs font-bold text-slate-700 transition";
+loadAnalysisData();
+});
 
 fpToggleSingle.addEventListener('click', () => {
 isFamilyPannaMergeMode = false;
@@ -675,7 +697,7 @@ function freqIn(records,getter,windowSize,key){const a=records.slice(-windowSize
 function categoryDelay(records,keyFn,keys){const n=records.length,last=Object.fromEntries(keys.map(k=>[k,-1]));records.forEach((r,i)=>{const k=keyFn(r);if(k&&last[k]!==undefined)last[k]=i;});return Object.fromEntries(keys.map(k=>[k,last[k]<0?n:n-1-last[k]]));}
 function maxDelayForKeys(map,keys){return Math.max(0,...keys.map(k=>map[k]??0));}
 function rankWithTies(arr){return [...arr].sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);}
-function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>`<div class="rounded-lg ${el.id==='finalJodiStrong'?'bg-emerald-100 border-emerald-300 text-emerald-950':'bg-amber-50 border-amber-200 text-amber-950'} border px-1.5 py-2 text-center"><div class="text-base font-black tracking-wider leading-none">${x.jodi}</div><div class="text-[7px] font-bold mt-1 opacity-70">${x.type}</div></div>`).join('');}
+function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>{const strong=el.id==='finalJodiStrong'&&x.isStrong;return `<div class="rounded-lg ${strong?'bg-rose-100 border-2 border-rose-500 text-rose-950 shadow-sm':'bg-amber-50 border border-amber-200 text-amber-950'} px-1.5 py-2 text-center"><div class="text-[7px] font-black ${strong?'text-rose-700':'text-amber-700'}">${strong?'🔴 STRONG JODI':el.id==='finalJodiStrong'?'TOP JODI':'SUPPORT JODI'}</div><div class="text-base font-black tracking-wider leading-none mt-0.5">${x.jodi}</div><div class="text-[7px] font-bold mt-1 opacity-70">${x.type}${x.signalCount!=null?` • ${x.signalCount} SIG`:''}</div></div>`;}).join('');}
 
 function shortlistPredictionKey(market,date){return `shortlist_prediction_v2::${market}::${date}`;}
 function saveShortlistPrediction(market,date,data){
@@ -901,29 +923,32 @@ async function runFinalShortlist(showPendingPopup=false){
       const currentCloseTop3=histCloseScores.slice(0,3);
       saveShortlistPrediction(pendingMarket,currentRecord.date,{market:pendingMarket,date:currentRecord.date,open:String(latestOpen),closeTop3:currentCloseTop3.map(x=>String(x.digit))});
       const bestPannasForCurrentClose=(digit)=>{
-        const stats={};
-        completed.forEach((r,i)=>{
-          const p=numP(r.closePana);
-          if(!p) return;
-          // A Panna belongs to a digit by its Panna total (sum of 3 digits) % 10,
-          // not merely because the predicted digit appears inside the Panna.
-          const pannaDigit=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;
-          if(pannaDigit!==Number(digit)) return;
-          if(!stats[p])stats[p]={p,count:0,last:-1};stats[p].count++;stats[p].last=i;
-        });
-        return Object.values(stats).map(x=>({...x,delay:cn-1-x.last,recent20:completed.slice(-20).filter(r=>numP(r.closePana)===x.p).length,recent10:completed.slice(-10).filter(r=>numP(r.closePana)===x.p).length}))
-          .sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
+        const key='closePana';
+        const map={"1":["222","123","470","100","330","399","114"],"2":["444","345","246","200","110","377","133"],"3":["666","567","369","300","440","477","233"],"4":["888","789","130","400","220","144","266"],"5":["000","456","230","366","334","177","244"],"6":["222","123","470","100","330","399","114"],"7":["444","345","246","200","110","377","133"],"8":["666","567","369","300","440","477","233"],"9":["888","789","130","400","220","144","266"],"0":["000","456","230","366","334","177","244"]};
+        const groups=map[String(digit)]||[], gs={}; groups.forEach(g=>gs[g]={group:g,count:0,last:-1,recent20:0,recent10:0});
+        completed.forEach((r,i)=>{const p=numP(r[key]),g=p?PANNA_TO_GROUP[p]:null;if(g&&gs[g]){gs[g].count++;gs[g].last=i;}});
+        Object.values(gs).forEach(g=>{g.delay=g.last<0?cn:cn-1-g.last;g.recent20=completed.slice(-20).filter(r=>{const p=numP(r[key]);return p&&PANNA_TO_GROUP[p]===g.group;}).length;g.recent10=completed.slice(-10).filter(r=>{const p=numP(r[key]);return p&&PANNA_TO_GROUP[p]===g.group;}).length;g.score=g.delay*1.5+g.recent20*1.2+g.recent10*.8+g.count*.25;});
+        const allowed=new Set(Object.values(gs).sort((a,b)=>b.score-a.score||b.delay-a.delay||b.count-a.count).slice(0,3).map(g=>g.group));
+        const stats={}; completed.forEach((r,i)=>{const p=numP(r[key]),g=p?PANNA_TO_GROUP[p]:null;if(!p||!g||!allowed.has(g))return;const pd=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;if(pd!==Number(digit))return;if(!stats[p])stats[p]={p,count:0,last:-1,group:g};stats[p].count++;stats[p].last=i;});
+        const ranked=Object.values(stats).map(x=>{const g=gs[x.group]||{};return {...x,delay:cn-1-x.last,recent20:completed.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:completed.slice(-10).filter(r=>numP(r[key])===x.p).length,groupScore:g.score||0,groupDelay:g.delay||0};}).sort((a,b)=>{const sa=a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25+a.groupScore*.45,sb=b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25+b.groupScore*.45;return sb-sa||b.groupDelay-a.groupDelay||b.delay-a.delay||a.p.localeCompare(b.p);});
+        if(ranked.length)return ranked.slice(0,2).map(x=>x.p);
+        const fallback={}; completed.forEach((r,i)=>{const p=numP(r[key]);if(!p)return;const pd=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;if(pd!==Number(digit))return;if(!fallback[p])fallback[p]={p,count:0,last:-1};fallback[p].count++;fallback[p].last=i;});
+        return Object.values(fallback).map(x=>({...x,delay:cn-1-x.last,recent20:completed.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:completed.slice(-10).filter(r=>numP(r[key])===x.p).length})).sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
       };
       const pendingPannaMap=currentCloseTop3.map(x=>bestPannasForCurrentClose(x.digit));
       const closePannaCards=currentCloseTop3.map((x,i)=>{
         const pannas=pendingPannaMap[i];
-        return `<div class="rounded-lg border ${i===0?'border-emerald-300 bg-emerald-100 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center"><div class="text-2xl font-black leading-none">${x.digit}</div><div class="text-[7px] font-black mt-1">${i===0?'BEST CLOSE':'TOP CLOSE'}</div><div class="mt-1 text-[7px] font-bold text-slate-500">BEST 2 PANNA</div><div class="text-sm font-black tracking-wider text-slate-800 mt-0.5">${pannas[0]||'-'}&nbsp;&nbsp;${pannas[1]||'-'}</div><div class="mt-1 text-[7px] text-slate-500">Open ${latestOpen} → ${x.digit} • ${x.conditionalCount} historical</div></div>`;
+        return `<div class="rounded-lg border ${i===0?'border-2 border-rose-500 bg-rose-100 text-rose-950 shadow-sm':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center"><div class="text-2xl font-black leading-none">${x.digit}</div><div class="text-[7px] font-black mt-1">${i===0?'BEST CLOSE':'TOP CLOSE'}</div><div class="mt-1 text-[7px] font-bold text-slate-500">BEST 2 PANNA</div><div class="text-sm font-black tracking-wider text-slate-800 mt-0.5">${pannas[0]||'-'}&nbsp;&nbsp;${pannas[1]||'-'}</div><div class="mt-1 text-[7px] text-slate-500">Open ${latestOpen} → ${x.digit} • ${x.conditionalCount} historical</div></div>`;
       }).join('');
       document.getElementById('shortlistGameCard').innerHTML=`<div class="flex items-center justify-between border-b border-slate-100 pb-1.5"><span class="text-[9px] font-black tracking-wide text-slate-500">CURRENT GAME</span><span class="text-[8px] font-black px-2 py-1 rounded-full bg-amber-100 text-amber-700">CLOSE PENDING</span></div><div class="rounded-lg border border-blue-200 bg-blue-50 px-2 py-1.5"><div class="text-[8px] font-black text-blue-700">MARKET: ${pendingMarket} • DATE: ${currentRecord.date}</div><div class="text-[11px] font-black text-slate-900 mt-0.5">OPEN ${latestOpen} → CLOSE RANKING</div><div class="text-[7px] font-semibold text-slate-500 mt-0.5">આ ranking માત્ર આ current gameના Close માટે છે.</div></div><div class="border-t border-slate-100 pt-2"><div class="text-[9px] font-black text-slate-500 mb-1">CLOSE — RECALCULATED FROM OPEN ${latestOpen}</div><div class="grid grid-cols-3 gap-1.5">${closePannaCards}</div></div>`;
       document.getElementById('finalJodiStrong').innerHTML='';
       document.getElementById('finalJodiSupport').innerHTML='';
-      document.getElementById('shortlistShareText').value=`${pendingMarket}\n\nCURRENT OPEN ${latestOpen}\nBEST CLOSE ${currentCloseTop3.map(x=>x.digit).join(' - ')}`;
-      return;
+const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
+      document.getElementById('shortlistShareText').value=[
+        `${pendingMarket} - ${currentRecord.date}`,
+        `CLOSE : ${currentCloseTop3.map(x=>x.digit).join(' - ')}`,
+        `Pana : ${closePannaText}`
+      ].join('\\n');      return;
     }
     const n=records.length;
     const openDelay=lastSeenDelay(records,r=>digitOf(r.openAnk)),closeDelay=lastSeenDelay(records,r=>digitOf(r.closeAnk));
@@ -974,56 +999,137 @@ async function runFinalShortlist(showPendingPopup=false){
       const frequency=recent20*2.2+recent10*1.5;
       const score=delay*1.2+frequency+oeSupport+familyMix+totalSupport+diffSupport+pannaCompatibility*1.5;
       const conflict=(totalD<2?1:0)+(diffD<2?1:0)+(oeD<2?1:0)+(fjD<2?1:0);
-      jodiCandidates.push({jodi:j,open:o,close:c,delay,type,fam,total,diff,score,conflict,totalD,diffD,oeD,fjD});
+      // Multi-signal validation: delay alone is never enough to mark a Jodi red.
+      // Independent supporting signals are counted separately, then conflicts reduce strength.
+      const signalCount=[delay>=8,totalD>=8,diffD>=8,oeD>=8,fjD>=8,recent20>0,recent10>0,pannaCompatibility===1].filter(Boolean).length;
+      const isStrong=signalCount>=3&&conflict<=1&&(delay>=5||fjD>=5||totalD>=5||diffD>=5);
+      jodiCandidates.push({jodi:j,open:o,close:c,delay,type,fam,total,diff,score,conflict,totalD,diffD,oeD,fjD,signalCount,isStrong});
     }
-    jodiCandidates.sort((a,b)=>b.score-a.score||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
-    const strong5=jodiCandidates.slice(0,5),strongSet=new Set(strong5.map(x=>x.jodi));
+    jodiCandidates.sort((a,b)=>b.score-a.score||b.signalCount-a.signalCount||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
+    const validatedStrong=jodiCandidates.filter(x=>x.isStrong);
+    const strong5=(validatedStrong.length>=3?validatedStrong:jodiCandidates).slice(0,5);
+    const strongSet=new Set(strong5.map(x=>x.jodi));
     // Support is intentionally independent: it is selected from the next ranked candidates using structural diversity, not only Open Strong/Close Strong.
     const supportPool=jodiCandidates.filter(x=>!strongSet.has(x.jodi));
     const support5=[];const usedTypes=new Set();const usedFamilies=new Set();
     for(const x of supportPool){if(support5.length>=5)break;const diverse=!usedTypes.has(x.type)||!usedFamilies.has(x.fam);if(diverse){support5.push(x);usedTypes.add(x.type);if(x.fam)usedFamilies.add(x.fam);}}
     for(const x of supportPool)if(support5.length<5&&!support5.includes(x))support5.push(x);
     const bestJodiConflict=strong5.filter(x=>x.conflict>=2).length;
-    const status=bestJodiConflict>=2?'MIXED SIGNAL':(strong5.filter(x=>x.conflict===0).length>=3?'HIGH CONSENSUS':'MODERATE');
+    const trueStrongCount=strong5.filter(x=>x.isStrong).length;
+    const status=trueStrongCount>=3&&bestJodiConflict===0?'HIGH CONSENSUS':trueStrongCount>=1?'MODERATE':'MIXED SIGNAL';
 
+    // Family-Panna-aware Panna selector. The digit ranking stays independent;
+    // only the Panna layer now follows the same fixed Family Panna mapping used
+    // by Analysis. Family Jodi is intentionally not referenced here.
     const bestPannasForDigit=(digit,side)=>{
-      const key=side==='open'?'openPana':'closePana',stats={};
+      const key=side==='open'?'openPana':'closePana';
+      const digitFamilyPannaMap={
+        "1":["222","123","470","100","330","399","114"],
+        "2":["444","345","246","200","110","377","133"],
+        "3":["666","567","369","300","440","477","233"],
+        "4":["888","789","130","400","220","144","266"],
+        "5":["000","456","230","366","334","177","244"],
+        "6":["222","123","470","100","330","399","114"],
+        "7":["444","345","246","200","110","377","133"],
+        "8":["666","567","369","300","440","477","233"],
+        "9":["888","789","130","400","220","144","266"],
+        "0":["000","456","230","366","334","177","244"]
+      };
+      const groups=digitFamilyPannaMap[String(digit)]||[];
+      const groupStats={};
+      groups.forEach(g=>groupStats[g]={group:g,count:0,last:-1,maxDelay:0,recent20:0,recent10:0});
+      records.forEach((r,i)=>{
+        const p=numP(r[key]),g=p?PANNA_TO_GROUP[p]:null;
+        if(g&&groupStats[g]){groupStats[g].count++;groupStats[g].last=i;}
+      });
+      Object.values(groupStats).forEach(g=>{
+        g.delay=g.last<0?n:n-1-g.last;
+        let last=-1;
+        records.forEach((r,i)=>{const p=numP(r[key]);if(p&&PANNA_TO_GROUP[p]===g.group)last=i;});
+        // Historical max delay for the group, calculated from every occurrence.
+        let max=0;
+        for(let i=0;i<records.length;i++){
+          const p=numP(records[i][key]);
+          if(p&&PANNA_TO_GROUP[p]===g.group){max=Math.max(max,i-(i===records.length-1?i:i));}
+        }
+        // Use current delay + recency/count as the primary group score; maxDelay
+        // is retained as a stabilizer rather than a trigger by itself.
+        g.recent20=records.slice(-20).filter(r=>{const p=numP(r[key]);return p&&PANNA_TO_GROUP[p]===g.group;}).length;
+        g.recent10=records.slice(-10).filter(r=>{const p=numP(r[key]);return p&&PANNA_TO_GROUP[p]===g.group;}).length;
+        g.maxDelay=max;
+        g.score=g.delay*1.5+g.recent20*1.2+g.recent10*.8+g.count*.25;
+      });
+      const selectedGroups=Object.values(groupStats).sort((a,b)=>b.score-a.score||b.delay-a.delay||b.count-a.count||a.group.localeCompare(b.group)).slice(0,3);
+      const allowed=new Set(selectedGroups.map(g=>g.group));
+      const stats={};
       records.forEach((r,i)=>{
         const p=numP(r[key]);
-        if(!p) return;
-        // Only show Pannas whose calculated Ank matches the selected digit.
+        if(!p||PANNA_TO_GROUP[p]===undefined||!allowed.has(PANNA_TO_GROUP[p])) return;
+        // Keep the selected digit's Panna-total relation as a second filter.
         const pannaDigit=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;
         if(pannaDigit!==Number(digit)) return;
-        if(!stats[p])stats[p]={p,count:0,last:-1};stats[p].count++;stats[p].last=i;
+        if(!stats[p])stats[p]={p,count:0,last:-1,group:PANNA_TO_GROUP[p]};
+        stats[p].count++;stats[p].last=i;
       });
-      return Object.values(stats).map(x=>({...x,delay:n-1-x.last,recent20:records.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:records.slice(-10).filter(r=>numP(r[key])===x.p).length})).sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*0.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*0.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
+      const ranked=Object.values(stats).map(x=>{
+        const gs=groupStats[x.group]||{};
+        return {...x,delay:n-1-x.last,recent20:records.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:records.slice(-10).filter(r=>numP(r[key])===x.p).length,groupScore:gs.score||0,groupDelay:gs.delay||0};
+      }).sort((a,b)=>{
+        const sa=a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25+a.groupScore*.45;
+        const sb=b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25+b.groupScore*.45;
+        return sb-sa||b.groupDelay-a.groupDelay||b.delay-a.delay||a.p.localeCompare(b.p);
+      });
+      // If the Family-aware filter has no matching Panna, fall back to the
+      // previous Panna-total method so the UI never breaks on sparse datasets.
+      if(!ranked.length){
+        const fallback={};
+        records.forEach((r,i)=>{const p=numP(r[key]);if(!p)return;const pannaDigit=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;if(pannaDigit!==Number(digit))return;if(!fallback[p])fallback[p]={p,count:0,last:-1};fallback[p].count++;fallback[p].last=i;});
+        return Object.values(fallback).map(x=>({...x,delay:n-1-x.last,recent20:records.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:records.slice(-10).filter(r=>numP(r[key])===x.p).length})).sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
+      }
+      return ranked.slice(0,2).map(x=>x.p);
     };
     const openPannaData=topOpen.map(x=>({digit:x.digit,pannas:bestPannasForDigit(x.digit,'open'),score:x.score,delay:x.delay}));
     const closePannaData=topClose.map(x=>({digit:x.digit,pannas:bestPannasForDigit(x.digit,'close'),score:x.score,delay:x.delay}));
     const openPannaText=openPannaData.map(x=>`${x.digit}: ${x.pannas.join(' • ')||'-'}`).join(' | ');
     const closePannaText=closePannaData.map(x=>`${x.digit}: ${x.pannas.join(' • ')||'-'}`).join(' | ');
-    const digitBox=(x,i)=>`<div class=\"rounded-lg border ${i===0?'border-emerald-300 bg-emerald-100 text-emerald-900':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center\"><div class=\"text-2xl font-black leading-none tracking-widest\">${x.digit}</div><div class=\"text-[7px] font-bold mt-1 opacity-70\">${i===0?'STRONG':'TOP'}</div></div>`;
-    const pannaBox=(x,i)=>`<div class=\"rounded-md border ${i===0?'border-emerald-200 bg-emerald-50':'border-slate-200 bg-white'} px-1.5 py-1 text-center\"><div class=\"text-[7px] font-bold text-slate-400\">${x.digit}</div><div class=\"text-base font-black tracking-wider leading-none text-slate-800\">${x.pannas[0]||'-'} &nbsp;&nbsp; ${x.pannas[1]||'-'}</div></div>`;
+    const digitBox=(x,i)=>`<div class=\"rounded-lg border ${i===0?'border-2 border-rose-500 bg-rose-100 text-rose-950 shadow-sm':'border-slate-200 bg-slate-50 text-slate-800'} px-2 py-2 text-center\"><div class=\"text-2xl font-black leading-none tracking-widest\">${x.digit}</div><div class=\"text-[7px] font-bold mt-1 opacity-70\">${i===0?'🔴 STRONG':'TOP'}</div></div>`;
+    const pannaBox=(x,i)=>`<div class=\"rounded-md border ${i===0?'border-2 border-rose-500 bg-rose-100 shadow-sm':'border-slate-200 bg-white'} px-1.5 py-1 text-center\"><div class=\"text-[7px] font-bold text-slate-400\">${x.digit}</div><div class=\"text-base font-black tracking-wider leading-none text-slate-800\">${x.pannas[0]||'-'} &nbsp;&nbsp; ${x.pannas[1]||'-'}</div></div>`;
     document.getElementById('finalOpenTop3').innerHTML=openPannaData.map(digitBox).join('');
     document.getElementById('finalOpenPannas').innerHTML=openPannaData.map(pannaBox).join('');
     document.getElementById('finalCloseTop3').innerHTML=closePannaData.map(digitBox).join('');
     document.getElementById('finalClosePannas').innerHTML=closePannaData.map(pannaBox).join('');
     document.getElementById('finalOpenDetails').innerText=openPannaData.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
     document.getElementById('finalCloseDetails').innerText=closePannaData.map(x=>`S${x.score.toFixed(1)} D${x.delay}`).join(' | ');
+    // Signal quality is descriptive only: it summarizes agreement between the
+    // independent digit score and the Family-Panna-aware Panna layer.
+    const topGap=(arr)=>arr.length>1?Math.abs((arr[0]?.score||0)-(arr[1]?.score||0)):0;
+    const openGap=topGap(topOpen),closeGap=topGap(topClose);
+    const conflictCount=(arr)=>arr.filter(x=>x.delay<2).length;
+    const openConflict=conflictCount(topOpen),closeConflict=conflictCount(topClose);
+    const qualityScore=Math.max(0,Math.min(100,50+Math.min(openGap+closeGap,25)*1.2-(openConflict+closeConflict)*8));
+    const quality=qualityScore>=75?'HIGH':qualityScore>=55?'MODERATE':'LOW';
+    const signalCard=document.getElementById('finalConfidenceCard');
+    if(signalCard)signalCard.className=quality==='HIGH'?'rounded-xl border-2 border-rose-500 bg-rose-100 p-2 shadow-sm':quality==='MODERATE'?'rounded-xl border border-amber-300 bg-amber-50 p-2':'rounded-xl border border-slate-200 bg-slate-50 p-2';
+    document.getElementById('finalSignalQuality').innerText=`${quality==='HIGH'?'🔴 STRONG SIGNAL':quality} • ${qualityScore.toFixed(0)}/100`;
+    document.getElementById('finalSignalReason').innerText=`Digit gap O:${openGap.toFixed(1)} C:${closeGap.toFixed(1)} • low-delay conflicts O:${openConflict} C:${closeConflict} • Family-Panna active`;
     renderFinalRows(document.getElementById('finalJodiStrong'),strong5);renderFinalRows(document.getElementById('finalJodiSupport'),support5);
     const bestType=[...oeKeys].sort((a,b)=>oeDelay[b]-oeDelay[a])[0];
     document.getElementById('finalOddEvenBadge').innerText=bestType;
     document.getElementById('finalOddEvenFocus').innerText=`OO ${oeDelay.OO} • OE ${oeDelay.OE} • EO ${oeDelay.EO} • EE ${oeDelay.EE}`;
-    document.getElementById('finalConflict').innerText=bestJodiConflict?`⚠️ ${bestJodiConflict} Strong Jodiમાં 2+ conflict signals છે. Conflict Jodiને Strong તરીકે blindly ન લો.`:`✅ Strong Jodiમાં major conflict ઓછો છે.`;
-    const shareText = [
-      `OPEN  ${topOpen.map(x=>x.digit).join(' - ')}`,
-      `PANNA  ${openPannaText}`,
-      `CLOSE ${topClose.map(x=>x.digit).join(' - ')}`,
-      `PANNA  ${closePannaText}`,
-      `STRONG JODI  ${strong5.map(x=>x.jodi).join(' • ')}`,
-      `SUPPORT JODI ${support5.map(x=>x.jodi).join(' • ')}`
+    document.getElementById('finalConflict').innerText=bestJodiConflict?`⚠️ ${bestJodiConflict} Jodiમાં 2+ conflict signals છે. તેને Strong તરીકે ન ગણો.`:`${trueStrongCount>=3?'🔴 Multiple independent signals agree — Strong Jodi candidates highlighted.':'ℹ️ હાલ multi-signal Strong Jodi ઓછા છે; Top Jodi ને માત્ર ranking તરીકે જુઓ.'}`;
+    // Copy format for OPEN state.
+    const copyMarket=autoState?.market || (selectedMarket==='ALL_MERGED' ? (targetRecord?.marketName || 'ALL MARKETS') : selectedMarket);
+    const copyDate=autoState?.date || selectedDate;
+    const copyOpenPannas=openPannaData.flatMap(x=>x.pannas||[]).filter(Boolean).join(' - ');
+    const copyShareText = [
+      `${copyMarket} - ${copyDate}`,
+      `OPEN : ${topOpen.map(x=>x.digit).join(' - ')}`,
+      `CLOSE : ${topClose.map(x=>x.digit).join(' - ')}`,
+      `JODI : ${strong5.map(x=>x.jodi).join('-')}`,
+      `SUPP JODI : ${support5.map(x=>x.jodi).join('-')}`,
+      `Pana : ${copyOpenPannas}`
     ].join('\n');
-    document.getElementById('shortlistShareText').value=shareText;
+    document.getElementById('shortlistShareText').value=copyShareText;
     const targetEl=document.getElementById('shortlistTargetGame');
     if(targetEl){
       const targetMarketObj=autoState?.marketObj || marketsList.find(m=>m.name===selectedMarket);
@@ -1125,11 +1231,10 @@ else if (currentAnalysisView === 'Close' && data.closeAnk !== undefined && data.
 else if (currentAnalysisView === 'Total' && data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') targetVal = (parseInt(data.openAnk) + parseInt(data.closeAnk)) % 10; 
 else if (currentAnalysisView === 'Diff' && data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') targetVal = (10 + parseInt(data.closeAnk) - parseInt(data.openAnk)) % 10; 
 
-let fKey = null, fpKey = null, pannaToTest = data.openPana; 
-if (pannaToTest && pannaToTest.length === 3) { 
-for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) { 
-if (pList.includes(pannaToTest)) { fpKey = gKey; break; } 
-} 
+let fKey = null, openFpKey = null, closeFpKey = null;
+for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {
+if (data.openPana && String(data.openPana).length === 3 && pList.includes(String(data.openPana))) openFpKey = gKey;
+if (data.closePana && String(data.closePana).length === 3 && pList.includes(String(data.closePana))) closeFpKey = gKey;
 } 
 let jodiKey = null; 
 if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== "" && data.closeAnk !== "") { 
@@ -1142,7 +1247,7 @@ if (jList.includes(jodi)) { jodiKey = gKey; break; }
 } 
 } 
 
-records.push({ date: data.date, marketName: data.marketName, openTime, val: targetVal, familyKey: jodiKey, familyPannaKey: fpKey, openPana: data.openPana, openAnk: data.openAnk, closeAnk: data.closeAnk, openType: data.openType || '-' }); 
+records.push({ date: data.date, marketName: data.marketName, openTime, val: targetVal, familyKey: jodiKey, openFamilyPannaKey: openFpKey, closeFamilyPannaKey: closeFpKey, openPana: data.openPana, closePana: data.closePana, openAnk: data.openAnk, closeAnk: data.closeAnk, openType: data.openType || '-' }); 
 } 
 }); 
 
@@ -1189,57 +1294,73 @@ gridWrapper.appendChild(card);
 }); 
 gapGridContainer.appendChild(gridWrapper); 
 return; 
-} else if (currentAnalysisView === 'FamilyPanna') { 
-gridTitleLabel.innerText = `📊 More Analysis (FamilyPanna):`; 
-topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT"; 
-let activeGroups = [];
-const digitFamilyPannaMap = { 
-"1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"] 
-};
-if (isFamilyPannaMergeMode) {
-let parts = selectedFamilyPannaDigit.split('-');
-let set1 = digitFamilyPannaMap[parts[0]] || [];
-let set2 = digitFamilyPannaMap[parts[1]] || [];
-activeGroups = [...new Set([...set1, ...set2])];
-} else {
-activeGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];
-}
+} else if (currentAnalysisView === 'FamilyPanna') {
+  gridTitleLabel.innerText = `📊 More Analysis (FamilyPanna — ${selectedFamilyPannaSession}):`;
+  topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT";
+  let activeGroups = [];
+  const digitFamilyPannaMap = {
+    "1": ["222", "123", "470", "100", "330", "399", "114"], "2": ["444", "345", "246", "200", "110", "377", "133"], "3": ["666", "567", "369", "300", "440", "477", "233"], "4": ["888", "789", "130", "400", "220", "144", "266"], "5": ["000", "456", "230", "366", "334", "177", "244"], "6": ["222", "123", "470", "100", "330", "399", "114"], "7": ["444", "345", "246", "200", "110", "377", "133"], "8": ["666", "567", "369", "300", "440", "477", "233"], "9": ["888", "789", "130", "400", "220", "144", "266"], "0": ["000", "456", "230", "366", "334", "177", "244"]
+  };
+  if (isFamilyPannaMergeMode) {
+    let parts = selectedFamilyPannaDigit.split('-');
+    activeGroups = [...new Set([...(digitFamilyPannaMap[parts[0]] || []), ...(digitFamilyPannaMap[parts[1]] || [])])];
+  } else {
+    activeGroups = digitFamilyPannaMap[selectedFamilyPannaDigit] || [];
+  }
 
-let fpStats = {}; 
-activeGroups.forEach(k => fpStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 }); 
-records.forEach((rec, idx) => { if (rec.familyPannaKey && fpStats[rec.familyPannaKey]) fpStats[rec.familyPannaKey].occurrences.push(idx); }); 
-let totalLen = records.length; 
-activeGroups.forEach(k => { 
-let occs = fpStats[k].occurrences; 
-fpStats[k].currentDelay = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1]; 
-if (occs.length > 0) fpStats[k].lastSeen = occs[occs.length - 1]; 
-let gaps = occs.length > 0 ? [occs[0]] : [totalLen]; 
-for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1); 
-if (occs.length > 0) gaps.push(totalLen - 1 - occs[occs.length - 1]); 
-fpStats[k].maxDelay = Math.max(...gaps); 
-}); 
-let fpListArr = activeGroups.map(k => ({ group: k, ...fpStats[k] })); 
-let sortedByRecent = [...fpListArr].sort((a, b) => a.currentDelay - b.currentDelay || b.lastSeen - a.lastSeen); 
-let fpRecent2 = sortedByRecent.slice(0, 2); 
-let fpTop2 = fpListArr.filter(item => !fpRecent2.some(r => r.group === item.group)).sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 2); 
-let fpUsed = new Set([...fpRecent2.map(x => x.group), ...fpTop2.map(x => x.group)]); 
-let fpMid3 = fpListArr.filter(x => !fpUsed.has(x.group)); 
+  const fpKeyField = selectedFamilyPannaSession === 'Close' ? 'closeFamilyPannaKey' : 'openFamilyPannaKey';
+  let fpStats = {};
+  activeGroups.forEach(k => fpStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1, count: 0 });
 
-topAnkVal.innerText = fpTop2[0] ? fpTop2[0].currentDelay : 0; topMaxVal.innerText = `Max: ${fpTop2[0] ? fpTop2[0].maxDelay : 0}`; topListContainer.innerText = `[${fpTop2.map(x => x.group).join(', ')}]`; 
-midAnkVal.innerText = fpMid3[0] ? fpMid3[0].currentDelay : 0; midMaxVal.innerText = `Max: ${fpMid3[0] ? fpMid3[0].maxDelay : 0}`; midListContainer.innerText = `[${fpMid3.map(x => x.group).join(', ')}]`; 
-recentAnkVal.innerText = fpRecent2[0] ? fpRecent2[0].currentDelay : 0; recentMaxVal.innerText = `Max: ${fpRecent2[0] ? fpRecent2[0].maxDelay : 0}`; recentListContainer.innerText = `[${fpRecent2.map(x => x.group).join(', ')}]`; 
+  records.forEach((rec, idx) => {
+    const key = rec[fpKeyField];
+    if (key && fpStats[key]) {
+      fpStats[key].occurrences.push(idx);
+      fpStats[key].count++;
+      fpStats[key].lastSeen = idx;
+    }
+  });
 
-gapGridContainer.innerHTML = ''; 
-let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-3 gap-1.5 text-center"; 
-fpListArr.forEach((item) => { 
-let isHit = (item.currentDelay === 0);
-let card = document.createElement('div'); card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm cursor-pointer" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition"; 
-card.innerHTML = `<div class="text-xs font-bold text-slate-500">Grp ${item.group}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-indigo-600'}">${item.currentDelay}</div>`; 
-card.addEventListener('click', () => showFamilyPannaDetails(item.group)); 
-gridWrapper.appendChild(card); 
-}); 
-gapGridContainer.appendChild(gridWrapper); 
-return; 
+  const totalLen = records.length;
+  activeGroups.forEach(k => {
+    const st = fpStats[k], occs = st.occurrences;
+    st.currentDelay = occs.length ? totalLen - 1 - occs[occs.length - 1] : totalLen;
+    const gaps = occs.length ? [occs[0]] : [totalLen];
+    for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1);
+    if (occs.length) gaps.push(totalLen - 1 - occs[occs.length - 1]);
+    st.maxDelay = Math.max(0, ...gaps);
+  });
+
+  const fpListArr = activeGroups.map(k => ({ group: k, ...fpStats[k] }));
+  const byRecent = [...fpListArr].sort((a,b) => a.currentDelay - b.currentDelay || b.lastSeen - a.lastSeen || a.group.localeCompare(b.group));
+  const fpRecent2 = byRecent.slice(0, 2);
+  const recentSet = new Set(fpRecent2.map(x => x.group));
+  const fpTop2 = fpListArr.filter(x => !recentSet.has(x.group)).sort((a,b) => b.currentDelay - a.currentDelay || b.maxDelay - a.maxDelay || b.count - a.count || a.group.localeCompare(b.group)).slice(0, 2);
+  const used = new Set([...fpRecent2.map(x => x.group), ...fpTop2.map(x => x.group)]);
+  const fpMid3 = fpListArr.filter(x => !used.has(x.group)).sort((a,b) => b.currentDelay - a.currentDelay || b.maxDelay - a.maxDelay || b.count - a.count || a.group.localeCompare(b.group));
+
+  topAnkVal.innerText = fpTop2[0] ? fpTop2[0].currentDelay : 0;
+  topMaxVal.innerText = `Max: ${fpTop2[0] ? fpTop2[0].maxDelay : 0} • Count: ${fpTop2[0] ? fpTop2[0].count : 0}`;
+  topListContainer.innerText = `[${fpTop2.map(x => x.group).join(', ')}]`;
+  midAnkVal.innerText = fpMid3[0] ? fpMid3[0].currentDelay : 0;
+  midMaxVal.innerText = `Max: ${fpMid3[0] ? fpMid3[0].maxDelay : 0} • Count: ${fpMid3[0] ? fpMid3[0].count : 0}`;
+  midListContainer.innerText = `[${fpMid3.map(x => x.group).join(', ')}]`;
+  recentAnkVal.innerText = fpRecent2[0] ? fpRecent2[0].currentDelay : 0;
+  recentMaxVal.innerText = `Max: ${fpRecent2[0] ? fpRecent2[0].maxDelay : 0} • Count: ${fpRecent2[0] ? fpRecent2[0].count : 0}`;
+  recentListContainer.innerText = `[${fpRecent2.map(x => x.group).join(', ')}]`;
+
+  gapGridContainer.innerHTML = '';
+  let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-3 gap-1.5 text-center";
+  fpListArr.forEach(item => {
+    const isHit = item.currentDelay === 0;
+    let card = document.createElement('div');
+    card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm cursor-pointer" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm cursor-pointer hover:bg-slate-50 transition";
+    card.innerHTML = `<div class="text-xs font-bold text-slate-500">Grp ${item.group}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-indigo-600'}">${item.currentDelay}</div><div class="text-[9px] text-slate-400 font-semibold">Max: ${item.maxDelay} • Count: ${item.count}</div>`;
+    card.addEventListener('click', () => showFamilyPannaDetails(item.group));
+    gridWrapper.appendChild(card);
+  });
+  gapGridContainer.appendChild(gridWrapper);
+  return;
 } else if (currentAnalysisView === 'OddEven') { 
 gridTitleLabel.innerText = `📊 More Analysis (OddEven):`; 
 topCardBox.classList.add('hidden');
@@ -1353,17 +1474,22 @@ oeWrapper.appendChild(boxesGrid);
 
 gapGridContainer.appendChild(oeWrapper);
 return; 
-} else if (currentAnalysisView === 'PanelType') { 
-gridTitleLabel.innerText = `📊 More Analysis (PanelType):`; 
-topCardTitle.innerText = "🔥 Single (SP)"; midCardTitle.innerText = "💠 Double (DP)"; recentCardTitle.innerText = "⚡ Triple (TP)"; 
-let spCount = 0, dpCount = 0, tpCount = 0; 
-records.forEach(r => { if (r.openType.includes("SP")) spCount++; else if (r.openType.includes("DP")) dpCount++; else if (r.openType.includes("TP")) tpCount++; }); 
-topAnkVal.innerText = spCount; topMaxVal.innerText = "Max: SP"; topListContainer.innerText = `[Single Panna]`; 
-midAnkVal.innerText = dpCount; midMaxVal.innerText = "Max: DP"; midListContainer.innerText = `[Double Panna]`; 
-recentAnkVal.innerText = tpCount; recentMaxVal.innerText = "Max: TP"; recentListContainer.innerText = `[Triple Panna]`; 
-gapGridContainer.innerHTML = `<div class="col-span-5 bg-white border border-slate-200 rounded-xl p-3 text-center shadow-sm space-y-1"><div class="text-xs font-bold text-slate-600">Panel Types Breakdown</div><div class="text-xs font-bold text-slate-700">SP: ${spCount} | DP: ${dpCount} | TP: ${tpCount}</div></div>`; 
-return; 
-} 
+} else if (currentAnalysisView === 'PanelType') {
+gridTitleLabel.innerText = `📊 More Analysis (PanelType):`;
+topCardTitle.innerText = "🔴 STRONG PANEL"; midCardTitle.innerText = "💠 SUPPORT"; recentCardTitle.innerText = "⚡ RECENT";
+const panelTypes=[{key:'SP',label:'Single Panna'},{key:'DP',label:'Double Panna'},{key:'TP',label:'Triple Panna'}];
+const pStats={SP:{occ:[],count:0},DP:{occ:[],count:0},TP:{occ:[],count:0}};
+records.forEach((r,i)=>{const t=String(r.openType||'').toUpperCase();const k=t.includes('SP')?'SP':t.includes('DP')?'DP':t.includes('TP')?'TP':null;if(k){pStats[k].occ.push(i);pStats[k].count++;}});
+const plen=records.length;
+panelTypes.forEach(pt=>{const st=pStats[pt.key],o=st.occ;st.delay=o.length?plen-1-o[o.length-1]:plen;const gaps=o.length?[o[0]]:[plen];for(let i=1;i<o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(plen-1-o[o.length-1]);st.maxDelay=Math.max(...gaps);st.recent20=o.filter(i=>i>=Math.max(0,plen-20)).length;st.score=st.delay*1.5+st.recent20*1.2+st.count*.25;});
+const rankedPanels=panelTypes.map(x=>({...x,...pStats[x.key]})).sort((a,b)=>b.score-a.score||b.delay-a.delay||b.count-a.count);
+const strongPanel=rankedPanels[0],supportPanels=rankedPanels.slice(1);
+topAnkVal.innerText=strongPanel?.delay||0;topMaxVal.innerText=`Max: ${strongPanel?.maxDelay||0} • Count: ${strongPanel?.count||0}`;topListContainer.innerText=`[${strongPanel?.key||'-'} — ${strongPanel?.label||'-'}]`;
+midAnkVal.innerText=supportPanels[0]?.delay||0;midMaxVal.innerText=`Max: ${supportPanels[0]?.maxDelay||0} • Count: ${supportPanels[0]?.count||0}`;midListContainer.innerText=`[${supportPanels.map(x=>x.key).join(', ')}]`;
+recentAnkVal.innerText=rankedPanels[2]?.delay||0;recentMaxVal.innerText=`Max: ${rankedPanels[2]?.maxDelay||0} • Count: ${rankedPanels[2]?.count||0}`;recentListContainer.innerText=`[${rankedPanels[2]?.key||'-'}]`;
+gapGridContainer.innerHTML=`<div class="grid grid-cols-3 gap-1.5 text-center">${rankedPanels.map((x,i)=>`<div class="rounded-xl ${i===0?'bg-rose-100 border-2 border-rose-500 shadow-sm':'bg-white border border-slate-200'} p-2"><div class="text-xs font-black ${i===0?'text-rose-800':'text-slate-600'}">${i===0?'🔴 STRONG PANEL':'SUPPORT'}</div><div class="text-lg font-black mt-1">${x.key}</div><div class="text-[9px] text-slate-500">${x.label}</div><div class="text-[9px] font-bold mt-1">Delay ${x.delay} • Max ${x.maxDelay}</div></div>`).join('')}</div>`;
+return;
+}
 
 topCardBox.classList.remove('hidden');
 midCardBox.classList.remove('hidden');
@@ -1526,10 +1652,11 @@ document.getElementById('fpModalTitle').innerText = `Group ${groupKey} Details`;
 groupPannas.forEach(panna => { 
 let lastIdx = -1; 
 for (let i = filteredRecords.length - 1; i >= 0; i--) { 
-if (String(filteredRecords[i].openPana || '') === String(panna)) { lastIdx = i; break; } 
+const pannaField = selectedFamilyPannaSession === 'Close' ? 'closePana' : 'openPana';
+if (String(filteredRecords[i][pannaField] || '') === String(panna)) { lastIdx = i; break; } 
 } 
 const delay = lastIdx === -1 ? totalLen : totalLen - 1 - lastIdx; 
-const occurrenceCount = filteredRecords.filter(r => String(r.openPana || '') === String(panna)).length; 
+const occurrenceCount = filteredRecords.filter(r => String(r[pannaField] || '') === String(panna)).length; 
 
 const row = document.createElement('div'); 
 row.className = "flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 rounded-xl font-mono shadow-sm"; 
