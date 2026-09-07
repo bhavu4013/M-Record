@@ -105,7 +105,8 @@
 <button type="button" data-view="FamilyJodi" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Family Jodi</button> 
 <button type="button" data-view="FamilyPanna" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Family Panna</button> 
 <button type="button" data-view="OddEven" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Odd/Even</button> 
-<button type="button" data-view="PanelType" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Panel Type</button> 
+<button type="button" data-view="PanelType" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">Panel Type</button>
+<button type="button" data-view="Backtest" class="analysis-view-btn bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-center hover:bg-slate-300 transition shrink-0">🧪 Backtest</button> 
 </div> 
 
 <!-- Family Panna Toggle & Digit Selection --> 
@@ -163,6 +164,32 @@
 <div id="gapGridContainer" class="space-y-1.5"></div> 
 </div> 
 </div> 
+
+<!-- BACKTEST LAB -->
+<div id="backtestSection" class="hidden space-y-3 w-full">
+  <div class="rounded-xl border border-indigo-200 bg-indigo-50 p-3"><div class="flex items-center justify-between gap-2"><div><div class="text-sm font-black text-indigo-800">🧪 Backtest Lab</div><div class="text-[9px] font-semibold text-indigo-600 mt-0.5">Historical data પર strategy check — statistical result only.</div></div><span id="backtestStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">READY</span><span id="masterDataStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">MASTER…</span></div></div>
+  <div class="rounded-xl border border-slate-200 bg-white p-3 space-y-3">
+    <div class="grid grid-cols-2 gap-2">
+      <label class="text-[10px] font-bold text-slate-600">Market<select id="backtestMarketSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="ALL_MERGED">All Markets</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Mode<select id="backtestModeSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="COMBO" selected>Open × Close Combo</option><option value="OPEN">Open Only</option><option value="CLOSE">Close Only</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Open Group<select id="backtestOpenGroupSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="BOTH" selected>TOP + RECENT</option><option value="TOP">TOP only</option><option value="RECENT">RECENT only</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Close Group<select id="backtestCloseGroupSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="BOTH" selected>TOP + RECENT</option><option value="TOP">TOP only</option><option value="RECENT">RECENT only</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Open/Close Count<select id="backtestRankCountSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="1">1 + 1</option><option value="2">2 + 2</option><option value="3" selected>3 + 3</option><option value="4">4 + 4</option><option value="5">5 + 5</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">4-Way Delay Rule<select id="backtestFourWaySelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="0" selected>OFF — Rank by score</option><option value="2">2 of 4 delayed</option><option value="3">3 of 4 delayed</option><option value="4">ALL 4 delayed</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Delay Threshold<select id="backtestDelayThresholdSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="0" selected>Any delay</option><option value="3">≥ 3</option><option value="5">≥ 5</option><option value="8">≥ 8</option><option value="10">≥ 10</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Top Jodi<select id="backtestTopNSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="1">Top 1</option><option value="3" selected>Top 3</option><option value="5">Top 5</option><option value="10">Top 10</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">History Window<select id="backtestWindowSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="20">20 games</option><option value="30">30 games</option><option value="50" selected>50 games</option><option value="100">100 games</option><option value="200">200 games</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Score Weight<select id="backtestScoreSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="BALANCED" selected>Balanced</option><option value="DELAY">Delay Heavy</option><option value="RECENT">Recent Heavy</option><option value="FOURWAY">4-Way Minimum Heavy</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Test From<input id="backtestFromDate" type="date" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"></label>
+      <label class="text-[10px] font-bold text-slate-600">Test To<input id="backtestToDate" type="date" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"></label>
+    </div>
+    <div class="flex gap-2"><button id="runBacktestBtn" type="button" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-black text-sm shadow-sm">Run Backtest</button><button id="resetBacktestBtn" type="button" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 rounded-lg font-bold text-sm">Reset</button></div>
+  </div>
+  <div class="grid grid-cols-2 gap-2"><div class="rounded-xl border border-slate-200 bg-white p-2 text-center"><div class="text-[9px] font-black text-slate-500">TESTED</div><div id="btTested" class="text-lg font-black text-slate-800">0</div></div><div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2 text-center"><div class="text-[9px] font-black text-emerald-700">HITS</div><div id="btHits" class="text-lg font-black text-emerald-800">0</div></div><div class="rounded-xl border border-rose-200 bg-rose-50 p-2 text-center"><div class="text-[9px] font-black text-rose-700">MISSES</div><div id="btMisses" class="text-lg font-black text-rose-800">0</div></div><div class="rounded-xl border border-indigo-200 bg-indigo-50 p-2 text-center"><div class="text-[9px] font-black text-indigo-700">HIT RATE</div><div id="btRate" class="text-lg font-black text-indigo-800">0%</div></div></div>
+  <div class="rounded-xl border border-slate-200 bg-white p-3"><div class="flex items-center justify-between mb-2"><div class="text-xs font-black text-slate-700">📊 Candidate Performance</div><div id="btDetailLabel" class="text-[9px] font-semibold text-slate-400">-</div></div><div id="backtestCandidateGrid" class="space-y-1"></div></div>
+  <div class="rounded-xl border border-slate-200 bg-white p-3"><div class="text-xs font-black text-slate-700 mb-2">🧾 Recent Backtest Rows</div><div class="overflow-x-auto"><table class="w-full text-[9px] border-collapse"><thead><tr class="bg-slate-100 text-slate-600"><th class="p-1 text-left">Date</th><th class="p-1 text-left">Signal</th><th class="p-1 text-left">Prediction</th><th class="p-1 text-left">Actual</th><th class="p-1 text-left">Result</th></tr></thead><tbody id="backtestRows"></tbody></table></div></div>
+</div>
+
 </div> 
 
 <!-- SHORTLIST SECTION -->
@@ -332,7 +359,7 @@ appId: "1:479303152172:web:3cc53dcecc9e8ce1ebd789"
 }; 
 
 const app = initializeApp(firebaseConfig); 
-const db = getFirestore(app); 
+const db = getFirestore(app);
 
 const dateInput = document.getElementById('recordDate'); 
 dateInput.value = new Date().toISOString().split('T')[0]; 
@@ -345,7 +372,13 @@ let isFamilyPannaMergeMode = false;
 let familyPannaAutoSelect = true; 
 let oddEvenMode = 'Merge'; 
 let selectedOddEvenDigit = "1";
-let globalAllRecords = []; 
+let globalAllRecords = [];
+let globalRawRecords = [];
+let rawRecordsCacheLoaded = false;
+let rawRecordsCachePromise = null;
+let masterData = { familyJodi: null, familyPanna: null, version: 0 };
+let masterDataLoaded = false;
+let masterDataPromise = null; 
 
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
 const navAnalysisBtn = document.getElementById('navAnalysisBtn'); 
@@ -377,7 +410,7 @@ pageTitle.innerText = "Data Analysis Portal";
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
 navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-500 font-semibold transition"; 
-loadAnalysisData(); 
+loadMarkets().then(() => loadAnalysisData()).catch(err => { console.error('Analysis init error:', err); loadAnalysisData(); }); 
 }); 
 
 navShortlistBtn.addEventListener('click', () => { 
@@ -396,6 +429,7 @@ const analysisViewBtns = document.querySelectorAll('.analysis-view-btn');
 const familyPannaOptionsContainer = document.getElementById('familyPannaOptionsContainer'); 
 const oddEvenOptionsContainer = document.getElementById('oddEvenOptionsContainer'); 
 const analysisCardsContainer = document.getElementById('analysisCardsContainer'); 
+const backtestSection = document.getElementById('backtestSection');
 
 analysisViewBtns.forEach(btn => { 
 btn.addEventListener('click', (e) => { 
@@ -405,7 +439,8 @@ currentAnalysisView = e.target.getAttribute('data-view');
 
 familyPannaOptionsContainer.classList.add('hidden'); 
 oddEvenOptionsContainer.classList.add('hidden'); 
-analysisCardsContainer.classList.remove('hidden'); 
+if (backtestSection) backtestSection.classList.toggle('hidden', currentAnalysisView !== 'Backtest');
+analysisCardsContainer.classList.toggle('hidden', currentAnalysisView === 'Backtest'); 
 document.getElementById('topCardBox').classList.remove('hidden');
 document.getElementById('midCardBox').classList.remove('hidden');
 document.getElementById('recentCardBox').classList.remove('hidden');
@@ -415,7 +450,10 @@ familyPannaAutoSelect = true;
 familyPannaOptionsContainer.classList.remove('hidden'); 
 } else if (currentAnalysisView === 'OddEven') { 
 oddEvenOptionsContainer.classList.remove('hidden'); 
-} 
+} else if (currentAnalysisView === 'Backtest') {
+initBacktestUI();
+return;
+}
 loadAnalysisData(); 
 }); 
 }); 
@@ -744,22 +782,89 @@ loadMarkets();
 // --- FINAL INDEPENDENT SHORTLIST RANKING ENGINE ---
 // Independent historical ranking. Rule 1-4 / old Common / old Strong outputs are not used.
 const FAMILY_DIGITS = {0:[0,5],1:[1,6],2:[2,7],3:[3,8],4:[4,9],5:[0,5],6:[1,6],7:[2,7],8:[3,8],9:[4,9]};
-const FAMILY_JODI_GROUPS = {
+const DEFAULT_FAMILY_JODI_GROUPS = {
   "11":["11","16","61","66"],"12":["12","17","21","26","62","67","71","76"],"13":["13","18","31","36","63","68","81","86"],"14":["14","19","41","46","64","69","91","96"],"15":["10","15","50","55","01","06","51","60"],
   "22":["22","27","72","77"],"23":["23","28","32","37","73","78","82","87"],"24":["24","29","42","47","74","79","92","97"],"25":["20","25","52","57","70","75","02","07"],
   "33":["33","38","83","88"],"34":["34","39","43","48","84","89","93","98"],"35":["30","35","53","58","80","85","03","08"],
   "44":["44","49","94","99"],"45":["40","45","54","59","90","95","04","09"],"55":["00","05","50","55"]
 };
-const FAMILY_PANNA_GROUPS = {
+const DEFAULT_FAMILY_PANNA_GROUPS = {
   "222":["777","222","227","277"],"444":["444","999","499","449"],"666":["111","666","166","116"],"888":["888","333","338","388"],"000":["555","000","500","550"],
   "123":["128","123","678","178","236","367","137","268"],"345":["345","890","390","340","480","458","589","359"],"567":["157","567","120","260","670","170","256","125"],"789":["789","234","248","478","239","289","347","379"],"456":["456","145","140","190","690","460","159","569"],
   "470":["470","240","290","790","245","259","579","457"],"246":["246","269","129","124","147","179","679","467"],"369":["346","369","148","134","139","189","689","468"],"130":["130","180","680","360","356","568","158","135"],"230":["230","280","780","370","258","235","357","578"],
   "100":["100","600","155","556","560","150"],"200":["200","700","255","557","570","250"],"300":["300","800","355","558","580","350"],"400":["400","900","455","559","590","450"],
   "366":["366","668","113","118","168","136"],"330":["335","330","588","880","380","358"],"110":["110","115","660","566","156","160"],"440":["445","440","599","990","490","459"],"220":["220","225","770","577","257","270"],"334":["339","334","889","488","348","389"],"399":["399","899","344","448","489","349"],"377":["778","377","228","223","237","278"],"477":["779","477","229","224","247","279"],"144":["446","144","699","199","149","469"],"177":["177","677","122","226","267","127"],"114":["119","114","669","466","146","169"],"133":["336","133","688","188","138","368"],"233":["337","233","788","288","238","378"],"266":["266","667","112","117","167","126"],"244":["447","244","799","299","249","479"]
 };
-const PANNA_TO_GROUP=(()=>{const m={};Object.entries(FAMILY_PANNA_GROUPS).forEach(([g,a])=>a.forEach(p=>m[p]=g));return m;})();
-const JODI_TO_FAMILY=(()=>{const m={};Object.entries(FAMILY_JODI_GROUPS).forEach(([g,a])=>a.forEach(j=>m[j]=g));return m;})();
-const JODI_TO_FAMILIES=(()=>{const m={};Object.entries(FAMILY_JODI_GROUPS).forEach(([g,a])=>a.forEach(j=>{if(!m[j])m[j]=[];m[j].push(g);}));return m;})();
+
+let FAMILY_JODI_GROUPS = DEFAULT_FAMILY_JODI_GROUPS;
+let FAMILY_PANNA_GROUPS = DEFAULT_FAMILY_PANNA_GROUPS;
+function rebuildMasterIndexes(){
+  PANNA_TO_GROUP={};
+  Object.entries(FAMILY_PANNA_GROUPS).forEach(([g,a])=>a.forEach(p=>PANNA_TO_GROUP[p]=g));
+  JODI_TO_FAMILIES={};
+  Object.entries(FAMILY_JODI_GROUPS).forEach(([g,a])=>a.forEach(j=>{if(!JODI_TO_FAMILIES[j])JODI_TO_FAMILIES[j]=[];JODI_TO_FAMILIES[j].push(g);}));
+  JODI_TO_FAMILY={};
+  Object.entries(JODI_TO_FAMILIES).forEach(([j,gs])=>JODI_TO_FAMILY[j]=gs[0]);
+}
+let PANNA_TO_GROUP={};
+let JODI_TO_FAMILY={};
+let JODI_TO_FAMILIES={};
+rebuildMasterIndexes();
+async function loadMasterData(){
+  if(masterDataLoaded) return masterData;
+  if(masterDataPromise) return masterDataPromise;
+  masterDataPromise=(async()=>{
+    try{
+      const [jSnap,pSnap]=await Promise.all([getDoc(doc(db,'masterData','familyJodi')),getDoc(doc(db,'masterData','familyPanna'))]);
+      const j=jSnap.exists()?jSnap.data():null, p=pSnap.exists()?pSnap.data():null;
+      if(j?.groups && p?.groups){
+        FAMILY_JODI_GROUPS=j.groups;
+        FAMILY_PANNA_GROUPS=p.groups;
+        masterData={familyJodi:FAMILY_JODI_GROUPS,familyPanna:FAMILY_PANNA_GROUPS,version:Math.max(j.version||1,p.version||1)};
+        rebuildMasterIndexes();
+      } else {
+        masterData={familyJodi:DEFAULT_FAMILY_JODI_GROUPS,familyPanna:DEFAULT_FAMILY_PANNA_GROUPS,version:0};
+      }
+      masterDataLoaded=true;
+      const ms=document.getElementById('masterDataStatus'); if(ms) ms.textContent = masterData.version ? `MASTER v${masterData.version}` : 'LOCAL BASELINE';
+      return masterData;
+    }catch(e){
+      console.warn('Master data load failed; using exact local baseline.',e);
+      masterData={familyJodi:DEFAULT_FAMILY_JODI_GROUPS,familyPanna:DEFAULT_FAMILY_PANNA_GROUPS,version:0};
+      masterDataLoaded=true;
+      const ms=document.getElementById('masterDataStatus'); if(ms) ms.textContent = masterData.version ? `MASTER v${masterData.version}` : 'LOCAL BASELINE';
+      return masterData;
+    }
+  })();
+  return masterDataPromise;
+}
+async function seedMasterDataIfMissing(){
+  try{
+    const [jSnap,pSnap]=await Promise.all([getDoc(doc(db,'masterData','familyJodi')),getDoc(doc(db,'masterData','familyPanna'))]);
+    const writes=[];
+    if(!jSnap.exists()) writes.push(setDoc(doc(db,'masterData','familyJodi'),{groups:DEFAULT_FAMILY_JODI_GROUPS,version:1,updatedAt:serverTimestamp()}));
+    if(!pSnap.exists()) writes.push(setDoc(doc(db,'masterData','familyPanna'),{groups:DEFAULT_FAMILY_PANNA_GROUPS,version:1,updatedAt:serverTimestamp()}));
+    if(writes.length) await Promise.all(writes);
+  }catch(e){console.warn('Master data seed skipped:',e);}
+}
+// Master data is initialized only after its state variables and default maps are declared.
+loadMasterData();
+seedMasterDataIfMissing();
+
+async function loadAllRawRecords(force=false){
+  if(rawRecordsCacheLoaded && !force) return globalRawRecords;
+  if(rawRecordsCachePromise && !force) return rawRecordsCachePromise;
+  rawRecordsCachePromise=(async()=>{
+    const snap=await getDocs(collection(db,'matka_records'));
+    const rows=[];
+    snap.forEach(ds=>{const d=ds.data();if(d.date&&d.marketName)rows.push({id:ds.id,...d});});
+    rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes(a.openTime ?? marketsList.find(m=>m.name===a.marketName)?.openTime)??1439)-(timeToMinutes(b.openTime ?? marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
+    globalRawRecords=rows; rawRecordsCacheLoaded=true; return rows;
+  })().finally(()=>{rawRecordsCachePromise=null;});
+  return rawRecordsCachePromise;
+}
+function invalidateRawRecordsCache(){rawRecordsCacheLoaded=false;globalRawRecords=[];}
+
 function familyJodiDelayMap(records){
   const completed=records.filter(r=>digitOf(r.openAnk)!==null&&digitOf(r.closeAnk)!==null);
   const keys=Object.keys(FAMILY_JODI_GROUPS),last=Object.fromEntries(keys.map(k=>[k,-1]));
@@ -783,6 +888,42 @@ function historicalMaxDelay(records,keyFn,keys){
   keys.forEach(k=>{let prev=-1,max=0;records.forEach((r,i)=>{if(keyFn(r)===k){if(prev>=0)max=Math.max(max,i-prev-1);prev=i;}});if(prev<0)max=n;else max=Math.max(max,n-1-prev);out[k]=max;});
   return out;
 }
+// Central statistics engine shared by Analysis, Shortlist and Backtest.
+function buildAnalysisStats(records, options={}){
+  const source=Array.isArray(records)?records:[];
+  const completed=source.filter(r=>digitOf(r.openAnk)!==null&&digitOf(r.closeAnk)!==null);
+  const openRecords=source.filter(r=>digitOf(r.openAnk)!==null);
+  const closeRecords=source.filter(r=>digitOf(r.closeAnk)!==null);
+  const calc=options.completedOnly===false?source:completed;
+  const digits=Array.from({length:10},(_,i)=>i), oeKeys=['OO','OE','EO','EE'];
+  const pannaOEKeys=['OOO','OOE','OEO','OEE','EOO','EOE','EEO','EEE'];
+  const familyJodiKeys=Object.keys(FAMILY_JODI_GROUPS), familyPannaKeys=Object.keys(FAMILY_PANNA_GROUPS);
+  const openDelay=lastSeenDelay(calc,r=>digitOf(r.openAnk));
+  const closeDelay=lastSeenDelay(calc,r=>digitOf(r.closeAnk));
+  const totalDelay=lastSeenDelay(calc,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10});
+  const diffDelay=lastSeenDelay(calc,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10});
+  const oeDelay=categoryDelay(calc,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:oddEvenType(o,c)},oeKeys);
+  const openPannaOE=categoryDelay(calc,r=>pannaParity(r.openPana),pannaOEKeys), closePannaOE=categoryDelay(calc,r=>pannaParity(r.closePana),pannaOEKeys);
+  const familyJodiDelay=familyJodiDelayMap(calc);
+  const openFamilyDelay=categoryDelay(calc,r=>{const o=digitOf(r.openAnk);return o===null?null:String(Math.min(...FAMILY_DIGITS[o]))},['0','1','2','3','4']);
+  const closeFamilyDelay=categoryDelay(calc,r=>{const c=digitOf(r.closeAnk);return c===null?null:String(Math.min(...FAMILY_DIGITS[c]))},['0','1','2','3','4']);
+  const openPannaDelay=categoryDelay(calc,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,familyPannaKeys);
+  const closePannaDelay=categoryDelay(calc,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,familyPannaKeys);
+  const jodiDelay=lastSeenDelay(calc,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:o*10+c},100);
+  const max={
+    open:historicalMaxDelay(calc,r=>digitOf(r.openAnk),digits),
+    close:historicalMaxDelay(calc,r=>digitOf(r.closeAnk),digits),
+    total:historicalMaxDelay(calc,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},digits),
+    diff:historicalMaxDelay(calc,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},digits),
+    familyPannaOpen:historicalMaxDelay(calc,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,familyPannaKeys),
+    familyPannaClose:historicalMaxDelay(calc,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,familyPannaKeys)
+  };
+  // Family Jodi has overlapping memberships, so each group gets its own gap scan.
+  max.familyJodi=Object.fromEntries(familyJodiKeys.map(g=>{let prev=-1,mx=0;calc.forEach((r,i)=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);if(o===null||c===null)return;if((JODI_TO_FAMILIES[`${o}${c}`]||[]).includes(g)){if(prev>=0)mx=Math.max(mx,i-prev-1);prev=i;}});mx=prev<0?calc.length:Math.max(mx,calc.length-1-prev);return [g,mx];}));
+  const recent=(getter,key,windowSize=20)=>freqIn(calc,getter,windowSize,key);
+  return {source,completed,openRecords,closeRecords,calc,count:calc.length,digits,oeKeys,pannaOEKeys,familyJodiKeys,familyPannaKeys,openDelay,closeDelay,totalDelay,diffDelay,oeDelay,openPannaOE,closePannaOE,familyJodiDelay,openFamilyDelay,closeFamilyDelay,openPannaDelay,closePannaDelay,jodiDelay,max,recent};
+}
+
 function rankWithTies(arr){return [...arr].sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);}
 function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>{const strong=el.id==='finalJodiStrong'&&x.isStrong;return `<div class="rounded-lg ${strong?'bg-rose-100 border-2 border-rose-500 text-rose-950 shadow-sm':'bg-amber-50 border border-amber-200 text-amber-950'} px-1.5 py-2 text-center"><div class="text-base font-black tracking-wider leading-none mt-0.5">${x.jodi}</div><div class="text-[7px] font-bold mt-1 opacity-70">${x.type}${x.signalCount!=null?` • ${x.signalCount} SIG`:''}</div></div>`;}).join('');}
 
@@ -920,12 +1061,11 @@ function formatMarketTime(t){
 }
 
 async function runFinalShortlist(showPendingPopup=false){
+  await loadMasterData();
   try{
     // Always inspect the full schedule/history first. The Home screen must
     // follow the real market sequence instead of preserving a stale selection.
-    const allSnap=await getDocs(collection(db,'matka_records'));let allRecords=[];
-    allSnap.forEach(ds=>{const r=ds.data();if(r.date&&r.marketName)allRecords.push(r);});
-    allRecords.sort((a,b)=>new Date(a.date)-new Date(b.date) || (timeToMinutes(a.openTime ?? marketsList.find(m=>m.name===a.marketName)?.openTime)??1439) - (timeToMinutes(b.openTime ?? marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
+    const allRecords=await loadAllRawRecords();
     // The selected date controls ONLY the target game. Historical ranking data
     // must remain available across previous dates; otherwise a new/opening game
     // has no history to calculate from.
@@ -1037,19 +1177,9 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
         `Pana : ${closePannaText}`
       ].join('\\n');      return;
     }
-    const n=records.length;
-    const openDelay=lastSeenDelay(records,r=>digitOf(r.openAnk)),closeDelay=lastSeenDelay(records,r=>digitOf(r.closeAnk));
-    const totalDelay=lastSeenDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10});
-    const diffDelay=lastSeenDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10});
-    const oeKeys=['OO','OE','EO','EE'];
-    const oeDelay=categoryDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:oddEvenType(o,c)},oeKeys);
-    const pannaOEKeys=['OOO','OOE','OEO','OEE','EOO','EOE','EEO','EEE'];
-    const openPannaOE=categoryDelay(records,r=>pannaParity(r.openPana),pannaOEKeys),closePannaOE=categoryDelay(records,r=>pannaParity(r.closePana),pannaOEKeys);
-    const fjDelay=familyJodiDelayMap(records);
-    const openFamilyDelay=categoryDelay(records,r=>{const o=digitOf(r.openAnk);return o===null?null:String(Math.min(...FAMILY_DIGITS[o]))},['0','1','2','3','4']);
-    const closeFamilyDelay=categoryDelay(records,r=>{const c=digitOf(r.closeAnk);return c===null?null:String(Math.min(...FAMILY_DIGITS[c]))},['0','1','2','3','4']);
-    const openPannaDelay=categoryDelay(records,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
-    const closePannaDelay=categoryDelay(records,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+    const stats=buildAnalysisStats(records);
+    const n=stats.count;
+    const {openDelay,closeDelay,totalDelay,diffDelay,oeKeys,oeDelay,pannaOEKeys,openPannaOE,closePannaOE,familyJodiDelay:fjDelay,openFamilyDelay,closeFamilyDelay,openPannaDelay,closePannaDelay}=stats;
 
     const openScores=rankWithTies(openDelay.map(x=>{
       const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
@@ -1301,8 +1431,8 @@ document.getElementById('recordDate')?.addEventListener('change',()=>{
 document.getElementById('recentGamesBtn')?.addEventListener('click',async()=>{
   try{
     const selectedMarket=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED';
-    const snap=await getDocs(collection(db,'matka_records'));const rows=[];
-    snap.forEach(ds=>{const r=ds.data();if((selectedMarket==='ALL_MERGED'||r.marketName===selectedMarket)&&r.date&&r.marketName)rows.push(r);});
+    const allRows=await loadAllRawRecords();
+    const rows=allRows.filter(r=>selectedMarket==='ALL_MERGED'||r.marketName===selectedMarket);
     renderRecentGames(rows,selectedMarket);
   }catch(e){console.error('Recent games error',e);const c=document.getElementById('recentGamesContent');if(c)c.innerHTML='<div class="py-6 text-center text-xs font-bold text-rose-600">Recent games could not be loaded.</div>';document.getElementById('recentGamesModal')?.classList.remove('hidden');}
 });
@@ -1317,7 +1447,57 @@ document.getElementById('copyShortlistBtn')?.addEventListener('click',async()=>{
 });
 
 // --- DYNAMIC GROUP-WISE DELAY SIMULATION & ANALYSIS ---
-async function loadAnalysisData() { 
+let backtestInitialized=false;
+function btDigit(v){const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;}
+function btNumP(v){return /^\d{3}$/.test(String(v??''))?String(v):null;}
+function btJodi(r){const o=btDigit(r.openAnk),c=btDigit(r.closeAnk);return o===null||c===null?null:`${o}${c}`;}
+function btTotal(r){const o=btDigit(r.openAnk),c=btDigit(r.closeAnk);return o===null||c===null?null:(o+c)%10;}
+function btDiff(r){const o=btDigit(r.openAnk),c=btDigit(r.closeAnk);return o===null||c===null?null:(10+c-o)%10;}
+function btSeriesDelay(history,valueFn){const vals=history.map(valueFn).filter(v=>v!==null);const n=vals.length,last={};vals.forEach((v,i)=>last[String(v)]=i);return Object.fromEntries([...new Set(vals)].map(v=>[String(v),n-1-last[String(v)]]));}
+function btTopRecent(history,valueFn,count){const vals=history.map(valueFn).filter(v=>v!==null);if(!vals.length)return {top:[],recent:[]};const n=vals.length,last=btSeriesDelay(history,valueFn),keys=[...new Set(vals.map(String))];const freq={};vals.forEach(v=>freq[String(v)]=(freq[String(v)]||0)+1);const top=keys.sort((a,b)=>(+last[b]-+last[a])||(freq[b]-freq[a])||a.localeCompare(b)).slice(0,count);const recent=keys.sort((a,b)=>(+last[a]-+last[b])||a.localeCompare(b)).slice(0,count);return {top,recent};}
+function btSelectGroups(tr,count,which){if(which==='TOP')return tr.top.slice(0,count);if(which==='RECENT')return tr.recent.slice(0,count);return [...new Set([...tr.top.slice(0,count),...tr.recent.slice(0,count)])];}
+function btJodiDelay(history){return btSeriesDelay(history,r=>btJodi(r));}
+function btCandidatesAdvanced(history,opts){
+  if(!history.length)return [];
+  const openR=btTopRecent(history,r=>btDigit(r.openAnk),opts.count), closeR=btTopRecent(history,r=>btDigit(r.closeAnk),opts.count);
+  const open=btSelectGroups(openR,opts.count,opts.openGroup), close=btSelectGroups(closeR,opts.count,opts.closeGroup);
+  if(opts.mode==='OPEN')return open;
+  if(opts.mode==='CLOSE')return close;
+  if(!open.length||!close.length)return [];
+  const central=buildAnalysisStats(history);
+  const totalD=Object.fromEntries(central.totalDelay.map(x=>[String(x.digit),x.delay]));
+  const diffD=Object.fromEntries(central.diffDelay.map(x=>[String(x.digit),x.delay]));
+  const jodiD=Object.fromEntries(central.jodiDelay.map(x=>[String(x.digit),x.delay]));
+  const od=Object.fromEntries(central.openDelay.map(x=>[String(x.digit),x.delay]));
+  const cd=Object.fromEntries(central.closeDelay.map(x=>[String(x.digit),x.delay]));
+  const threshold=opts.threshold;
+  const rows=[];
+  open.forEach(o=>close.forEach(c=>{
+    const oj=String(o),cj=String(c),j=`${oj}${cj}`,total=(+oj + +cj)%10,diff=(10 + +cj - +oj)%10;
+    const four=[od[oj]??0,cd[cj]??0,totalD[String(total)]??0,diffD[String(diff)]??0];
+    const delayed=four.filter(x=>x>=threshold).length;
+    if(opts.fourWay>0 && delayed<opts.fourWay)return;
+    const weights={BALANCED:[1,1,1,1,1,0.6],DELAY:[1.8,1.8,1.8,1.8,2.2,0.5],RECENT:[0.7,0.7,1,1,1.2,1.5],FOURWAY:[1,1,1.2,1.2,1.8,2]};
+    const w=weights[opts.score]||weights.BALANCED;
+    const score=od[oj]*w[0]+cd[cj]*w[1]+(totalD[String(total)]||0)*w[2]+(diffD[String(diff)]||0)*w[3]+(jodiD[j]||0)*w[4]+delayed*w[5];
+    rows.push({value:j,open:+oj,close:+cj,total,diff,openDelay:od[oj]??0,closeDelay:cd[cj]??0,totalDelay:totalD[String(total)]??0,diffDelay:diffD[String(diff)]??0,jodiDelay:jodiD[j]??0,four:delayed,score});
+  }));
+  return rows.sort((a,b)=>b.score-a.score||b.four-a.four||Math.min(b.openDelay,b.closeDelay,b.totalDelay,b.diffDelay)-Math.min(a.openDelay,a.closeDelay,a.totalDelay,a.diffDelay)||a.value.localeCompare(b.value)).slice(0,opts.topN);
+}
+function initBacktestUI(){const m=document.getElementById('backtestMarketSelect');if(!m||backtestInitialized)return;m.innerHTML='<option value="ALL_MERGED">All Markets</option>';(marketsList||[]).forEach(x=>{const o=document.createElement('option');o.value=x.name;o.textContent=x.name;m.appendChild(o);});const t=new Date().toISOString().slice(0,10);document.getElementById('backtestToDate').value=t;document.getElementById('runBacktestBtn').addEventListener('click',runBacktest);document.getElementById('resetBacktestBtn').addEventListener('click',()=>{['btTested','btHits','btMisses'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('btRate').textContent='0%';document.getElementById('backtestCandidateGrid').innerHTML='';document.getElementById('backtestRows').innerHTML='';document.getElementById('backtestStatus').textContent='READY';document.getElementById('btDetailLabel').textContent='-';});backtestInitialized=true;}
+async function runBacktest(){await loadMasterData();const status=document.getElementById('backtestStatus'),btn=document.getElementById('runBacktestBtn');btn.disabled=true;status.textContent='RUNNING';try{
+ const market=document.getElementById('backtestMarketSelect').value,mode=document.getElementById('backtestModeSelect').value,openGroup=document.getElementById('backtestOpenGroupSelect').value,closeGroup=document.getElementById('backtestCloseGroupSelect').value,count=parseInt(document.getElementById('backtestRankCountSelect').value,10),fourWay=parseInt(document.getElementById('backtestFourWaySelect').value,10),threshold=parseInt(document.getElementById('backtestDelayThresholdSelect').value,10),topN=parseInt(document.getElementById('backtestTopNSelect').value,10),w=parseInt(document.getElementById('backtestWindowSelect').value,10),score=document.getElementById('backtestScoreSelect').value,from=document.getElementById('backtestFromDate').value,to=document.getElementById('backtestToDate').value;
+ const allRows=await loadAllRawRecords(); const rows=allRows.filter(d=>market==='ALL_MERGED'||d.marketName===market);
+ rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes((marketsList.find(m=>m.name===a.marketName)||{}).openTime||'00:00')??1439)-(timeToMinutes((marketsList.find(m=>m.name===b.marketName)||{}).openTime||'00:00')??1439));
+ const data=rows.filter(r=>btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null);const results=[],stats={};
+ for(let i=0;i<data.length;i++){const target=data[i];if(from&&target.date<from)continue;if(to&&target.date>to)continue;const h=data.slice(Math.max(0,i-w),i);if(h.length<Math.min(5,w))continue;const candRows=btCandidatesAdvanced(h,{mode,openGroup,closeGroup,count,fourWay,threshold,topN,score});const cand=mode==='OPEN'?candRows.map(String):mode==='CLOSE'?candRows.map(String):candRows.map(x=>x.value);if(!cand.length)continue;const actual=mode==='OPEN'?btDigit(target.openAnk):mode==='CLOSE'?btDigit(target.closeAnk):btJodi(target);if(actual===null)continue;const hit=cand.includes(String(actual));results.push({date:target.date,pred:cand.join(', '),actual:String(actual),hit,detail:mode==='COMBO'?candRows.map(x=>`${x.value} O${x.openDelay}/C${x.closeDelay}/T${x.totalDelay}/D${x.diffDelay}/J${x.jodiDelay}`).join(' | '):''});cand.forEach(c=>{stats[c]??={t:0,h:0};stats[c].t++;if(String(c)===String(actual))stats[c].h++;});}
+ const hits=results.filter(x=>x.hit).length;document.getElementById('btTested').textContent=results.length;document.getElementById('btHits').textContent=hits;document.getElementById('btMisses').textContent=results.length-hits;document.getElementById('btRate').textContent=(results.length?hits/results.length*100:0).toFixed(1)+'%';document.getElementById('btDetailLabel').textContent=`${mode} • O:${openGroup} C:${closeGroup} • ${count}+${count} • 4W:${fourWay||'OFF'} @${threshold} • ${score}`;
+ const ent=Object.entries(stats).sort((a,b)=>b[1].h/b[1].t-a[1].h/a[1].t||b[1].h-a[1].h).slice(0,20);document.getElementById('backtestCandidateGrid').innerHTML=ent.map(([k,v])=>`<div class="flex justify-between rounded-lg bg-slate-50 border border-slate-100 px-2 py-1"><span class="font-mono font-black">${k}</span><span class="text-[9px] font-bold text-slate-500">${v.h}/${v.t} • ${(v.h/v.t*100).toFixed(1)}%</span></div>`).join('')||'<div class="text-[10px] text-slate-400 text-center py-3">No testable rows.</div>';
+ document.getElementById('backtestRows').innerHTML=results.slice(-30).reverse().map(r=>`<tr class="border-b border-slate-100"><td class="p-1">${r.date}</td><td class="p-1 font-mono">${r.pred}</td><td class="p-1 font-mono">${r.actual}</td><td class="p-1 font-black ${r.hit?'text-emerald-600':'text-rose-600'}">${r.hit?'HIT':'MISS'}</td><td class="p-1">${r.detail||mode}</td></tr>`).join('');status.textContent='DONE';
+ }catch(e){console.error(e);status.textContent='ERROR';}finally{btn.disabled=false;}}
+
+async function loadAnalysisData() {
+await loadMasterData(); 
 let selectedMarketVal = document.getElementById('analysisMarketSelect').value; 
 const analysisHeaderTitle = document.getElementById('analysisHeaderTitle'); 
 const openTotalLogs = document.getElementById('openTotalLogs'); 
@@ -1345,15 +1525,9 @@ analysisHeaderTitle.innerText = `⏳ ${marketLabel} (${currentAnalysisView.toUpp
 gridTitleLabel.innerText = `📊 ${currentAnalysisView} Analysis:`; 
 
 try { 
-const querySnapshot = await getDocs(collection(db, "matka_records")); 
+const querySnapshot = await loadAllRawRecords(); 
 let records = []; 
-const familyPannaGroupsMap = { 
-"222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
-"123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
-}; 
-
-querySnapshot.forEach((docSnap) => { 
-let data = docSnap.data(); 
+querySnapshot.forEach((data) => { 
 let matchMarket = (selectedMarketVal === 'ALL_MERGED' || !selectedMarketVal) || (data.marketName === selectedMarketVal); 
 if (matchMarket && data.date && data.marketName) { 
 let marketObj = marketsList.find(m => m.name === data.marketName); 
@@ -1365,17 +1539,14 @@ else if (currentAnalysisView === 'Total' && data.openAnk !== undefined && data.c
 else if (currentAnalysisView === 'Diff' && data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== '' && data.closeAnk !== '') targetVal = (10 + parseInt(data.closeAnk) - parseInt(data.openAnk)) % 10; 
 
 let fKey = null, openFpKey = null, closeFpKey = null;
-for (let [gKey, pList] of Object.entries(familyPannaGroupsMap)) {
+for (let [gKey, pList] of Object.entries(FAMILY_PANNA_GROUPS)) {
 if (data.openPana && String(data.openPana).length === 3 && pList.includes(String(data.openPana))) openFpKey = gKey;
 if (data.closePana && String(data.closePana).length === 3 && pList.includes(String(data.closePana))) closeFpKey = gKey;
 } 
 let jodiKey = null; 
 if (data.openAnk !== undefined && data.closeAnk !== undefined && data.openAnk !== "" && data.closeAnk !== "") { 
 let jodi = `${data.openAnk}${data.closeAnk}`; 
-const familyGroupsMap = { 
-"11": ["11", "16", "61", "66"], "12": ["12", "17", "21", "26", "62", "67", "71", "76"], "13": ["13", "18", "31", "36", "63", "68", "81", "86"], "14": ["14", "19", "41", "46", "64", "69", "91", "96"], "15": ["10", "15", "50", "55", "01", "06", "51", "60"], "22": ["22", "27", "72", "77"], "23": ["23", "28", "32", "37", "73", "78", "82", "87"], "24": ["24", "29", "42", "47", "74", "79", "92", "97"], "25": ["20", "25", "52", "57", "70", "75", "02", "07"], "33": ["33", "38", "83", "88"], "34": ["34", "39", "43", "48", "84", "89", "93", "98"], "35": ["30", "35", "53", "58", "80", "85", "03", "08"], "44": ["44", "49", "94", "99"], "45": ["40", "45", "54", "59", "90", "95", "04", "09"], "55": ["00", "05", "50", "55"] 
-}; 
-for (let [gKey, jList] of Object.entries(familyGroupsMap)) { 
+for (let [gKey, jList] of Object.entries(FAMILY_JODI_GROUPS)) { 
 if (jList.includes(jodi)) { jodiKey = gKey; break; } 
 } 
 } 
@@ -1837,21 +2008,17 @@ gridRowsWrapper.appendChild(row2);
 gapGridContainer.appendChild(gridRowsWrapper); 
 
 } catch (e) { 
-console.log("Analysis error:", e); 
+console.error("Analysis error:", e); 
+try { if (openTotalLogs) openTotalLogs.innerText = "Analysis load error"; if (gapGridContainer) gapGridContainer.innerHTML = `<div class="p-4 text-center text-xs font-bold text-rose-600">Analysis data could not be loaded. Please check Firebase/data connection.</div>`; } catch(_) {} 
 } 
 } 
 
 function showFamilyPannaDetails(groupKey) { 
-const familyPannaGroupsMap = { 
-"222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
-"123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
-}; 
-
 let selectedMarketVal = document.getElementById('analysisMarketSelect').value; 
 const filteredBaseRecords = globalAllRecords.filter(r => selectedMarketVal === 'ALL_MERGED' || !selectedMarketVal || r.marketName === selectedMarketVal); 
 const filteredRecords = isFamilyPannaMergeMode ? buildFamilyPannaMergedRecords(filteredBaseRecords) : filteredBaseRecords;
 const totalLen = filteredRecords.length; 
-const groupPannas = familyPannaGroupsMap[groupKey] || [groupKey]; 
+const groupPannas = FAMILY_PANNA_GROUPS[groupKey] || [groupKey]; 
 
 const contentDiv = document.getElementById('fpModalContent'); 
 contentDiv.innerHTML = ''; 
@@ -1996,18 +2163,9 @@ let calculatedAnk = '';
 let detectedPanelType = ''; 
 let detectedFamilyGroup = ''; 
 
-function getFamilyGroup(panna) { 
-const familyPannaGroupsMap = { 
-"222": ["777", "222", "227", "277"], "444": ["444", "999", "499", "449"], "666": ["111", "666", "166", "116"], "888": ["888", "333", "338", "388"], "000": ["555", "000", "500", "550"], 
-"123": ["128", "123", "678", "178", "236", "367", "137", "268"], "345": ["345", "890", "390", "340", "480", "458", "589", "359"], "567": ["157", "567", "120", "260", "670", "170", "256", "125"], "789": ["789", "234", "248", "478", "239", "289", "347", "379"], "456": ["456", "145", "140", "190", "690", "460", "159", "569"], "470": ["470", "240", "290", "790", "245", "259", "579", "457"], "246": ["246", "269", "129", "124", "147", "179", "679", "467"], "369": ["346", "369", "148", "134", "139", "189", "689", "468"], "130": ["130", "180", "680", "360", "356", "568", "158", "135"], "230": ["230", "280", "780", "370", "258", "235", "357", "578"], "100": ["100", "600", "155", "556", "560", "150"], "200": ["200", "700", "255", "557", "570", "250"], "300": ["300", "800", "355", "558", "580", "350"], "400": ["400", "900", "455", "559", "590", "450"], "366": ["366", "668", "113", "118", "168", "136"], "330": ["335", "330", "588", "880", "380", "358"], "110": ["110", "115", "660", "566", "156", "160"], "440": ["445", "440", "599", "990", "490", "459"], "220": ["220", "225", "770", "577", "257", "270"], "334": ["339", "334", "889", "488", "348", "389"], "399": ["399", "899", "344", "448", "489", "349"], "377": ["778", "377", "228", "223", "237", "278"], "477": ["779", "477", "229", "224", "247", "279"], "144": ["446", "144", "699", "199", "149", "469"], "177": ["177", "677", "122", "226", "267", "127"], "114": ["119", "114", "669", "466", "146", "169"], "133": ["336", "133", "688", "188", "138", "368"], "233": ["337", "233", "788", "288", "238", "378"], "266": ["266", "667", "112", "117", "167", "126"], "244": ["447", "244", "799", "299", "249", "479"] 
-}; 
-for (let [groupKey, pannaList] of Object.entries(familyPannaGroupsMap)) { 
-if (pannaList.includes(panna)) { 
-return groupKey; 
-} 
-} 
-return panna.split('').sort().join(''); 
-} 
+function getFamilyGroup(panna) {
+  return PANNA_TO_GROUP[String(panna)] || String(panna||'').split('').sort().join('');
+}
 
 document.getElementById('pannaInput').addEventListener('input', function(e) { 
 let panna = e.target.value; 
