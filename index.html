@@ -120,7 +120,7 @@
 <button type="button" id="fpToggleSingle" class="flex-1 py-1 rounded text-xs font-bold bg-indigo-600 text-white transition">Single Digit</button> 
 <button type="button" id="fpToggleMerge" class="flex-1 py-1 rounded text-xs font-bold text-slate-700 transition">Cut / Merge (1-6)</button> 
 </div> 
-<div class="grid grid-cols-5 gap-1 text-xs font-bold pt-1" id="fpDigitButtonsGrid"></div> 
+<div class="grid grid-cols-4 gap-1 text-xs font-bold pt-1" id="fpDigitButtonsGrid"></div> 
 </div> 
 
 <!-- Odd / Even Custom Sub-view Options --> 
@@ -130,7 +130,7 @@
 <button type="button" id="oeBtnOdd" class="py-2 px-1 rounded-lg bg-slate-200 text-slate-700 text-center transition">ODD</button> 
 <button type="button" id="oeBtnEven" class="py-2 px-1 rounded-lg bg-slate-200 text-slate-700 text-center transition">EVEN</button> 
 </div> 
-<div id="oeDigitSelectorRow" class="hidden grid grid-cols-5 gap-1 text-xs font-bold pt-1"></div> 
+<div id="oeDigitSelectorRow" class="hidden grid grid-cols-4 gap-1 text-xs font-bold pt-1"></div> 
 </div> 
 
 <div class="flex justify-between items-center text-xs font-bold px-1 pt-1 text-slate-700"> 
@@ -171,7 +171,7 @@
   <div class="rounded-xl border border-slate-200 bg-white p-3 space-y-3 shadow-sm">
     <div class="grid grid-cols-2 gap-2">
       <label class="text-[10px] font-bold text-slate-600">Market<select id="backtestMarketSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="ALL_MERGED">All Markets</option></select></label>
-      <label class="text-[10px] font-bold text-slate-600">Mode<select id="backtestModeSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="COMBO" selected>Open × Close Combo</option><option value="LOCKED_JODI">🔗 Locked Jodi (Open → Close)</option><option value="OPEN">Open Only</option><option value="CLOSE">Close Only</option></select></label>
+      <label class="text-[10px] font-bold text-slate-600">Mode<select id="backtestModeSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="COMBO" selected>Open × Close Combo</option><option value="LOCKED_JODI">🔗 Locked Jodi (Open → Close)</option><option value="CURRENT_STRUCTURE">🎯 Current Structure (3 Open + 4 Strong + 4 Support)</option><option value="REVERSE_STRUCTURE">↩️ Reverse Structure (3×3 → 8 Jodi)</option><option value="OPEN">Open Only</option><option value="CLOSE">Close Only</option></select></label>
       <label class="text-[10px] font-bold text-slate-600">Open Group<select id="backtestOpenGroupSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="BOTH" selected>TOP + RECENT</option><option value="TOP">TOP only</option><option value="RECENT">RECENT only</option></select></label>
       <label class="text-[10px] font-bold text-slate-600">Close Group<select id="backtestCloseGroupSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="BOTH" selected>TOP + RECENT</option><option value="TOP">TOP only</option><option value="RECENT">RECENT only</option></select></label>
       <label class="text-[10px] font-bold text-slate-600">Open/Close Count<select id="backtestRankCountSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="1">1 + 1</option><option value="2">2 + 2</option><option value="3" selected>3 + 3</option><option value="4">4 + 4</option><option value="5">5 + 5</option></select></label>
@@ -183,9 +183,12 @@
       <label class="text-[10px] font-bold text-slate-600">Test From<input id="backtestFromDate" type="date" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"></label>
       <label class="text-[10px] font-bold text-slate-600">Test To<input id="backtestToDate" type="date" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"></label>
     </div>
+    <div id="lockedJodiModeNote" class="hidden rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-2 text-[9px] font-semibold text-indigo-700">🔗 <b>Locked Jodi mode:</b> દરેક test point પર historical Open known રાખીને માત્ર <b>same Open digit → Close digit</b> Jodi candidates rank થાય છે. Open Group, Close Group, 4-Way અને Score Weight આ modeમાં ઉપયોગમાં નથી.</div>
+    <div id="reverseStructureModeNote" class="hidden rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-2 text-[9px] font-semibold text-violet-700">↩️ <b>Reverse Structure mode:</b> Previous result contextથી <b>3 Open</b>, દરેક Open માટે conditional Close rank કરીને <b>3×3 = 9 Jodi</b> બનાવાય છે; weakest 1 drop કરીને <b>4 Strong + 4 Support = 8 Jodi</b>. Walk-forward history only — future data ઉપયોગમાં નથી.</div>
+    <div id="currentStructureModeNote" class="hidden rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-2 text-[9px] font-semibold text-emerald-700">🎯 <b>Current Structure mode:</b> પહેલા <b>Top 3 Open</b> — delay + recent + relationship signalsથી. પછી એ જ 3 Openમાંથી <b>4 Strong + 4 Support = 8 Jodi</b>. Strongમાં conditional Open→Close pair historyનું વજન વધુ છે; Supportમાં બાકીના Open digits, family/type અને score diversity cover થાય છે. Strategy HIT એટલે actual Jodi આ 8માં આવે.</div>
     <div class="flex gap-2"><button id="runBacktestBtn" type="button" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-black text-sm shadow-sm">Run Backtest</button><button id="resetBacktestBtn" type="button" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 rounded-lg font-bold text-sm">Reset</button></div>
   </div>
-  <div class="grid grid-cols-2 gap-2"><div class="rounded-xl border border-slate-200 bg-white p-2 text-center"><div class="text-[9px] font-black text-slate-500">TESTED</div><div id="btTested" class="text-lg font-black text-slate-800">0</div></div><div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2 text-center"><div class="text-[9px] font-black text-emerald-700">HITS</div><div id="btHits" class="text-lg font-black text-emerald-800">0</div></div><div class="rounded-xl border border-rose-200 bg-rose-50 p-2 text-center"><div class="text-[9px] font-black text-rose-700">MISSES</div><div id="btMisses" class="text-lg font-black text-rose-800">0</div></div><div class="rounded-xl border border-indigo-200 bg-indigo-50 p-2 text-center"><div class="text-[9px] font-black text-indigo-700">HIT RATE</div><div id="btRate" class="text-lg font-black text-indigo-800">0%</div></div></div>
+  <div class="grid grid-cols-2 gap-2"><div class="rounded-xl border border-slate-200 bg-white p-2 text-center"><div class="text-[9px] font-black text-slate-500">TESTED</div><div id="btTested" class="text-lg font-black text-slate-800">0</div></div><div class="rounded-xl border border-blue-200 bg-blue-50 p-2 text-center"><div class="text-[9px] font-black text-blue-700">OPEN-3 HIT</div><div id="btOpenRate" class="text-lg font-black text-blue-800">0%</div><div id="btOpenHits" class="text-[8px] font-bold text-blue-600">0 / 0</div></div><div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2 text-center"><div class="text-[9px] font-black text-emerald-700">HITS</div><div id="btHits" class="text-lg font-black text-emerald-800">0</div></div><div class="rounded-xl border border-rose-200 bg-rose-50 p-2 text-center"><div class="text-[9px] font-black text-rose-700">MISSES</div><div id="btMisses" class="text-lg font-black text-rose-800">0</div></div><div class="rounded-xl border border-indigo-200 bg-indigo-50 p-2 text-center"><div class="text-[9px] font-black text-indigo-700">HIT RATE</div><div id="btRate" class="text-lg font-black text-indigo-800">0%</div></div></div>
   <div class="rounded-xl border border-slate-200 bg-white p-3"><div class="flex items-center justify-between mb-2"><div class="text-xs font-black text-slate-700">📊 Candidate Performance</div><div id="btDetailLabel" class="text-[9px] font-semibold text-slate-400">-</div></div><div id="backtestCandidateGrid" class="space-y-1"></div></div>
   <div class="rounded-xl border border-slate-200 bg-white p-3"><div class="text-xs font-black text-slate-700 mb-2">🧾 Recent Backtest Rows</div><div class="overflow-x-auto"><table class="w-full text-[9px] border-collapse"><thead><tr class="bg-slate-100 text-slate-600"><th class="p-1 text-left">Date</th><th class="p-1 text-left">Signal</th><th class="p-1 text-left">Prediction</th><th class="p-1 text-left">Actual</th><th class="p-1 text-left">Result</th></tr></thead><tbody id="backtestRows"></tbody></table></div></div>
 </div>
@@ -226,9 +229,9 @@
   </div>
   <div id="finalConfidenceCard" class="rounded-xl border border-sky-200 bg-sky-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-sky-700">SIGNAL QUALITY</span><span id="finalSignalQuality" class="text-[9px] font-black text-sky-800">-</span></div><div id="finalSignalReason" class="text-[8px] text-slate-500 mt-0.5">-</div></div>
   <div class="rounded-xl border border-violet-200 bg-violet-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-violet-700">JODI ODD / EVEN</span><span id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</span></div><div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-0.5"></div></div>
-  <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 5</div><div id="finalJodiStrong" class="grid grid-cols-5 gap-1"></div></div>
-  <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 5</div><div id="finalJodiSupport" class="grid grid-cols-5 gap-1"></div></div>
-  <div class="flex items-center gap-2 pt-1"><button id="recentGamesBtn" type="button" class="flex-1 bg-slate-700 hover:bg-slate-800 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Recent Games</button><button id="copyShortlistBtn" type="button" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Copy</button></div>
+  <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 4</div><div id="finalJodiStrong" class="grid grid-cols-4 gap-1"></div></div>
+  <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 4</div><div id="finalJodiSupport" class="grid grid-cols-4 gap-1"></div></div>
+  <div class="flex items-center gap-2 pt-1"><button id="recentGamesBtn" type="button" class="flex-1 bg-slate-700 hover:bg-slate-800 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Recent Games</button><button id="shortlistBacktestBtn" type="button" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-black text-sm shadow-sm transition">🧪 Backtest</button><button id="liveProfitBacktestBtn" type="button" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg font-black text-sm shadow-sm transition">💰 Live Profit</button><button id="copyShortlistBtn" type="button" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">Copy</button></div>
   <textarea id="shortlistShareText" class="hidden" aria-hidden="true"></textarea>
   <div id="finalOddEven" class="hidden"></div><div id="finalConflict" class="hidden"></div>
 </div>
@@ -242,6 +245,49 @@
     </div>
     <div id="recentGamesContent" class="space-y-2 max-h-[70vh] overflow-y-auto"></div>
     <button id="closeRecentGamesFooterBtn" type="button" class="w-full bg-slate-800 text-white py-2 rounded-xl text-xs font-black">Close</button>
+  </div>
+</div>
+
+<!-- Shortlist One-Click Backtest Popup -->
+<div id="shortlistBacktestModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-[65]">
+  <div class="bg-white p-4 rounded-2xl max-w-md w-full shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-2"><div><div class="text-sm font-black text-indigo-800">🧪 Shortlist Backtest</div><div id="shortlistBtSub" class="text-[8px] font-semibold text-slate-500 mt-0.5">3 Open → 4 Strong + 4 Support</div></div><button id="closeShortlistBacktestBtn" type="button" class="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button></div>
+    <div class="grid grid-cols-3 gap-1.5"><button data-sbt-window="20" class="sbt-window bg-slate-100 text-slate-700 rounded-lg py-1.5 text-[10px] font-black">20 Games</button><button data-sbt-window="30" class="sbt-window bg-indigo-600 text-white rounded-lg py-1.5 text-[10px] font-black">30 Games</button><button data-sbt-window="50" class="sbt-window bg-slate-100 text-slate-700 rounded-lg py-1.5 text-[10px] font-black">50 Games</button></div>
+    <div id="shortlistBtStatus" class="rounded-lg border border-indigo-100 bg-indigo-50 px-2 py-1.5 text-[8px] font-bold text-indigo-700">READY</div>
+    <div class="grid grid-cols-3 gap-1.5"><div class="rounded-xl border border-slate-200 bg-slate-50 p-2 text-center"><div class="text-[8px] font-black text-slate-500">TESTED</div><div id="sbtTested" class="text-lg font-black text-slate-900">0</div></div><div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2 text-center"><div class="text-[8px] font-black text-emerald-700">OPEN-3 HIT</div><div id="sbtOpenRate" class="text-lg font-black text-emerald-800">0%</div><div id="sbtOpenHits" class="text-[7px] font-bold text-slate-500">0 / 0</div></div><div class="rounded-xl border border-indigo-200 bg-indigo-50 p-2 text-center"><div class="text-[8px] font-black text-indigo-700">8-JODI HIT</div><div id="sbtJodiRate" class="text-lg font-black text-indigo-800">0%</div><div id="sbtJodiHits" class="text-[7px] font-bold text-slate-500">0 / 0</div></div></div>
+    <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700">RULE</div><div class="text-[8px] font-semibold text-slate-600 mt-0.5">દરેક historical game માટે માત્ર તેની પહેલાંનો data લઈ Top 3 Open અને તેમાંથી 4 Strong + 4 Support Jodi બનાવાશે. Future data predictionમાં નહીં આવે.</div></div>
+    <div class="rounded-xl border border-slate-200 bg-white p-2"><div class="text-[9px] font-black text-slate-700 mb-1">RECENT TESTS</div><div id="shortlistBtRows" class="space-y-1"></div></div>
+    <button id="closeShortlistBacktestFooterBtn" type="button" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 rounded-lg font-bold text-sm">Close</button>
+  </div>
+</div>
+
+
+<!-- Live Profit Backtest Modal -->
+<div id="liveProfitModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden p-4 z-[70]">
+  <div class="bg-white p-4 rounded-2xl max-w-lg w-full shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-2"><div><div class="text-sm font-black text-emerald-800">💰 Live Profit Backtest</div><div id="lpSub" class="text-[8px] font-semibold text-slate-500 mt-0.5">Live Firebase • walk-forward historical test</div></div><button id="closeLiveProfitBtn" type="button" class="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button></div>
+    <div class="grid grid-cols-2 gap-2">
+      <label class="text-[9px] font-black text-slate-600">MARKET<select id="lpMarket" class="mt-1 w-full border rounded-lg p-1.5 text-xs font-bold"><option value="ALL_MERGED">ALL MARKETS</option></select></label>
+      <label class="text-[9px] font-black text-slate-600">WINDOW<select id="lpWindow" class="mt-1 w-full border rounded-lg p-1.5 text-xs font-bold"><option>20</option><option selected>30</option><option>50</option><option>100</option></select></label>
+    </div>
+    <div class="grid grid-cols-3 gap-1.5">
+      <label class="rounded-lg bg-emerald-50 border border-emerald-100 p-2 text-center text-[8px] font-black text-emerald-700">SINGLE PICKS<input id="lpSinglePicks" type="number" min="1" max="10" value="3" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg bg-indigo-50 border border-indigo-100 p-2 text-center text-[8px] font-black text-indigo-700">JODI PICKS<input id="lpJodiPicks" type="number" min="1" max="20" value="8" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg bg-amber-50 border border-amber-100 p-2 text-center text-[8px] font-black text-amber-700">PANNA PICKS<input id="lpPannaPicks" type="number" min="1" max="20" value="4" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+    </div>
+    <div class="grid grid-cols-4 gap-1.5">
+      <label class="rounded-lg border p-2 text-center text-[8px] font-black">SINGLE ₹<input id="lpSingleStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-2 text-center text-[8px] font-black">JODI ₹<input id="lpJodiStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-2 text-center text-[8px] font-black">SP ₹<input id="lpSpStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-2 text-center text-[8px] font-black">DP ₹<input id="lpDpStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+    </div>
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-2"><div class="text-[8px] font-black text-slate-500 mb-1">PAYOUT (GROSS RETURN PER ₹1 HIT)</div><div class="grid grid-cols-4 gap-1 text-center text-[9px] font-black"><div>Single<br><span class="text-emerald-700">₹9.50</span></div><div>Jodi<br><span class="text-indigo-700">₹95</span></div><div>SP<br><span class="text-amber-700">₹150</span></div><div>DP<br><span class="text-orange-700">₹300</span></div></div></div>
+    <div class="rounded-lg border border-indigo-100 bg-indigo-50 px-2 py-1.5 text-[8px] font-semibold text-indigo-800">દરેક target game માટે માત્ર પહેલાંનો historical data લેવાશે. Future result predictionમાં નહીં આવે. Triple સંપૂર્ણપણે ignore છે. SP/DP માટે historical Panna delay ranking વપરાશે.</div>
+    <button id="runLiveProfitBtn" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-black text-sm">RUN LIVE FIREBASE BACKTEST</button>
+    <div id="lpStatus" class="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-[8px] font-bold text-slate-600">READY</div>
+    <div id="lpCards" class="grid grid-cols-2 gap-1.5"></div>
+    <div id="lpRows" class="space-y-1 max-h-52 overflow-y-auto"></div>
+    <button id="closeLiveProfitFooterBtn" type="button" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 rounded-lg font-bold text-sm">Close</button>
   </div>
 </div>
 
@@ -1073,16 +1119,158 @@ function lockedJodiCandidates(history, openDigit, topN=3){
   const globalCloseMap=Object.fromEntries(globalClose.map(x=>[String(x.digit),x.delay]));
   const totalDelay=lastSeenDelay(completed,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===null||b===null?null:(a+b)%10});
   const diffDelay=lastSeenDelay(completed,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===null||b===null?null:(10+b-a)%10});
+  const conditionalWeight=Math.min(condN/5,1);
+  const globalWeight=1-conditionalWeight;
   const rows=[];
   for(let c=0;c<=9;c++){
     const j=`${o}${c}`; let last=-1,count=0;
     conditional.forEach((r,i)=>{if(digitOf(r.closeAnk)===c){count++;last=i;}});
-    const delay=last<0?condN:condN-1-last, recent20=conditional.slice(-20).filter(r=>digitOf(r.closeAnk)===c).length, recent10=conditional.slice(-10).filter(r=>digitOf(r.closeAnk)===c).length;
-    const globalDelay=globalCloseMap[String(c)]??n,total=(o+c)%10,diff=(10+c-o)%10,td=totalDelay[total]?.delay??n,dd=diffDelay[diff]?.delay??n;
-    const score=delay*2.0+recent20*2.2+recent10*1.4+count*0.8+Math.min(globalDelay,20)*0.35+Math.min(td,20)*0.35+Math.min(dd,20)*0.35;
-    rows.push({jodi:j,open:o,close:c,digit:c,delay,recent20,recent10,count,globalDelay,totalDelay:td,diffDelay:dd,score,conditionalCount:count});
+    const delay=last<0?condN:condN-1-last;
+    const recent20=conditional.slice(-20).filter(r=>digitOf(r.closeAnk)===c).length;
+    const recent10=conditional.slice(-10).filter(r=>digitOf(r.closeAnk)===c).length;
+    const globalDelay=globalCloseMap[String(c)]??n;
+    const total=(o+c)%10,diff=(10+c-o)%10;
+    const td=totalDelay[total]?.delay??n, dd=diffDelay[diff]?.delay??n;
+    const conditionalScore=delay*2.0+recent20*2.2+recent10*1.4+count*0.8;
+    const fallbackScore=Math.min(globalDelay,20)*0.8+Math.min(td,20)*0.45+Math.min(dd,20)*0.45;
+    const score=conditionalScore*conditionalWeight+fallbackScore*globalWeight;
+    rows.push({jodi:j,open:o,close:c,digit:c,delay,recent20,recent10,count,globalDelay,totalDelay:td,diffDelay:dd,score,conditionalCount:count,sampleCount:condN,sampleWeight:conditionalWeight,sampleQuality:condN>=5?'GOOD':condN>=3?'LIMITED':'LOW'});
   }
   return rows.sort((a,b)=>b.score-a.score||b.delay-a.delay||b.recent20-a.recent20||a.close-b.close).slice(0,topN);
+}
+
+function buildReverseStructurePrediction(history, openCount=3, strongCount=4, supportCount=4){
+  const source=(Array.isArray(history)?history:[]).filter(r=>digitOf(r.openAnk)!==null&&digitOf(r.closeAnk)!==null);
+  if(source.length<8)return {open:[],strong:[],support:[],allJodi:[],dropped:null};
+  const stats=buildAnalysisStats(source), n=source.length, prev=source.at(-1);
+  const prevOpen=digitOf(prev.openAnk), prevClose=digitOf(prev.closeAnk), prevJodi=btJodi(prev);
+  const openRows=[];
+  for(let o=0;o<=9;o++){
+    let last=-1,count=0; source.forEach((r,i)=>{if(digitOf(r.openAnk)===o){count++;last=i;}});
+    const delay=last<0?n:n-1-last, r20=freqIn(source,r=>digitOf(r.openAnk),20,o), r10=freqIn(source,r=>digitOf(r.openAnk),10,o);
+    const nextAfterPrevClose=source.slice(0,-1).filter((r,i)=>digitOf(r.closeAnk)===prevClose && digitOf(source[i+1]?.openAnk)===o).length;
+    const prevCloseSample=source.slice(0,-1).filter(r=>digitOf(r.closeAnk)===prevClose).length;
+    const transition=prevCloseSample?nextAfterPrevClose/prevCloseSample:0;
+    const prevJodiOpen=prevJodi&&String(prevJodi)[0]===String(o)?1:0;
+    const score=delay*1.35+r20*1.8+r10*1.2+transition*6+prevJodiOpen*0.8;
+    openRows.push({digit:o,delay,r20,r10,transition,score});
+  }
+  openRows.sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);
+  const open=openRows.slice(0,openCount), allowed=new Set(open.map(x=>x.digit));
+  const pairRows=[];
+  for(const o of allowed){
+    const cond=source.filter(r=>digitOf(r.openAnk)===o), cn=cond.length;
+    for(let c=0;c<=9;c++){
+      const j=`${o}${c}`; let last=-1,count=0; cond.forEach((r,i)=>{if(digitOf(r.closeAnk)===c){count++;last=i;}});
+      const delay=last<0?cn:cn-1-last, r20=cond.slice(-20).filter(r=>digitOf(r.closeAnk)===c).length, r10=cond.slice(-10).filter(r=>digitOf(r.closeAnk)===c).length;
+      const prevCloseCount=source.slice(0,-1).filter((r,i)=>digitOf(r.closeAnk)===prevClose&&digitOf(source[i+1]?.openAnk)===o&&digitOf(source[i+1]?.closeAnk)===c).length;
+      const prevCloseOpenCount=source.slice(0,-1).filter(r=>digitOf(r.closeAnk)===prevClose&&digitOf(source[source.indexOf(r)+1]?.openAnk)===o).length;
+      const transition=prevCloseOpenCount?prevCloseCount/prevCloseOpenCount:0;
+      const total=(o+c)%10,diff=(10+c-o)%10;
+      const td=stats.totalDelay[total]?.delay??n, dd=stats.diffDelay[diff]?.delay??n;
+      const fam=(JODI_TO_FAMILIES[j]||[]).reduce((m,g)=>Math.max(m,stats.familyJodiDelay[g]??n),0);
+      const score=delay*1.55+r20*2.2+r10*1.5+count*0.8+transition*7+Math.min(td,20)*0.35+Math.min(dd,20)*0.35+Math.min(fam,20)*0.35;
+      pairRows.push({jodi:j,open:o,close:c,delay,r20,r10,count,transition,total,diff,score});
+    }
+  }
+  pairRows.sort((a,b)=>b.score-a.score||b.delay-a.delay||b.r20-a.r20||a.jodi.localeCompare(b.jodi));
+  const top9=pairRows.slice(0,9), dropped=top9.length===9?top9[top9.length-1]:null, selected=top9.slice(0,8);
+  // Strong = strongest four; Support = remaining four with Open/family/type diversity where possible.
+  const strong=selected.slice(0,strongCount).map(x=>({...x,kind:'STRONG'})), strongSet=new Set(strong.map(x=>x.jodi));
+  const supportPool=selected.filter(x=>!strongSet.has(x.jodi));
+  const support=[]; const usedOpen=new Set(strong.map(x=>x.open)), usedType=new Set(strong.map(x=>oddEvenType(x.open,x.close))), usedFam=new Set(strong.flatMap(x=>JODI_TO_FAMILIES[x.jodi]||[]));
+  for(const pass of [0,1,2]){
+    for(const x of supportPool){
+      if(support.some(y=>y.jodi===x.jodi))continue;
+      const fams=JODI_TO_FAMILIES[x.jodi]||[], famHit=fams.some(g=>usedFam.has(g)), type=oddEvenType(x.open,x.close);
+      const want=pass===0?!usedOpen.has(x.open):pass===1?(!usedType.has(type)||!famHit):true;
+      if(want){support.push({...x,kind:'SUPPORT'});usedOpen.add(x.open);usedType.add(type);fams.forEach(g=>usedFam.add(g));if(support.length>=supportCount)break;}
+    }
+    if(support.length>=supportCount)break;
+  }
+  return {open,strong,support,allJodi:selected,dropped,previous:{open:prevOpen,close:prevClose,jodi:prevJodi}};
+}
+
+function buildCurrentStructurePrediction(history, openCount=3, strongCount=4, supportCount=4){
+  const source=(Array.isArray(history)?history:[]).filter(r=>digitOf(r.openAnk)!==null&&digitOf(r.closeAnk)!==null);
+  if(!source.length)return {open:[],strong:[],support:[],allJodi:[]};
+  const stats=buildAnalysisStats(source), rankingRecords=stats.calc, n=stats.count;
+  const {openDelay,closeDelay,totalDelay,diffDelay,oeKeys,oeDelay,familyJodiDelay:fjDelay}=stats;
+  const openScores=rankWithTies(openDelay.map(x=>{
+    const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
+    const pKeys=Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g);
+    const recent20=freqIn(rankingRecords,r=>digitOf(r.openAnk),20,x.digit),recent10=freqIn(rankingRecords,r=>digitOf(r.openAnk),10,x.digit);
+    const totalRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20,x.digit);
+    const diffRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
+    const family=stats.openFamilyDelay[f]||0,panna=maxDelayForKeys(stats.openPannaDelay,pKeys),pOE=Math.max(...stats.pannaOEKeys.map(k=>stats.openPannaOE[k]||0));
+    return {...x,score:x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*0.8+Math.min(diffRel,6)*0.8+family*0.7+Math.min(panna,20)*0.45+Math.min(pOE,20)*0.25};
+  }));
+  const closeScores=rankWithTies(stats.closeDelay.map(x=>{
+    const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
+    const pKeys=Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g);
+    const recent20=freqIn(rankingRecords,r=>digitOf(r.closeAnk),20,x.digit),recent10=freqIn(rankingRecords,r=>digitOf(r.closeAnk),10,x.digit);
+    const totalRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20,x.digit);
+    const diffRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
+    const family=stats.closeFamilyDelay[f]||0,panna=maxDelayForKeys(stats.closePannaDelay,pKeys),pOE=Math.max(...stats.pannaOEKeys.map(k=>stats.closePannaOE[k]||0));
+    return {...x,score:x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*.8+Math.min(diffRel,6)*.8+family*.7+Math.min(panna,20)*.45+Math.min(pOE,20)*.25};
+  }));
+  const topOpen=openScores.slice(0,openCount),topClose=closeScores.slice(0,3);
+  const allowedOpen=new Set(topOpen.map(x=>x.digit));
+  const jodiCandidates=[];
+  for(let o of allowedOpen)for(let c=0;c<=9;c++){
+    const j=`${o}${c}`,fams=JODI_TO_FAMILIES[j]||[],fam=fams[0]||null,total=(o+c)%10,diff=(10+c-o)%10,type=oddEvenType(o,c);
+    let last=-1;rankingRecords.forEach((r,i)=>{if(digitOf(r.openAnk)===o&&digitOf(r.closeAnk)===c)last=i;});
+    const delay=last<0?n:n-1-last;
+    const recent10=freqIn(rankingRecords,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},10,j);
+    const recent20=freqIn(rankingRecords,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},20,j);
+    const totalD=totalDelay[total]?.delay??n,diffD=diffDelay[diff]?.delay??n,oeD=oeDelay[type]??n,fjD=fams.length?Math.max(...fams.map(f=>fjDelay[f]??n)):n;
+    const openRank=topOpen.findIndex(x=>x.digit===o),closeRank=topClose.findIndex(x=>x.digit===c);
+    const opP=pannaParity(rankingRecords.at(-1)?.openPana),clP=pannaParity(rankingRecords.at(-1)?.closePana);
+    const pannaCompatibility=(opP&&clP&&oddEvenType(o,c)===((opP[0]+opP[1]===2?'OO':opP[0]+opP[1]===1?'OE':'EE')))?1:0;
+    const frequency=recent20*2.2+recent10*1.5;
+    const conditionalSample=rankingRecords.filter(r=>digitOf(r.openAnk)===o).length;
+    const conditionalPairCount=rankingRecords.filter(r=>digitOf(r.openAnk)===o&&digitOf(r.closeAnk)===c).length;
+    const conditionalStrength=Math.min(conditionalSample/8,1);
+    const pairRecency=recent20*2.4+recent10*1.7;
+    const pairDelay=delay*1.7;
+    const relationshipSupport=Math.min(totalD,20)*.65+Math.min(diffD,20)*.65;
+    const familySupport=Math.min(fjD,20)*.9;
+    const openDigitSupport=openRank===0?4:openRank===1?2.5:openRank===2?1.2:0;
+    const closeDigitSupport=closeRank===0?4:closeRank===1?2.5:closeRank===2?1.2:0;
+    const twoDigitBridge=(openRank>=0&&closeRank>=0)?2.5:0;
+    const globalSupport=Math.min(delay,20)*.35;
+    const score=(pairDelay+pairRecency+conditionalPairCount*.9)*conditionalStrength
+      +(globalSupport+relationshipSupport+familySupport)*(.55+.45*(1-conditionalStrength))
+      +pannaCompatibility*1.5+openDigitSupport+closeDigitSupport+twoDigitBridge;
+    const conflict=(totalD<2?1:0)+(diffD<2?1:0)+(oeD<2?1:0)+(fjD<2?1:0);
+    const signalCount=[delay>=8,totalD>=8,diffD>=8,oeD>=8,fjD>=8,recent20>0,recent10>0,openRank===0,conditionalPairCount>=2].filter(Boolean).length;
+    const isStrong=signalCount>=3&&conflict<=1&&(delay>=5||fjD>=5||totalD>=5||diffD>=5||conditionalPairCount>=2);
+    jodiCandidates.push({jodi:j,open:o,close:c,delay,type,fam,total,diff,score,conflict,totalD,diffD,oeD,fjD,signalCount,conditionalSample,conditionalPairCount,conditionalStrength,isStrong});
+  }
+  jodiCandidates.sort((a,b)=>b.score-a.score||b.signalCount-a.signalCount||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
+  const validated=jodiCandidates.filter(x=>x.isStrong);
+  const strongPool=(validated.length>=strongCount?validated:jodiCandidates).slice().sort((a,b)=>b.score-a.score||b.signalCount-a.signalCount||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
+  const strong=[...strongPool].slice(0,strongCount);
+  const strongSet=new Set(strong.map(x=>x.jodi));
+  const supportPool=jodiCandidates.filter(x=>!strongSet.has(x.jodi)).slice().sort((a,b)=>b.score-a.score||b.signalCount-a.signalCount||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
+  const support=[];const usedTypes=new Set(strong.map(x=>x.type));const usedFamilies=new Set(strong.map(x=>x.fam).filter(Boolean));
+  // Coverage rule: with 3 shortlisted Opens, Support Jodi first fills any
+  // Open digit that is not represented by Strong, then fills family/type gaps.
+  const coveredOpens=new Set(strong.map(x=>x.open));
+  for(const o of topOpen.map(x=>x.digit)){
+    if(support.length>=supportCount)break;
+    if(coveredOpens.has(o))continue;
+    const pick=supportPool.find(x=>x.open===o&&!support.includes(x));
+    if(pick){support.push(pick);coveredOpens.add(o);usedTypes.add(pick.type);if(pick.fam)usedFamilies.add(pick.fam);}
+  }
+  for(const x of supportPool){
+    if(support.length>=supportCount)break;
+    if(support.includes(x))continue;
+    const diverse=!usedTypes.has(x.type)||!usedFamilies.has(x.fam)||!coveredOpens.has(x.open);
+    if(diverse){support.push(x);coveredOpens.add(x.open);usedTypes.add(x.type);if(x.fam)usedFamilies.add(x.fam);}
+  }
+  for(const x of supportPool)if(support.length<supportCount&&!support.includes(x))support.push(x);
+  return {open:topOpen,strong,support,allJodi:jodiCandidates};
 }
 
 async function runFinalShortlist(showPendingPopup=false){
@@ -1151,27 +1339,6 @@ async function runFinalShortlist(showPendingPopup=false){
         document.getElementById('shortlistShareText').value='';
         return;
       }
-      const closeLastSeen=lastSeenDelay(completed,r=>digitOf(r.closeAnk));
-      const histCloseScores=closeLastSeen.map(x=>{
-        const c=x.digit;
-        const recent20=freqIn(completed,r=>digitOf(r.closeAnk),20,c);
-        const recent10=freqIn(completed,r=>digitOf(r.closeAnk),10,c);
-        const totalRel=freqIn(completed,r=>{const o=digitOf(r.openAnk),cl=digitOf(r.closeAnk);return (o+cl)%10},20,c);
-        const diffRel=freqIn(completed,r=>{const o=digitOf(r.openAnk),cl=digitOf(r.closeAnk);return (10+cl-o)%10},20,c);
-        const openMatches=completed.filter(r=>digitOf(r.openAnk)===latestOpen);
-        const conditionalCount=openMatches.filter(r=>digitOf(r.closeAnk)===c).length;
-        const conditionalRecent=openMatches.slice(-20).filter(r=>digitOf(r.closeAnk)===c).length;
-        const family=String(Math.min(...FAMILY_DIGITS[c]));
-        const familyDelay=categoryDelay(completed,r=>{const d=digitOf(r.closeAnk);return d===null?null:String(Math.min(...FAMILY_DIGITS[d]))},['0','1','2','3','4'])[family]||0;
-        const base=x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*0.8+Math.min(diffRel,6)*0.8+familyDelay*0.7;
-        const conditionSupport=conditionalCount*2.4+conditionalRecent*1.6;
-        const currentTotal=(latestOpen+c)%10, currentDiff=(10+c-latestOpen)%10;
-        const totalDelayMap=lastSeenDelay(completed,r=>{const o=digitOf(r.openAnk),cl=digitOf(r.closeAnk);return o===null||cl===null?null:(o+cl)%10},10);
-        const diffDelayMap=lastSeenDelay(completed,r=>{const o=digitOf(r.openAnk),cl=digitOf(r.closeAnk);return o===null||cl===null?null:(10+cl-o)%10},10);
-        const totalCurrentDelay=totalDelayMap[currentTotal]?.delay??cn;
-        const diffCurrentDelay=diffDelayMap[currentDiff]?.delay??cn;
-        return {...x,score:base+conditionSupport+Math.min(totalCurrentDelay,20)*0.45+Math.min(diffCurrentDelay,20)*0.45,conditionalCount,conditionalRecent};
-      }).sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);
       const currentCloseTop3=lockedJodiCandidates(completed,latestOpen,3);
       const lockedJodis=currentCloseTop3.map(x=>x.jodi);
       saveShortlistPrediction(pendingMarket,currentRecord.date,{market:pendingMarket,date:currentRecord.date,open:String(latestOpen),closeTop3:currentCloseTop3.map(x=>String(x.digit))});
@@ -1197,7 +1364,7 @@ async function runFinalShortlist(showPendingPopup=false){
       document.getElementById('finalJodiStrong').innerHTML='';
       document.getElementById('finalJodiSupport').innerHTML='';
       const lockedBox=document.getElementById('finalLockedJodi');
-      if(lockedBox){lockedBox.classList.remove('hidden');document.getElementById('finalLockedJodiRule').textContent=`OPEN ${latestOpen} FIXED`;document.getElementById('finalLockedJodiList').textContent=lockedJodis.join(' • ');}
+      if(lockedBox){lockedBox.classList.remove('hidden');document.getElementById('finalLockedJodiRule').textContent=`OPEN ${latestOpen} FIXED • ${currentCloseTop3[0]?.sampleQuality||'LOW SAMPLE'}`;document.getElementById('finalLockedJodiList').textContent=lockedJodis.join(' • ');}
       const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       document.getElementById('shortlistShareText').value=[
         `${pendingMarket} - ${currentRecord.date}`,
@@ -1234,7 +1401,9 @@ async function runFinalShortlist(showPendingPopup=false){
     const topOpen=openScores.slice(0,3),topClose=closeScores.slice(0,3);
 
     const jodiCandidates=[];
+    const allowedJodiOpenDigits=new Set(topOpen.map(x=>x.digit));
     for(let o=0;o<=9;o++)for(let c=0;c<=9;c++){
+      if(!allowedJodiOpenDigits.has(o)) continue;
       const j=`${o}${c}`,fams=JODI_TO_FAMILIES[j]||[],fam=fams[0]||null,total=(o+c)%10,diff=(10+c-o)%10,type=oddEvenType(o,c);
       let last=-1;rankingRecords.forEach((r,i)=>{if(digitOf(r.openAnk)===o&&digitOf(r.closeAnk)===c)last=i;});
       const delay=last<0?n:n-1-last;
@@ -1264,13 +1433,13 @@ async function runFinalShortlist(showPendingPopup=false){
     }
     jodiCandidates.sort((a,b)=>b.score-a.score||b.signalCount-a.signalCount||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
     const validatedStrong=jodiCandidates.filter(x=>x.isStrong);
-    const strong5=(validatedStrong.length>=3?validatedStrong:jodiCandidates).slice(0,5);
+    const strong5=(validatedStrong.length>=3?validatedStrong:jodiCandidates).slice(0,4);
     const strongSet=new Set(strong5.map(x=>x.jodi));
     // Support is intentionally independent: it is selected from the next ranked candidates using structural diversity, not only Open Strong/Close Strong.
     const supportPool=jodiCandidates.filter(x=>!strongSet.has(x.jodi));
     const support5=[];const usedTypes=new Set();const usedFamilies=new Set();
-    for(const x of supportPool){if(support5.length>=5)break;const diverse=!usedTypes.has(x.type)||!usedFamilies.has(x.fam);if(diverse){support5.push(x);usedTypes.add(x.type);if(x.fam)usedFamilies.add(x.fam);}}
-    for(const x of supportPool)if(support5.length<5&&!support5.includes(x))support5.push(x);
+    for(const x of supportPool){if(support5.length>=4)break;const diverse=!usedTypes.has(x.type)||!usedFamilies.has(x.fam);if(diverse){support5.push(x);usedTypes.add(x.type);if(x.fam)usedFamilies.add(x.fam);}}
+    for(const x of supportPool)if(support5.length<4&&!support5.includes(x))support5.push(x);
     const bestJodiConflict=strong5.filter(x=>x.conflict>=2).length;
     const trueStrongCount=strong5.filter(x=>x.isStrong).length;
     const status=trueStrongCount>=3&&bestJodiConflict===0?'HIGH CONSENSUS':trueStrongCount>=1?'MODERATE':'MIXED SIGNAL';
@@ -1484,6 +1653,68 @@ document.getElementById('copyShortlistBtn')?.addEventListener('click',async()=>{
   catch(e){ta.select();document.execCommand('copy');showCustomAlert('Share Text','Game ranking copied.','success');}
 });
 
+
+// --- LIVE FIREBASE PROFIT BACKTEST ---
+function classifyPannaType(p){ const s=numP(p); if(!s)return null; if(s[0]===s[1]&&s[1]===s[2])return 'TP'; if(s[0]===s[1]||s[1]===s[2]||s[0]===s[2])return 'DP'; return 'SP'; }
+function lpPannaCandidates(history,type,topN){
+  const rows=history.filter(r=>{const p=type==='SP'?r.openPana:r.openPana; return classifyPannaType(p)===type;});
+  const seen=new Map(); const n=history.length;
+  rows.forEach((r,i)=>{const p=numP(r.openPana); if(p)seen.set(p,i);});
+  return [...seen.entries()].map(([p,last])=>({p,delay:n-1-last})).sort((a,b)=>b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,topN).map(x=>x.p);
+}
+function lpClosePannaCandidates(history,type,topN){
+  const rows=history.filter(r=>classifyPannaType(r.closePana)===type); const seen=new Map(); const n=history.length;
+  rows.forEach((r,i)=>{const p=numP(r.closePana); if(p)seen.set(p,i);});
+  return [...seen.entries()].map(([p,last])=>({p,delay:n-1-last})).sort((a,b)=>b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,topN).map(x=>x.p);
+}
+function lpCard(label,stake,hits,plays,payout){const invested=stake*plays, gross=stake*payout*hits, net=gross-invested, roi=invested?net/invested*100:0; return `<div class="rounded-xl border p-2 bg-white"><div class="text-[9px] font-black text-slate-700">${label}</div><div class="text-lg font-black ${net>=0?'text-emerald-700':'text-rose-700'}">${net>=0?'+':''}₹${net.toFixed(2)}</div><div class="text-[8px] text-slate-500">Invest ₹${invested.toFixed(2)} • Gross ₹${gross.toFixed(2)} • ${hits}/${plays} hits</div><div class="text-[8px] font-black ${roi>=0?'text-emerald-600':'text-rose-600'}">ROI ${roi.toFixed(1)}%</div></div>`;}
+async function runLiveProfitBacktest(){
+ const status=document.getElementById('lpStatus'); if(status)status.textContent='LOADING LIVE FIREBASE DATA…';
+ try{ await loadMasterData(); const all=await loadAllRawRecords(true); const market=document.getElementById('lpMarket')?.value||'ALL_MERGED'; const w=Math.max(10,Number(document.getElementById('lpWindow')?.value)||30); const singleN=Math.max(1,Math.min(10,Number(document.getElementById('lpSinglePicks')?.value)||3)); const jodiN=Math.max(1,Math.min(20,Number(document.getElementById('lpJodiPicks')?.value)||8)); const pannaN=Math.max(1,Math.min(20,Number(document.getElementById('lpPannaPicks')?.value)||4)); const ss=Number(document.getElementById('lpSingleStake')?.value)||0, js=Number(document.getElementById('lpJodiStake')?.value)||0, ps=Number(document.getElementById('lpSpStake')?.value)||0, ds=Number(document.getElementById('lpDpStake')?.value)||0;
+  let rows=all.filter(r=>(market==='ALL_MERGED'||r.marketName===market)&&btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null); rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes(a.openTime??marketsList.find(m=>m.name===a.marketName)?.openTime)??1439)-(timeToMinutes(b.openTime??marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
+  const agg={single:{hits:0,plays:0},jodi:{hits:0,plays:0},sp:{hits:0,plays:0},dp:{hits:0,plays:0}}; const recent=[];
+  for(let i=0;i<rows.length;i++){ const history=rows.slice(Math.max(0,i-w),i); if(history.length<10)continue; const t=rows[i], ao=String(btDigit(t.openAnk)), aj=btJodi(t); if(aj===null)continue; const openPred=buildCurrentStructurePrediction(history,Math.min(3,singleN),4,4).open.map(x=>String(x.digit)).slice(0,singleN); const jPred=buildCurrentStructurePrediction(history,3,4,4); const jodis=[...jPred.strong,...jPred.support].map(x=>x.jodi).slice(0,jodiN); const spPred=lpClosePannaCandidates(history,'SP',pannaN); const dpPred=lpClosePannaCandidates(history,'DP',pannaN); const actualSP=classifyPannaType(t.closePana)==='SP'?numP(t.closePana):null, actualDP=classifyPannaType(t.closePana)==='DP'?numP(t.closePana):null;
+    const sh=openPred.includes(ao), jh=jodis.includes(aj), sph=actualSP?spPred.includes(actualSP):false, dph=actualDP?dpPred.includes(actualDP):false; agg.single.plays+=1;agg.jodi.plays+=1;agg.sp.plays+=1;agg.dp.plays+=1; if(sh)agg.single.hits++;if(jh)agg.jodi.hits++;if(sph)agg.sp.hits++;if(dph)agg.dp.hits++; recent.push({date:t.date,market:t.marketName,o:openPred.join('-'),j:jodis.join('-'),sp:spPred.join('-'),dp:dpPred.join('-'),actual:`${ao}/${aj}`,hits:`${sh?'S':''}${jh?' J':''}${sph?' SP':''}${dph?' DP':''}`}); }
+  document.getElementById('lpCards').innerHTML=lpCard('SINGLE',ss,agg.single.hits,agg.single.plays,9.5)+lpCard('JODI',js,agg.jodi.hits,agg.jodi.plays,95)+lpCard('SP',ps,agg.sp.hits,agg.sp.plays,150)+lpCard('DP',ds,agg.dp.hits,agg.dp.plays,300);
+  document.getElementById('lpRows').innerHTML=recent.slice(-12).reverse().map(r=>`<div class="rounded-lg border border-slate-100 bg-slate-50 px-2 py-1 text-[8px]"><b>${r.date} • ${r.market}</b><div class="font-mono text-slate-600">S:${r.o} | J:${r.j}</div><div class="font-mono text-slate-500">SP:${r.sp} | DP:${r.dp} | Actual:${r.actual} ${r.hits?'• '+r.hits:''}</div></div>`).join('');
+  const totalInv=agg.single.plays*ss+agg.jodi.plays*js+agg.sp.plays*ps+agg.dp.plays*ds, totalGross=agg.single.hits*ss*9.5+agg.jodi.hits*js*95+agg.sp.hits*ps*150+agg.dp.hits*ds*300,totalNet=totalGross-totalInv; document.getElementById('lpStatus').textContent=`DONE • ${recent.length} TESTS • NET ${totalNet>=0?'+':''}₹${totalNet.toFixed(2)} • ROI ${totalInv?(totalNet/totalInv*100).toFixed(1):'0.0'}%`; document.getElementById('lpSub').textContent=`${market==='ALL_MERGED'?'All Markets':market} • Window ${w} • Triple ignored`;
+ }catch(e){console.error('Live profit backtest error',e); if(status)status.textContent='ERROR • '+(e?.message||'Live data could not be loaded');}
+}
+function populateLiveProfitMarkets(){ const sel=document.getElementById('lpMarket'); if(!sel)return; const current=sel.value||'ALL_MERGED'; sel.innerHTML='<option value="ALL_MERGED">ALL MARKETS</option>'+marketsList.map(m=>`<option value="${m.name}">${m.name}</option>`).join(''); if([...sel.options].some(o=>o.value===current))sel.value=current; }
+document.getElementById('liveProfitBacktestBtn')?.addEventListener('click',()=>{populateLiveProfitMarkets();document.getElementById('liveProfitModal')?.classList.remove('hidden');}); document.getElementById('runLiveProfitBtn')?.addEventListener('click',runLiveProfitBacktest); document.getElementById('closeLiveProfitBtn')?.addEventListener('click',()=>document.getElementById('liveProfitModal')?.classList.add('hidden')); document.getElementById('closeLiveProfitFooterBtn')?.addEventListener('click',()=>document.getElementById('liveProfitModal')?.classList.add('hidden'));
+
+// --- SHORTLIST ONE-CLICK BACKTEST ---
+let shortlistBacktestWindow=30;
+function resetShortlistBacktestPopup(){
+  const a=document.getElementById('sbtTested'),b=document.getElementById('sbtOpenHits'),c=document.getElementById('sbtJodiHits');if(a)a.textContent='0';if(b)b.textContent='0 / 0';if(c)c.textContent='0 / 0';
+  ['sbtOpenRate','sbtJodiRate'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='0%';});
+  const st=document.getElementById('shortlistBtStatus');if(st)st.textContent='READY';const rows=document.getElementById('shortlistBtRows');if(rows)rows.innerHTML='';
+}
+async function runShortlistBacktestPopup(){
+  const status=document.getElementById('shortlistBtStatus');if(status)status.textContent='RUNNING • '+shortlistBacktestWindow+' GAME WINDOW';
+  try{
+    await loadMasterData();
+    const selectedMarket=document.getElementById('shortlistMarketSelect')?.value||'ALL_MERGED';
+    const allRows=await loadAllRawRecords();
+    const rows=allRows.filter(r=>(selectedMarket==='ALL_MERGED'||r.marketName===selectedMarket)&&btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null);
+    rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes((marketsList.find(m=>m.name===a.marketName)||{}).openTime||'00:00')??1439)-(timeToMinutes((marketsList.find(m=>m.name===b.marketName)||{}).openTime||'00:00')??1439));
+    const results=[];
+    for(let i=0;i<rows.length;i++){
+      const target=rows[i],history=rows.slice(Math.max(0,i-shortlistBacktestWindow),i);if(history.length<Math.min(10,shortlistBacktestWindow))continue;
+      const prediction=buildCurrentStructurePrediction(history,3,4,4),openPred=prediction.open.map(x=>String(x.digit)),strong=prediction.strong.map(x=>x.jodi),support=prediction.support.map(x=>x.jodi),jodis=[...strong,...support],actualOpen=String(btDigit(target.openAnk)),actualJodi=btJodi(target);if(actualJodi===null)continue;
+      results.push({date:target.date,market:target.marketName,openHit:openPred.includes(actualOpen),jodiHit:jodis.includes(actualJodi),openPred,jodiPred:jodis,actualOpen,actualJodi});
+    }
+    const oh=results.filter(x=>x.openHit).length,jh=results.filter(x=>x.jodiHit).length,pct=(n,d)=>d?(n/d*100).toFixed(1)+'%':'0%';
+    document.getElementById('sbtTested').textContent=results.length;document.getElementById('sbtOpenRate').textContent=pct(oh,results.length);document.getElementById('sbtOpenHits').textContent=`${oh} / ${results.length}`;document.getElementById('sbtJodiRate').textContent=pct(jh,results.length);document.getElementById('sbtJodiHits').textContent=`${jh} / ${results.length}`;
+    const sub=document.getElementById('shortlistBtSub');if(sub)sub.textContent=`${selectedMarket==='ALL_MERGED'?'All Markets':selectedMarket} • 3 Open → 4 Strong + 4 Support • Window ${shortlistBacktestWindow}`;
+    const box=document.getElementById('shortlistBtRows');box.innerHTML=results.slice(-15).reverse().map(r=>`<div class="flex items-center justify-between gap-2 rounded-lg border border-slate-100 bg-slate-50 px-2 py-1"><div class="min-w-0"><div class="text-[8px] font-black text-slate-500">${r.date} • ${r.market}</div><div class="text-[9px] font-mono font-bold text-slate-700 truncate">O: ${r.openPred.join(' • ')} | J: ${r.jodiPred.join(' ')}</div></div><div class="shrink-0 text-right"><div class="text-[8px] font-black ${r.openHit?'text-emerald-600':'text-rose-600'}">O ${r.openHit?'HIT':'MISS'}</div><div class="text-[8px] font-black ${r.jodiHit?'text-indigo-600':'text-rose-600'}">J ${r.jodiHit?'HIT':'MISS'}</div><div class="text-[7px] font-mono text-slate-400">${r.actualOpen}/${r.actualJodi}</div></div></div>`).join('')||'<div class="py-4 text-center text-[9px] font-bold text-slate-400">No testable historical rows.</div>';
+    if(status)status.textContent=`DONE • ${results.length} TESTS`;
+  }catch(e){console.error('Shortlist backtest error',e);if(status)status.textContent='ERROR • Please refresh and try again.';}
+}
+document.getElementById('shortlistBacktestBtn')?.addEventListener('click',async()=>{resetShortlistBacktestPopup();document.getElementById('shortlistBacktestModal')?.classList.remove('hidden');await runShortlistBacktestPopup();});
+document.querySelectorAll('.sbt-window').forEach(btn=>btn.addEventListener('click',async()=>{shortlistBacktestWindow=parseInt(btn.dataset.sbtWindow,10)||30;document.querySelectorAll('.sbt-window').forEach(b=>{const on=b===btn;b.classList.toggle('bg-indigo-600',on);b.classList.toggle('text-white',on);b.classList.toggle('bg-slate-100',!on);b.classList.toggle('text-slate-700',!on);});await runShortlistBacktestPopup();}));
+document.getElementById('closeShortlistBacktestBtn')?.addEventListener('click',()=>document.getElementById('shortlistBacktestModal')?.classList.add('hidden'));document.getElementById('closeShortlistBacktestFooterBtn')?.addEventListener('click',()=>document.getElementById('shortlistBacktestModal')?.classList.add('hidden'));
+
 // --- DYNAMIC GROUP-WISE DELAY SIMULATION & ANALYSIS ---
 let backtestInitialized=false;
 function btDigit(v){const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;}
@@ -1502,6 +1733,8 @@ function btCandidatesAdvanced(history,opts){
   if(opts.mode==='OPEN')return open;
   if(opts.mode==='CLOSE')return close;
   if(opts.mode==='LOCKED_JODI'){ const openSignal=history.length?btDigit(history.at(-1).openAnk):null; if(openSignal===null)return []; return lockedJodiCandidates(history,openSignal,opts.topN); }
+  if(opts.mode==='CURRENT_STRUCTURE'){ const p=buildCurrentStructurePrediction(history,3,4,4); return [...p.strong.map(x=>({...x,kind:'STRONG'})),...p.support.map(x=>({...x,kind:'SUPPORT'}))]; }
+  if(opts.mode==='REVERSE_STRUCTURE'){ const p=buildReverseStructurePrediction(history,3,4,4); return [...p.strong,...p.support]; }
   if(!open.length||!close.length)return [];
   const central=buildAnalysisStats(history);
   const totalD=Object.fromEntries(central.totalDelay.map(x=>[String(x.digit),x.delay]));
@@ -1523,14 +1756,42 @@ function btCandidatesAdvanced(history,opts){
   }));
   return rows.sort((a,b)=>b.score-a.score||b.four-a.four||Math.min(b.openDelay,b.closeDelay,b.totalDelay,b.diffDelay)-Math.min(a.openDelay,a.closeDelay,a.totalDelay,a.diffDelay)||a.value.localeCompare(b.value)).slice(0,opts.topN);
 }
-function initBacktestUI(){const m=document.getElementById('backtestMarketSelect');if(!m||backtestInitialized)return;m.innerHTML='<option value="ALL_MERGED">All Markets</option>';(marketsList||[]).forEach(x=>{const o=document.createElement('option');o.value=x.name;o.textContent=x.name;m.appendChild(o);});const t=new Date().toISOString().slice(0,10);document.getElementById('backtestToDate').value=t;document.getElementById('runBacktestBtn').addEventListener('click',runBacktest);document.getElementById('resetBacktestBtn').addEventListener('click',()=>{['btTested','btHits','btMisses'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('btRate').textContent='0%';document.getElementById('backtestCandidateGrid').innerHTML='';document.getElementById('backtestRows').innerHTML='';document.getElementById('backtestStatus').textContent='READY';document.getElementById('btDetailLabel').textContent='-';});backtestInitialized=true;}
+function updateBacktestModeUI(){
+  const mode=document.getElementById('backtestModeSelect')?.value;
+  const locked=mode==='LOCKED_JODI';
+  const current=mode==='CURRENT_STRUCTURE';
+  const reverse=mode==='REVERSE_STRUCTURE';
+  const note=document.getElementById('lockedJodiModeNote');
+  const currentNote=document.getElementById('currentStructureModeNote');
+  const reverseNote=document.getElementById('reverseStructureModeNote');
+  if(note)note.classList.toggle('hidden',!locked);
+  if(reverseNote)reverseNote.classList.toggle('hidden',!reverse);
+  if(currentNote)currentNote.classList.toggle('hidden',!current);
+  const controls=[
+    ['backtestOpenGroupSelect','Open Group'],['backtestCloseGroupSelect','Close Group'],
+    ['backtestRankCountSelect','Open/Close Count'],['backtestFourWaySelect','4-Way Delay Rule'],
+    ['backtestDelayThresholdSelect','Delay Threshold'],['backtestScoreSelect','Score Weight']
+  ];
+  controls.forEach(([id])=>{
+    const el=document.getElementById(id); const label=el?.closest('label');
+    if(!el||!label)return;
+    label.classList.toggle('opacity-50',locked||current||reverse);
+    el.disabled=locked||current||reverse;
+  });
+  const topLabel=document.getElementById('backtestTopNSelect')?.closest('label');
+  if(topLabel){
+    const text=Array.from(topLabel.childNodes).find(n=>n.nodeType===3 && n.textContent.trim());
+    if(text)text.textContent=locked?'Top Locked Jodi':current?'Structure Jodi':reverse?'Reverse Jodi':'Top Jodi';
+  }
+}
+function initBacktestUI(){const m=document.getElementById('backtestMarketSelect');if(!m||backtestInitialized)return;m.innerHTML='<option value="ALL_MERGED">All Markets</option>';(marketsList||[]).forEach(x=>{const o=document.createElement('option');o.value=x.name;o.textContent=x.name;m.appendChild(o);});const t=new Date().toISOString().slice(0,10);document.getElementById('backtestToDate').value=t;document.getElementById('runBacktestBtn').addEventListener('click',runBacktest);document.getElementById('backtestModeSelect')?.addEventListener('change',updateBacktestModeUI);updateBacktestModeUI();document.getElementById('resetBacktestBtn').addEventListener('click',()=>{['btTested','btHits','btMisses'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('btRate').textContent='0%';if(document.getElementById('btOpenRate'))document.getElementById('btOpenRate').textContent='0%';if(document.getElementById('btOpenHits'))document.getElementById('btOpenHits').textContent='0 / 0';document.getElementById('backtestCandidateGrid').innerHTML='';document.getElementById('backtestRows').innerHTML='';document.getElementById('backtestStatus').textContent='READY';document.getElementById('btDetailLabel').textContent='-';});backtestInitialized=true;}
 async function runBacktest(){await loadMasterData();const status=document.getElementById('backtestStatus'),btn=document.getElementById('runBacktestBtn');btn.disabled=true;status.textContent='RUNNING';try{
  const market=document.getElementById('backtestMarketSelect').value,mode=document.getElementById('backtestModeSelect').value,openGroup=document.getElementById('backtestOpenGroupSelect').value,closeGroup=document.getElementById('backtestCloseGroupSelect').value,count=parseInt(document.getElementById('backtestRankCountSelect').value,10),fourWay=parseInt(document.getElementById('backtestFourWaySelect').value,10),threshold=parseInt(document.getElementById('backtestDelayThresholdSelect').value,10),topN=parseInt(document.getElementById('backtestTopNSelect').value,10),w=parseInt(document.getElementById('backtestWindowSelect').value,10),score=document.getElementById('backtestScoreSelect').value,from=document.getElementById('backtestFromDate').value,to=document.getElementById('backtestToDate').value;
  const allRows=await loadAllRawRecords(); const rows=allRows.filter(d=>market==='ALL_MERGED'||d.marketName===market);
  rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes((marketsList.find(m=>m.name===a.marketName)||{}).openTime||'00:00')??1439)-(timeToMinutes((marketsList.find(m=>m.name===b.marketName)||{}).openTime||'00:00')??1439));
- const data=rows.filter(r=>mode==='OPEN'?btDigit(r.openAnk)!==null:mode==='CLOSE'?btDigit(r.closeAnk)!==null:mode==='LOCKED_JODI'?(btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null):(btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null));const results=[],stats={};
- for(let i=0;i<data.length;i++){const target=data[i];if(from&&target.date<from)continue;if(to&&target.date>to)continue;const h=data.slice(Math.max(0,i-w),i);if(h.length<Math.min(5,w))continue;const candRows=btCandidatesAdvanced(h,{mode,openGroup,closeGroup,count,fourWay,threshold,topN,score});const cand=mode==='OPEN'?candRows.map(String):mode==='CLOSE'?candRows.map(String):mode==='LOCKED_JODI'?candRows.map(x=>x.jodi):candRows.map(x=>x.value);if(!cand.length)continue;const actual=mode==='OPEN'?btDigit(target.openAnk):mode==='CLOSE'?btDigit(target.closeAnk):btJodi(target);if(actual===null)continue;const hit=cand.includes(String(actual));results.push({date:target.date,signal:mode,pred:cand.join(', '),actual:String(actual),hit,detail:mode==='COMBO'?candRows.map(x=>`${x.value} O${x.openDelay}/C${x.closeDelay}/T${x.totalDelay}/D${x.diffDelay}/J${x.jodiDelay}`).join(' | '):mode==='LOCKED_JODI'?candRows.map(x=>`${x.jodi} C${x.close} D${x.delay}/R20${x.recent20}/R10${x.recent10}`).join(' | '):''});cand.forEach(c=>{stats[c]??={t:0,h:0};stats[c].t++;if(String(c)===String(actual))stats[c].h++;});}
- const hits=results.filter(x=>x.hit).length;document.getElementById('btTested').textContent=results.length;document.getElementById('btHits').textContent=hits;document.getElementById('btMisses').textContent=results.length-hits;document.getElementById('btRate').textContent=(results.length?hits/results.length*100:0).toFixed(1)+'%';document.getElementById('btDetailLabel').textContent=`${mode} • O:${openGroup} C:${closeGroup} • ${count}+${count} • 4W:${fourWay||'OFF'} @${threshold} • ${score}`;
+ const data=rows.filter(r=>mode==='OPEN'?btDigit(r.openAnk)!==null:mode==='CLOSE'?btDigit(r.closeAnk)!==null:mode==='LOCKED_JODI'||mode==='CURRENT_STRUCTURE'||mode==='REVERSE_STRUCTURE'?(btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null):(btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null));const results=[],stats={};
+ for(let i=0;i<data.length;i++){const target=data[i];if(from&&target.date<from)continue;if(to&&target.date>to)continue;const h=data.slice(Math.max(0,i-w),i);if(h.length<Math.min(5,w))continue;const candRows=btCandidatesAdvanced(h,{mode,openGroup,closeGroup,count,fourWay,threshold,topN,score});const cand=mode==='OPEN'?candRows.map(String):mode==='CLOSE'?candRows.map(String):mode==='LOCKED_JODI'||mode==='CURRENT_STRUCTURE'||mode==='REVERSE_STRUCTURE'?candRows.map(x=>x.jodi):candRows.map(x=>x.value);if(!cand.length)continue;const actual=mode==='OPEN'?btDigit(target.openAnk):mode==='CLOSE'?btDigit(target.closeAnk):btJodi(target);if(actual===null)continue;const hit=cand.includes(String(actual));let openPred=[],openHit=null;if(mode==='CURRENT_STRUCTURE'||mode==='REVERSE_STRUCTURE'){const pp=mode==='CURRENT_STRUCTURE'?buildCurrentStructurePrediction(h,3,4,4):buildReverseStructurePrediction(h,3,4,4);openPred=pp.open.map(x=>String(x.digit));openHit=openPred.includes(String(btDigit(target.openAnk)));}results.push({date:target.date,signal:mode,pred:cand.join(', '),actual:String(actual),hit,openPred,openHit,detail:mode==='COMBO'?candRows.map(x=>`${x.value} O${x.openDelay}/C${x.closeDelay}/T${x.totalDelay}/D${x.diffDelay}/J${x.jodiDelay}`).join(' | '):mode==='LOCKED_JODI'?candRows.map(x=>`${x.jodi} C${x.close} D${x.delay}/R20${x.recent20}/R10${x.recent10}`).join(' | '):mode==='CURRENT_STRUCTURE'?`OPEN-3 ${openPred.join(',')} • ${candRows.map(x=>`${x.kind||'JODI'} ${x.jodi} D${x.delay} SIG${x.signalCount}`).join(' | ')}`:mode==='REVERSE_STRUCTURE'?`OPEN-3 ${openPred.join(',')} • 3×3→9 DROP-1 • ${candRows.map(x=>`${x.kind||'JODI'} ${x.jodi} D${x.delay}`).join(' | ')}`:''});cand.forEach(c=>{stats[c]??={t:0,h:0};stats[c].t++;if(String(c)===String(actual))stats[c].h++;});}
+ const hits=results.filter(x=>x.hit).length;const openResults=results.filter(x=>x.openHit!=null);const openHits=openResults.filter(x=>x.openHit).length;document.getElementById('btTested').textContent=results.length;if(document.getElementById('btOpenRate'))document.getElementById('btOpenRate').textContent=(openResults.length?openHits/openResults.length*100:0).toFixed(1)+'%';if(document.getElementById('btOpenHits'))document.getElementById('btOpenHits').textContent=`${openHits} / ${openResults.length}`;document.getElementById('btHits').textContent=hits;document.getElementById('btMisses').textContent=results.length-hits;document.getElementById('btRate').textContent=(results.length?hits/results.length*100:0).toFixed(1)+'%';document.getElementById('btDetailLabel').textContent=mode==='LOCKED_JODI'?`${mode} • Top ${topN} • Window ${w}`:mode==='CURRENT_STRUCTURE'?`${mode} • Open 3 • Strong 4 + Support 4 • 8 Jodi • Window ${w}`:mode==='REVERSE_STRUCTURE'?`${mode} • Previous Context • 3×3 → Drop 1 • 8 Jodi • Window ${w}`:`${mode} • O:${openGroup} C:${closeGroup} • ${count}+${count} • 4W:${fourWay||'OFF'} @${threshold} • ${score}`;
  const ent=Object.entries(stats).sort((a,b)=>b[1].h/b[1].t-a[1].h/a[1].t||b[1].h-a[1].h).slice(0,20);document.getElementById('backtestCandidateGrid').innerHTML=ent.map(([k,v])=>`<div class="flex justify-between rounded-lg bg-slate-50 border border-slate-100 px-2 py-1"><span class="font-mono font-black">${k}</span><span class="text-[9px] font-bold text-slate-500">${v.h}/${v.t} • ${(v.h/v.t*100).toFixed(1)}%</span></div>`).join('')||'<div class="text-[10px] text-slate-400 text-center py-3">No testable rows.</div>';
  document.getElementById('backtestRows').innerHTML=results.slice(-30).reverse().map(r=>`<tr class="border-b border-slate-100"><td class="p-1">${r.date}</td><td class="p-1 font-semibold">${r.signal}</td><td class="p-1 font-mono">${r.pred}</td><td class="p-1 font-mono font-black">${r.actual}</td><td class="p-1 font-black ${r.hit?'text-emerald-600':'text-rose-600'}">${r.hit?'HIT':'MISS'}${r.detail?`<div class="text-[8px] font-normal text-slate-400 truncate max-w-[220px]">${r.detail}</div>`:''}</td></tr>`).join('');status.textContent='DONE';
  }catch(e){console.error(e);status.textContent='ERROR';}finally{btn.disabled=false;}}
