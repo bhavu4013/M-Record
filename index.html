@@ -167,8 +167,8 @@
 
 <!-- BACKTEST LAB -->
 <div id="backtestSection" class="hidden space-y-3 w-full">
-  <div class="rounded-xl border border-indigo-200 bg-indigo-50 p-3"><div class="flex items-center justify-between gap-2"><div><div class="text-sm font-black text-indigo-800">🧪 Backtest Lab</div><div class="text-[9px] font-semibold text-indigo-600 mt-0.5">Historical data પર strategy check — statistical result only.</div></div><span id="backtestStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">READY</span><span id="masterDataStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">MASTER…</span></div></div>
-  <div class="rounded-xl border border-slate-200 bg-white p-3 space-y-3">
+  <div class="rounded-xl border border-indigo-200 bg-indigo-50 p-3 shadow-sm"><div class="flex items-center justify-between gap-2"><div><div class="text-sm font-black text-indigo-800">🧪 Backtest Lab</div><div class="text-[9px] font-semibold text-indigo-600 mt-0.5">Historical data પર strategy check — statistical result only.</div></div><span id="backtestStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">READY</span><span id="masterDataStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">MASTER…</span></div></div>
+  <div class="rounded-xl border border-slate-200 bg-white p-3 space-y-3 shadow-sm">
     <div class="grid grid-cols-2 gap-2">
       <label class="text-[10px] font-bold text-slate-600">Market<select id="backtestMarketSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="ALL_MERGED">All Markets</option></select></label>
       <label class="text-[10px] font-bold text-slate-600">Mode<select id="backtestModeSelect" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="COMBO" selected>Open × Close Combo</option><option value="OPEN">Open Only</option><option value="CLOSE">Close Only</option></select></label>
@@ -344,6 +344,8 @@
 </div> 
 </div> 
 </div> 
+
+</div>
 
 <script type="module"> 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"; 
@@ -1178,24 +1180,26 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       ].join('\\n');      return;
     }
     const stats=buildAnalysisStats(records);
+    // Keep Shortlist ranking on the exact same completed-game dataset as the central engine.
+    const rankingRecords=stats.calc;
     const n=stats.count;
     const {openDelay,closeDelay,totalDelay,diffDelay,oeKeys,oeDelay,pannaOEKeys,openPannaOE,closePannaOE,familyJodiDelay:fjDelay,openFamilyDelay,closeFamilyDelay,openPannaDelay,closePannaDelay}=stats;
 
     const openScores=rankWithTies(openDelay.map(x=>{
       const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
       const pKeys=Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g);
-      const recent20=freqIn(records,r=>digitOf(r.openAnk),20,x.digit),recent10=freqIn(records,r=>digitOf(r.openAnk),10,x.digit);
-      const totalRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20, x.digit);
-      const diffRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
+      const recent20=freqIn(rankingRecords,r=>digitOf(r.openAnk),20,x.digit),recent10=freqIn(rankingRecords,r=>digitOf(r.openAnk),10,x.digit);
+      const totalRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20, x.digit);
+      const diffRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
       const family=openFamilyDelay[f]||0,panna=maxDelayForKeys(openPannaDelay,pKeys),pOE=Math.max(...pannaOEKeys.map(k=>openPannaOE[k]||0));
       return {...x,score:x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*0.8+Math.min(diffRel,6)*0.8+family*0.7+Math.min(panna,20)*0.45+Math.min(pOE,20)*0.25};
     }));
     const closeScores=rankWithTies(closeDelay.map(x=>{
       const f=String(Math.min(...FAMILY_DIGITS[x.digit]));
       const pKeys=Object.entries(FAMILY_PANNA_GROUPS).filter(([,a])=>a.some(p=>p.includes(String(x.digit)))).map(([g])=>g);
-      const recent20=freqIn(records,r=>digitOf(r.closeAnk),20,x.digit),recent10=freqIn(records,r=>digitOf(r.closeAnk),10,x.digit);
-      const totalRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20,x.digit);
-      const diffRel=freqIn(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
+      const recent20=freqIn(rankingRecords,r=>digitOf(r.closeAnk),20,x.digit),recent10=freqIn(rankingRecords,r=>digitOf(r.closeAnk),10,x.digit);
+      const totalRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},20,x.digit);
+      const diffRel=freqIn(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},20,x.digit);
       const family=closeFamilyDelay[f]||0,panna=maxDelayForKeys(closePannaDelay,pKeys),pOE=Math.max(...pannaOEKeys.map(k=>closePannaOE[k]||0));
       return {...x,score:x.delay*1.5+recent20*1.8+recent10*1.2+Math.min(totalRel,6)*0.8+Math.min(diffRel,6)*0.8+family*0.7+Math.min(panna,20)*0.45+Math.min(pOE,20)*0.25};
     }));
@@ -1204,10 +1208,10 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
     const jodiCandidates=[];
     for(let o=0;o<=9;o++)for(let c=0;c<=9;c++){
       const j=`${o}${c}`,fams=JODI_TO_FAMILIES[j]||[],fam=fams[0]||null,total=(o+c)%10,diff=(10+c-o)%10,type=oddEvenType(o,c);
-      let last=-1;records.forEach((r,i)=>{if(digitOf(r.openAnk)===o&&digitOf(r.closeAnk)===c)last=i;});
+      let last=-1;rankingRecords.forEach((r,i)=>{if(digitOf(r.openAnk)===o&&digitOf(r.closeAnk)===c)last=i;});
       const delay=last<0?n:n-1-last;
-      const recent10=freqIn(records,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},10,j);
-      const recent20=freqIn(records,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},20,j);
+      const recent10=freqIn(rankingRecords,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},10,j);
+      const recent20=freqIn(rankingRecords,r=>{const a=digitOf(r.openAnk),b=digitOf(r.closeAnk);return a===o&&b===c?j:null},20,j);
       const totalD=totalDelay[total]?.delay??n,diffD=diffDelay[diff]?.delay??n,oeD=oeDelay[type]??n,fjD=fams.length?Math.max(...fams.map(f=>fjDelay[f]??n)):n;
       const opP=pannaParity(records.at(-1)?.openPana),clP=pannaParity(records.at(-1)?.closePana);
       const pannaCompatibility=(opP&&clP&&oddEvenType(o,c)===((opP[0]+opP[1]===2?'OO':opP[0]+opP[1]===1?'OE':'EE')))?1:0;
@@ -1263,31 +1267,36 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       const groups=digitFamilyPannaMap[String(digit)]||[];
       const groupStats={};
       groups.forEach(g=>groupStats[g]={group:g,count:0,last:-1,maxDelay:0,recent20:0,recent10:0});
-      records.forEach((r,i)=>{
+      rankingRecords.forEach((r,i)=>{
         const p=numP(r[key]),g=p?PANNA_TO_GROUP[p]:null;
         if(g&&groupStats[g]){groupStats[g].count++;groupStats[g].last=i;}
       });
       Object.values(groupStats).forEach(g=>{
         g.delay=g.last<0?n:n-1-g.last;
         let last=-1;
-        records.forEach((r,i)=>{const p=numP(r[key]);if(p&&PANNA_TO_GROUP[p]===g.group)last=i;});
-        // Historical max delay for the group, calculated from every occurrence.
-        let max=0;
-        for(let i=0;i<records.length;i++){
-          const p=numP(records[i][key]);
-          if(p&&PANNA_TO_GROUP[p]===g.group){max=Math.max(max,i-(i===records.length-1?i:i));}
-        }
-        // Use current delay + recency/count as the primary group score; maxDelay
-        // is retained as a stabilizer rather than a trigger by itself.
+        rankingRecords.forEach((r,i)=>{const p=numP(r[key]);if(p&&PANNA_TO_GROUP[p]===g.group)last=i;});
+        // Historical maximum gap for this Family Panna group, matching the
+        // central historicalMaxDelay definition used by Analysis.
+        let prev=-1,max=0;
+        records.forEach((r,i)=>{
+          const p=numP(r[key]);
+          if(p&&PANNA_TO_GROUP[p]===g.group){
+            if(prev>=0) max=Math.max(max,i-prev-1);
+            prev=i;
+          }
+        });
+        max = prev<0 ? n : Math.max(max,n-1-prev);
         g.recent20=records.slice(-20).filter(r=>{const p=numP(r[key]);return p&&PANNA_TO_GROUP[p]===g.group;}).length;
         g.recent10=records.slice(-10).filter(r=>{const p=numP(r[key]);return p&&PANNA_TO_GROUP[p]===g.group;}).length;
         g.maxDelay=max;
-        g.score=g.delay*1.5+g.recent20*1.2+g.recent10*.8+g.count*.25;
+        // Keep current delay as the primary signal; maxDelay is only a small
+        // stabilizer so the Family-Panna ranking remains consistent with Analysis.
+        g.score=g.delay*1.5+g.recent20*1.2+g.recent10*.8+g.count*.25+Math.min(g.maxDelay,20)*0.05;
       });
       const selectedGroups=Object.values(groupStats).sort((a,b)=>b.score-a.score||b.delay-a.delay||b.count-a.count||a.group.localeCompare(b.group)).slice(0,3);
       const allowed=new Set(selectedGroups.map(g=>g.group));
       const stats={};
-      records.forEach((r,i)=>{
+      rankingRecords.forEach((r,i)=>{
         const p=numP(r[key]);
         if(!p||PANNA_TO_GROUP[p]===undefined||!allowed.has(PANNA_TO_GROUP[p])) return;
         // Keep the selected digit's Panna-total relation as a second filter.
@@ -1298,7 +1307,7 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       });
       const ranked=Object.values(stats).map(x=>{
         const gs=groupStats[x.group]||{};
-        return {...x,delay:n-1-x.last,recent20:records.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:records.slice(-10).filter(r=>numP(r[key])===x.p).length,groupScore:gs.score||0,groupDelay:gs.delay||0};
+        return {...x,delay:n-1-x.last,recent20:rankingRecords.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:rankingRecords.slice(-10).filter(r=>numP(r[key])===x.p).length,groupScore:gs.score||0,groupDelay:gs.delay||0};
       }).sort((a,b)=>{
         const sa=a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25+a.groupScore*.45;
         const sb=b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25+b.groupScore*.45;
@@ -1308,8 +1317,8 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       // previous Panna-total method so the UI never breaks on sparse datasets.
       if(!ranked.length){
         const fallback={};
-        records.forEach((r,i)=>{const p=numP(r[key]);if(!p)return;const pannaDigit=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;if(pannaDigit!==Number(digit))return;if(!fallback[p])fallback[p]={p,count:0,last:-1};fallback[p].count++;fallback[p].last=i;});
-        return Object.values(fallback).map(x=>({...x,delay:n-1-x.last,recent20:records.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:records.slice(-10).filter(r=>numP(r[key])===x.p).length})).sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
+        rankingRecords.forEach((r,i)=>{const p=numP(r[key]);if(!p)return;const pannaDigit=([...p].reduce((sum,ch)=>sum+parseInt(ch,10),0))%10;if(pannaDigit!==Number(digit))return;if(!fallback[p])fallback[p]={p,count:0,last:-1};fallback[p].count++;fallback[p].last=i;});
+        return Object.values(fallback).map(x=>({...x,delay:n-1-x.last,recent20:rankingRecords.slice(-20).filter(r=>numP(r[key])===x.p).length,recent10:rankingRecords.slice(-10).filter(r=>numP(r[key])===x.p).length})).sort((a,b)=>(b.delay*1.5+b.recent20*1.2+b.recent10*.8+b.count*.25)-(a.delay*1.5+a.recent20*1.2+a.recent10*.8+a.count*.25)||b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,2).map(x=>x.p);
       }
       return ranked.slice(0,2).map(x=>x.p);
     };
@@ -1347,13 +1356,13 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       const cur=current[key]??0,mx=maxMap[key]??0;
       return {key,current:cur,max:mx,near:mx>0&&cur>=Math.max(0,mx-2)};
     };
-    const openDigitMax=historicalMaxDelay(records,r=>digitOf(r.openAnk),Array.from({length:10},(_,i)=>i));
-    const closeDigitMax=historicalMaxDelay(records,r=>digitOf(r.closeAnk),Array.from({length:10},(_,i)=>i));
-    const totalMax=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},Array.from({length:10},(_,i)=>i));
-    const diffMax=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},Array.from({length:10},(_,i)=>i));
-    const fjMax=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:JODI_TO_FAMILY[`${o}${c}`]||null},Object.keys(FAMILY_JODI_GROUPS));
-    const fpMaxOpen=historicalMaxDelay(records,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
-    const fpMaxClose=historicalMaxDelay(records,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+    const openDigitMax=historicalMaxDelay(rankingRecords,r=>digitOf(r.openAnk),Array.from({length:10},(_,i)=>i));
+    const closeDigitMax=historicalMaxDelay(rankingRecords,r=>digitOf(r.closeAnk),Array.from({length:10},(_,i)=>i));
+    const totalMax=historicalMaxDelay(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},Array.from({length:10},(_,i)=>i));
+    const diffMax=historicalMaxDelay(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},Array.from({length:10},(_,i)=>i));
+    const fjMax=historicalMaxDelay(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:JODI_TO_FAMILY[`${o}${c}`]||null},Object.keys(FAMILY_JODI_GROUPS));
+    const fpMaxOpen=historicalMaxDelay(rankingRecords,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+    const fpMaxClose=historicalMaxDelay(rankingRecords,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
     const nearSignals=[];
     topOpen.forEach(x=>{const q=max2Window(openDelay.reduce((m,a)=>(m[a.digit]=a.delay,m),{}),openDigitMax,x.digit);if(q.near)nearSignals.push(`OPEN ${x.digit} (${q.current}/${q.max})`);});
     topClose.forEach(x=>{const q=max2Window(closeDelay.reduce((m,a)=>(m[a.digit]=a.delay,m),{}),closeDigitMax,x.digit);if(q.near)nearSignals.push(`CLOSE ${x.digit} (${q.current}/${q.max})`);});
@@ -1361,7 +1370,7 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
     [...new Set(totalCandidates)].forEach(k=>{const cur=totalDelay[k]?.delay??0;if(cur>=Math.max(0,(totalMax[k]??0)-2)&&((totalMax[k]??0)>0))nearSignals.push(`TOTAL ${k} (${cur}/${totalMax[k]})`);});
     const diffCandidates=topOpen.flatMap(o=>topClose.map(c=>(10+c.digit-o.digit)%10));
     [...new Set(diffCandidates)].forEach(k=>{const cur=diffDelay[k]?.delay??0;if(cur>=Math.max(0,(diffMax[k]??0)-2)&&((diffMax[k]??0)>0))nearSignals.push(`DIFF ${k} (${cur}/${diffMax[k]})`);});
-    strong5.filter(x=>x.isStrong).slice(0,5).forEach(x=>{const cur=x.delay,mx=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===x.open&&c===x.close?x.jodi:null},[x.jodi])[x.jodi]||0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`JODI ${x.jodi} (${cur}/${mx})`);});
+    strong5.filter(x=>x.isStrong).slice(0,5).forEach(x=>{const cur=x.delay,mx=historicalMaxDelay(rankingRecords,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===x.open&&c===x.close?x.jodi:null},[x.jodi])[x.jodi]||0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`JODI ${x.jodi} (${cur}/${mx})`);});
     topOpen.forEach(x=>bestPannasForDigit(x.digit,'open').forEach(p=>{const g=PANNA_TO_GROUP[p];if(!g)return;const cur=openPannaDelay[g]??0,mx=fpMaxOpen[g]??0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`OPEN FP ${g} (${cur}/${mx})`);}));
     topClose.forEach(x=>bestPannasForDigit(x.digit,'close').forEach(p=>{const g=PANNA_TO_GROUP[p];if(!g)return;const cur=closePannaDelay[g]??0,mx=fpMaxClose[g]??0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`CLOSE FP ${g} (${cur}/${mx})`);}));
     const uniqueNear=[...new Set(nearSignals)];
@@ -1454,7 +1463,7 @@ function btJodi(r){const o=btDigit(r.openAnk),c=btDigit(r.closeAnk);return o===n
 function btTotal(r){const o=btDigit(r.openAnk),c=btDigit(r.closeAnk);return o===null||c===null?null:(o+c)%10;}
 function btDiff(r){const o=btDigit(r.openAnk),c=btDigit(r.closeAnk);return o===null||c===null?null:(10+c-o)%10;}
 function btSeriesDelay(history,valueFn){const vals=history.map(valueFn).filter(v=>v!==null);const n=vals.length,last={};vals.forEach((v,i)=>last[String(v)]=i);return Object.fromEntries([...new Set(vals)].map(v=>[String(v),n-1-last[String(v)]]));}
-function btTopRecent(history,valueFn,count){const vals=history.map(valueFn).filter(v=>v!==null);if(!vals.length)return {top:[],recent:[]};const n=vals.length,last=btSeriesDelay(history,valueFn),keys=[...new Set(vals.map(String))];const freq={};vals.forEach(v=>freq[String(v)]=(freq[String(v)]||0)+1);const top=keys.sort((a,b)=>(+last[b]-+last[a])||(freq[b]-freq[a])||a.localeCompare(b)).slice(0,count);const recent=keys.sort((a,b)=>(+last[a]-+last[b])||a.localeCompare(b)).slice(0,count);return {top,recent};}
+function btTopRecent(history,valueFn,count){const vals=history.map(valueFn).filter(v=>v!==null);if(!vals.length)return {top:[],recent:[]};const last=btSeriesDelay(history,valueFn),keys=[...new Set(vals.map(String))];const freq={};vals.forEach(v=>freq[String(v)]=(freq[String(v)]||0)+1);const top=[...keys].sort((a,b)=>(+last[b]-+last[a])||(freq[b]-freq[a])||a.localeCompare(b)).slice(0,count);const recent=[...keys].sort((a,b)=>(+last[a]-+last[b])||a.localeCompare(b)).slice(0,count);return {top,recent};}
 function btSelectGroups(tr,count,which){if(which==='TOP')return tr.top.slice(0,count);if(which==='RECENT')return tr.recent.slice(0,count);return [...new Set([...tr.top.slice(0,count),...tr.recent.slice(0,count)])];}
 function btJodiDelay(history){return btSeriesDelay(history,r=>btJodi(r));}
 function btCandidatesAdvanced(history,opts){
@@ -1489,11 +1498,11 @@ async function runBacktest(){await loadMasterData();const status=document.getEle
  const market=document.getElementById('backtestMarketSelect').value,mode=document.getElementById('backtestModeSelect').value,openGroup=document.getElementById('backtestOpenGroupSelect').value,closeGroup=document.getElementById('backtestCloseGroupSelect').value,count=parseInt(document.getElementById('backtestRankCountSelect').value,10),fourWay=parseInt(document.getElementById('backtestFourWaySelect').value,10),threshold=parseInt(document.getElementById('backtestDelayThresholdSelect').value,10),topN=parseInt(document.getElementById('backtestTopNSelect').value,10),w=parseInt(document.getElementById('backtestWindowSelect').value,10),score=document.getElementById('backtestScoreSelect').value,from=document.getElementById('backtestFromDate').value,to=document.getElementById('backtestToDate').value;
  const allRows=await loadAllRawRecords(); const rows=allRows.filter(d=>market==='ALL_MERGED'||d.marketName===market);
  rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes((marketsList.find(m=>m.name===a.marketName)||{}).openTime||'00:00')??1439)-(timeToMinutes((marketsList.find(m=>m.name===b.marketName)||{}).openTime||'00:00')??1439));
- const data=rows.filter(r=>btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null);const results=[],stats={};
- for(let i=0;i<data.length;i++){const target=data[i];if(from&&target.date<from)continue;if(to&&target.date>to)continue;const h=data.slice(Math.max(0,i-w),i);if(h.length<Math.min(5,w))continue;const candRows=btCandidatesAdvanced(h,{mode,openGroup,closeGroup,count,fourWay,threshold,topN,score});const cand=mode==='OPEN'?candRows.map(String):mode==='CLOSE'?candRows.map(String):candRows.map(x=>x.value);if(!cand.length)continue;const actual=mode==='OPEN'?btDigit(target.openAnk):mode==='CLOSE'?btDigit(target.closeAnk):btJodi(target);if(actual===null)continue;const hit=cand.includes(String(actual));results.push({date:target.date,pred:cand.join(', '),actual:String(actual),hit,detail:mode==='COMBO'?candRows.map(x=>`${x.value} O${x.openDelay}/C${x.closeDelay}/T${x.totalDelay}/D${x.diffDelay}/J${x.jodiDelay}`).join(' | '):''});cand.forEach(c=>{stats[c]??={t:0,h:0};stats[c].t++;if(String(c)===String(actual))stats[c].h++;});}
+ const data=rows.filter(r=>mode==='OPEN'?btDigit(r.openAnk)!==null:mode==='CLOSE'?btDigit(r.closeAnk)!==null:(btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null));const results=[],stats={};
+ for(let i=0;i<data.length;i++){const target=data[i];if(from&&target.date<from)continue;if(to&&target.date>to)continue;const h=data.slice(Math.max(0,i-w),i);if(h.length<Math.min(5,w))continue;const candRows=btCandidatesAdvanced(h,{mode,openGroup,closeGroup,count,fourWay,threshold,topN,score});const cand=mode==='OPEN'?candRows.map(String):mode==='CLOSE'?candRows.map(String):candRows.map(x=>x.value);if(!cand.length)continue;const actual=mode==='OPEN'?btDigit(target.openAnk):mode==='CLOSE'?btDigit(target.closeAnk):btJodi(target);if(actual===null)continue;const hit=cand.includes(String(actual));results.push({date:target.date,signal:mode,pred:cand.join(', '),actual:String(actual),hit,detail:mode==='COMBO'?candRows.map(x=>`${x.value} O${x.openDelay}/C${x.closeDelay}/T${x.totalDelay}/D${x.diffDelay}/J${x.jodiDelay}`).join(' | '):''});cand.forEach(c=>{stats[c]??={t:0,h:0};stats[c].t++;if(String(c)===String(actual))stats[c].h++;});}
  const hits=results.filter(x=>x.hit).length;document.getElementById('btTested').textContent=results.length;document.getElementById('btHits').textContent=hits;document.getElementById('btMisses').textContent=results.length-hits;document.getElementById('btRate').textContent=(results.length?hits/results.length*100:0).toFixed(1)+'%';document.getElementById('btDetailLabel').textContent=`${mode} • O:${openGroup} C:${closeGroup} • ${count}+${count} • 4W:${fourWay||'OFF'} @${threshold} • ${score}`;
  const ent=Object.entries(stats).sort((a,b)=>b[1].h/b[1].t-a[1].h/a[1].t||b[1].h-a[1].h).slice(0,20);document.getElementById('backtestCandidateGrid').innerHTML=ent.map(([k,v])=>`<div class="flex justify-between rounded-lg bg-slate-50 border border-slate-100 px-2 py-1"><span class="font-mono font-black">${k}</span><span class="text-[9px] font-bold text-slate-500">${v.h}/${v.t} • ${(v.h/v.t*100).toFixed(1)}%</span></div>`).join('')||'<div class="text-[10px] text-slate-400 text-center py-3">No testable rows.</div>';
- document.getElementById('backtestRows').innerHTML=results.slice(-30).reverse().map(r=>`<tr class="border-b border-slate-100"><td class="p-1">${r.date}</td><td class="p-1 font-mono">${r.pred}</td><td class="p-1 font-mono">${r.actual}</td><td class="p-1 font-black ${r.hit?'text-emerald-600':'text-rose-600'}">${r.hit?'HIT':'MISS'}</td><td class="p-1">${r.detail||mode}</td></tr>`).join('');status.textContent='DONE';
+ document.getElementById('backtestRows').innerHTML=results.slice(-30).reverse().map(r=>`<tr class="border-b border-slate-100"><td class="p-1">${r.date}</td><td class="p-1 font-semibold">${r.signal}</td><td class="p-1 font-mono">${r.pred}</td><td class="p-1 font-mono font-black">${r.actual}</td><td class="p-1 font-black ${r.hit?'text-emerald-600':'text-rose-600'}">${r.hit?'HIT':'MISS'}${r.detail?`<div class="text-[8px] font-normal text-slate-400 truncate max-w-[220px]">${r.detail}</div>`:''}</td></tr>`).join('');status.textContent='DONE';
  }catch(e){console.error(e);status.textContent='ERROR';}finally{btn.disabled=false;}}
 
 async function loadAnalysisData() {
@@ -1596,7 +1605,7 @@ openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`;
 if (currentAnalysisView === 'FamilyJodi') {
 gridTitleLabel.innerText = `📊 More Analysis (FamilyJodi):`;
 topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT";
-const allGroupKeys = ["11", "12", "13", "14", "15", "22", "23", "24", "25", "33", "34", "35", "44", "45", "55"];
+const allGroupKeys = Object.keys(FAMILY_JODI_GROUPS);
 
 // Family-Jodi is a completed-game analysis: both Open and Close must exist.
 // This prevents a pending Open-only record from increasing every group's delay.
