@@ -4,7 +4,8 @@
 <meta charset="UTF-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <title>Daily Data Logger & Analysis Portal</title> 
-<script src="https://cdn.tailwindcss.com"></script> 
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> 
 <style>
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -78,8 +79,12 @@
 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold text-sm shadow-sm transition">Save Record</button> 
 <button type="button" id="cancelEditBtn" class="hidden w-1/3 bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-semibold text-sm transition">Cancel</button> 
 </div> 
-</form> 
-</div> 
+</form>
+<div class="pt-1 w-full">
+<button type="button" id="openBulkImportBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-semibold text-sm shadow-sm transition">📥 Bulk Import Excel</button>
+<div class="text-[9px] text-slate-400 text-center mt-1.5">5-sheet market workbook • Date + Market safe merge • Working-days aware</div>
+</div>
+</div>
 
 <!-- ANALYSIS SECTION --> 
 <div id="analysisSection" class="hidden space-y-4 w-full">
@@ -222,6 +227,30 @@
 <button type="button" id="closeFpModalFooterBtn" class="w-full bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-red-700 transition shadow-md">Close</button> 
 </div> 
 </div> 
+
+<!-- Bulk Excel Import Modal -->
+<div id="bulkImportModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center hidden p-4 z-50">
+  <div class="bg-white p-5 rounded-2xl max-w-md w-full space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between border-b pb-2">
+      <h3 class="text-sm font-black text-slate-800">BULK EXCEL IMPORT</h3>
+      <button type="button" id="closeBulkImportBtn" class="text-slate-400 hover:text-slate-700 text-lg font-black">×</button>
+    </div>
+    <div class="rounded-xl bg-indigo-50 border border-indigo-100 p-3 text-[10px] leading-relaxed text-indigo-900">
+      <div class="font-black mb-1">Expected workbook</div>
+      <div>Each sheet = one market. Weekly rows are read as <b>Open Panna → Jodi → Close Panna</b>; columns represent consecutive dates. Existing Market Time and Working Days settings remain the master.</div>
+    </div>
+    <input id="bulkExcelFile" type="file" accept=".xlsx,.xls" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white">
+    <div id="bulkImportStatus" class="hidden rounded-xl border p-3 text-xs font-semibold"></div>
+    <div id="bulkImportProgress" class="hidden space-y-1">
+      <div class="flex justify-between text-[9px] font-black text-slate-500"><span>IMPORT PROGRESS</span><span id="bulkImportProgressText">0%</span></div>
+      <div class="h-2 bg-slate-200 rounded-full overflow-hidden"><div id="bulkImportProgressBar" class="h-full bg-indigo-600 transition-all" style="width:0%"></div></div>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <button type="button" id="startBulkImportBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-sm">Import Excel</button>
+      <button type="button" id="cancelBulkImportBtn" class="bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold text-xs">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <!-- Bottom Navigation Bar --> 
 <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg flex justify-around p-1.5 max-w-md mx-auto z-40"> 
@@ -888,7 +917,7 @@ async function runFinalShortlist(showPendingPopup=false){
     // follow the real market sequence instead of preserving a stale selection.
     const allSnap=await getDocs(collection(db,'matka_records'));let allRecords=[];
     allSnap.forEach(ds=>{const r=ds.data();if(r.date&&r.marketName)allRecords.push(r);});
-    allRecords.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    allRecords.sort((a,b)=>new Date(a.date)-new Date(b.date) || (timeToMinutes(a.openTime ?? marketsList.find(m=>m.name===a.marketName)?.openTime)??1439) - (timeToMinutes(b.openTime ?? marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
     // The selected date controls ONLY the target game. Historical ranking data
     // must remain available across previous dates; otherwise a new/opening game
     // has no history to calculate from.
@@ -906,7 +935,7 @@ async function runFinalShortlist(showPendingPopup=false){
     // current/pending game so today's new game does not contaminate history.
     let records=allRecords.filter(r=>r.marketName &&
       (selectedMarket==='ALL_MERGED'||r.marketName===selectedMarket));
-    records.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    records.sort((a,b)=>new Date(a.date)-new Date(b.date) || (timeToMinutes(a.openTime ?? marketsList.find(m=>m.name===a.marketName)?.openTime)??1439) - (timeToMinutes(b.openTime ?? marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
 
     // For All Markets, autoState identifies the actual target market while the
     // dropdown remains All Markets so merged-history ranking still works.
@@ -1348,7 +1377,7 @@ records.push({ date: data.date, marketName: data.marketName, openTime, val: targ
 }); 
 
 globalAllRecords = records; 
-records.sort((a, b) => new Date(a.date) - new Date(b.date) || a.openTime.localeCompare(b.openTime)); 
+records.sort((a,b)=>new Date(a.date)-new Date(b.date) || (timeToMinutes(a.openTime)??1439)-(timeToMinutes(b.openTime)??1439)); 
 
 if (currentAnalysisView === 'FamilyPanna' && familyPannaAutoSelect) {
   const latest = isFamilyPannaMergeMode
@@ -1379,44 +1408,74 @@ if (currentAnalysisView === 'FamilyPanna' && familyPannaAutoSelect) {
 openTotalLogs.innerText = `${records.length} ગેમ્સ ડેટા`; 
 
 // --- SUB-VIEWS LOGIC ---
-if (currentAnalysisView === 'FamilyJodi') { 
-gridTitleLabel.innerText = `📊 More Analysis (FamilyJodi):`; 
-topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT"; 
-const allGroupKeys = ["11", "12", "13", "14", "15", "22", "23", "24", "25", "33", "34", "35", "44", "45", "55"]; 
-let groupStats = {}; 
-allGroupKeys.forEach(k => groupStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1 }); 
-records.forEach((rec, idx) => { if (rec.familyKey && groupStats[rec.familyKey]) groupStats[rec.familyKey].occurrences.push(idx); }); 
-let totalLen = records.length; 
-allGroupKeys.forEach(k => { 
-let occs = groupStats[k].occurrences; 
-groupStats[k].currentDelay = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1]; 
-if (occs.length > 0) groupStats[k].lastSeen = occs[occs.length - 1]; 
-let gaps = occs.length > 0 ? [occs[0]] : [totalLen]; 
-for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1); 
-if (occs.length > 0) gaps.push(totalLen - 1 - occs[occs.length - 1]); 
-groupStats[k].maxDelay = Math.max(...gaps); 
-}); 
-let listArr = allGroupKeys.map(k => ({ group: k, ...groupStats[k] })); 
-let sortedByRecent = [...listArr].sort((a, b) => a.currentDelay - b.currentDelay || b.lastSeen - a.lastSeen); 
-let recent5 = sortedByRecent.slice(0, 5); 
-let top5 = listArr.filter(item => !recent5.some(r => r.group === item.group)).sort((a, b) => b.currentDelay - a.currentDelay).slice(0, 5); 
-let usedGroups = new Set([...recent5.map(r => r.group), ...top5.map(t => t.group)]); 
-let midGroups = listArr.filter(item => !usedGroups.has(item.group)); 
+if (currentAnalysisView === 'FamilyJodi') {
+gridTitleLabel.innerText = `📊 More Analysis (FamilyJodi):`;
+topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT";
+const allGroupKeys = ["11", "12", "13", "14", "15", "22", "23", "24", "25", "33", "34", "35", "44", "45", "55"];
 
-topAnkVal.innerText = top5[0] ? top5[0].currentDelay : 0; topMaxVal.innerText = `Max: ${top5[0] ? top5[0].maxDelay : 0}`; topListContainer.innerText = `[${top5.map(x => x.group).join(', ')}]`; 
-midAnkVal.innerText = midGroups[0] ? midGroups[0].currentDelay : 0; midMaxVal.innerText = `Max: ${midGroups[0] ? midGroups[0].maxDelay : 0}`; midListContainer.innerText = `[${midGroups.map(x => x.group).join(', ')}]`; 
-recentAnkVal.innerText = recent5[0] ? recent5[0].currentDelay : 0; recentMaxVal.innerText = `Max: ${recent5[0] ? recent5[0].maxDelay : 0}`; recentListContainer.innerText = `[${recent5.map(x => x.group).join(', ')}]`; 
+// Family-Jodi is a completed-game analysis: both Open and Close must exist.
+// This prevents a pending Open-only record from increasing every group's delay.
+const familyJodiRecords = records.filter(rec =>
+  digitOf(rec.openAnk) !== null && digitOf(rec.closeAnk) !== null
+);
 
-gapGridContainer.innerHTML = ''; 
-let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-5 gap-1.5 text-center"; 
-listArr.forEach(item => { 
-let isHit = (item.currentDelay === 0);
-let card = document.createElement('div'); card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm"; 
-card.innerHTML = `<div class="text-xs font-bold text-slate-500">${item.group}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-indigo-600'}">${item.currentDelay}</div>`; 
-gridWrapper.appendChild(card); 
-}); 
-gapGridContainer.appendChild(gridWrapper); 
-return; 
+let groupStats = {};
+allGroupKeys.forEach(k => groupStats[k] = { occurrences: [], currentDelay: 0, maxDelay: 0, lastSeen: -1, count: 0 });
+
+// Use the fixed FAMILY_JODI_GROUPS lists directly. Do not use the single-value
+// JODI_TO_FAMILY lookup here because overlapping members (notably 50/55)
+// must be counted in every family group to which they belong.
+familyJodiRecords.forEach((rec, idx) => {
+  const jodi = `${digitOf(rec.openAnk)}${digitOf(rec.closeAnk)}`;
+  allGroupKeys.forEach(groupKey => {
+    if ((FAMILY_JODI_GROUPS[groupKey] || []).includes(jodi)) {
+      groupStats[groupKey].occurrences.push(idx);
+      groupStats[groupKey].count++;
+      groupStats[groupKey].lastSeen = idx;
+    }
+  });
+});
+
+const totalLen = familyJodiRecords.length;
+allGroupKeys.forEach(k => {
+  const st = groupStats[k], occs = st.occurrences;
+  // Same delay definition as Open/Close: number of completed games after last hit.
+  st.currentDelay = occs.length === 0 ? totalLen : totalLen - 1 - occs[occs.length - 1];
+  let gaps = occs.length > 0 ? [occs[0]] : [totalLen];
+  for (let j = 1; j < occs.length; j++) gaps.push(occs[j] - occs[j - 1] - 1);
+  if (occs.length > 0) gaps.push(totalLen - 1 - occs[occs.length - 1]);
+  st.maxDelay = Math.max(0, ...gaps);
+});
+
+let listArr = allGroupKeys.map(k => ({ group: k, ...groupStats[k] }));
+let sortedByRecent = [...listArr].sort((a, b) => a.currentDelay - b.currentDelay || b.lastSeen - a.lastSeen);
+let recent5 = sortedByRecent.slice(0, 5);
+let top5 = listArr.filter(item => !recent5.some(r => r.group === item.group))
+  .sort((a, b) => b.currentDelay - a.currentDelay || b.maxDelay - a.maxDelay).slice(0, 5);
+let usedGroups = new Set([...recent5.map(r => r.group), ...top5.map(t => t.group)]);
+let midGroups = listArr.filter(item => !usedGroups.has(item.group));
+
+topAnkVal.innerText = top5[0] ? top5[0].currentDelay : 0;
+topMaxVal.innerText = `Max: ${top5[0] ? top5[0].maxDelay : 0}`;
+topListContainer.innerText = `[${top5.map(x => x.group).join(', ')}]`;
+midAnkVal.innerText = midGroups[0] ? midGroups[0].currentDelay : 0;
+midMaxVal.innerText = `Max: ${midGroups[0] ? midGroups[0].maxDelay : 0}`;
+midListContainer.innerText = `[${midGroups.map(x => x.group).join(', ')}]`;
+recentAnkVal.innerText = recent5[0] ? recent5[0].currentDelay : 0;
+recentMaxVal.innerText = `Max: ${recent5[0] ? recent5[0].maxDelay : 0}`;
+recentListContainer.innerText = `[${recent5.map(x => x.group).join(', ')}]`;
+
+gapGridContainer.innerHTML = '';
+let gridWrapper = document.createElement('div'); gridWrapper.className = "grid grid-cols-5 gap-1.5 text-center";
+listArr.forEach(item => {
+  let isHit = (item.currentDelay === 0);
+  let card = document.createElement('div');
+  card.className = isHit ? "bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 text-center shadow-sm" : "bg-white border border-slate-200 rounded-xl p-2 text-center shadow-sm";
+  card.innerHTML = `<div class="text-xs font-bold text-slate-500">${item.group}</div><div class="text-sm font-extrabold ${isHit ? 'text-emerald-700' : 'text-indigo-600'}">${item.currentDelay}</div>`;
+  gridWrapper.appendChild(card);
+});
+gapGridContainer.appendChild(gridWrapper);
+return;
 } else if (currentAnalysisView === 'FamilyPanna') {
   gridTitleLabel.innerText = `📊 More Analysis (FamilyPanna — ${isFamilyPannaMergeMode ? 'Merged • Open → Close' : selectedFamilyPannaSession}):`;
   topCardTitle.innerText = "🔥 TOP"; midCardTitle.innerText = "💠 MID"; recentCardTitle.innerText = "⚡ RECENT";
@@ -1971,6 +2030,154 @@ document.getElementById('previewFamilyGroup').innerText = '-';
 document.getElementById('previewPanelType').innerText = '-'; 
 }); 
 
+
+// --- BULK EXCEL IMPORT ---
+// The workbook format is intentionally flexible: each sheet is one configured
+// market, while weekly blocks contain Open Panna / Jodi / Close Panna rows.
+// Excel columns are consecutive dates, not markets. Platform market time and
+// working-days settings are always the master. Existing session values are
+// preserved; only missing Open/Close values are filled.
+function bulkText(v){
+  if(v===undefined||v===null) return '';
+  return String(v).trim();
+}
+function bulkIsPlaceholder(v){
+  const x=bulkText(v).replace(/\s+/g,'');
+  return !x || /^(\*+|[-—]+|na|n\/a)$/i.test(x);
+}
+function bulkPanna(v){
+  if(bulkIsPlaceholder(v)) return null;
+  const raw=bulkText(v).replace(/\.0$/,'');
+  if(!/^\d{3}$/.test(raw)) return null;
+  return raw;
+}
+function bulkAnk(panna){
+  return String((parseInt(panna[0],10)+parseInt(panna[1],10)+parseInt(panna[2],10))%10);
+}
+function bulkPanelType(panna){
+  if(panna[0]===panna[1]&&panna[1]===panna[2]) return 'TP (Triple Panna)';
+  if(panna[0]===panna[1]||panna[1]===panna[2]||panna[0]===panna[2]) return 'DP (Double Panna)';
+  return 'SP (Single Panna)';
+}
+function bulkDateFromExcelSerial(v){
+  if(v instanceof Date && !isNaN(v)) return localDateKey(v);
+  const n=Number(v);
+  if(!Number.isFinite(n)) return null;
+  const epoch=Date.UTC(1899,11,30);
+  const d=new Date(epoch+n*86400000);
+  return isNaN(d)?null:`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+}
+function bulkDateAdd(dateStr,days){
+  const d=new Date(`${dateStr}T12:00:00`); d.setDate(d.getDate()+days); return localDateKey(d);
+}
+function bulkFindMarket(sheetName){
+  const clean=bulkText(sheetName).toLowerCase().replace(/[^a-z0-9]+/g,'');
+  return marketsList.find(m=>String(m.name||'').toLowerCase().replace(/[^a-z0-9]+/g,'')===clean)
+      || marketsList.find(m=>String(m.name||'').toLowerCase()===bulkText(sheetName).toLowerCase())
+      || null;
+}
+function bulkWorkingDate(market,dateStr){
+  return marketWorksOnDate(market,new Date(`${dateStr}T12:00:00`));
+}
+function bulkParseSheet(workbook,sheetName,market){
+  const ws=workbook.Sheets[sheetName];
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+  const out=[];
+  for(let r=0;r<rows.length;){
+    const row=rows[r]||[];
+    const first=bulkText(row[0]);
+    if(!/^\d{4}$/.test(first) || r+2>=rows.length){r++;continue;}
+    const jodiRow=rows[r+1]||[];
+    const closeRow=rows[r+2]||[];
+    if(bulkText(closeRow[0]).toLowerCase()!=='to'){r++;continue;}
+    const startDate=bulkDateFromExcelSerial(jodiRow[0]);
+    if(!startDate){r+=3;continue;}
+    const maxCols=Math.max(row.length,jodiRow.length,closeRow.length);
+    for(let c=1;c<maxCols;c++){
+      const dateStr=bulkDateAdd(startDate,c-1);
+      const open=bulkPanna(row[c]);
+      const close=bulkPanna(closeRow[c]);
+      const jodi=bulkText(jodiRow[c]);
+      // Blank/placeholder cells are holidays/no-result for this market.
+      if(!open && !close) continue;
+      // Platform working-day settings are authoritative.
+      if(!bulkWorkingDate(market,dateStr)) continue;
+      out.push({date:dateStr,market,openPana:open,closePana:close,jodi});
+    }
+    r+=3;
+    // Skip the optional week-end/separator date row.
+    if(r<rows.length && bulkText(rows[r]?.[0])) r++;
+  }
+  return out;
+}
+async function runBulkExcelImport(file){
+  if(!file) throw new Error('Please select an Excel file.');
+  if(typeof XLSX==='undefined') throw new Error('Excel reader could not be loaded. Please refresh the page and try again.');
+  if(!marketsList.length) await loadMarkets();
+  const buffer=await file.arrayBuffer();
+  const wb=XLSX.read(buffer,{type:'array',cellDates:false});
+  const stats={sheets:0,rows:0,created:0,filled:0,skippedExisting:0,skippedHoliday:0,skippedInvalid:0,unknownSheets:[]};
+  const byKey=new Map();
+  wb.SheetNames.forEach(sheetName=>{
+    const market=bulkFindMarket(sheetName);
+    if(!market){stats.unknownSheets.push(sheetName);return;}
+    stats.sheets++;
+    const parsed=bulkParseSheet(wb,sheetName,market);
+    parsed.forEach(x=>byKey.set(`${x.market.name}::${x.date}`,x));
+  });
+  stats.rows=byKey.size;
+  if(!stats.sheets) throw new Error('No Excel sheet matched the existing Market settings. Sheet names must match Market Name.');
+
+  const keys=[...byKey.keys()].sort((a,b)=>{
+    const [am,ad]=a.split('::'),[bm,bd]=b.split('::');
+    return ad.localeCompare(bd) || ((timeToMinutes(marketsList.find(m=>m.name===am)?.openTime)??1439)-(timeToMinutes(marketsList.find(m=>m.name===bm)?.openTime)??1439));
+  });
+  const progressBox=document.getElementById('bulkImportProgress');
+  const bar=document.getElementById('bulkImportProgressBar');
+  const pct=document.getElementById('bulkImportProgressText');
+  progressBox.classList.remove('hidden');
+  for(let i=0;i<keys.length;i++){
+    const item=byKey.get(keys[i]), market=item.market, date=item.date;
+    const docId=`${date}_${market.name.replace(/\s+/g,'_')}`;
+    const ref=doc(db,'matka_records',docId);
+    const snap=await getDoc(ref);
+    const existing=snap.exists()?snap.data():null;
+    const data=existing?{...existing}:{date,marketName:market.name,timestamp:serverTimestamp()};
+    let changed=false;
+    data.marketName=market.name; data.openTime=market.openTime||''; data.closeTime=market.closeTime||'';
+    data.marketOrder=timeToMinutes(market.openTime)??1439;
+    if(item.openPana){
+      if(data.openPana) stats.skippedExisting++;
+      else {data.openPana=item.openPana;data.openAnk=bulkAnk(item.openPana);data.openGroup=item.openPana;data.openFamilyGroup=getFamilyGroup(item.openPana);data.openType=bulkPanelType(item.openPana);changed=true;}
+    }
+    if(item.closePana){
+      if(data.closePana) stats.skippedExisting++;
+      else {data.closePana=item.closePana;data.closeAnk=bulkAnk(item.closePana);data.closeGroup=item.closePana;data.closeFamilyGroup=getFamilyGroup(item.closePana);data.closeType=bulkPanelType(item.closePana);changed=true;}
+    }
+    if(!snap.exists()){await setDoc(ref,data);stats.created++;}
+    else if(changed){await setDoc(ref,data,{merge:true});stats.filled++;}
+    const percent=Math.round(((i+1)/keys.length)*100);
+    if(bar)bar.style.width=percent+'%'; if(pct)pct.innerText=percent+'%';
+  }
+  return stats;
+}
+const bulkModal=document.getElementById('bulkImportModal');
+const bulkStatus=document.getElementById('bulkImportStatus');
+function showBulkStatus(message,type='ok'){
+  bulkStatus.classList.remove('hidden','bg-emerald-50','border-emerald-200','text-emerald-800','bg-rose-50','border-rose-200','text-rose-800','bg-amber-50','border-amber-200','text-amber-800');
+  const cls=type==='error'?['bg-rose-50','border-rose-200','text-rose-800']:type==='warn'?['bg-amber-50','border-amber-200','text-amber-800']:['bg-emerald-50','border-emerald-200','text-emerald-800'];
+  bulkStatus.classList.add(...cls); bulkStatus.innerHTML=message;
+}
+document.getElementById('openBulkImportBtn')?.addEventListener('click',()=>{bulkStatus.classList.add('hidden');document.getElementById('bulkExcelFile').value='';document.getElementById('bulkImportProgress').classList.add('hidden');bulkModal.classList.remove('hidden');});
+document.getElementById('closeBulkImportBtn')?.addEventListener('click',()=>bulkModal.classList.add('hidden'));
+document.getElementById('cancelBulkImportBtn')?.addEventListener('click',()=>bulkModal.classList.add('hidden'));
+document.getElementById('startBulkImportBtn')?.addEventListener('click',async()=>{
+  const file=document.getElementById('bulkExcelFile').files[0]; const btn=document.getElementById('startBulkImportBtn');
+  try{btn.disabled=true;btn.classList.add('opacity-50','cursor-not-allowed');showBulkStatus('Reading workbook and matching sheets...');const st=await runBulkExcelImport(file);showBulkStatus(`<b>Import complete.</b><br>Sheets: ${st.sheets} • Dates: ${st.rows} • New records: ${st.created} • Existing records filled: ${st.filled} • Existing sessions preserved: ${st.skippedExisting}${st.unknownSheets.length?`<br>Unmatched sheets: ${st.unknownSheets.join(', ')}`:''}`,'ok');await loadMarkets();if(!shortlistSection.classList.contains('hidden')) await runFinalShortlist(false);if(!analysisSection.classList.contains('hidden')) await loadAnalysisData();}
+  catch(e){console.error('Bulk import error',e);showBulkStatus(e.message||'Bulk import failed.','error');}
+  finally{btn.disabled=false;btn.classList.remove('opacity-50','cursor-not-allowed');}
+});
+
 document.getElementById('matkaForm').addEventListener('submit', async function(e) { 
 e.preventDefault(); 
 let session = document.querySelector('input[name="sessionToggle"]:checked').value; 
@@ -1989,11 +2196,15 @@ const docId = `${date}_${marketName.replace(/\s+/g, '_')}`;
 const docRef = doc(db, "matka_records", docId); 
 try { 
 let existingDoc = await getDoc(docRef); 
+let selectedMarketObj = marketsList.find(m => m.name === marketName);
 let recordData = existingDoc.exists() ? existingDoc.data() : { 
 date: date, 
 marketName: marketName, 
 timestamp: serverTimestamp() 
-}; 
+};
+recordData.openTime = selectedMarketObj?.openTime || recordData.openTime || '';
+recordData.closeTime = selectedMarketObj?.closeTime || recordData.closeTime || '';
+recordData.marketOrder = timeToMinutes(recordData.openTime) ?? 1439; 
 if (session === "Open") { 
 recordData.openPana = panna; 
 recordData.openAnk = calculatedAnk; 
