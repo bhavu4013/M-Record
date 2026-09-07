@@ -190,6 +190,7 @@
     </div>
   </div>
   <div id="finalConfidenceCard" class="rounded-xl border border-sky-200 bg-sky-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-sky-700">SIGNAL QUALITY</span><span id="finalSignalQuality" class="text-[9px] font-black text-sky-800">-</span></div><div id="finalSignalReason" class="text-[8px] text-slate-500 mt-0.5">-</div></div>
+  <div id="finalGameSignalCard" class="rounded-xl border border-slate-200 bg-slate-50 p-2"><div class="flex items-center justify-between"><span class="text-[10px] font-black text-slate-600">GAME SIGNAL</span><span id="finalGameSignal" class="text-[10px] font-black px-2 py-1 rounded-full">-</span></div><div id="finalGameSignalReason" class="text-[8px] text-slate-500 mt-1">-</div></div>
   <div class="rounded-xl border border-violet-200 bg-violet-50 p-2"><div class="flex items-center justify-between"><span class="text-[9px] font-black text-violet-700">JODI ODD / EVEN</span><span id="finalOddEvenBadge" class="text-[9px] font-black text-violet-800">-</span></div><div id="finalOddEvenFocus" class="text-[8px] text-slate-500 mt-0.5"></div></div>
   <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2"><div class="text-[9px] font-black text-emerald-700 mb-1">STRONG JODI 5</div><div id="finalJodiStrong" class="grid grid-cols-5 gap-1"></div></div>
   <div class="rounded-xl border border-amber-200 bg-amber-50 p-2"><div class="text-[9px] font-black text-amber-700 mb-1">SUPPORT JODI 5</div><div id="finalJodiSupport" class="grid grid-cols-5 gap-1"></div></div>
@@ -696,6 +697,13 @@ function lastSeenDelay(records,getter,size=10){const n=records.length,last=Array
 function freqIn(records,getter,windowSize,key){const a=records.slice(-windowSize);let count=0;for(const r of a)if(getter(r)===key)count++;return count;}
 function categoryDelay(records,keyFn,keys){const n=records.length,last=Object.fromEntries(keys.map(k=>[k,-1]));records.forEach((r,i)=>{const k=keyFn(r);if(k&&last[k]!==undefined)last[k]=i;});return Object.fromEntries(keys.map(k=>[k,last[k]<0?n:n-1-last[k]]));}
 function maxDelayForKeys(map,keys){return Math.max(0,...keys.map(k=>map[k]??0));}
+// Historical maximum delay: longest gap between two hits, including the current
+// unfinished gap after the latest hit. This is used only as a data-analysis window.
+function historicalMaxDelay(records,keyFn,keys){
+  const n=records.length,out={};
+  keys.forEach(k=>{let prev=-1,max=0;records.forEach((r,i)=>{if(keyFn(r)===k){if(prev>=0)max=Math.max(max,i-prev-1);prev=i;}});if(prev<0)max=n;else max=Math.max(max,n-1-prev);out[k]=max;});
+  return out;
+}
 function rankWithTies(arr){return [...arr].sort((a,b)=>b.score-a.score||b.delay-a.delay||a.digit-b.digit);}
 function renderFinalRows(el,arr){el.innerHTML=arr.map((x,i)=>{const strong=el.id==='finalJodiStrong'&&x.isStrong;return `<div class="rounded-lg ${strong?'bg-rose-100 border-2 border-rose-500 text-rose-950 shadow-sm':'bg-amber-50 border border-amber-200 text-amber-950'} px-1.5 py-2 text-center"><div class="text-[7px] font-black ${strong?'text-rose-700':'text-amber-700'}">${strong?'🔴 STRONG JODI':el.id==='finalJodiStrong'?'TOP JODI':'SUPPORT JODI'}</div><div class="text-base font-black tracking-wider leading-none mt-0.5">${x.jodi}</div><div class="text-[7px] font-bold mt-1 opacity-70">${x.type}${x.signalCount!=null?` • ${x.signalCount} SIG`:''}</div></div>`;}).join('');}
 
@@ -997,11 +1005,19 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
       const familyMix=fam?Math.min(fjD,25)*1.0:0;
       const totalSupport=Math.min(totalD,25)*0.7,diffSupport=Math.min(diffD,25)*0.7,oeSupport=Math.min(oeD,25)*0.55;
       const frequency=recent20*2.2+recent10*1.5;
-      const score=delay*1.2+frequency+oeSupport+familyMix+totalSupport+diffSupport+pannaCompatibility*1.5;
+      // Open/Close digit -> Jodi bridge: a Jodi receives extra support when
+      // either of its digits is currently ranked strongly. This keeps Jodi
+      // selection connected to the digit shortlist instead of running as a
+      // completely independent ranking.
+      const openRank=topOpen.findIndex(x=>x.digit===o),closeRank=topClose.findIndex(x=>x.digit===c);
+      const openDigitSupport=openRank===0?4.0:openRank===1?2.5:openRank===2?1.2:0;
+      const closeDigitSupport=closeRank===0?4.0:closeRank===1?2.5:closeRank===2?1.2:0;
+      const twoDigitBridge=(openRank>=0&&closeRank>=0)?2.5:0;
+      const score=delay*1.2+frequency+oeSupport+familyMix+totalSupport+diffSupport+pannaCompatibility*1.5+openDigitSupport+closeDigitSupport+twoDigitBridge;
       const conflict=(totalD<2?1:0)+(diffD<2?1:0)+(oeD<2?1:0)+(fjD<2?1:0);
       // Multi-signal validation: delay alone is never enough to mark a Jodi red.
       // Independent supporting signals are counted separately, then conflicts reduce strength.
-      const signalCount=[delay>=8,totalD>=8,diffD>=8,oeD>=8,fjD>=8,recent20>0,recent10>0,pannaCompatibility===1].filter(Boolean).length;
+      const signalCount=[delay>=8,totalD>=8,diffD>=8,oeD>=8,fjD>=8,recent20>0,recent10>0,pannaCompatibility===1,openRank===0,closeRank===0,(openRank>=0&&closeRank>=0)].filter(Boolean).length;
       const isStrong=signalCount>=3&&conflict<=1&&(delay>=5||fjD>=5||totalD>=5||diffD>=5);
       jodiCandidates.push({jodi:j,open:o,close:c,delay,type,fam,total,diff,score,conflict,totalD,diffD,oeD,fjD,signalCount,isStrong});
     }
@@ -1112,6 +1128,44 @@ const closePannaText=pendingPannaMap.flat().filter(Boolean).join(' - ');
     if(signalCard)signalCard.className=quality==='HIGH'?'rounded-xl border-2 border-rose-500 bg-rose-100 p-2 shadow-sm':quality==='MODERATE'?'rounded-xl border border-amber-300 bg-amber-50 p-2':'rounded-xl border border-slate-200 bg-slate-50 p-2';
     document.getElementById('finalSignalQuality').innerText=`${quality==='HIGH'?'🔴 STRONG SIGNAL':quality} • ${qualityScore.toFixed(0)}/100`;
     document.getElementById('finalSignalReason').innerText=`Digit gap O:${openGap.toFixed(1)} C:${closeGap.toFixed(1)} • low-delay conflicts O:${openConflict} C:${closeConflict} • Family-Panna active`;
+
+    // GAME SIGNAL / MAX-DELAY WINDOW:
+    // A category enters the watch window when its current delay is within 2 games
+    // of its own historical maximum delay. This does not guarantee a result; it
+    // simply surfaces games where several independent delay records are close to
+    // their historical extremes.
+    const max2Window=(current,maxMap,key)=>{
+      const cur=current[key]??0,mx=maxMap[key]??0;
+      return {key,current:cur,max:mx,near:mx>0&&cur>=Math.max(0,mx-2)};
+    };
+    const openDigitMax=historicalMaxDelay(records,r=>digitOf(r.openAnk),Array.from({length:10},(_,i)=>i));
+    const closeDigitMax=historicalMaxDelay(records,r=>digitOf(r.closeAnk),Array.from({length:10},(_,i)=>i));
+    const totalMax=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(o+c)%10},Array.from({length:10},(_,i)=>i));
+    const diffMax=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:(10+c-o)%10},Array.from({length:10},(_,i)=>i));
+    const fjMax=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===null||c===null?null:JODI_TO_FAMILY[`${o}${c}`]||null},Object.keys(FAMILY_JODI_GROUPS));
+    const fpMaxOpen=historicalMaxDelay(records,r=>PANNA_TO_GROUP[numP(r.openPana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+    const fpMaxClose=historicalMaxDelay(records,r=>PANNA_TO_GROUP[numP(r.closePana)]||null,Object.keys(FAMILY_PANNA_GROUPS));
+    const nearSignals=[];
+    topOpen.forEach(x=>{const q=max2Window(openDelay.reduce((m,a)=>(m[a.digit]=a.delay,m),{}),openDigitMax,x.digit);if(q.near)nearSignals.push(`OPEN ${x.digit} (${q.current}/${q.max})`);});
+    topClose.forEach(x=>{const q=max2Window(closeDelay.reduce((m,a)=>(m[a.digit]=a.delay,m),{}),closeDigitMax,x.digit);if(q.near)nearSignals.push(`CLOSE ${x.digit} (${q.current}/${q.max})`);});
+    const totalCandidates=topOpen.flatMap(o=>topClose.map(c=>(o.digit+c.digit)%10));
+    [...new Set(totalCandidates)].forEach(k=>{const cur=totalDelay[k]?.delay??0;if(cur>=Math.max(0,(totalMax[k]??0)-2)&&((totalMax[k]??0)>0))nearSignals.push(`TOTAL ${k} (${cur}/${totalMax[k]})`);});
+    const diffCandidates=topOpen.flatMap(o=>topClose.map(c=>(10+c.digit-o.digit)%10));
+    [...new Set(diffCandidates)].forEach(k=>{const cur=diffDelay[k]?.delay??0;if(cur>=Math.max(0,(diffMax[k]??0)-2)&&((diffMax[k]??0)>0))nearSignals.push(`DIFF ${k} (${cur}/${diffMax[k]})`);});
+    strong5.filter(x=>x.isStrong).slice(0,5).forEach(x=>{const cur=x.delay,mx=historicalMaxDelay(records,r=>{const o=digitOf(r.openAnk),c=digitOf(r.closeAnk);return o===x.open&&c===x.close?x.jodi:null},[x.jodi])[x.jodi]||0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`JODI ${x.jodi} (${cur}/${mx})`);});
+    topOpen.forEach(x=>bestPannasForDigit(x.digit,'open').forEach(p=>{const g=PANNA_TO_GROUP[p];if(!g)return;const cur=openPannaDelay[g]??0,mx=fpMaxOpen[g]??0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`OPEN FP ${g} (${cur}/${mx})`);}));
+    topClose.forEach(x=>bestPannasForDigit(x.digit,'close').forEach(p=>{const g=PANNA_TO_GROUP[p];if(!g)return;const cur=closePannaDelay[g]??0,mx=fpMaxClose[g]??0;if(mx>0&&cur>=Math.max(0,mx-2))nearSignals.push(`CLOSE FP ${g} (${cur}/${mx})`);}));
+    const uniqueNear=[...new Set(nearSignals)];
+    const strongJodiCount=strong5.filter(x=>x.isStrong).length;
+    const readyToPlay=uniqueNear.length>=2 || (quality==='HIGH'&&strongJodiCount>=1);
+    const watchGame=uniqueNear.length===1 || (quality==='MODERATE'&&strongJodiCount>=1);
+    const gameCard=document.getElementById('finalGameSignalCard'),gameSignal=document.getElementById('finalGameSignal'),gameReason=document.getElementById('finalGameSignalReason');
+    if(gameCard&&gameSignal&&gameReason){
+      if(readyToPlay){gameCard.className='rounded-xl border-2 border-rose-500 bg-rose-100 p-2 shadow-sm';gameSignal.className='text-[10px] font-black px-2 py-1 rounded-full bg-rose-600 text-white';gameSignal.innerText='🔴 READY TO PLAY';}
+      else if(watchGame){gameCard.className='rounded-xl border border-amber-300 bg-amber-50 p-2';gameSignal.className='text-[10px] font-black px-2 py-1 rounded-full bg-amber-500 text-white';gameSignal.innerText='🟠 WATCH GAME';}
+      else{gameCard.className='rounded-xl border border-slate-200 bg-slate-50 p-2';gameSignal.className='text-[10px] font-black px-2 py-1 rounded-full bg-slate-500 text-white';gameSignal.innerText='⚪ WAIT FOR GAME';}
+      gameReason.innerText=uniqueNear.length?`Max-delay window (≤2 games): ${uniqueNear.slice(0,6).join(' • ')}${uniqueNear.length>6?` • +${uniqueNear.length-6} more`:''}`:`No selected signal is within 2 games of its historical maximum delay.`;
+    }
     renderFinalRows(document.getElementById('finalJodiStrong'),strong5);renderFinalRows(document.getElementById('finalJodiSupport'),support5);
     const bestType=[...oeKeys].sort((a,b)=>oeDelay[b]-oeDelay[a])[0];
     document.getElementById('finalOddEvenBadge').innerText=bestType;
