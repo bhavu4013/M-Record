@@ -1673,14 +1673,34 @@ function lpProgressiveCard(label,picks,metrics,payout,tests){const invested=metr
 function lpMetric(label,value,sub=''){return `<div class="rounded-xl border border-slate-200 bg-slate-50 p-2 text-center"><div class="text-[8px] font-black text-slate-500">${label}</div><div class="text-base font-black text-slate-900">${value}</div>${sub?`<div class="text-[7px] font-bold text-slate-500">${sub}</div>`:''}</div>`;}
 function lpCalcRunMetrics(tests,config){
   const types=['single','jodi','sp','dp'],out={};
+  const picks=Object.fromEntries(types.map(type=>[type,Math.max(0,Number(config[type+'Picks'])||0)]));
+  const base=Object.fromEntries(types.map(type=>[type,Math.max(0,Number(config[type])||0)]));
+  const progressive=config.jodiStakeMode==='TARGET_PROFIT'&&picks.jodi>0&&base.jodi>0&&picks.jodi<95;
+  const targetProfit=progressive?base.jodi*(95-picks.jodi):0;
+  const stakes=Object.fromEntries(types.map(type=>[type,[]]));
+  const hitInvestments=Object.fromEntries(types.map(type=>[type,[]]));
+  const hits=Object.fromEntries(types.map(type=>[type,0]));
+  let balance=0,maxDrawdown=0,peakBalance=0,maxCapitalRequired=0,totalInvested=0,totalGross=0,maxNegativeRun=0,currentNegativeRun=0;
+  tests.forEach((x,i)=>{
+    const drawdownBefore=Math.max(0,-balance);
+    const jodiStake=progressive?Math.ceil(((drawdownBefore+targetProfit)/(95-picks.jodi))*2)/2:base.jodi;
+    const gameStake={single:base.single,jodi:jodiStake,sp:base.sp,dp:base.dp};
+    types.forEach(type=>stakes[type].push(gameStake[type]));
+    const gameInvest=types.reduce((sum,type)=>sum+picks[type]*gameStake[type],0);
+    const gameGross=(x.singleHit?gameStake.single*9.5:0)+(x.jodiHit?gameStake.jodi*95:0)+(x.spHit?gameStake.sp*150:0)+(x.dpHit?gameStake.dp*300:0);
+    types.forEach(type=>{if(x[type+'Hit']){hits[type]++;hitInvestments[type].push(totalInvested+gameInvest);}});
+    const capitalRequired=Math.max(0,-balance)+gameInvest;
+    maxCapitalRequired=Math.max(maxCapitalRequired,capitalRequired);
+    totalInvested+=gameInvest;totalGross+=gameGross;
+    const net=gameGross-gameInvest;balance+=net;
+    if(balance<0){currentNegativeRun++;maxNegativeRun=Math.max(maxNegativeRun,currentNegativeRun);maxDrawdown=Math.max(maxDrawdown,-balance);}else{currentNegativeRun=0;peakBalance=Math.max(peakBalance,balance);}
+  });
   types.forEach(type=>{
-    const hits=tests.filter(x=>x[type+'Hit']).length,plays=tests.length,picks=Math.max(0,Number(config[type+'Picks'])||0),baseStake=Math.max(0,Number(config[type])||0);
-    const progressive=type==='jodi'&&config.jodiStakeMode==='TARGET_PROFIT'&&picks>0&&baseStake>0&&picks<95;
-    const targetProfit=progressive?baseStake*(95-picks):0; let carryLoss=0,stakes=[],hitInvestments=[];
-    tests.forEach((x,i)=>{let stake=baseStake;if(progressive)stake=Math.ceil(((carryLoss+targetProfit)/(95-picks))*2)/2;stakes.push(stake);const inv=picks*stake;if(x[type+'Hit']){hitInvestments.push(stakes.slice(0,i+1).reduce((a,v)=>a+picks*v,0));carryLoss=0;}else if(progressive)carryLoss+=inv;});
-    let run=0,maxRun=0,maxLoss=0,currentLoss=0;tests.forEach((x,i)=>{const inv=picks*stakes[i];if(x[type+'Hit']){run=0;currentLoss=0;}else{run++;currentLoss+=inv;maxRun=Math.max(maxRun,run);maxLoss=Math.max(maxLoss,currentLoss);}});
-    out[type]={hits,plays,picks,stake:baseStake,stakes,progressive,targetProfit,investedPerGame:progressive?null:picks*baseStake,invested:stakes.reduce((a,v)=>a+picks*v,0),maxRun,hitInvestments,maxLoss};
-  });return out;
+    const invested=stakes[type].reduce((sum,stake)=>sum+picks[type]*stake,0);
+    out[type]={hits:hits[type],plays:tests.length,picks:picks[type],stake:base[type],stakes:stakes[type],progressive:type==='jodi'&&progressive,targetProfit:type==='jodi'?targetProfit:0,investedPerGame:progressive&&type==='jodi'?null:picks[type]*base[type],invested,hitInvestments:hitInvestments[type],maxRun:0,maxLoss:0};
+  });
+  out._combined={balance,maxDrawdown,maxCapitalRequired,totalInvested,totalGross,totalNet:totalGross-totalInvested,maxNegativeRun};
+  return out;
 }
 
 async function runLiveProfitBacktest(){
@@ -1703,12 +1723,11 @@ async function runLiveProfitBacktest(){
   const metrics=lpCalcRunMetrics(tests,{single:ss,jodi:js,sp:ps,dp:ds,singlePicks:singleN,jodiPicks:jodiN,spPicks:pannaN,dpPicks:pannaN,jodiStakeMode});
   const cards=[];if(singleN>0)cards.push(lpCard('SINGLE',singleN,ss,metrics.single.hits,metrics.single.plays,9.5));if(jodiN>0){const jl='JODI '+(jodiStrategy==='REVERSE'?'REVERSE':'CURRENT')+(jodiStakeMode==='TARGET_PROFIT'?' • INCREASE':'');cards.push(jodiStakeMode==='TARGET_PROFIT'?lpProgressiveCard(jl,jodiN,metrics.jodi,95,tests):lpCard(jl,jodiN,js,metrics.jodi.hits,metrics.jodi.plays,95));}if(pannaN>0){cards.push(lpCard('SP',pannaN,ps,metrics.sp.hits,metrics.sp.plays,150));cards.push(lpCard('DP',pannaN,ds,metrics.dp.hits,metrics.dp.plays,300));}
   document.getElementById('lpCards').innerHTML=cards.join('')||'<div class="col-span-2 rounded-lg bg-slate-50 border p-3 text-center text-[9px] font-bold text-slate-500">NO PICKS SELECTED — calculation disabled.</div>';
-  const allInvest=Object.values(metrics).reduce((a,x)=>a+x.invested,0),baseGameInvest=singleN*ss+jodiN*js+pannaN*ps+pannaN*ds;let maxCombinedLoss=0,currentLoss=0,maxCombinedRun=0,combinedRun=0,totalGross=0;
-  tests.forEach((x,i)=>{const si=metrics.single.stakes?.[i]??ss,ji=metrics.jodi.stakes?.[i]??js,spi=metrics.sp.stakes?.[i]??ps,dpi=metrics.dp.stakes?.[i]??ds,gameInvest=singleN*si+jodiN*ji+pannaN*spi+pannaN*dpi,gross=(x.singleHit?si*9.5:0)+(x.jodiHit?ji*95:0)+(x.spHit?spi*150:0)+(x.dpHit?dpi*300:0);totalGross+=gross;const net=gross-gameInvest;if(net<0){combinedRun++;currentLoss+=-net;maxCombinedRun=Math.max(maxCombinedRun,combinedRun);maxCombinedLoss=Math.max(maxCombinedLoss,currentLoss);}else{combinedRun=0;currentLoss=0;}});
-  const peakJodiStake=Math.max(0,...(metrics.jodi.stakes||[])),peakJodiInvestment=peakJodiStake*jodiN,allHitInvest=Math.max(0,...Object.values(metrics).flatMap(x=>x.hitInvestments||[]));
-  document.getElementById('lpMetrics').innerHTML=lpMetric('PER GAME BASE INVESTMENT','₹'+baseGameInvest.toFixed(2),'first game selected picks')+lpMetric('MAX COMBINED LOSS','₹'+maxCombinedLoss.toFixed(2),maxCombinedRun+' consecutive negative games')+lpMetric('PEAK JODI STAKE','₹'+peakJodiStake.toFixed(2),jodiN+' picks • ₹'+peakJodiInvestment.toFixed(2)+' game investment')+lpMetric('TOTAL INVESTMENT','₹'+allInvest.toFixed(2),tests.length+' target games');
+  const combined=metrics._combined||{totalInvested:0,totalGross:0,totalNet:0,maxDrawdown:0,maxCapitalRequired:0,maxNegativeRun:0},allInvest=combined.totalInvested,baseGameInvest=singleN*ss+jodiN*js+pannaN*ps+pannaN*ds;
+  const peakJodiStake=Math.max(0,...(metrics.jodi.stakes||[])),peakJodiInvestment=peakJodiStake*jodiN;
+  document.getElementById('lpMetrics').innerHTML=lpMetric('PER GAME BASE INVESTMENT','₹'+baseGameInvest.toFixed(2),'first game selected picks')+lpMetric('MAX DRAWDOWN','₹'+combined.maxDrawdown.toFixed(2),combined.maxNegativeRun+' consecutive negative-balance games')+lpMetric('MAX CAPITAL REQUIRED','₹'+combined.maxCapitalRequired.toFixed(2),'to keep the strategy running')+lpMetric('PEAK JODI STAKE','₹'+peakJodiStake.toFixed(2),jodiN+' picks • ₹'+peakJodiInvestment.toFixed(2)+' game investment')+lpMetric('TOTAL INVESTMENT','₹'+allInvest.toFixed(2),tests.length+' target games');
   document.getElementById('lpRows').innerHTML=tests.slice().reverse().map(r=>`<div class="rounded-lg border border-slate-100 bg-slate-50 px-2 py-1 text-[8px]"><b>${r.date} • ${r.market}</b><div class="font-mono text-slate-600">S:${r.o} ${r.singleHit?'✓':'✕'} | J:${r.j} ${r.jodiHit?'✓':'✕'}</div><div class="font-mono text-slate-500">SP:${r.sp} ${r.spHit?'✓':'✕'} | DP:${r.dp} ${r.dpHit?'✓':'✕'} | Actual:${r.actual}</div></div>`).join('');
-  const totalNet=totalGross-allInvest;status.textContent=`DONE • ${tests.length} / ${Math.min(w,rows.length)} TARGET GAMES • NET ${totalNet>=0?'+':''}₹${totalNet.toFixed(2)} • ROI ${allInvest?(totalNet/allInvest*100).toFixed(1):'0.0'}%`;document.getElementById('lpSub').textContent=`${market==='ALL_MERGED'?'All Markets':market} • Last ${w} target games • ${jodiStrategy==='REVERSE'?'Reverse Jodi':'Current Jodi'} • ${jodiStakeMode==='TARGET_PROFIT'?'Increasing stake':'Flat stake'} • Triple ignored`;
+  const totalNet=combined.totalNet;status.textContent=`DONE • ${tests.length} / ${Math.min(w,rows.length)} TARGET GAMES • NET ${totalNet>=0?'+':''}₹${totalNet.toFixed(2)} • ROI ${allInvest?(totalNet/allInvest*100).toFixed(1):'0.0'}%`;document.getElementById('lpSub').textContent=`${market==='ALL_MERGED'?'All Markets':market} • ${windowRaw==='ALL'?'ALL TIME':'Last '+w+' target games'} • ${jodiStrategy==='REVERSE'?'Reverse Jodi':'Current Jodi'} • ${jodiStakeMode==='TARGET_PROFIT'?'Increasing stake':'Flat stake'} • Triple ignored`;
  }catch(e){console.error('Live profit backtest error',e);if(status)status.textContent='ERROR • '+(e?.message||'Live data could not be loaded');}
 }
 
