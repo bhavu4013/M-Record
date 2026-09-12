@@ -165,6 +165,38 @@
 </div> 
 </div> 
 
+<!-- PATTERN DISCOVERY LAB -->
+<div id="patternDiscoverySection" class="hidden space-y-3 w-full">
+  <div class="rounded-xl border border-violet-200 bg-violet-50 p-3 shadow-sm">
+    <div class="flex items-center justify-between gap-2">
+      <div><div class="text-sm font-black text-violet-800">🔬 Pattern Discovery Lab</div><div class="text-[9px] font-semibold text-violet-600 mt-0.5">Databaseમાંથી repeatable relationships શોધો — discovery first, validation later.</div></div>
+      <span id="pdStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">READY</span>
+    </div>
+  </div>
+
+  <div class="rounded-xl border border-slate-200 bg-white p-3 space-y-3 shadow-sm">
+    <div class="grid grid-cols-2 gap-2">
+      <label class="text-[9px] font-black text-slate-600">MARKET<select id="pdMarket" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="ALL_MERGED">All Markets</option></select></label>
+      <label class="text-[9px] font-black text-slate-600">DIRECTION<select id="pdDirection" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="FORWARD" selected>→ Forward • Old → New</option><option value="REVERSE">← Reverse-Time • New → Old</option></select></label>
+      <label class="text-[9px] font-black text-slate-600">RELATIONSHIP<select id="pdRelation" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="O2O" selected>Open → Open</option><option value="C2C">Close → Close</option><option value="O2C">Open → Close</option><option value="C2O">Close → Open</option><option value="J2J">Jodi → Jodi</option><option value="JF2JF">Jodi Family → Jodi Family</option></select></label>
+      <label class="text-[9px] font-black text-slate-600">STEP<select id="pdStep" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="1" selected>+1 Game</option><option value="2">+2 Games</option><option value="3">+3 Games</option><option value="5">+5 Games</option><option value="7">+7 Games</option><option value="10">+10 Games</option></select></label>
+      <label class="text-[9px] font-black text-slate-600">LOOKBACK<select id="pdWindow" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="50">50 games</option><option value="100" selected>100 games</option><option value="200">200 games</option><option value="500">500 games</option><option value="ALL">ALL available</option></select></label>
+      <label class="text-[9px] font-black text-slate-600">MIN SAMPLE<select id="pdMinSample" class="mt-1 w-full border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white"><option value="5">5+</option><option value="10">10+</option><option value="20" selected>20+</option><option value="30">30+</option><option value="50">50+</option></select></label>
+    </div>
+    <div class="rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-2 text-[8px] font-semibold text-violet-800">
+      <b>Reverse-Time:</b> data <b>New → Old</b> વાંચાશે. આ exploratory pattern discovery છે; તેને સીધું future-prediction proof માનવું નહીં. Strong pattern મળે તો નીચે <b>Forward Verify</b>થી walk-forward test કરવો.
+    </div>
+    <div class="flex gap-2"><button id="pdScanBtn" type="button" class="flex-1 bg-violet-600 hover:bg-violet-700 text-white py-2.5 rounded-lg font-black text-sm shadow-sm">🔎 SCAN PATTERNS</button><button id="pdResetBtn" type="button" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 rounded-lg font-bold text-sm">Reset</button></div>
+  </div>
+
+  <div id="pdSummary" class="grid grid-cols-2 gap-1.5"></div>
+  <div class="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm">
+    <div class="flex items-center justify-between mb-2"><div class="text-[9px] font-black text-slate-700">TOP DISCOVERIES</div><span id="pdDiscoveryMeta" class="text-[8px] font-bold text-slate-400">—</span></div>
+    <div id="pdResults" class="space-y-1.5"></div>
+  </div>
+  <div id="pdDetail" class="hidden rounded-xl border border-indigo-200 bg-indigo-50 p-2.5 shadow-sm"></div>
+</div>
+
 <!-- BACKTEST LAB -->
 <div id="backtestSection" class="hidden space-y-3 w-full">
   <div class="rounded-xl border border-indigo-200 bg-indigo-50 p-3 shadow-sm"><div class="flex items-center justify-between gap-2"><div><div class="text-sm font-black text-indigo-800">🧪 Backtest Lab</div><div class="text-[9px] font-semibold text-indigo-600 mt-0.5">Historical data પર strategy check — statistical result only.</div></div><span id="backtestStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">READY</span><span id="masterDataStatus" class="text-[9px] font-black px-2 py-1 rounded-full bg-white text-slate-500">MASTER…</span></div></div>
@@ -263,35 +295,38 @@
 
 
 <!-- Live Profit Backtest Modal -->
-<div id="liveProfitModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden p-4 z-[70]">
-  <div class="bg-white p-4 rounded-2xl max-w-lg w-full shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto">
-    <div class="flex items-center justify-between border-b border-slate-100 pb-2"><div><div class="text-sm font-black text-emerald-800">💰 Live Profit Backtest</div><div id="lpSub" class="text-[8px] font-semibold text-slate-500 mt-0.5">Live Firebase • walk-forward historical test</div></div><button id="closeLiveProfitBtn" type="button" class="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button></div>
-    <div class="grid grid-cols-2 gap-2">
-      <label class="text-[9px] font-black text-slate-600">MARKET<select id="lpMarket" class="mt-1 w-full border rounded-lg p-1.5 text-xs font-bold"><option value="ALL_MERGED">ALL MARKETS</option></select></label>
-      <label class="text-[9px] font-black text-slate-600">WINDOW<select id="lpWindow" class="mt-1 w-full border rounded-lg p-1.5 text-xs font-bold"><option>20</option><option selected>30</option><option>50</option><option>100</option><option value="ALL">ALL TIME</option></select></label>
+<div id="liveProfitModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden p-3 z-[70]">
+  <div class="bg-white p-3 rounded-2xl max-w-lg w-full shadow-2xl space-y-2 max-h-[94vh] overflow-y-auto">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-2"><div><div class="text-sm font-black text-emerald-800">💰 Live Profit / Increase Backtest</div><div id="lpSub" class="text-[8px] font-semibold text-slate-500 mt-0.5">Historical Firebase • walk-forward test</div></div><button id="closeLiveProfitBtn" type="button" class="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button></div>
+    <div class="grid grid-cols-2 gap-1.5">
+      <label class="text-[8px] font-black text-slate-600">MARKET<select id="lpMarket" class="mt-1 w-full border rounded-lg p-1.5 text-xs font-bold"><option value="ALL_MERGED">ALL MARKETS</option></select></label>
+      <label class="text-[8px] font-black text-slate-600">WINDOW<select id="lpWindow" class="mt-1 w-full border rounded-lg p-1.5 text-xs font-bold"><option>20</option><option selected>30</option><option>50</option><option>100</option><option value="ALL">ALL TIME</option></select></label>
     </div>
     <div class="grid grid-cols-3 gap-1.5">
-      <label class="rounded-lg bg-emerald-50 border border-emerald-100 p-2 text-center text-[8px] font-black text-emerald-700">SINGLE PICKS<input id="lpSinglePicks" type="number" min="0" max="10" value="3" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
-      <label class="rounded-lg bg-indigo-50 border border-indigo-100 p-2 text-center text-[8px] font-black text-indigo-700">JODI PICKS<input id="lpJodiPicks" type="number" min="0" max="20" value="8" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
-      <label class="rounded-lg bg-amber-50 border border-amber-100 p-2 text-center text-[8px] font-black text-amber-700">PANNA PICKS<input id="lpPannaPicks" type="number" min="0" max="20" value="4" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg bg-emerald-50 border border-emerald-100 p-1.5 text-center text-[8px] font-black text-emerald-700">SINGLE PICKS<input id="lpSinglePicks" type="number" min="0" max="10" value="3" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg bg-indigo-50 border border-indigo-100 p-1.5 text-center text-[8px] font-black text-indigo-700">FINAL JODI PICKS<input id="lpJodiPicks" type="number" min="0" max="20" value="8" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg bg-amber-50 border border-amber-100 p-1.5 text-center text-[8px] font-black text-amber-700">PANNA PICKS<input id="lpPannaPicks" type="number" min="0" max="20" value="4" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
     </div>
     <div class="grid grid-cols-2 gap-1.5">
-      <label class="text-[8px] font-black text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg p-2">JODI STRATEGY<select id="lpJodiStrategy" class="mt-1 w-full border rounded p-1 text-xs font-bold"><option value="CURRENT">CURRENT STRUCTURE</option><option value="REVERSE">REVERSE STRUCTURE</option></select></label>
-      <label class="text-[8px] font-black text-rose-700 bg-rose-50 border border-rose-100 rounded-lg p-2">JODI STAKE MODE<select id="lpJodiStakeMode" class="mt-1 w-full border rounded p-1 text-xs font-bold"><option value="FLAT">FLAT STAKE</option><option value="TARGET_PROFIT">INCREASE → SAME PROFIT</option></select></label>
+      <label class="text-[8px] font-black text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg p-1.5">FINAL JODI STRATEGY<select id="lpJodiStrategy" class="mt-1 w-full border rounded p-1 text-xs font-bold"><option value="CURRENT">CURRENT STRUCTURE</option><option value="REVERSE">REVERSE STRUCTURE</option></select></label>
+      <label class="text-[8px] font-black text-violet-700 bg-violet-50 border border-violet-100 rounded-lg p-1.5">ANALYSIS MODE<select id="lpAnalysisMode" class="mt-1 w-full border rounded p-1 text-xs font-bold"><option value="FULL">FULL</option><option value="OPEN">OPEN ONLY</option><option value="CLOSE">CLOSE ONLY</option><option value="JODI">FINAL JODI ONLY</option><option value="PANNA">PANNA ONLY</option><option value="OPEN_JODI">OPEN + FINAL JODI</option><option value="OPEN_JODI_PANNA">OPEN + JODI + PANNA</option></select></label>
     </div>
-    <div id="lpJodiIncreaseNote" class="rounded-lg border border-rose-200 bg-rose-50 px-2 py-1.5 text-[8px] font-bold text-rose-800">Increase logic: પહેલી gameનો Jodi net-profit target fix. Loss થાય તો next gameમાં stake = જૂનો cumulative loss + એ જ profit target cover થાય એટલો. Hit પછી base stake પર reset.</div>
     <div class="grid grid-cols-4 gap-1.5">
-      <label class="rounded-lg border p-2 text-center text-[8px] font-black">SINGLE ₹<input id="lpSingleStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
-      <label class="rounded-lg border p-2 text-center text-[8px] font-black">JODI ₹<input id="lpJodiStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
-      <label class="rounded-lg border p-2 text-center text-[8px] font-black">SP ₹<input id="lpSpStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
-      <label class="rounded-lg border p-2 text-center text-[8px] font-black">DP ₹<input id="lpDpStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-1.5 text-center text-[8px] font-black">SINGLE ₹<input id="lpSingleStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-1.5 text-center text-[8px] font-black">JODI ₹<input id="lpJodiStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-1.5 text-center text-[8px] font-black">SP ₹<input id="lpSpStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
+      <label class="rounded-lg border p-1.5 text-center text-[8px] font-black">DP ₹<input id="lpDpStake" type="number" min="0" step="0.5" value="1" class="mt-1 w-full text-center border rounded p-1 text-xs"></label>
     </div>
-    <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-2 py-1.5 text-[8px] font-black text-emerald-800">INVESTMENT = (Single Picks × Single ₹) + (Jodi Picks × Jodi ₹) + (SP Picks × SP ₹) + (DP Picks × DP ₹) — એટલે 3 Single @ ₹10 = ₹30, 4 SP @ ₹10 = ₹40, 4 DP @ ₹10 = ₹40; કુલ ₹110 પ્રતિ game (Jodi અલગ ઉમેરાશે).</div>
-    <div class="rounded-xl border border-slate-200 bg-slate-50 p-2"><div class="text-[8px] font-black text-slate-500 mb-1">PAYOUT (GROSS RETURN PER ₹1 HIT)</div><div class="grid grid-cols-4 gap-1 text-center text-[9px] font-black"><div>Single<br><span class="text-emerald-700">₹9.50</span></div><div>Jodi<br><span class="text-indigo-700">₹95</span></div><div>SP<br><span class="text-amber-700">₹150</span></div><div>DP<br><span class="text-orange-700">₹300</span></div></div></div>
-    <div class="rounded-lg border border-indigo-100 bg-indigo-50 px-2 py-1.5 text-[8px] font-semibold text-indigo-800">દરેક target game માટે માત્ર પહેલાંનો historical data લેવાશે. Future result predictionમાં નહીં આવે. Triple સંપૂર્ણપણે ignore છે. SP/DP માટે historical Panna delay ranking વપરાશે.</div>
-    <button id="runLiveProfitBtn" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-black text-sm">RUN LIVE FIREBASE BACKTEST</button>
+    <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-1.5 text-[8px] font-bold text-emerald-800">INCREASE RULE: Base game profit = (winning stake × payout) − total base investment. Loss પછી next stake = (cumulative cycle loss + same base profit) ÷ (payout − number of picks). Hit થાય ત્યારે base profit lock થાય અને recovery cycle ZERO થાય.</div>
+    <div class="rounded-lg border border-indigo-100 bg-indigo-50 px-2 py-1.5 text-[8px] font-semibold text-indigo-800">IMPORTANT: Open/Close Jodi અલગ નથી. Open Ank + Close Ank = ONE FINAL JODI. Single Open અને Single Close અલગ streams છે. SP/DPમાં Open અને Close અલગ છે. Triple ignore.</div>
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-1.5"><div class="text-[8px] font-black text-slate-500 mb-1">PAYOUT — GROSS RETURN PER ₹1 HIT</div><div class="grid grid-cols-4 gap-1 text-center text-[8px] font-black"><div>Single<br><span class="text-emerald-700">₹9.50</span></div><div>Final Jodi<br><span class="text-indigo-700">₹95</span></div><div>SP<br><span class="text-amber-700">₹150</span></div><div>DP<br><span class="text-orange-700">₹300</span></div></div></div>
+    <div class="grid grid-cols-2 gap-1.5"><label class="text-[8px] font-black text-slate-600">DETAIL<select id="lpDetailMode" class="mt-1 w-full border rounded p-1 text-xs font-bold"><option value="SUMMARY">SUMMARY</option><option value="LEDGER">GAME-BY-GAME LEDGER</option></select></label><div id="lpIncBadge" class="rounded-lg border border-violet-100 bg-violet-50 p-2 text-center text-[8px] font-black text-violet-700">READY</div></div>
+    <button id="runLiveProfitBtn" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-black text-sm">RUN HISTORICAL BACKTEST</button>
     <div id="lpStatus" class="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-[8px] font-bold text-slate-600">READY</div>
     <div id="lpCards" class="grid grid-cols-2 gap-1.5"></div>
+    <div id="lpIncMetrics" class="grid grid-cols-2 gap-1.5"></div>
+    <div id="lpStreamTable" class="overflow-x-auto"></div>
+    <div id="lpLedger" class="hidden max-h-72 overflow-y-auto space-y-1"></div>
     <div id="lpMetrics" class="grid grid-cols-2 gap-1.5"></div>
     <div id="lpRows" class="space-y-1 max-h-52 overflow-y-auto"></div>
     <button id="closeLiveProfitFooterBtn" type="button" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 rounded-lg font-bold text-sm">Close</button>
@@ -346,6 +381,10 @@
 <button id="navAnalysisBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"> 
 <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> 
 <span class="text-[10px]">Analysis</span> 
+</button>
+<button id="navPatternBtn" class="flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition">
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 19V5m0 0h16M4 5l6 6 4-4 6 6"></path></svg>
+<span class="text-[10px]">Patterns</span>
 </button> 
 </div> 
 
@@ -439,46 +478,68 @@ let masterDataPromise = null;
 const navLoggerBtn = document.getElementById('navLoggerBtn'); 
 const navAnalysisBtn = document.getElementById('navAnalysisBtn'); 
 const navShortlistBtn = document.getElementById('navShortlistBtn');
+const navPatternBtn = document.getElementById('navPatternBtn');
 
 const loggerSection = document.getElementById('loggerSection'); 
 const analysisSection = document.getElementById('analysisSection'); 
-const shortlistSection = document.getElementById('shortlistSection'); 
+const shortlistSection = document.getElementById('shortlistSection');
+const patternDiscoverySection = document.getElementById('patternDiscoverySection'); 
 const pageTitle = document.getElementById('pageTitle'); 
 
 navLoggerBtn.addEventListener('click', () => { 
 loggerSection.classList.remove('hidden'); 
 analysisSection.classList.add('hidden'); 
-shortlistSection.classList.add('hidden'); 
+shortlistSection.classList.add('hidden');
+patternDiscoverySection.classList.add('hidden');
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "M RECORD"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
-navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-500 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+navPatternBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
 checkValidationAndStatus(); 
 }); 
 
 navAnalysisBtn.addEventListener('click', () => { 
 analysisSection.classList.remove('hidden'); 
 loggerSection.classList.add('hidden'); 
-shortlistSection.classList.add('hidden'); 
+shortlistSection.classList.add('hidden');
+patternDiscoverySection.classList.add('hidden');
 document.getElementById('entryAlertBox').classList.add('hidden'); 
 pageTitle.innerText = "Data Analysis Portal"; 
 navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
-navShortlistBtn.className = "flex-1 flex flex-col items-center py-2 text-slate-500 font-semibold transition"; 
+navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+navPatternBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
 loadMarkets().then(() => loadAnalysisData()).catch(err => { console.error('Analysis init error:', err); loadAnalysisData(); }); 
 }); 
 
 navShortlistBtn.addEventListener('click', () => { 
 shortlistSection.classList.remove('hidden'); 
 loggerSection.classList.add('hidden'); 
-analysisSection.classList.add('hidden'); 
-document.getElementById('entryAlertBox').classList.add('hidden'); 
+analysisSection.classList.add('hidden');
+patternDiscoverySection.classList.add('hidden');
+document.getElementById('entryAlertBox').classList.add('hidden');
 pageTitle.innerText = "Game Shortlist Portal"; 
 navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition"; 
 navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
-navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition"; 
+navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+navPatternBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
 loadMarkets().then(()=>runFinalShortlist(true)).catch(e=>console.error('Shortlist market load error',e));
+});
+
+navPatternBtn.addEventListener('click', async () => {
+  patternDiscoverySection.classList.remove('hidden');
+  loggerSection.classList.add('hidden');
+  analysisSection.classList.add('hidden');
+  shortlistSection.classList.add('hidden');
+  document.getElementById('entryAlertBox').classList.add('hidden');
+  pageTitle.innerText = "Pattern Discovery Lab";
+  navPatternBtn.className = "flex-1 flex flex-col items-center py-1.5 text-blue-600 font-bold transition";
+  navLoggerBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+  navAnalysisBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+  navShortlistBtn.className = "flex-1 flex flex-col items-center py-1.5 text-slate-500 font-semibold transition";
+  try { await loadMarkets(); pdPopulateMarkets(); } catch(e) { console.error('Pattern market load error',e); }
 });
 
 const analysisViewBtns = document.querySelectorAll('.analysis-view-btn'); 
@@ -944,6 +1005,61 @@ function historicalMaxDelay(records,keyFn,keys){
   keys.forEach(k=>{let prev=-1,max=0;records.forEach((r,i)=>{if(keyFn(r)===k){if(prev>=0)max=Math.max(max,i-prev-1);prev=i;}});if(prev<0)max=n;else max=Math.max(max,n-1-prev);out[k]=max;});
   return out;
 }
+// Pattern Discovery Lab
+const pdEls = {
+  market: document.getElementById('pdMarket'), direction: document.getElementById('pdDirection'), relation: document.getElementById('pdRelation'),
+  step: document.getElementById('pdStep'), window: document.getElementById('pdWindow'), minSample: document.getElementById('pdMinSample'),
+  scan: document.getElementById('pdScanBtn'), reset: document.getElementById('pdResetBtn'), status: document.getElementById('pdStatus'),
+  summary: document.getElementById('pdSummary'), results: document.getElementById('pdResults'), meta: document.getElementById('pdDiscoveryMeta'), detail: document.getElementById('pdDetail')
+};
+function pdPopulateMarkets(){ if(!pdEls.market) return; const current=pdEls.market.value||'ALL_MERGED'; pdEls.market.innerHTML='<option value="ALL_MERGED">All Markets</option>'+marketsList.map(m=>`<option value="${String(m.name).replace(/"/g,'&quot;')}">${m.name}</option>`).join(''); if([...pdEls.market.options].some(o=>o.value===current))pdEls.market.value=current; }
+function pdVal(type,r){
+  const o=digitOf(r.openAnk), c=digitOf(r.closeAnk);
+  if(type==='O') return o===null?null:String(o);
+  if(type==='C') return c===null?null:String(c);
+  if(type==='J') return o===null||c===null?null:String(o)+String(c);
+  if(type==='JF') { if(o===null||c===null)return null; const gs=JODI_TO_FAMILIES[`${o}${c}`]||[]; return gs.length?gs.join('/'):null; }
+  return null;
+}
+function pdRelationParts(){ const map={O2O:['O','O'],C2C:['C','C'],O2C:['O','C'],C2O:['C','O'],J2J:['J','J'],JF2JF:['JF','JF']}; return map[pdEls.relation?.value||'O2O']||map.O2O; }
+function pdBaseline(targetType){ if(targetType==='O'||targetType==='C')return 0.10; if(targetType==='J')return 0.01; if(targetType==='JF')return Math.max(0.01,1/Math.max(1,Object.keys(FAMILY_JODI_GROUPS).length)); return 0.10; }
+function pdFmt(v){ return Number.isFinite(v)?v.toFixed(1):'—'; }
+function pdStrength(lift,rate,sample,consistency){ let score=Math.max(0,Math.min(100,((lift-0.8)*45)+Math.min(sample/50,1)*25+consistency*30)); return {score, label:score>=75?'STRONG':score>=55?'MODERATE':score>=35?'INTERESTING':'WEAK'}; }
+function pdScan(){
+  if(!pdEls.results)return;
+  pdEls.status.textContent='SCANNING'; pdEls.results.innerHTML=''; pdEls.summary.innerHTML=''; pdEls.detail.classList.add('hidden');
+  let rows=(globalRawRecords||[]).filter(r=>r.date&&r.marketName&&digitOf(r.openAnk)!==null&&digitOf(r.closeAnk)!==null);
+  const market=pdEls.market.value||'ALL_MERGED'; if(market!=='ALL_MERGED') rows=rows.filter(r=>r.marketName===market);
+  rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes(a.openTime??marketsList.find(m=>m.name===a.marketName)?.openTime)??1439)-(timeToMinutes(b.openTime??marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
+  const rawWindow=pdEls.window.value||'100', windowSize=rawWindow==='ALL'?rows.length:Math.max(2,Number(rawWindow)||100);
+  rows=rows.slice(-windowSize);
+  if((pdEls.direction.value||'FORWARD')==='REVERSE')rows=rows.slice().reverse();
+  const step=Math.max(1,Number(pdEls.step.value)||1), minSample=Math.max(1,Number(pdEls.minSample.value)||20), [fromType,toType]=pdRelationParts();
+  const targetCounts=new Map(), pairCounts=new Map(), totalPairs=new Map();
+  for(let i=0;i+step<rows.length;i++){
+    const a=pdVal(fromType,rows[i]), b=pdVal(toType,rows[i+step]); if(a===null||b===null)continue;
+    const key=a+' → '+b; pairCounts.set(key,(pairCounts.get(key)||0)+1); totalPairs.set(a,(totalPairs.get(a)||0)+1); targetCounts.set(b,(targetCounts.get(b)||0)+1);
+  }
+  const baseline=pdBaseline(toType), results=[];
+  for(const [key,count] of pairCounts){ if(count<minSample)continue; const [a,b]=key.split(' → '), denom=totalPairs.get(a)||count, rate=count/denom; const expected=denom*baseline, lift=baseline?rate/baseline:0; const consistency=rows.length?Math.min(1,count/Math.max(1,expected))*0.6+Math.min(1,denom/50)*0.4:0; const strength=pdStrength(lift,rate,count,consistency); results.push({a,b,key,count,denom,rate,baseline,expected,lift,consistency,strength}); }
+  results.sort((a,b)=>b.strength.score-a.strength.score||b.lift-a.lift||b.count-a.count);
+  pdEls.status.textContent='DONE'; pdEls.meta.textContent=`${rows.length} games • ${results.length} qualifying patterns`;
+  pdEls.summary.innerHTML=[['GAMES',rows.length],['PATTERNS',results.length],['STEP','+'+step],['DIRECTION',pdEls.direction.value==='REVERSE'?'NEW → OLD':'OLD → NEW']].map(([k,v])=>`<div class="rounded-lg border border-slate-200 bg-slate-50 p-2 text-center"><div class="text-[8px] font-black text-slate-500">${k}</div><div class="text-xs font-black text-slate-800 mt-0.5">${v}</div></div>`).join('');
+  if(!results.length){pdEls.results.innerHTML='<div class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-[9px] font-bold text-amber-800">No pattern met the selected minimum sample. Try a lower MIN SAMPLE or larger LOOKBACK.</div>';return;}
+  pdEls.results.innerHTML=results.slice(0,20).map((x,i)=>`<button type="button" data-pd-index="${i}" class="w-full text-left rounded-lg border border-slate-200 bg-white p-2 hover:bg-violet-50 transition"><div class="flex items-center justify-between gap-2"><div class="text-[10px] font-black text-slate-800">${i+1}. ${x.key}</div><span class="text-[8px] font-black px-1.5 py-0.5 rounded-full ${x.strength.label==='STRONG'?'bg-emerald-100 text-emerald-700':x.strength.label==='MODERATE'?'bg-indigo-100 text-indigo-700':x.strength.label==='INTERESTING'?'bg-amber-100 text-amber-700':'bg-slate-100 text-slate-600'}">${x.strength.label}</span></div><div class="grid grid-cols-4 gap-1 mt-1 text-center"><div><div class="text-[7px] text-slate-400">COUNT</div><div class="text-[9px] font-black">${x.count}</div></div><div><div class="text-[7px] text-slate-400">RATE</div><div class="text-[9px] font-black">${pdFmt(x.rate*100)}%</div></div><div><div class="text-[7px] text-slate-400">BASE</div><div class="text-[9px] font-black">${pdFmt(x.baseline*100)}%</div></div><div><div class="text-[7px] text-slate-400">LIFT</div><div class="text-[9px] font-black">${pdFmt(x.lift)}×</div></div></div></button>`).join('');
+  pdEls.results.querySelectorAll('[data-pd-index]').forEach(btn=>btn.addEventListener('click',()=>pdShowDetail(results[Number(btn.dataset.pdIndex)],rows,pdEls.direction.value==='REVERSE',step)));
+}
+function pdShowDetail(x,rows,isReverse,step){
+  const verifyRows=rows.slice().reverse();
+  const [fromType,toType]=pdRelationParts(); let tested=0,hits=0;
+  for(let i=0;i+step<verifyRows.length;i++){ const a=pdVal(fromType,verifyRows[i]),b=pdVal(toType,verifyRows[i+step]); if(a===x.a){tested++;if(b===x.b)hits++;} }
+  const verifyRate=tested?hits/tested*100:0;
+  pdEls.detail.classList.remove('hidden'); pdEls.detail.innerHTML=`<div class="flex items-center justify-between"><div class="text-[10px] font-black text-indigo-800">PATTERN DETAIL</div><button id="pdCloseDetail" class="text-slate-400 font-black">×</button></div><div class="text-sm font-black text-slate-900 mt-1">${x.key}</div><div class="grid grid-cols-2 gap-1.5 mt-2"><div class="rounded-lg bg-white border p-2"><div class="text-[8px] text-slate-500 font-bold">DISCOVERY RATE</div><div class="text-sm font-black">${pdFmt(x.rate*100)}%</div></div><div class="rounded-lg bg-white border p-2"><div class="text-[8px] text-slate-500 font-bold">LIFT</div><div class="text-sm font-black">${pdFmt(x.lift)}×</div></div><div class="rounded-lg bg-white border p-2"><div class="text-[8px] text-slate-500 font-bold">SAMPLE</div><div class="text-sm font-black">${x.count} / ${x.denom}</div></div><div class="rounded-lg bg-white border p-2"><div class="text-[8px] text-slate-500 font-bold">FORWARD VERIFY</div><div class="text-sm font-black">${pdFmt(verifyRate)}%</div></div></div><div class="mt-2 text-[8px] font-semibold text-indigo-700">${isReverse?'Reverse-Time discovery selected. Forward Verify above reverses the sequence so the discovered relationship can be checked in chronological direction.':'Forward discovery and verification use chronological order.'}</div>`;
+  document.getElementById('pdCloseDetail').onclick=()=>pdEls.detail.classList.add('hidden');
+}
+pdEls.scan?.addEventListener('click',async()=>{ try{await loadAllRawRecords(); pdScan(); }catch(e){pdEls.status.textContent='ERROR';pdEls.results.innerHTML=`<div class="rounded-lg border border-red-200 bg-red-50 p-2 text-[9px] font-bold text-red-700">${e.message||e}</div>`; }});
+pdEls.reset?.addEventListener('click',()=>{pdEls.market.value='ALL_MERGED';pdEls.direction.value='FORWARD';pdEls.relation.value='O2O';pdEls.step.value='1';pdEls.window.value='100';pdEls.minSample.value='20';pdEls.status.textContent='READY';pdEls.summary.innerHTML='';pdEls.results.innerHTML='';pdEls.detail.classList.add('hidden');});
+
 // Central statistics engine shared by Analysis, Shortlist and Backtest.
 function buildAnalysisStats(records, options={}){
   const source=Array.isArray(records)?records:[];
@@ -1661,78 +1777,185 @@ document.getElementById('copyShortlistBtn')?.addEventListener('click',async()=>{
 });
 
 
-// --- LIVE FIREBASE PROFIT BACKTEST ---
-function classifyPannaType(p){ const s=numP(p); if(!s)return null; if(s[0]===s[1]&&s[1]===s[2])return 'TP'; if(s[0]===s[1]||s[1]===s[2]||s[0]===s[2])return 'DP'; return 'SP'; }
+// --- LIVE FIREBASE PROFIT BACKTEST / INCREASE ANALYTICS ---
+// Historical backtest only.  Every target game uses data strictly before that game.
+function lpSafeNumber(v, fallback=0){const n=Number(v);return Number.isFinite(n)?n:fallback;}
+function lpSafeArray(v){return Array.isArray(v)?v:[];}
+function classifyPannaType(p){
+  const s=numP(p); if(!s)return null;
+  if(s[0]===s[1]&&s[1]===s[2])return 'TP';
+  if(s[0]===s[1]||s[1]===s[2]||s[0]===s[2])return 'DP';
+  return 'SP';
+}
+function lpOpenPannaCandidates(history,type,topN){
+  const source=lpSafeArray(history), n=source.length, seen=new Map();
+  source.forEach((r,i)=>{if(classifyPannaType(r?.openPana)===type){const p=numP(r.openPana);if(p)seen.set(p,i);}});
+  return [...seen.entries()].map(([p,last])=>({p,delay:n-1-last})).sort((a,b)=>b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,Math.max(0,topN)).map(x=>x.p);
+}
 function lpClosePannaCandidates(history,type,topN){
-  const rows=history.filter(r=>classifyPannaType(r.closePana)===type); const seen=new Map(); const n=history.length;
-  rows.forEach((r,i)=>{const p=numP(r.closePana); if(p)seen.set(p,i);});
-  return [...seen.entries()].map(([p,last])=>({p,delay:n-1-last})).sort((a,b)=>b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,topN).map(x=>x.p);
+  const source=lpSafeArray(history), n=source.length, seen=new Map();
+  source.forEach((r,i)=>{if(classifyPannaType(r?.closePana)===type){const p=numP(r.closePana);if(p)seen.set(p,i);}});
+  return [...seen.entries()].map(([p,last])=>({p,delay:n-1-last})).sort((a,b)=>b.delay-a.delay||a.p.localeCompare(b.p)).slice(0,Math.max(0,topN)).map(x=>x.p);
 }
-function lpCard(label,picks,stake,hits,plays,payout){const invested=picks*stake*plays, gross=stake*payout*hits, net=gross-invested, roi=invested?net/invested*100:0; return `<div class="rounded-xl border p-2 bg-white"><div class="text-[9px] font-black text-slate-700">${label}</div><div class="text-lg font-black ${net>=0?'text-emerald-700':'text-rose-700'}">${net>=0?'+':''}₹${net.toFixed(2)}</div><div class="text-[8px] text-slate-500">${picks} picks × ₹${stake.toFixed(2)} • Invest ₹${invested.toFixed(2)} • Gross ₹${gross.toFixed(2)} • ${hits}/${plays} hits</div><div class="text-[8px] font-black ${roi>=0?'text-emerald-600':'text-rose-600'}">ROI ${roi.toFixed(1)}%</div></div>`;}
-function lpProgressiveCard(label,picks,metrics,payout,tests){const invested=metrics.invested||0,gross=metrics.hits?metrics.stakes.reduce((sum,stake,i)=>sum+(tests[i]?.jodiHit?stake*payout:0),0):0,net=gross-invested,roi=invested?net/invested*100:0,peak=Math.max(0,...metrics.stakes);return `<div class="rounded-xl border p-2 bg-white"><div class="text-[9px] font-black text-slate-700">${label}</div><div class="text-lg font-black ${net>=0?'text-emerald-700':'text-rose-700'}">${net>=0?'+':''}₹${net.toFixed(2)}</div><div class="text-[8px] text-slate-500">${picks} picks • Invest ₹${invested.toFixed(2)} • Gross ₹${gross.toFixed(2)} • ${metrics.hits}/${metrics.plays} hits • Peak ₹${peak.toFixed(2)}/Jodi</div><div class="text-[8px] font-black ${roi>=0?'text-emerald-600':'text-rose-600'}">ROI ${roi.toFixed(1)}%</div></div>`;}
-function lpMetric(label,value,sub=''){return `<div class="rounded-xl border border-slate-200 bg-slate-50 p-2 text-center"><div class="text-[8px] font-black text-slate-500">${label}</div><div class="text-base font-black text-slate-900">${value}</div>${sub?`<div class="text-[7px] font-bold text-slate-500">${sub}</div>`:''}</div>`;}
-function lpCalcRunMetrics(tests,config){
-  const types=['single','jodi','sp','dp'],out={};
-  const picks=Object.fromEntries(types.map(type=>[type,Math.max(0,Number(config[type+'Picks'])||0)]));
-  const base=Object.fromEntries(types.map(type=>[type,Math.max(0,Number(config[type])||0)]));
-  const progressive=config.jodiStakeMode==='TARGET_PROFIT'&&picks.jodi>0&&base.jodi>0&&picks.jodi<95;
-  const targetProfit=progressive?base.jodi*(95-picks.jodi):0;
-  const stakes=Object.fromEntries(types.map(type=>[type,[]]));
-  const hitInvestments=Object.fromEntries(types.map(type=>[type,[]]));
-  const hits=Object.fromEntries(types.map(type=>[type,0]));
-  let balance=0,maxDrawdown=0,peakBalance=0,maxCapitalRequired=0,totalInvested=0,totalGross=0,maxNegativeRun=0,currentNegativeRun=0;
-  tests.forEach((x,i)=>{
-    const drawdownBefore=Math.max(0,-balance);
-    const jodiStake=progressive?Math.ceil(((drawdownBefore+targetProfit)/(95-picks.jodi))*2)/2:base.jodi;
-    const gameStake={single:base.single,jodi:jodiStake,sp:base.sp,dp:base.dp};
-    types.forEach(type=>stakes[type].push(gameStake[type]));
-    const gameInvest=types.reduce((sum,type)=>sum+picks[type]*gameStake[type],0);
-    const gameGross=(x.singleHit?gameStake.single*9.5:0)+(x.jodiHit?gameStake.jodi*95:0)+(x.spHit?gameStake.sp*150:0)+(x.dpHit?gameStake.dp*300:0);
-    types.forEach(type=>{if(x[type+'Hit']){hits[type]++;hitInvestments[type].push(totalInvested+gameInvest);}});
-    const capitalRequired=Math.max(0,-balance)+gameInvest;
-    maxCapitalRequired=Math.max(maxCapitalRequired,capitalRequired);
-    totalInvested+=gameInvest;totalGross+=gameGross;
-    const net=gameGross-gameInvest;balance+=net;
-    if(balance<0){currentNegativeRun++;maxNegativeRun=Math.max(maxNegativeRun,currentNegativeRun);maxDrawdown=Math.max(maxDrawdown,-balance);}else{currentNegativeRun=0;peakBalance=Math.max(peakBalance,balance);}
-  });
-  types.forEach(type=>{
-    const invested=stakes[type].reduce((sum,stake)=>sum+picks[type]*stake,0);
-    out[type]={hits:hits[type],plays:tests.length,picks:picks[type],stake:base[type],stakes:stakes[type],progressive:type==='jodi'&&progressive,targetProfit:type==='jodi'?targetProfit:0,investedPerGame:progressive&&type==='jodi'?null:picks[type]*base[type],invested,hitInvestments:hitInvestments[type],maxRun:0,maxLoss:0};
-  });
-  out._combined={balance,maxDrawdown,maxCapitalRequired,totalInvested,totalGross,totalNet:totalGross-totalInvested,maxNegativeRun};
-  return out;
+function lpDigitDelay(history,digit,side){
+  const source=lpSafeArray(history), d=String(digit);
+  for(let i=source.length-1;i>=0;i--){const v=side==='OPEN'?btDigit(source[i]?.openAnk):btDigit(source[i]?.closeAnk);if(v!==null&&String(v)===d)return source.length-1-i;}
+  return source.length;
 }
-
-async function runLiveProfitBacktest(){
- const status=document.getElementById('lpStatus');if(status)status.textContent='LOADING LIVE FIREBASE DATA…';
- try{
-  await loadMasterData();const all=await loadAllRawRecords(true);
-  const market=document.getElementById('lpMarket')?.value||'ALL_MERGED',windowRaw=document.getElementById('lpWindow')?.value||'30',w=windowRaw==='ALL'?Infinity:Math.max(10,Number(windowRaw)||30);
-  const singleN=Math.max(0,Math.min(10,Number(document.getElementById('lpSinglePicks')?.value)||0)),jodiN=Math.max(0,Math.min(20,Number(document.getElementById('lpJodiPicks')?.value)||0)),pannaN=Math.max(0,Math.min(20,Number(document.getElementById('lpPannaPicks')?.value)||0));
-  const ss=Math.max(0,Number(document.getElementById('lpSingleStake')?.value)||0),js=Math.max(0,Number(document.getElementById('lpJodiStake')?.value)||0),ps=Math.max(0,Number(document.getElementById('lpSpStake')?.value)||0),ds=Math.max(0,Number(document.getElementById('lpDpStake')?.value)||0);
-  const jodiStrategy=document.getElementById('lpJodiStrategy')?.value||'CURRENT',jodiStakeMode=document.getElementById('lpJodiStakeMode')?.value||'FLAT';
-  let rows=all.filter(r=>(market==='ALL_MERGED'||r.marketName===market)&&btDigit(r.openAnk)!==null&&btDigit(r.closeAnk)!==null);
-  rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes(a.openTime??marketsList.find(m=>m.name===a.marketName)?.openTime)??1439)-(timeToMinutes(b.openTime??marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
-  const targets=rows.slice(-w),tests=[];
-  for(let k=0;k<targets.length;k++){const t=targets[k],i=rows.indexOf(t),history=rows.slice(Math.max(0,i-w),i);if(history.length<10)continue;const ao=String(btDigit(t.openAnk)),aj=btJodi(t);if(aj===null)continue;
-   let openPred=[],jodis=[];if(singleN>0)openPred=buildCurrentStructurePrediction(history,Math.min(3,singleN),4,4).open.map(x=>String(x.digit)).slice(0,singleN);
-   if(jodiN>0){const jp=jodiStrategy==='REVERSE'?buildReverseStructurePrediction(history,3,4,4):buildCurrentStructurePrediction(history,3,4,4);jodis=[...jp.strong,...jp.support].map(x=>x.jodi).slice(0,jodiN);}
-   const spPred=pannaN>0?lpClosePannaCandidates(history,'SP',pannaN):[],dpPred=pannaN>0?lpClosePannaCandidates(history,'DP',pannaN):[],actualSP=classifyPannaType(t.closePana)==='SP'?numP(t.closePana):null,actualDP=classifyPannaType(t.closePana)==='DP'?numP(t.closePana):null;
-   tests.push({date:t.date,market:t.marketName,o:openPred.join('-'),j:jodis.join('-'),sp:spPred.join('-'),dp:dpPred.join('-'),actual:`${ao}/${aj}`,singleHit:singleN>0&&openPred.includes(ao),jodiHit:jodiN>0&&jodis.includes(aj),spHit:pannaN>0&&!!actualSP&&spPred.includes(actualSP),dpHit:pannaN>0&&!!actualDP&&dpPred.includes(actualDP)});
+function lpJodiDelay(history,jodi){
+  const source=lpSafeArray(history), key=String(jodi);
+  for(let i=source.length-1;i>=0;i--){if(String(btJodi(source[i])??'')===key)return source.length-1-i;}
+  return source.length;
+}
+function lpPannaDelay(history,panna,side){
+  const source=lpSafeArray(history), key=String(panna);
+  for(let i=source.length-1;i>=0;i--){const v=side==='OPEN'?numP(source[i]?.openPana):numP(source[i]?.closePana);if(v===key)return source.length-1-i;}
+  return source.length;
+}
+function lpDelayStats(values){
+  const a=lpSafeArray(values).map(Number).filter(Number.isFinite);
+  return a.length?{avg:a.reduce((x,y)=>x+y,0)/a.length,max:Math.max(...a)}:{avg:0,max:0};
+}
+// Do not round the mathematical stake.  The backtest therefore tests the exact
+// rule: recover the cycle loss AND earn the original/base-game profit.
+function lpRoundStake(v){return Math.max(0,lpSafeNumber(v));}
+function lpSimulateStream(tests,stream,picks,baseStake,payout,hitKey,delayKey){
+  const nPicks=Math.max(0,Math.floor(lpSafeNumber(picks)));
+  const base=Math.max(0,lpSafeNumber(baseStake));
+  const pay=Math.max(0,lpSafeNumber(payout));
+  const valid=nPicks>0&&base>0&&pay>nPicks;
+  const baseInvestment=valid?nPicks*base:0;
+  const baseProfit=valid?(base*pay)-baseInvestment:0;
+  let cycleLoss=0,cycleCapital=0,totalInvested=0,totalGross=0,lockedProfit=0,peakStake=base,peakCapital=0,maxCycleCapital=0;
+  let eventGames=0,eventCapital=0,maxIncreaseEvent=0,maxIncreaseEventCapital=0,increaseEvents=0;
+  const increaseEventRows=[];
+  let increaseGames=0,increaseWins=0,hits=0,misses=0,lossStreak=0;
+  const rows=[];
+  lpSafeArray(tests).forEach((x,i)=>{
+    const previousLoss=cycleLoss;
+    eventGames++;
+    const stake=valid&&previousLoss>0?lpRoundStake((previousLoss+baseProfit)/(pay-nPicks)):base;
+    const increased=stake>base+1e-9;
+    const hit=Boolean(x?.[hitKey]);
+    const invest=nPicks*stake;
+    const gross=hit?stake*pay:0;
+    cycleCapital+=invest;
+    eventCapital+=invest;
+    maxCycleCapital=Math.max(maxCycleCapital,cycleCapital);
+    const rawNet=gross-invest;
+    const preHitLossStreak=lossStreak;
+    let cycleResult=0;
+    if(hit){
+      hits++;
+      increaseEvents++;
+      increaseEventRows.push({games:eventGames,capital:eventCapital,hitIndex:i});
+      maxIncreaseEvent=Math.max(maxIncreaseEvent,eventGames);
+      maxIncreaseEventCapital=Math.max(maxIncreaseEventCapital,eventCapital);
+      cycleResult=rawNet-previousLoss;
+      lockedProfit+=cycleResult;
+      cycleLoss=0;
+      cycleCapital=0;
+      eventGames=0;
+      eventCapital=0;
+      lossStreak=0;
+    }else{
+      misses++;
+      cycleLoss+=invest;
+      lossStreak++;
+    }
+    if(increased){increaseGames++;if(hit)increaseWins++;}
+    totalInvested+=invest; totalGross+=gross;
+    peakStake=Math.max(peakStake,stake); peakCapital=Math.max(peakCapital,cycleLoss);
+    rows.push({i,stake,invest,gross,rawNet,cycleResult,balance:lockedProfit-cycleLoss,cycleLoss,previousLoss,increased,hit,lossStreak:preHitLossStreak,delayCount:lpSafeArray(x?.[delayKey]),lockedProfit});
+  });
+  // Increase Event = number of games in each hit-to-hit cycle, including the hit game.
+  // Example: hits on games 5, 15, 20 => events 5, 10, 5.
+  // Capital for the event is the cumulative investment from the previous reset through its hit.
+  if(eventGames>0){
+    maxIncreaseEvent=Math.max(maxIncreaseEvent,eventGames);
+    maxIncreaseEventCapital=Math.max(maxIncreaseEventCapital,eventCapital);
   }
-  const metrics=lpCalcRunMetrics(tests,{single:ss,jodi:js,sp:ps,dp:ds,singlePicks:singleN,jodiPicks:jodiN,spPicks:pannaN,dpPicks:pannaN,jodiStakeMode});
-  const cards=[];if(singleN>0)cards.push(lpCard('SINGLE',singleN,ss,metrics.single.hits,metrics.single.plays,9.5));if(jodiN>0){const jl='JODI '+(jodiStrategy==='REVERSE'?'REVERSE':'CURRENT')+(jodiStakeMode==='TARGET_PROFIT'?' • INCREASE':'');cards.push(jodiStakeMode==='TARGET_PROFIT'?lpProgressiveCard(jl,jodiN,metrics.jodi,95,tests):lpCard(jl,jodiN,js,metrics.jodi.hits,metrics.jodi.plays,95));}if(pannaN>0){cards.push(lpCard('SP',pannaN,ps,metrics.sp.hits,metrics.sp.plays,150));cards.push(lpCard('DP',pannaN,ds,metrics.dp.hits,metrics.dp.plays,300));}
-  document.getElementById('lpCards').innerHTML=cards.join('')||'<div class="col-span-2 rounded-lg bg-slate-50 border p-3 text-center text-[9px] font-bold text-slate-500">NO PICKS SELECTED — calculation disabled.</div>';
-  const combined=metrics._combined||{totalInvested:0,totalGross:0,totalNet:0,maxDrawdown:0,maxCapitalRequired:0,maxNegativeRun:0},allInvest=combined.totalInvested,baseGameInvest=singleN*ss+jodiN*js+pannaN*ps+pannaN*ds;
-  const peakJodiStake=Math.max(0,...(metrics.jodi.stakes||[])),peakJodiInvestment=peakJodiStake*jodiN;
-  document.getElementById('lpMetrics').innerHTML=lpMetric('PER GAME BASE INVESTMENT','₹'+baseGameInvest.toFixed(2),'first game selected picks')+lpMetric('MAX DRAWDOWN','₹'+combined.maxDrawdown.toFixed(2),combined.maxNegativeRun+' consecutive negative-balance games')+lpMetric('MAX CAPITAL REQUIRED','₹'+combined.maxCapitalRequired.toFixed(2),'to keep the strategy running')+lpMetric('PEAK JODI STAKE','₹'+peakJodiStake.toFixed(2),jodiN+' picks • ₹'+peakJodiInvestment.toFixed(2)+' game investment')+lpMetric('TOTAL INVESTMENT','₹'+allInvest.toFixed(2),tests.length+' target games');
-  document.getElementById('lpRows').innerHTML=tests.slice().reverse().map(r=>`<div class="rounded-lg border border-slate-100 bg-slate-50 px-2 py-1 text-[8px]"><b>${r.date} • ${r.market}</b><div class="font-mono text-slate-600">S:${r.o} ${r.singleHit?'✓':'✕'} | J:${r.j} ${r.jodiHit?'✓':'✕'}</div><div class="font-mono text-slate-500">SP:${r.sp} ${r.spHit?'✓':'✕'} | DP:${r.dp} ${r.dpHit?'✓':'✕'} | Actual:${r.actual}</div></div>`).join('');
-  const totalNet=combined.totalNet;status.textContent=`DONE • ${tests.length} / ${Math.min(w,rows.length)} TARGET GAMES • NET ${totalNet>=0?'+':''}₹${totalNet.toFixed(2)} • ROI ${allInvest?(totalNet/allInvest*100).toFixed(1):'0.0'}%`;document.getElementById('lpSub').textContent=`${market==='ALL_MERGED'?'All Markets':market} • ${windowRaw==='ALL'?'ALL TIME':'Last '+w+' target games'} • ${jodiStrategy==='REVERSE'?'Reverse Jodi':'Current Jodi'} • ${jodiStakeMode==='TARGET_PROFIT'?'Increasing stake':'Flat stake'} • Triple ignored`;
- }catch(e){console.error('Live profit backtest error',e);if(status)status.textContent='ERROR • '+(e?.message||'Live data could not be loaded');}
+  const incDelays=rows.filter(r=>r.increased&&r.hit).map(r=>{
+    let n=0;for(let k=r.i-1;k>=0&&!rows[k].hit;k--)n++;return n;
+  });
+  const pickDelays=lpSafeArray(tests).flatMap(x=>lpSafeArray(x?.[delayKey]));
+  const incDS=lpDelayStats(incDelays),pickDS=lpDelayStats(pickDelays);
+  const outstandingLoss=cycleLoss;
+  const finalNet=lockedProfit-outstandingLoss;
+  return {stream,picks:nPicks,baseStake:base,payout:pay,baseInvestment,baseProfit,targetProfit:baseProfit,hits,misses,plays:lpSafeArray(tests).length,increaseGames,increaseWins,increasePassRate:increaseGames?increaseWins/increaseGames*100:0,increaseEvents,increaseEventRows,totalInvested,totalGross,totalNet:finalNet,lockedProfit,outstandingLoss,roi:totalInvested?finalNet/totalInvested*100:0,peakStake,peakCapital,maxCycleCapital,maxIncreaseEvent,maxIncreaseEventCapital,avgIncreaseDelay:incDS.avg,maxIncreaseDelay:incDS.max,avgPickDelay:pickDS.avg,maxPickDelay:pickDS.max,rows};
 }
-
-function populateLiveProfitMarkets(){ const sel=document.getElementById('lpMarket'); if(!sel)return; const current=sel.value||'ALL_MERGED'; sel.innerHTML='<option value="ALL_MERGED">ALL MARKETS</option>'+marketsList.map(m=>`<option value="${m.name}">${m.name}</option>`).join(''); if([...sel.options].some(o=>o.value===current))sel.value=current; }
-document.getElementById('liveProfitBacktestBtn')?.addEventListener('click',()=>{populateLiveProfitMarkets();document.getElementById('liveProfitModal')?.classList.remove('hidden');}); document.getElementById('lpJodiStakeMode')?.addEventListener('change',e=>document.getElementById('lpJodiIncreaseNote')?.classList.toggle('hidden',e.target.value!=='TARGET_PROFIT')); document.getElementById('runLiveProfitBtn')?.addEventListener('click',runLiveProfitBacktest); document.getElementById('closeLiveProfitBtn')?.addEventListener('click',()=>document.getElementById('liveProfitModal')?.classList.add('hidden')); document.getElementById('closeLiveProfitFooterBtn')?.addEventListener('click',()=>document.getElementById('liveProfitModal')?.classList.add('hidden'));
+function lpStreamLabel(k){return ({openSingle:'OPEN SINGLE',closeSingle:'CLOSE SINGLE',jodi:'FINAL JODI',openSP:'OPEN SP PANNA',closeSP:'CLOSE SP PANNA',openDP:'OPEN DP PANNA',closeDP:'CLOSE DP PANNA'})[k]||k;}
+function lpMetric(label,value,sub=''){return `<div class="rounded-xl border border-slate-200 bg-slate-50 p-2 text-center"><div class="text-[8px] font-black text-slate-500">${label}</div><div class="text-base font-black text-slate-900">${value}</div>${sub?`<div class="text-[7px] font-bold text-slate-500">${sub}</div>`:''}</div>`;}
+function lpRenderIncreaseAnalytics(tests,params,mode,detail){
+  const defs={
+    openSingle:['singlePicks','single',9.5,'singleHit','openDigitDelays'],
+    closeSingle:['singlePicks','single',9.5,'closeSingleHit','closeDigitDelays'],
+    jodi:['jodiPicks','jodi',95,'jodiHit','jodiDelays'],
+    openSP:['pannaPicks','sp',150,'openSPHit','openSPDelays'],
+    closeSP:['pannaPicks','sp',150,'closeSPHit','closeSPDelays'],
+    openDP:['pannaPicks','dp',300,'openDPHit','openDPDelays'],
+    closeDP:['pannaPicks','dp',300,'closeDPHit','closeDPDelays']
+  };
+  const groups={
+    FULL:Object.keys(defs),OPEN:['openSingle','openSP','openDP'],CLOSE:['closeSingle','closeSP','closeDP'],
+    JODI:['jodi'],PANNA:['openSP','closeSP','openDP','closeDP'],OPEN_JODI:['openSingle','jodi'],OPEN_JODI_PANNA:['openSingle','jodi','openSP','openDP']
+  };
+  const keys=groups[mode]||groups.FULL;
+  const results=keys.map(k=>{const d=defs[k];return lpSimulateStream(tests,k,params[d[0]],params[d[1]],d[2],d[3],d[4]);});
+  const total=results.reduce((a,r)=>({invest:a.invest+r.totalInvested,gross:a.gross+r.totalGross,net:a.net+r.totalNet,capital:a.capital+r.maxIncreaseEventCapital,increase:a.increase+r.increaseGames,events:a.events+r.increaseEvents,maxEvent:Math.max(a.maxEvent,r.maxIncreaseEvent),wins:a.wins+r.increaseWins,locked:a.locked+r.lockedProfit,outstanding:a.outstanding+r.outstandingLoss}),{invest:0,gross:0,net:0,capital:0,increase:0,events:0,maxEvent:0,wins:0,locked:0,outstanding:0});
+  const m=document.getElementById('lpIncMetrics');
+  if(m)m.innerHTML=lpMetric('TESTED GAMES',lpSafeArray(tests).length,'complete Open + Close games')+lpMetric('BASE PROFIT / HIT','₹'+(results[0]?.baseProfit||0).toFixed(2),'original/base game profit')+lpMetric('SUCCESSFUL CYCLES',total.wins,'increase → hit')+lpMetric('LOCKED PROFIT','₹'+total.locked.toFixed(2),'profit locked after each hit')+lpMetric('OUTSTANDING LOSS','₹'+total.outstanding.toFixed(2),'unfinished recovery cycle')+lpMetric('FINAL NET P/L',(total.net>=0?'+':'')+'₹'+total.net.toFixed(2),'locked profit − outstanding loss')+lpMetric('TOTAL INVESTMENT','₹'+total.invest.toFixed(2),'actual stakes used')+lpMetric('MAX CAPITAL','₹'+total.capital.toFixed(2),'capital required for the longest event')+lpMetric('INCREASE EVENTS',total.events,'hit-to-hit cycles')+lpMetric('MAX EVENT DELAY',total.maxEvent,'games in longest cycle')+lpMetric('INCREASE PLAYS',total.increase,'games where stake > base')+lpMetric('INCREASE PASS RATE',total.increase?(total.wins/total.increase*100).toFixed(1)+'%':'0.0%',total.wins+' / '+total.increase);
+  const table=document.getElementById('lpStreamTable');
+  if(table)table.innerHTML='<table class="w-full text-[7px] border-collapse"><thead><tr class="bg-violet-100"><th class="p-1 text-left">STREAM</th><th class="p-1">HIT</th><th class="p-1">AVG PICK</th><th class="p-1">MAX PICK</th><th class="p-1">EVENTS</th><th class="p-1">MAX EVENT</th><th class="p-1">INC</th><th class="p-1">PASS</th><th class="p-1">AVG INC</th><th class="p-1">MAX INC</th><th class="p-1">PEAK STAKE</th><th class="p-1">MAX EVENT CAPITAL</th><th class="p-1">BASE PROFIT</th><th class="p-1">NET</th></tr></thead><tbody>'+results.map(r=>`<tr class="border-b border-slate-100"><td class="p-1 font-black">${lpStreamLabel(r.stream)}</td><td class="p-1 text-center">${r.hits}/${r.plays}</td><td class="p-1 text-center">${r.avgPickDelay.toFixed(1)}</td><td class="p-1 text-center">${r.maxPickDelay}</td><td class="p-1 text-center">${r.increaseEvents}</td><td class="p-1 text-center">${r.maxIncreaseEvent}</td><td class="p-1 text-center">${r.increaseGames}</td><td class="p-1 text-center">${r.increasePassRate.toFixed(1)}%</td><td class="p-1 text-center">${r.avgIncreaseDelay.toFixed(1)}</td><td class="p-1 text-center">${r.maxIncreaseDelay}</td><td class="p-1 text-center">₹${r.peakStake.toFixed(2)}</td><td class="p-1 text-center">₹${r.maxIncreaseEventCapital.toFixed(2)}</td><td class="p-1 text-center">₹${r.baseProfit.toFixed(2)}</td><td class="p-1 text-center font-black ${r.totalNet>=0?'text-emerald-700':'text-rose-700'}">${r.totalNet>=0?'+':''}₹${r.totalNet.toFixed(2)}</td></tr>`).join('')+'</tbody></table>';
+  const ledger=document.getElementById('lpLedger');
+  if(ledger){ledger.classList.toggle('hidden',detail!=='LEDGER');if(detail==='LEDGER')ledger.innerHTML=results.map(r=>`<div class="rounded-lg border bg-white p-1.5"><div class="text-[8px] font-black text-violet-700 mb-1">${lpStreamLabel(r.stream)} • BASE PROFIT ₹${r.baseProfit.toFixed(2)}</div><div class="grid grid-cols-8 gap-1 text-[7px] font-black bg-slate-100 px-1 py-0.5"><span>#</span><span>STAKE</span><span>INVEST</span><span>RESULT</span><span>MODE</span><span>OLD LOSS</span><span>CYCLE P/L</span><span>BALANCE</span></div>${r.rows.slice().reverse().map((g,n)=>`<div class="grid grid-cols-8 gap-1 border-t py-0.5 ${g.hit?'bg-emerald-50':'bg-rose-50'}"><span>#${r.rows.length-n}</span><span>₹${g.stake.toFixed(2)}</span><span>₹${g.invest.toFixed(2)}</span><span>${g.hit?'WIN':'LOSS'}</span><span>${g.increased?'INCREASE':'BASE'}</span><span>₹${g.previousLoss.toFixed(2)}</span><span>${g.hit?((g.cycleResult>=0?'+':'')+'₹'+g.cycleResult.toFixed(2)):'—'}</span><span>₹${g.balance.toFixed(2)}</span></div>`).join('')}</div>`).join('');}
+  const badge=document.getElementById('lpIncBadge');if(badge)badge.textContent=`${results.length} STREAMS • EVENT-BASED CAPITAL`;
+  return results;
+}
+async function runLiveProfitBacktest(){
+  const status=document.getElementById('lpStatus');if(status)status.textContent='LOADING HISTORICAL FIREBASE DATA…';
+  try{
+    await loadMasterData();
+    const all=lpSafeArray(await loadAllRawRecords(true));
+    const market=document.getElementById('lpMarket')?.value||'ALL_MERGED';
+    const windowRaw=document.getElementById('lpWindow')?.value||'30';
+    const windowSize=windowRaw==='ALL'?Infinity:Math.max(10,Math.floor(lpSafeNumber(windowRaw,30)));
+    const params={singlePicks:Math.max(0,Math.min(10,Math.floor(lpSafeNumber(document.getElementById('lpSinglePicks')?.value)))),jodiPicks:Math.max(0,Math.min(20,Math.floor(lpSafeNumber(document.getElementById('lpJodiPicks')?.value)))),pannaPicks:Math.max(0,Math.min(20,Math.floor(lpSafeNumber(document.getElementById('lpPannaPicks')?.value)))),single:Math.max(0,lpSafeNumber(document.getElementById('lpSingleStake')?.value)),jodi:Math.max(0,lpSafeNumber(document.getElementById('lpJodiStake')?.value)),sp:Math.max(0,lpSafeNumber(document.getElementById('lpSpStake')?.value)),dp:Math.max(0,lpSafeNumber(document.getElementById('lpDpStake')?.value))};
+    const jodiStrategy=document.getElementById('lpJodiStrategy')?.value||'CURRENT';
+    let rows=all.filter(r=>(market==='ALL_MERGED'||r?.marketName===market)&&btDigit(r?.openAnk)!==null&&btDigit(r?.closeAnk)!==null);
+    rows.sort((a,b)=>new Date(a.date)-new Date(b.date)||(timeToMinutes(a.openTime??marketsList.find(m=>m.name===a.marketName)?.openTime)??1439)-(timeToMinutes(b.openTime??marketsList.find(m=>m.name===b.marketName)?.openTime)??1439));
+    const targets=windowSize===Infinity?rows:rows.slice(-windowSize),tests=[];
+    for(const t of targets){
+      const i=rows.indexOf(t),history=rows.slice(Math.max(0,i-(windowSize===Infinity?i:windowSize)),i);
+      if(history.length<10)continue;
+      const ao=btDigit(t.openAnk),co=btDigit(t.closeAnk),aj=btJodi(t);if(ao===null||co===null||aj===null)continue;
+      let structure={open:[],strong:[],support:[]};try{structure=buildCurrentStructurePrediction(history,Math.max(3,params.singlePicks||3),4,4)||structure;}catch(e){console.warn('Open/Jodi prediction skipped',e);}
+      const openPred=params.singlePicks?lpSafeArray(structure.open).map(x=>String(x?.digit)).filter(x=>/^\d$/.test(x)).slice(0,params.singlePicks):[];
+      const closePred=params.singlePicks?lpSafeArray(structure.close).map(x=>String(x?.digit)).filter(x=>/^\d$/.test(x)).slice(0,params.singlePicks):[];
+      let jp=structure;if(jodiStrategy==='REVERSE'){try{jp=buildReverseStructurePrediction(history,3,4,4)||jp;}catch(e){console.warn('Reverse Jodi skipped',e);}}
+      const jodis=params.jodiPicks?[...lpSafeArray(jp.strong),...lpSafeArray(jp.support)].map(x=>String(x?.jodi)).filter(x=>/^\d{2}$/.test(x)).slice(0,params.jodiPicks):[];
+      const oSP=params.pannaPicks?lpOpenPannaCandidates(history,'SP',params.pannaPicks):[],cSP=params.pannaPicks?lpClosePannaCandidates(history,'SP',params.pannaPicks):[],oDP=params.pannaPicks?lpOpenPannaCandidates(history,'DP',params.pannaPicks):[],cDP=params.pannaPicks?lpClosePannaCandidates(history,'DP',params.pannaPicks):[];
+      const aosp=classifyPannaType(t.openPana)==='SP'?numP(t.openPana):null,cosp=classifyPannaType(t.closePana)==='SP'?numP(t.closePana):null,aodp=classifyPannaType(t.openPana)==='DP'?numP(t.openPana):null,codp=classifyPannaType(t.closePana)==='DP'?numP(t.closePana):null;
+      tests.push({date:t.date,market:t.marketName,o:openPred.join('-'),c:closePred.join('-'),j:jodis.join('-'),sp:(oSP.join('-')||'-')+'/'+(cSP.join('-')||'-'),dp:(oDP.join('-')||'-')+'/'+(cDP.join('-')||'-'),actual:`${ao}/${aj}`,singleHit:openPred.includes(String(ao)),closeSingleHit:closePred.includes(String(co)),jodiHit:jodis.includes(String(aj)),openSPHit:!!aosp&&oSP.includes(aosp),closeSPHit:!!cosp&&cSP.includes(cosp),openDPHit:!!aodp&&oDP.includes(aodp),closeDPHit:!!codp&&cDP.includes(codp),openDigitDelays:openPred.map(d=>lpDigitDelay(history,d,'OPEN')),closeDigitDelays:closePred.map(d=>lpDigitDelay(history,d,'CLOSE')),jodiDelays:jodis.map(j=>lpJodiDelay(history,j)),openSPDelays:oSP.map(x=>lpPannaDelay(history,x,'OPEN')),closeSPDelays:cSP.map(x=>lpPannaDelay(history,x,'CLOSE')),openDPDelays:oDP.map(x=>lpPannaDelay(history,x,'OPEN')),closeDPDelays:cDP.map(x=>lpPannaDelay(history,x,'CLOSE'))});
+    }
+    const mode=document.getElementById('lpAnalysisMode')?.value||'FULL',detail=document.getElementById('lpDetailMode')?.value||'SUMMARY';
+    const inc=lpRenderIncreaseAnalytics(tests,params,mode,detail);
+    const totalInvest=inc.reduce((s,r)=>s+r.totalInvested,0),totalNet=inc.reduce((s,r)=>s+r.totalNet,0);
+    const baseGameInvest=params.singlePicks*params.single+params.jodiPicks*params.jodi+params.pannaPicks*params.sp+params.pannaPicks*params.dp;
+    const lpCards=document.getElementById('lpCards');if(lpCards)lpCards.innerHTML='<div class="col-span-2 rounded-lg border border-emerald-100 bg-emerald-50 p-2 text-[8px] font-bold text-emerald-800">Increase rule active: Loss → recover cumulative cycle loss + original Base Profit → Hit → lock Base Profit → reset cycle. FINAL JODI is one stream; Open/Close Jodi are not separate.</div>';
+    const lpMetrics=document.getElementById('lpMetrics');if(lpMetrics)lpMetrics.innerHTML=lpMetric('BASE GAME INVESTMENT','₹'+baseGameInvest.toFixed(2),'before increase')+lpMetric('ACTUAL INVESTMENT','₹'+totalInvest.toFixed(2),'after increase')+lpMetric('FINAL NET P/L',(totalNet>=0?'+':'')+'₹'+totalNet.toFixed(2),'historical backtest')+lpMetric('ROI',totalInvest?(totalNet/totalInvest*100).toFixed(1)+'%':'0.0%','net / actual investment');
+    const lpRows=document.getElementById('lpRows');if(lpRows)lpRows.innerHTML=tests.slice().reverse().slice(0,30).map(r=>`<div class="rounded-lg border border-slate-100 bg-slate-50 px-2 py-1 text-[8px]"><b>${r.date} • ${r.market}</b><div class="font-mono text-slate-600">Open S:${r.o} ${r.singleHit?'✓':'✕'} | Close S:${r.c} ${r.closeSingleHit?'✓':'✕'} | Final Jodi:${r.j} ${r.jodiHit?'✓':'✕'}</div><div class="font-mono text-slate-500">SP O/C:${r.sp} • DP O/C:${r.dp} • Actual:${r.actual}</div></div>`).join('');
+    if(status)status.textContent=`DONE • ${tests.length} GAMES • NET ${totalNet>=0?'+':''}₹${totalNet.toFixed(2)} • ROI ${totalInvest?(totalNet/totalInvest*100).toFixed(1):'0.0'}%`;
+    const sub=document.getElementById('lpSub');if(sub)sub.textContent=`${market==='ALL_MERGED'?'All Markets':market} • ${windowRaw==='ALL'?'ALL TIME':'Last '+windowSize+' target games'} • ${jodiStrategy==='REVERSE'?'Reverse Jodi':'Current Jodi'} • Increase analytics • Triple ignored`;
+  }catch(e){console.error('Live profit backtest error',e);if(status)status.textContent='ERROR • '+(e?.message||'Historical calculation could not be completed');}
+}
+function populateLiveProfitMarkets(){const sel=document.getElementById('lpMarket');if(!sel)return;const current=sel.value||'ALL_MERGED';sel.innerHTML='<option value="ALL_MERGED">ALL MARKETS</option>'+lpSafeArray(marketsList).map(m=>`<option value="${m.name}">${m.name}</option>`).join('');if([...sel.options].some(o=>o.value===current))sel.value=current;}
+document.getElementById('liveProfitBacktestBtn')?.addEventListener('click',()=>{populateLiveProfitMarkets();document.getElementById('liveProfitModal')?.classList.remove('hidden');});
+document.getElementById('runLiveProfitBtn')?.addEventListener('click',runLiveProfitBacktest);
+document.getElementById('lpAnalysisMode')?.addEventListener('change',()=>runLiveProfitBacktest());
+document.getElementById('lpDetailMode')?.addEventListener('change',()=>runLiveProfitBacktest());
+document.getElementById('closeLiveProfitBtn')?.addEventListener('click',()=>document.getElementById('liveProfitModal')?.classList.add('hidden'));
+document.getElementById('closeLiveProfitFooterBtn')?.addEventListener('click',()=>document.getElementById('liveProfitModal')?.classList.add('hidden'));
 
 // --- SHORTLIST ONE-CLICK BACKTEST ---
 let shortlistBacktestWindow=30;
