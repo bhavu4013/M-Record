@@ -837,35 +837,6 @@ showCustomAlert("Success", "Market deleted successfully!"); modal.classList.add(
 } 
 }); 
 
-function selectDefaultMarketByTime() { 
-if (marketsList.length === 0) return; 
-const now = new Date(); 
-const currentTimeMinutes = now.getHours() * 60 + now.getMinutes(); 
-let selectedMarket = marketsList[0]; 
-let targetSession = "Open"; 
-for (let i = 0; i < marketsList.length; i++) { 
-let market = marketsList[i]; 
-if (!market.openTime || !market.closeTime) continue; 
-let [openH, openM] = market.openTime.split(':').map(Number); 
-let [closeH, closeM] = market.closeTime.split(':').map(Number); 
-let openMinutes = openH * 60 + openM; 
-let closeMinutes = closeH * 60 + closeM; 
-if (currentTimeMinutes >= openMinutes && currentTimeMinutes <= closeMinutes) { 
-selectedMarket = market; 
-let midpoint = openMinutes + Math.floor((closeMinutes - openMinutes) / 2); 
-targetSession = currentTimeMinutes <= midpoint ? "Open" : "Close"; 
-break; 
-} 
-} 
-const marketDropdown = document.getElementById('marketDropdown'); 
-if (selectedMarket && marketDropdown.value === "") { 
-marketDropdown.value = selectedMarket.name; 
-const sessionRadio = document.querySelector(`input[name="sessionToggle"][value="${targetSession}"]`); 
-if (sessionRadio) { sessionRadio.checked = true; updateToggleUI(); } 
-marketDropdown.dispatchEvent(new Event('change')); 
-} 
-} 
-
 async function loadMarkets() { 
 const marketDropdown = document.getElementById('marketDropdown'); 
 const analysisMarketSelect = document.getElementById('analysisMarketSelect'); 
@@ -885,8 +856,7 @@ let opt1 = document.createElement('option'); opt1.value = mData.name; opt1.textC
 let opt2 = document.createElement('option'); opt2.value = mData.name; opt2.textContent = mData.name; analysisMarketSelect.appendChild(opt2); 
 
 }); 
-if (currentSelected) marketDropdown.value = currentSelected; 
-else selectDefaultMarketByTime();
+if (currentSelected) marketDropdown.value = currentSelected;
 refreshShortlistMarketOptions(true);
 if (shortlistSelected && [...shortlistMarketSelect.options].some(o => o.value === shortlistSelected)) shortlistMarketSelect.value = shortlistSelected;
 else shortlistMarketSelect.value = 'ALL_MERGED';
@@ -1172,58 +1142,6 @@ function getScheduleState(record, nowMinutes){
   return nowMinutes===null?'OPEN':(nowMinutes>=0?'OPEN':'OPEN');
 }
 
-// Automatically choose the market/session that should be on the Shortlist Home.
-// Priority: pending Close -> next unplayed Open -> next working day's first Open.
-// This is intentionally independent of the last manually selected market so a
-// completed Milan game can never leave stale Shridevi data on the Home screen.
-async function autoSelectShortlistMarket(allRecords){
-  if(!marketsList.length) return null;
-  const dateInput=document.getElementById('shortlistDate');
-  const dropdown=document.getElementById('shortlistMarketSelect');
-  const now=new Date();
-  const todayKey=localDateKey(now);
-  const selectedDate=dateInput?.value || todayKey;
-  const selectedDateObj=new Date(`${selectedDate}T00:00:00`);
-  const isToday=selectedDate===todayKey;
-  const nowMinutes=now.getHours()*60+now.getMinutes();
-  const ordered=marketsList.slice().sort((a,b)=>(timeToMinutes(a.openTime)??1439)-(timeToMinutes(b.openTime)??1439));
-  const dateMarkets=ordered.filter(m=>marketWorksOnDate(m,selectedDateObj));
-  const dateRecords=new Map();
-  allRecords.filter(r=>r.date===selectedDate && r.marketName).forEach(r=>dateRecords.set(r.marketName,r));
-
-  // IMPORTANT: this function only identifies the target game internally.
-  // It NEVER changes the user's Market selection or Selected Date.
-  // Therefore ALL_MERGED always remains ALL_MERGED.
-  for(const m of dateMarkets){
-    const r=dateRecords.get(m.name);
-    if(getScheduleState(r,isToday?nowMinutes:null)==='CLOSE_PENDING'){
-      return {market:m.name,date:selectedDate,session:'Close',reason:'pending-close',marketObj:m};
-    }
-  }
-
-  // First uncompleted market for the selected date.
-  for(const m of dateMarkets){
-    const r=dateRecords.get(m.name);
-    if(getScheduleState(r,isToday?nowMinutes:null)!=='COMPLETED'){
-      return {market:m.name,date:selectedDate,session:'Open',reason:'next-open',marketObj:m};
-    }
-  }
-
-  // Only for TODAY, if everything is complete, identify next working day.
-  // Do not change the selected date automatically; only report the next target.
-  if(isToday){
-    for(let offset=1;offset<=14;offset++){
-      const next=new Date(now);
-      next.setDate(now.getDate()+offset);
-      const nextMarkets=ordered.filter(m=>marketWorksOnDate(m,next));
-      if(nextMarkets.length){
-        const target=nextMarkets[0];
-        return {market:target.name,date:localDateKey(next),session:'Open',reason:'next-day',marketObj:target};
-      }
-    }
-  }
-  return {market:null,date:selectedDate,session:'Open',reason:'date-complete',marketObj:null};
-}
 function formatMarketTime(t){
   if(!t) return '--';
   const [h,m]=String(t).split(':').map(Number);
@@ -1408,7 +1326,7 @@ async function runFinalShortlist(showPendingPopup=false){
     const dateEl=document.getElementById('shortlistDate');
     if(dateEl && !dateEl.value) dateEl.value=localDateKey(new Date());
     const selectedDate=dateEl?.value || localDateKey(new Date());
-    const autoState=await autoSelectShortlistMarket(allRecords);
+    const autoState=null;
     const selectedMarket=document.getElementById('shortlistMarketSelect').value || 'ALL_MERGED';
 
     // Target records are locked to the selected date.
@@ -1423,7 +1341,7 @@ async function runFinalShortlist(showPendingPopup=false){
 
     // For All Markets, autoState identifies the actual target market while the
     // dropdown remains All Markets so merged-history ranking still works.
-    const targetMarket=autoState?.market || (selectedMarket!=='ALL_MERGED'?selectedMarket:null);
+    const targetMarket=(selectedMarket!=='ALL_MERGED'?selectedMarket:null);
     const currentTargetRecords=targetRecords.filter(r=>!targetMarket || r.marketName===targetMarket);
     const targetRecord=currentTargetRecords.slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).at(-1) || null;
 
@@ -2978,11 +2896,6 @@ document.getElementById('submitBtn').innerText = "Save Record";
 document.getElementById('submitBtn').classList.replace('bg-emerald-600', 'bg-blue-600'); 
 document.getElementById('cancelEditBtn').classList.add('hidden'); 
 document.getElementById('entryAlertBox').classList.add('hidden'); 
-if (session === "Open") { 
-document.querySelector('input[name="sessionToggle"][value="Close"]').checked = true; 
-} else { 
-document.querySelector('input[name="sessionToggle"][value="Open"]').checked = true; 
-} 
 updateToggleUI(); 
 document.getElementById('previewAnk').innerText = '-'; 
 document.getElementById('previewGroup').innerText = '-'; 
