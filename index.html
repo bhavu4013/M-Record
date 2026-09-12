@@ -2470,20 +2470,20 @@ dList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] });
 } 
 
 let sortedRecent = [...dList].sort((a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen); 
-let rec4 = sortedRecent.slice(0, 4); 
-let rec4Set = new Set(rec4.map(x => x.ank)); 
+let rec3 = sortedRecent.slice(0, 3); 
+let rec3Set = new Set(rec3.map(x => x.ank)); 
 
-let remaining = dList.filter(x => !rec4Set.has(x.ank)); 
+let remaining = dList.filter(x => !rec3Set.has(x.ank)); 
 let sortedTop = [...remaining].sort((a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen); 
-let tp4 = sortedTop.slice(0, 4); 
-let tp4Set = new Set(tp4.map(x => x.ank)); 
+let tp3 = sortedTop.slice(0, 3); 
+let tp3Set = new Set(tp3.map(x => x.ank)); 
 
-let md2 = remaining.filter(x => !tp4Set.has(x.ank)); 
-let md2Set = new Set(md2.map(x => x.ank)); 
+let md4 = remaining.filter(x => !tp3Set.has(x.ank)); 
+let md4Set = new Set(md4.map(x => x.ank)); 
 
-let hitTop = tp4Set.has(val); 
-let hitMid = md2Set.has(val); 
-let hitRecent = rec4Set.has(val); 
+let hitTop = tp3Set.has(val); 
+let hitMid = md4Set.has(val); 
+let hitRecent = rec3Set.has(val); 
 
 if (hitTop) { 
 topGroupDelay = 0; 
@@ -2522,27 +2522,27 @@ for (let i = 0; i <= 9; i++) {
 currentDList.push({ ank: i, delay: digitDelays[i], lastSeen: digitLastSeen[i] }); 
 } 
 let curSortedRecent = [...currentDList].sort((a, b) => a.delay - b.delay || b.lastSeen - a.lastSeen); 
-let curRecent4 = curSortedRecent.slice(0, 4); 
-let curRecentSet = new Set(curRecent4.map(x => x.ank)); 
+let curRecent3 = curSortedRecent.slice(0, 3); 
+let curRecentSet = new Set(curRecent3.map(x => x.ank)); 
 
 let curRemaining = currentDList.filter(x => !curRecentSet.has(x.ank)); 
 let curSortedTop = [...curRemaining].sort((a, b) => b.delay - a.delay || a.lastSeen - b.lastSeen); 
-let curTop4 = curSortedTop.slice(0, 4); 
-let curTopSet = new Set(curTop4.map(x => x.ank)); 
+let curTop3 = curSortedTop.slice(0, 3); 
+let curTopSet = new Set(curTop3.map(x => x.ank)); 
 
-let curMid2 = curRemaining.filter(x => !curTopSet.has(x.ank)); 
+let curMid4 = curRemaining.filter(x => !curTopSet.has(x.ank)); 
 
 topAnkVal.innerText = topGroupDelay; 
 topMaxVal.innerText = `Max: ${topGroupMaxDelay}`; 
-topListContainer.innerText = `[${curTop4.map(i => i.ank).join(',')}]`; 
+topListContainer.innerText = `[${curTop3.map(i => i.ank).join(',')}]`; 
 
 midAnkVal.innerText = midGroupDelay; 
 midMaxVal.innerText = `Max: ${midGroupMaxDelay}`; 
-midListContainer.innerText = `[${curMid2.map(i => i.ank).join(',')}]`; 
+midListContainer.innerText = `[${curMid4.map(i => i.ank).join(',')}]`; 
 
 recentAnkVal.innerText = recentGroupDelay; 
 recentMaxVal.innerText = `Max: ${recentGroupMaxDelay}`; 
-recentListContainer.innerText = `[${curRecent4.map(i => i.ank).join(',')}]`; 
+recentListContainer.innerText = `[${curRecent3.map(i => i.ank).join(',')}]`; 
 
 let maxDel = Math.max(topGroupDelay, midGroupDelay, recentGroupDelay); 
 let cards = [ 
