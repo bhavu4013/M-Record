@@ -42,8 +42,134 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
   <button class="menu-btn" id="menuBtn">☰</button>
  </header>
  <div class="body">
-  <aside class="sidebar"><button class="nav-btn active" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button><button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button><button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button><button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button><button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button><button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button><button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button><button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button><button class="nav-btn" data-page="8"><span>🎯</span><span>Digit Play</span></button><button class="nav-btn" data-page="9"><span>📝</span><span>Panna Logger</span></button></aside>
-  <main class="content"><iframe class="page-frame" id="page-0" title="Family Jodi" style="display:block" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+  <aside class="sidebar"><button class="nav-btn" data-page="10"><span>🏠</span><span>Dashboard</span></button><button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button><button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button><button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button><button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button><button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button><button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button><button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button><button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button><button class="nav-btn" data-page="8"><span>🎯</span><span>Digit Play</span></button><button class="nav-btn" data-page="9"><span>📝</span><span>Panna Logger</span></button><button class="nav-btn" data-page="11"><span>⭐</span><span>Shortlist</span></button></aside>
+  <main class="content"><iframe class="page-frame" id="page-10" title="Dashboard" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;gu&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&lt;title&gt;Dashboard&lt;/title&gt;
+&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+&lt;style&gt;
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
+&lt;div class=&quot;max-w-4xl mx-auto space-y-3&quot;&gt;
+&lt;header class=&quot;card p-4&quot;&gt;
+ &lt;div class=&quot;flex items-center justify-between&quot;&gt;
+  &lt;div&gt;&lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;DASHBOARD&lt;/div&gt;&lt;div id=&quot;date&quot; class=&quot;text-[10px] font-bold text-slate-500 mt-1&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;button id=&quot;refresh&quot; class=&quot;w-10 h-10 rounded-xl bg-slate-100 font-black&quot;&gt;↻&lt;/button&gt;
+ &lt;/div&gt;
+&lt;/header&gt;
+
+&lt;section class=&quot;card p-3&quot;&gt;
+ &lt;div class=&quot;text-[9px] font-black text-slate-400 mb-2&quot;&gt;WHAT NEEDS ATTENTION&lt;/div&gt;
+ &lt;div id=&quot;focus&quot; class=&quot;rounded-xl bg-indigo-50 border border-indigo-200 p-3&quot;&gt;
+  &lt;div class=&quot;text-sm font-black text-indigo-700&quot;&gt;Loading...&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;div class=&quot;grid grid-cols-2 lg:grid-cols-4 gap-2&quot;&gt;
+ &lt;div class=&quot;card p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;NEXT MARKET&lt;/div&gt;&lt;div id=&quot;nextName&quot; class=&quot;text-sm font-black mt-1&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;nextTime&quot; class=&quot;text-[9px] font-bold text-indigo-600&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+ &lt;div class=&quot;card p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;OPEN PENDING&lt;/div&gt;&lt;div id=&quot;pending&quot; class=&quot;text-2xl font-black text-orange-500 mt-1&quot;&gt;—&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-400&quot;&gt;today&lt;/div&gt;&lt;/div&gt;
+ &lt;div class=&quot;card p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;COMPLETED&lt;/div&gt;&lt;div id=&quot;complete&quot; class=&quot;text-2xl font-black text-emerald-600 mt-1&quot;&gt;—&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-400&quot;&gt;today&lt;/div&gt;&lt;/div&gt;
+ &lt;div class=&quot;card p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;TOTAL ENTRIES&lt;/div&gt;&lt;div id=&quot;total&quot; class=&quot;text-2xl font-black text-slate-800 mt-1&quot;&gt;—&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-400&quot;&gt;today&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;section class=&quot;grid grid-cols-2 gap-2&quot;&gt;
+ &lt;button onclick=&quot;go(9)&quot; class=&quot;rounded-2xl bg-indigo-600 text-white p-4 text-left shadow-sm&quot;&gt;
+  &lt;div class=&quot;text-lg&quot;&gt;📝&lt;/div&gt;&lt;div class=&quot;font-black text-sm mt-1&quot;&gt;OPEN / CLOSE ENTRY&lt;/div&gt;&lt;div class=&quot;text-[9px] opacity-80&quot;&gt;Go to Panna Logger&lt;/div&gt;
+ &lt;/button&gt;
+ &lt;button onclick=&quot;go(8)&quot; class=&quot;rounded-2xl bg-slate-900 text-white p-4 text-left shadow-sm&quot;&gt;
+  &lt;div class=&quot;text-lg&quot;&gt;🎯&lt;/div&gt;&lt;div class=&quot;font-black text-sm mt-1&quot;&gt;DIGIT PLAY&lt;/div&gt;&lt;div class=&quot;text-[9px] opacity-70&quot;&gt;Quick analysis&lt;/div&gt;
+ &lt;/button&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;card p-3&quot;&gt;
+ &lt;div class=&quot;flex justify-between items-center mb-2&quot;&gt;
+  &lt;div class=&quot;font-black text-sm&quot;&gt;MARKET TIMELINE&lt;/div&gt;
+  &lt;div id=&quot;marketCount&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;&lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div id=&quot;markets&quot; class=&quot;space-y-2&quot;&gt;&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;card p-3&quot;&gt;
+ &lt;div class=&quot;font-black text-sm mb-2&quot;&gt;ANALYSIS&lt;/div&gt;
+ &lt;div class=&quot;grid grid-cols-2 sm:grid-cols-4 gap-2&quot;&gt;
+  &lt;button onclick=&quot;go(0)&quot; class=&quot;rounded-xl bg-indigo-50 border border-indigo-200 p-3 text-left&quot;&gt;&lt;div&gt;👨‍👩‍👧‍👦&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;/button&gt;
+  &lt;button onclick=&quot;go(1)&quot; class=&quot;rounded-xl bg-amber-50 border border-amber-200 p-3 text-left&quot;&gt;&lt;div&gt;🔺&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;FAMILY PANNA&lt;/div&gt;&lt;/button&gt;
+  &lt;button onclick=&quot;go(3)&quot; class=&quot;rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-left&quot;&gt;&lt;div&gt;🟢&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;OPEN DIGIT&lt;/div&gt;&lt;/button&gt;
+  &lt;button onclick=&quot;go(6)&quot; class=&quot;rounded-xl bg-rose-50 border border-rose-200 p-3 text-left&quot;&gt;&lt;div&gt;🔴&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;CLOSE DIGIT&lt;/div&gt;&lt;/button&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+&lt;div id=&quot;error&quot; class=&quot;text-center text-[10px] font-black text-red-500&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
+import {getFirestore,collection,getDocs} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
+const db=getFirestore(initializeApp(firebaseConfig));
+const $=id=&gt;document.getElementById(id);
+const pad=n=&gt;String(n).padStart(2,&quot;0&quot;);
+const today=()=&gt;{let d=new Date();return d.getFullYear()+&quot;-&quot;+pad(d.getMonth()+1)+&quot;-&quot;+pad(d.getDate())};
+const timeMin=t=&gt;{let m=String(t||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):9999};
+const timeText=t=&gt;{let m=String(t||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);if(!m)return &quot;--:--&quot;;let h=+m[1],mi=+m[2],ap=h&gt;=12?&quot;PM&quot;:&quot;AM&quot;;return (h%12||12)+&quot;:&quot;+pad(mi)+&quot; &quot;+ap};
+function go(i){try{parent.openPage(i)}catch(e){}} window.go=go;
+
+async function load(){
+ const now=new Date(),td=today(),nowMin=now.getHours()*60+now.getMinutes();
+ $(&quot;date&quot;).textContent=now.toLocaleDateString(&quot;en-IN&quot;,{weekday:&quot;long&quot;,day:&quot;2-digit&quot;,month:&quot;short&quot;,year:&quot;numeric&quot;})+&quot; • &quot;+timeText(pad(now.getHours())+&quot;:&quot;+pad(now.getMinutes()));
+ const [ms,rs]=await Promise.all([getDocs(collection(db,&quot;markets&quot;)),getDocs(collection(db,&quot;matka_records&quot;))]);
+ let markets=[],records=[];
+ ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
+ rs.forEach(d=&gt;records.push({id:d.id,...d.data()}));
+ markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
+ const tr=records.filter(r=&gt;r.date===td),pending=tr.filter(r=&gt;!r.openPana||!r.closePana),complete=tr.filter(r=&gt;r.openPana&amp;&amp;r.closePana);
+ $(&quot;pending&quot;).textContent=pending.length;$(&quot;complete&quot;).textContent=complete.length;$(&quot;total&quot;).textContent=tr.length;$(&quot;marketCount&quot;).textContent=markets.length+&quot; MARKETS&quot;;
+
+ const next=markets.find(m=&gt;timeMin(m.openTime)&gt;nowMin);
+ $(&quot;nextName&quot;).textContent=next?.name||&quot;NO MORE&quot;;
+ $(&quot;nextTime&quot;).textContent=next?timeText(next.openTime):&quot;for today&quot;;
+
+ let focusTitle,focusSub,focusCls;
+ if(pending.length){
+   focusTitle=&quot;🟠 &quot;+pending.length+&quot; market entry pending&quot;;
+   focusSub=&quot;Open entries are incomplete. Go to Logger to finish the current data entry.&quot;;
+   focusCls=&quot;bg-orange-50 border-orange-200 text-orange-800&quot;;
+ }else if(next){
+   focusTitle=&quot;⏰ Next: &quot;+next.name+&quot; at &quot;+timeText(next.openTime);
+   focusSub=&quot;Use the time-based market list to prepare the next entry.&quot;;
+   focusCls=&quot;bg-indigo-50 border-indigo-200 text-indigo-800&quot;;
+ }else if(complete.length){
+   focusTitle=&quot;✅ Today&#x27;s entries are up to date&quot;;
+   focusSub=&quot;Open the analysis modules when you want to review the recorded data.&quot;;
+   focusCls=&quot;bg-emerald-50 border-emerald-200 text-emerald-800&quot;;
+ }else{
+   focusTitle=&quot;📝 No entry recorded today&quot;;
+   focusSub=&quot;Start with Panna Logger.&quot;;
+   focusCls=&quot;bg-indigo-50 border-indigo-200 text-indigo-800&quot;;
+ }
+ $(&quot;focus&quot;).className=&quot;rounded-xl border p-3 &quot;+focusCls;
+ $(&quot;focus&quot;).innerHTML=&#x27;&lt;div class=&quot;font-black text-sm&quot;&gt;&#x27;+focusTitle+&#x27;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-semibold mt-1 opacity-80&quot;&gt;&#x27;+focusSub+&#x27;&lt;/div&gt;&#x27;;
+
+ $(&quot;markets&quot;).innerHTML=markets.length?markets.map(m=&gt;{
+   const rs=tr.filter(r=&gt;r.marketName===m.name);
+   const r=rs[rs.length-1];
+   const state=r?.openPana&amp;&amp;r?.closePana?&quot;COMPLETE&quot;:r?.openPana?&quot;OPEN ENTERED&quot;:r?.closePana?&quot;CLOSE ONLY&quot;:&quot;PENDING&quot;;
+   const cls=state===&quot;COMPLETE&quot;?&quot;text-emerald-600&quot;:state===&quot;OPEN ENTERED&quot;?&quot;text-orange-500&quot;:state===&quot;CLOSE ONLY&quot;?&quot;text-rose-600&quot;:&quot;text-slate-400&quot;;
+   return &#x27;&lt;div class=&quot;flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3&quot;&gt;&#x27;+
+   &#x27;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;&#x27;+String(m.name).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,&quot;&quot;)+&#x27;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-400&quot;&gt;OPEN &#x27;+timeText(m.openTime)+&#x27; • CLOSE &#x27;+timeText(m.closeTime)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;+
+   &#x27;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black &#x27;+cls+&#x27;&quot;&gt;&#x27;+state+&#x27;&lt;/div&gt;&#x27;+(r?.jodi?&#x27;&lt;div class=&quot;text-xs font-black&quot;&gt;JODI &#x27;+r.jodi+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;;
+ }).join(&quot;&quot;):&#x27;&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;ADD MARKETS FROM LOGGER&lt;/div&gt;&#x27;;
+}
+$(&quot;refresh&quot;).onclick=()=&gt;load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
+load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-0" title="Family Jodi" style="display:block" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
 &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;15 Groups • Group Delay • TOP 5 • MID 5 • RECENT 5&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
 &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-3 text-center shadow-sm&quot;&gt;
@@ -1651,6 +1777,29 @@ function render(){
  $(&quot;sources&quot;).innerHTML=all.map(s=&gt;`&lt;button data-id=&quot;${s.side}_${s.id}&quot; class=&quot;text-left rounded-xl border ${s.side===chosenSide&amp;&amp;s.id===winner.id?&quot;border-orange-300 bg-orange-50/50&quot;:&quot;border-slate-200 bg-white&quot;} p-3 shadow-sm&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[8px] font-black ${s.side===&quot;OPEN&quot;?&quot;text-indigo-500&quot;:&quot;text-emerald-500&quot;}&quot;&gt;${s.side} • ${s.scope}&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;${s.group}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${s.delay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;${s.digits.map(d=&gt;`&lt;span class=&quot;pill bg-slate-100 text-slate-700&quot;&gt;${d.digit}&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-bold text-slate-400&quot;&gt;GROUP MAX ${s.max} • GROUP HITS ${s.hits}&lt;/div&gt;&lt;/button&gt;`).join(&quot;&quot;);
  $(&quot;sources&quot;).querySelectorAll(&quot;[data-id]&quot;).forEach(b=&gt;b.onclick=()=&gt;showSource(all.find(s=&gt;`${s.side}_${s.id}`===b.dataset.id)));
  $(&quot;status&quot;).textContent=`${$(&quot;market&quot;).value} • SIGNAL: ${chosenSide}`;
+try{
+ parent.postMessage({
+  type:"DIGIT_PLAY_SIGNAL",
+  market:$("market").value,
+  side:chosenSide,
+  digits:winner.digits.map(x=>Number(x.digit)),
+  scope:winner.scope,
+  group:winner.group,
+  delay:winner.delay
+ },"*");
+}catch(e){}
+try{
+ parent.postMessage({
+  type:"DIGIT_PLAY_SIGNAL",
+  market:$("market").value,
+  side:chosenSide,
+  digits:winner.digits.map(x=>Number(x.digit)),
+  scope:winner.scope,
+  group:winner.group,
+  delay:winner.delay
+ },"*");
+}catch(e){}
+
 }
 function fillSide(side,x){
  $(side.toLowerCase()+&quot;Delay&quot;).textContent=x.winner.delay;
@@ -1662,6 +1811,31 @@ function showDigit(d,s){const rs=rows(s.scope===&quot;MARKET-WISE&quot;?$(&quot;
 function openModal(){$(&quot;modal&quot;).classList.remove(&quot;hidden&quot;);$(&quot;modal&quot;).classList.add(&quot;flex&quot;)}
 $(&quot;mClose&quot;).onclick=()=&gt;{$(&quot;modal&quot;).classList.add(&quot;hidden&quot;);$(&quot;modal&quot;).classList.remove(&quot;flex&quot;)};$(&quot;modal&quot;).onclick=e=&gt;{if(e.target===$(&quot;modal&quot;))$(&quot;mClose&quot;).click()};$(&quot;market&quot;).onchange=render;
 async function load(){try{const snap=await getDocs(collection(db,&quot;matka_records&quot;));records=snap.docs.map(d=&gt;({id:d.id,...d.data()}));const names=[...new Set(records.map(r=&gt;String(r.marketName||&quot;&quot;)).filter(Boolean))].sort();$(&quot;market&quot;).innerHTML=names.map(n=&gt;`&lt;option value=&quot;${n.replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${n}&lt;/option&gt;`).join(&quot;&quot;);if(!names.length)throw Error(&quot;No marketName records found.&quot;);render()}catch(e){console.error(e);$(&quot;status&quot;).textContent=&quot;DATA ERROR&quot;;$(&quot;sources&quot;).innerHTML=`&lt;div class=&quot;col-span-full rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-bold text-red-600&quot;&gt;${e.message}&lt;/div&gt;`}}
+function publishDigitPlaySignal(){
+ try{
+  parent.postMessage({
+   type:"DIGIT_PLAY_SIGNAL",
+   market:$("market").value,
+   side:chosenSide,
+   digits:winner.digits.map(x=>Number(x.digit)),
+   scope:winner.scope,
+   group:winner.group,
+   delay:winner.delay
+  },"*");
+ }catch(e){}
+}
+window.addEventListener("message",e=>{
+ if(e.data && e.data.type==="REQUEST_DIGIT_PLAY_SIGNAL"){
+  try{publishDigitPlaySignal();}catch(err){}
+ }
+});
+publishDigitPlaySignal();
+
+window.addEventListener("message",e=>{
+ if(e.data && e.data.type==="REQUEST_DIGIT_PLAY_SIGNAL"){
+  try{render();}catch(err){}
+ }
+});
 load();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-9" title="Panna Logger" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
@@ -1857,20 +2031,176 @@ try{await loadMarkets();await loadRecords();$(&quot;openPanna&quot;).focus()}cat
 &lt;/body&gt;
 &lt;/html&gt;"></iframe></main>
  </div>
- <nav class="bottom-nav"><button class="nav-btn active" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button><button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button><button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button><button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button><button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button><button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button><button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button><button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button><button class="nav-btn" data-page="8"><span>🎯</span><span>Digit Play</span></button><button class="nav-btn" data-page="9"><span>📝</span><span>Panna Logger</span></button></nav>
+<iframe class="page-frame" id="page-11" title="Shortlist" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&lt;title&gt;Shortlist&lt;/title&gt;
+&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+&lt;style&gt;
+*{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:#0f172a;font-family:Inter,Arial,sans-serif}
+.card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body class=&quot;p-3 sm:p-5&quot;&gt;
+&lt;div class=&quot;max-w-4xl mx-auto space-y-3&quot;&gt;
+ &lt;div class=&quot;card p-4&quot;&gt;
+  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
+   &lt;div&gt;&lt;div class=&quot;text-xl font-black&quot;&gt;⭐ SHORTLIST&lt;/div&gt;
+   &lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;DIGIT PLAY SYNC • 3 DIGITS → 8 JODI&lt;/div&gt;&lt;/div&gt;
+   &lt;select id=&quot;market&quot; class=&quot;border rounded-xl px-3 py-2 text-sm bg-white&quot;&gt;&lt;/select&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;status&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-3&quot;&gt;Loading...&lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js&quot;;
+import {getFirestore,collection,getDocs} from &quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js&quot;;
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
+const db=getFirestore(initializeApp(firebaseConfig));const $=id=&gt;document.getElementById(id);let records=[],markets=[];
+
+const FAMILY_JODI_GROUPS={
+&quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],&quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],
+&quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],&quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],
+&quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],&quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],
+&quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],&quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],
+&quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],&quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],
+&quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],&quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],
+&quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],&quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],
+&quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]};
+const JODI_TO_FAMILY={};Object.entries(FAMILY_JODI_GROUPS).forEach(([g,a])=&gt;a.forEach(j=&gt;JODI_TO_FAMILY[j]=g));
+
+function digit(v){if(v===undefined||v===null||v===&quot;&quot;)return null;const m=String(v).match(/\d/g);return m?Number(m[m.length-1]):null}
+function jodiOf(r){const o=digit(r.openAnk),c=digit(r.closeAnk);return o===null||c===null?null:String(o)+String(c)}
+function timeMin(v){const m=String(v||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
+function rowTime(r){return timeMin(r.openTime??markets.find(m=&gt;m.name===r.marketName)?.openTime)}
+function dateValue(v){if(v&amp;&amp;typeof v.toDate===&quot;function&quot;){const d=v.toDate();return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}if(v&amp;&amp;typeof v.seconds===&quot;number&quot;)return v.seconds*1000;const d=new Date(v);return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}
+function sortRows(a){return a.slice().sort((x,y)=&gt;dateValue(x.date)-dateValue(y.date)||rowTime(x)-rowTime(y)||String(x.marketName||&quot;&quot;).localeCompare(String(y.marketName||&quot;&quot;)))}
+function rowsFor(market){return sortRows(records.filter(r=&gt;r.date&amp;&amp;jodiOf(r)!==null&amp;&amp;(market===&quot;ALL_MERGED&quot;||String(r.marketName)===market)))}
+
+function digitRanking(rs,side){
+ const n=rs.length,a=Array.from({length:10},(_,d)=&gt;({digit:d,occ:[],hits:0,last:-1,currentDelay:n,maxDelay:0}));
+ rs.forEach((r,i)=&gt;{const d=digit(side===&quot;OPEN&quot;?r.openAnk:r.closeAnk);if(d!==null){a[d].occ.push(i);a[d].hits++;a[d].last=i}});
+ a.forEach(x=&gt;{const o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});
+ const rank=a.slice().sort((x,y)=&gt;y.currentDelay-x.currentDelay||y.maxDelay-x.maxDelay||y.hits-x.hits||x.digit-y.digit);
+ return {rows:rs,TOP:rank.slice(0,3),MID:rank.slice(3,7),RECENT:rank.slice(7,10)}
+}
+function groupDelay(data,group,side){
+ const ds=data[group],rs=data.rows,n=rs.length,h=[];
+ rs.forEach((r,i)=&gt;{const d=digit(side===&quot;OPEN&quot;?r.openAnk:r.closeAnk);if(ds.some(x=&gt;x.digit===d))h.push(i)});
+ return h.length?n-1-h[h.length-1]:n;
+}
+function buildSide(side){
+ const market=$(&quot;market&quot;).value,local=rowsFor(market),all=rowsFor(&quot;ALL_MERGED&quot;);
+ const md=digitRanking(local,side),ad=digitRanking(all,side),sources=[];
+ [&quot;TOP&quot;,&quot;MID&quot;,&quot;RECENT&quot;].forEach(g=&gt;sources.push({scope:&quot;MARKET-WISE&quot;,group:g,digits:md[g],delay:groupDelay(md,g,side)}));
+ [&quot;TOP&quot;,&quot;MID&quot;,&quot;RECENT&quot;].forEach(g=&gt;sources.push({scope:&quot;ALL-MERGED&quot;,group:g,digits:ad[g],delay:groupDelay(ad,g,side)}));
+ return sources.sort((a,b)=&gt;b.delay-a.delay||a.scope.localeCompare(b.scope))[0];
+}
+
+/* COMMON FACTOR:
+   Do not add raw delays. First find the delayed/common factors in each layer.
+   A Jodi is preferred when multiple independent layers point to its factors. */
+function categoryStats(rs,keyFn){
+ const n=rs.length,occ={};
+ rs.forEach((r,i)=&gt;{const k=keyFn(r);if(k!==null&amp;&amp;k!==undefined)(occ[k]??=[]).push(i)});
+ const out={};
+ Object.keys(occ).forEach(k=&gt;{const o=occ[k],gaps=[o[0]];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);gaps.push(n-1-o[o.length-1]);out[k]={delay:n-1-o[o.length-1],max:Math.max(...gaps),hits:o.length}});
+ return out
+}
+function topFactorSet(map){
+ const keys=Object.keys(map);if(!keys.length)return new Set();
+ const ranked=keys.sort((a,b)=&gt;map[b].delay-map[a].delay||map[b].max-map[a].max||map[b].hits-map[a].hits);
+ return new Set(ranked.slice(0,Math.max(3,Math.ceil(ranked.length*0.4))));
+}
+function layerStats(rs){
+ const total=categoryStats(rs,r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);return o===null||c===null?null:(o+c)%10});
+ const diff=categoryStats(rs,r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);return o===null||c===null?null:(c-o+10)%10});
+ const parity=categoryStats(rs,r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);return o===null||c===null?null:(o%2?&quot;O&quot;:&quot;E&quot;)+(c%2?&quot;O&quot;:&quot;E&quot;)});
+ const famOcc={};rs.forEach((r,i)=&gt;{const g=JODI_TO_FAMILY[jodiOf(r)];if(g)(famOcc[g]??=[]).push(i)});
+ const family={},n=rs.length;
+ Object.keys(FAMILY_JODI_GROUPS).forEach(g=&gt;{const o=famOcc[g]||[];if(o.length){const gaps=[o[0]];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);gaps.push(n-1-o[o.length-1]);family[g]={delay:n-1-o[o.length-1],max:Math.max(...gaps),hits:o.length}}else family[g]={delay:n,max:n,hits:0}});
+ return {total,diff,parity,family,common:{total:topFactorSet(total),diff:topFactorSet(diff),parity:topFactorSet(parity),family:topFactorSet(family)}}
+}
+function directJodiStats(rs){
+ const n=rs.length,occ={};rs.forEach((r,i)=&gt;{const j=jodiOf(r);if(j)(occ[j]??=[]).push(i)});
+ const out={};for(let i=0;i&lt;100;i++){const j=String(i).padStart(2,&quot;0&quot;),o=occ[j]||[];out[j]={delay:o.length?n-1-o[o.length-1]:n,hits:o.length}}return out
+}
+function scoreJodi(j,rs,L,J){
+ const o=Number(j[0]),c=Number(j[1]),total=(o+c)%10,diff=(c-o+10)%10,par=(o%2?&quot;O&quot;:&quot;E&quot;)+(c%2?&quot;O&quot;:&quot;E&quot;),fam=JODI_TO_FAMILY[j];
+ const T=L.total[String(total)]||{delay:rs.length,hits:0},D=L.diff[String(diff)]||{delay:rs.length,hits:0},F=L.family[fam]||{delay:rs.length,hits:0},P=L.parity[par]||{delay:rs.length,hits:0},direct=J[j]||{delay:rs.length,hits:0};
+ const common=[L.common.total.has(String(total)),L.common.diff.has(String(diff)),L.common.family.has(String(fam)),L.common.parity.has(String(par))].filter(Boolean).length;
+ const support=[T.delay&gt;0,D.delay&gt;0,F.delay&gt;0,P.delay&gt;0].filter(Boolean).length;
+ const delayTie=T.delay+D.delay+F.delay+P.delay;
+ return {jodi:j,common,support,delayTie,direct:direct.delay,T:T.delay,D:D.delay,F:F.delay,P:P.delay,total,diff,family:fam,parity:par}
+}
+function makeJodis(selected,side,rs){
+ const L=layerStats(rs),J=directJodiStats(rs),result=[];
+ selected.forEach(d=&gt;{
+  const c=[];
+  for(let x=0;x&lt;10;x++){const j=side===&quot;CLOSE&quot;?String(x)+String(d):String(d)+String(x);c.push(scoreJodi(j,rs,L,J))}
+  c.sort((a,b)=&gt;b.common-a.common||b.support-a.support||b.delayTie-a.delayTie||b.direct-a.direct||a.jodi.localeCompare(b.jodi));
+  result.push({digit:d,jodis:c.slice(0,3)});
+ });
+ return result
+}
+function render(){
+ try{
+  const rs=rowsFor($(&quot;market&quot;).value);if(!rs.length)throw Error(&quot;No completed Open + Close records found.&quot;);
+  const ow=buildSide(&quot;OPEN&quot;),cw=buildSide(&quot;CLOSE&quot;),side=ow.delay&gt;cw.delay?&quot;OPEN&quot;:&quot;CLOSE&quot;,winner=side===&quot;OPEN&quot;?ow:cw;
+  const selected=winner.digits.map(x=&gt;Number(x.digit)).slice(0,3),groups=makeJodis(selected,side,rs);
+  $(&quot;result&quot;).innerHTML=`
+  &lt;div class=&quot;card p-5 text-center&quot;&gt;
+   &lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;GAME SIDE&lt;/div&gt;
+   &lt;div class=&quot;mt-2 text-4xl font-black ${side===&quot;CLOSE&quot;?&quot;text-rose-600&quot;:&quot;text-indigo-700&quot;}&quot;&gt;PLAY ${side}&lt;/div&gt;
+   &lt;div class=&quot;text-[10px] font-bold text-slate-500 mt-1&quot;&gt;${winner.scope} → ${winner.group} • DIGIT DELAY ${winner.delay}&lt;/div&gt;
+   &lt;div class=&quot;flex justify-center items-center gap-2 mt-4&quot;&gt;${selected.map((d,i)=&gt;`${i?&#x27;&lt;span class=&quot;text-2xl text-slate-300 font-black&quot;&gt;•&lt;/span&gt;&#x27;:&quot;&quot;}&lt;div class=&quot;w-14 h-14 rounded-2xl ${side===&quot;CLOSE&quot;?&quot;bg-rose-50 text-rose-700&quot;:&quot;bg-indigo-50 text-indigo-700&quot;} flex items-center justify-center text-2xl font-black&quot;&gt;${d}&lt;/div&gt;`).join(&quot;&quot;)}&lt;/div&gt;
+   &lt;div class=&quot;mt-3 text-[9px] font-black text-slate-600&quot;&gt;JODI LOGIC: COMMON FACTOR FIRST&lt;/div&gt;
+   &lt;div class=&quot;mt-1 text-[8px] text-slate-400 font-bold&quot;&gt;TOTAL + DIFFERENCE + FAMILY JODI + ODD/EVEN&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;space-y-3 mt-3&quot;&gt;
+   ${groups.map(g=&gt;`&lt;div class=&quot;card p-4&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-3&quot;&gt;&lt;div class=&quot;text-xl font-black&quot;&gt;DIGIT ${g.digit}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;3 BEST JODI&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;${g.jodis.map(x=&gt;`&lt;div class=&quot;rounded-xl border border-slate-200 bg-slate-50 p-2 text-center&quot;&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-indigo-600 mt-1&quot;&gt;COMMON ${x.common}/4&lt;/div&gt;&lt;div class=&quot;text-[7px] text-slate-400 font-bold mt-1&quot;&gt;T ${x.T} • D ${x.D} • F ${x.F} • OE ${x.P}&lt;/div&gt;&lt;/div&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;/div&gt;`).join(&quot;&quot;)}
+  &lt;/div&gt;`;
+  $(&quot;status&quot;).textContent=`${$(&quot;market&quot;).value===&quot;ALL_MERGED&quot;?&quot;ALL MARKETS&quot;:$(&quot;market&quot;).value} • ${rs.length} GAMES • PLAY ${side} • 3 DIGITS • ${groups.length*3} JODI`;
+ }catch(e){console.error(e);$(&quot;status&quot;).textContent=&quot;DATA ERROR: &quot;+(e.message||e);$(&quot;result&quot;).innerHTML=`&lt;div class=&quot;card p-4 text-xs font-bold text-red-600&quot;&gt;${e.message||e}&lt;/div&gt;`}
+}
+async function load(){
+ try{
+  $(&quot;status&quot;).textContent=&quot;Loading Firebase data...&quot;;
+  const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&quot;markets&quot;)),getDocs(collection(db,&quot;matka_records&quot;))]);
+  markets=[];mSnap.forEach(d=&gt;{const x=d.data();if(x?.name)markets.push({name:x.name,openTime:x.openTime||&quot;00:00&quot;})});
+  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||a.name.localeCompare(b.name));
+  records=rSnap.docs.map(d=&gt;({id:d.id,...d.data()}));
+  $(&quot;market&quot;).innerHTML=`&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;`+
+    markets.map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${m.name} • ${m.openTime||&quot;&quot;}&lt;/option&gt;`).join(&quot;&quot;);
+  render();
+ }catch(e){console.error(e);$(&quot;status&quot;).textContent=&quot;DATA ERROR: &quot;+(e.message||e);$(&quot;result&quot;).innerHTML=`&lt;div class=&quot;card p-4 text-xs font-bold text-red-600&quot;&gt;${e.message||e}&lt;/div&gt;`}
+}
+$(&quot;market&quot;).onchange=render;load();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe> <nav class="bottom-nav"><button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button><button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button><button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button><button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button><button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button><button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button><button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button><button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button><button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button><button class="nav-btn" data-page="8"><span>🎯</span><span>Digit Play</span></button><button class="nav-btn" data-page="9"><span>📝</span><span>Panna Logger</span></button><button class="nav-btn" data-page="11"><span>⭐</span><span>Shortlist</span></button></nav>
 </div>
 <script>
 const buttons=[...document.querySelectorAll('.nav-btn')];
 const frames=[...document.querySelectorAll('.page-frame')];
 function openPage(index){
  buttons.forEach(b=>b.classList.toggle('active',Number(b.dataset.page)===index));
- frames.forEach((f,i)=>f.style.display=i===index?'block':'none');
- try{localStorage.setItem('analysisPlatformPage',String(index));}catch(e){}
+ frames.forEach(f=>f.style.display=Number((f.id||'').replace('page-',''))===index?'block':'none');
+ try{localStorage.setItem('analysisPlatformPageV8',String(index));}catch(e){}
+ if(index===11){
+  const dp=document.getElementById('page-8');
+  if(dp && dp.contentWindow)dp.contentWindow.postMessage({type:'REQUEST_DIGIT_PLAY_SIGNAL'},'*');
+ }
 }
 buttons.forEach(b=>b.addEventListener('click',()=>openPage(Number(b.dataset.page))));
-let saved=0;
-try{saved=Number(localStorage.getItem('analysisPlatformPage')||0)}catch(e){}
-if(!Number.isInteger(saved)||saved<0||saved>=10)saved=0;
+window.addEventListener("message",e=>{
+ if(!e.data || e.data.type!=="DIGIT_PLAY_SIGNAL")return;
+ const target=document.getElementById("page-11");
+ if(target && target.contentWindow)target.contentWindow.postMessage(e.data,"*");
+});
+
+let saved=10;
+try{saved=Number(localStorage.getItem('analysisPlatformPageV8')||10)}catch(e){}
+if(!Number.isInteger(saved)||saved<0||saved>11)saved=10;
 openPage(saved);
 </script>
 </body>
