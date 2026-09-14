@@ -15,20 +15,99 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 .brand-sub{font-size:8px;font-weight:800;color:#94a3b8;margin-top:3px}
 .menu-btn{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:18px;font-weight:900}
 .body{min-height:0;flex:1;display:flex;overflow:hidden}
-.sidebar{width:190px;flex:0 0 190px;background:#fff;border-right:1px solid #e2e8f0;padding:10px 8px;overflow:auto}
-.nav-btn{width:100%;border:1px solid transparent;background:#fff;border-radius:11px;padding:10px 9px;margin-bottom:5px;text-align:left;font-size:10px;font-weight:900;color:#475569;display:flex;align-items:center;gap:8px;cursor:pointer}
-.nav-btn span:first-child{width:22px;text-align:center;font-size:14px}
+.sidebar{width:176px;flex:0 0 176px;background:#fff;border-right:1px solid #e2e8f0;padding:8px 7px;overflow:auto}
+.nav-section{font-size:7px;font-weight:950;letter-spacing:.7px;color:#94a3b8;padding:7px 5px 4px;text-transform:uppercase}
+.nav-btn{width:100%;border:1px solid transparent;background:#fff;border-radius:9px;padding:7px 8px;margin-bottom:3px;text-align:left;font-size:9px;font-weight:900;color:#475569;display:flex;align-items:center;gap:7px;cursor:pointer}
+.nav-btn span:first-child{width:20px;text-align:center;font-size:13px}
 .nav-btn.active{background:#eef2ff;color:#4338ca;border-color:#c7d2fe}
 .content{min-width:0;min-height:0;flex:1;position:relative;background:#f1f5f9}
 .page-frame{border:0;width:100%;height:100%;background:#f1f5f9}
 .bottom-nav{display:none}
+.more-panel{display:none}
+.nav-more{border:1px solid #e2e8f0;background:#fff;border-radius:10px;cursor:pointer;color:#475569;font-weight:900}
+.nav-more.active{background:#eef2ff;color:#4338ca;border-color:#c7d2fe}
 @media(max-width:700px){
  .topbar{height:54px;flex-basis:54px}
  .sidebar{display:none}
- .bottom-nav{display:flex;height:62px;flex:0 0 62px;background:#fff;border-top:1px solid #e2e8f0;padding:5px 4px;gap:2px;overflow-x:auto;z-index:10}
- .nav-btn{min-width:88px;flex:1;margin:0;padding:6px 3px;justify-content:center;flex-direction:column;gap:1px;text-align:center;font-size:8px;border-radius:9px}
- .nav-btn span:first-child{font-size:15px;width:auto}
+ .bottom-nav{display:flex;height:60px;flex:0 0 60px;background:#fff;border-top:1px solid #e2e8f0;padding:4px 3px;gap:3px;z-index:20}
+ .bottom-nav .nav-btn{min-width:0;flex:1;margin:0;padding:5px 1px;justify-content:center;flex-direction:column;gap:1px;text-align:center;font-size:7px;border-radius:8px}
+ .bottom-nav .nav-btn span:first-child{font-size:15px;width:auto}
+ .nav-more{min-width:0;flex:1;padding:5px 1px;font-size:7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px}
+ .nav-more span:first-child{font-size:15px}
+ .more-panel{display:none;position:absolute;left:6px;right:6px;bottom:66px;background:#fff;border:1px solid #e2e8f0;border-radius:15px;padding:8px;box-shadow:0 10px 30px rgba(15,23,42,.16);z-index:30}
+ .more-panel.show{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+ .more-panel .nav-btn{margin:0;padding:9px 8px;font-size:8px}
+ .more-panel .nav-btn span:first-child{font-size:14px}
  .menu-btn{display:none}
+}
+@media(min-width:701px){.more-panel{display:none!important}}
+
+
+
+/* V24 — clean navigation: 4 primary items + More */
+@media(max-width:700px){
+  .bottom-nav{
+    height:74px!important;
+    flex:0 0 74px!important;
+    padding:6px 5px!important;
+    gap:4px!important;
+  }
+  .bottom-nav .nav-btn,
+  .bottom-nav .nav-more{
+    min-width:0!important;
+    min-height:60px!important;
+    flex:1 1 20%!important;
+    padding:8px 5px!important;
+    font-size:10px!important;
+    border-radius:12px!important;
+  }
+  .bottom-nav .nav-btn span:first-child,
+  .bottom-nav .nav-more span:first-child{
+    font-size:19px!important;
+    width:auto!important;
+  }
+  .more-panel{
+    bottom:80px!important;
+    padding:10px!important;
+    border-radius:16px!important;
+  }
+  .more-panel.show{
+    grid-template-columns:1fr 1fr!important;
+    gap:7px!important;
+  }
+  .more-panel .nav-btn{
+    min-height:58px!important;
+    padding:10px!important;
+    font-size:10px!important;
+    font-weight:900!important;
+    border-radius:13px!important;
+  }
+  .more-panel .nav-btn span:first-child{
+    width:24px!important;
+    font-size:17px!important;
+  }
+}
+</style>
+
+<style id="final-nav-ui">
+@media(max-width:700px){
+  .bottom-nav{
+    height:74px!important;
+    min-height:74px!important;
+    padding:6px 5px!important;
+    gap:4px!important;
+  }
+  .bottom-nav .nav-btn,.bottom-nav .nav-more{
+    flex:1 1 20%!important;
+    min-width:0!important;
+    min-height:60px!important;
+    border-radius:12px!important;
+    font-size:10px!important;
+    font-weight:900!important;
+  }
+  .bottom-nav .nav-btn span:first-child,.bottom-nav .nav-more span:first-child{
+    font-size:19px!important;
+  }
 }
 </style>
 </head>
@@ -42,7 +121,19 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
   <button class="menu-btn" id="menuBtn">☰</button>
  </header>
  <div class="body">
-  <aside class="sidebar"><button class="nav-btn" data-page="10"><span>🏠</span><span>Dashboard</span></button><button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button><button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button><button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button><button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button><button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button><button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button><button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button><button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button><button class="nav-btn" data-page="8"><span>🎯</span><span>Digit Play</span></button><button class="nav-btn" data-page="9"><span>📝</span><span>Panna Logger</span></button><button class="nav-btn" data-page="11"><span>⭐</span><span>Shortlist</span></button></aside>
+  <aside class="sidebar">
+<button class="nav-btn" data-page="10"><span>🏠</span><span>Dashboard</span></button>
+<button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
+<button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
+<button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+<div class="nav-more-title">MORE</div>
+<button class="nav-btn more-nav" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
+<button class="nav-btn more-nav" data-page="3"><span>🟢</span><span>Open Digit</span></button>
+<button class="nav-btn more-nav" data-page="4"><span>➕</span><span>Total Digit</span></button>
+<button class="nav-btn more-nav" data-page="5"><span>⚖️</span><span>Odd / Even</span></button>
+<button class="nav-btn more-nav" data-page="6"><span>🔴</span><span>Close Digit</span></button>
+<button class="nav-btn more-nav" data-page="7"><span>➖</span><span>Difference Digit</span></button>
+</aside>
   <main class="content"><iframe class="page-frame" id="page-10" title="Dashboard" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
@@ -54,13 +145,74 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
 &lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-4xl mx-auto space-y-3&quot;&gt;
 &lt;header class=&quot;card p-4&quot;&gt;
  &lt;div class=&quot;flex items-center justify-between&quot;&gt;
   &lt;div&gt;&lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;DASHBOARD&lt;/div&gt;&lt;div id=&quot;date&quot; class=&quot;text-[10px] font-bold text-slate-500 mt-1&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-  &lt;button id=&quot;refresh&quot; class=&quot;w-10 h-10 rounded-xl bg-slate-100 font-black&quot;&gt;↻&lt;/button&gt;
+  &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
  &lt;/div&gt;
 &lt;/header&gt;
 
@@ -169,7 +321,68 @@ $(&quot;refresh&quot;).onclick=()=&gt;load().catch(e=&gt;$(&quot;error&quot;).te
 load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-0" title="Family Jodi" style="display:block" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-0" title="Family Jodi" style="display:block" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
+&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
 &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;15 Groups • Group Delay • TOP 5 • MID 5 • RECENT 5&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
 &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-3 text-center shadow-sm&quot;&gt;
@@ -576,6 +789,67 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;
 .tab-active{transform:translateY(-1px);box-shadow:0 5px 14px rgba(15,23,42,.12)}
 .member{letter-spacing:.04em}
 &lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
@@ -586,7 +860,7 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;
       &lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;FAMILY PANNA&lt;/div&gt;
       &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;35 GROUPS • TOP 10 / MID 15 / RECENT 10 • GROUP DELAY&lt;/div&gt;
     &lt;/div&gt;
-    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-black shadow-sm&quot;&gt;REFRESH&lt;/button&gt;
+    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
   &lt;/div&gt;
   &lt;select id=&quot;marketSelect&quot; class=&quot;mt-4 w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-white&quot;&gt;
     &lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;
@@ -801,6 +1075,67 @@ refreshBtn.onclick=async()=&gt;{try{refreshBtn.disabled=true;el.status.textConte
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 &lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
@@ -931,6 +1266,67 @@ initDigits();load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.mes
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 &lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
@@ -1053,6 +1449,67 @@ load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);cons
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -1182,50 +1639,117 @@ body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
 .badge{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}
 .modal{background:rgba(15,23,42,.62)}
 &lt;/style&gt;
-&lt;/head&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
+&lt;style id=&quot;oddeven-reference-ui&quot;&gt;
+body{background:#f1f5f9!important;color:#1e293b!important}
+.mode{border-radius:12px!important;min-height:46px!important}
+.mode.active{background:#0f172a!important;color:#fff!important;border-color:#0f172a!important}
+&lt;/style&gt;&lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;
 
-&lt;header class=&quot;bg-white sticky top-0 z-20 border-b border-slate-200&quot;&gt;
- &lt;div class=&quot;max-w-5xl mx-auto px-4 py-3 flex items-center justify-between&quot;&gt;
-  &lt;div&gt;
-   &lt;div class=&quot;text-lg font-black tracking-tight&quot;&gt;ODD / EVEN&lt;/div&gt;
-   &lt;div class=&quot;text-[9px] text-slate-400 font-bold&quot;&gt;PARITY BASED ANALYSIS&lt;/div&gt;
+&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
+  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
+    &lt;div&gt;
+      &lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;ODD / EVEN&lt;/div&gt;
+      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;PARITY BASED ANALYSIS&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
   &lt;/div&gt;
-  &lt;div id=&quot;status&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;Loading...&lt;/div&gt;
- &lt;/div&gt;
-&lt;/header&gt;
+  &lt;select id=&quot;market&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;/select&gt;
+  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
+&lt;/div&gt;
 
-&lt;main class=&quot;max-w-5xl mx-auto p-4 space-y-4&quot;&gt;
-
- &lt;section class=&quot;card p-4&quot;&gt;
-  &lt;div class=&quot;flex flex-wrap gap-2 items-center&quot;&gt;
-   &lt;select id=&quot;market&quot; class=&quot;btn min-w-[160px]&quot;&gt;&lt;/select&gt;
-   &lt;button class=&quot;btn mode active&quot; data-mode=&quot;JODI&quot;&gt;JODI&lt;/button&gt;
-   &lt;button class=&quot;btn mode&quot; data-mode=&quot;OPEN&quot;&gt;OPEN&lt;/button&gt;
-   &lt;button class=&quot;btn mode&quot; data-mode=&quot;CLOSE&quot;&gt;CLOSE&lt;/button&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+  &lt;div class=&quot;text-sm font-black mb-2&quot;&gt;ANALYSIS MODE&lt;/div&gt;
+  &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
+    &lt;button class=&quot;btn mode active rounded-xl bg-slate-900 text-white p-3 text-sm font-black&quot; data-mode=&quot;JODI&quot;&gt;JODI&lt;/button&gt;
+    &lt;button class=&quot;btn mode rounded-xl bg-white border border-slate-200 p-3 text-sm font-black&quot; data-mode=&quot;OPEN&quot;&gt;OPEN&lt;/button&gt;
+    &lt;button class=&quot;btn mode rounded-xl bg-white border border-slate-200 p-3 text-sm font-black&quot; data-mode=&quot;CLOSE&quot;&gt;CLOSE&lt;/button&gt;
   &lt;/div&gt;
- &lt;/section&gt;
+&lt;/section&gt;
 
- &lt;section class=&quot;card p-4&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between mb-3&quot;&gt;
-   &lt;div&gt;
-    &lt;div class=&quot;font-black text-sm&quot;&gt;Parity Groups&lt;/div&gt;
-    &lt;div id=&quot;subtitle&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;&lt;/div&gt;
-   &lt;/div&gt;
-   &lt;div id=&quot;games&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;&lt;/div&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+  &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;
+    &lt;div&gt;
+      &lt;div class=&quot;font-black text-sm&quot;&gt;PARITY GROUPS&lt;/div&gt;
+      &lt;div id=&quot;subtitle&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;games&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;div id=&quot;grid&quot; class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-3&quot;&gt;&lt;/div&gt;
- &lt;/section&gt;
+&lt;/section&gt;
 
- &lt;section class=&quot;card p-4&quot;&gt;
-  &lt;div class=&quot;font-black text-sm&quot;&gt;Odd / Even Intelligence&lt;/div&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+  &lt;div class=&quot;font-black text-sm&quot;&gt;ODD / EVEN INTELLIGENCE&lt;/div&gt;
   &lt;div id=&quot;insight&quot; class=&quot;text-[10px] leading-5 text-slate-600 mt-2&quot;&gt;&lt;/div&gt;
- &lt;/section&gt;
+&lt;/section&gt;
 
- &lt;section class=&quot;card p-4&quot;&gt;
-  &lt;div class=&quot;font-black text-sm&quot;&gt;Recent Parity Sequence&lt;/div&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+  &lt;div class=&quot;font-black text-sm&quot;&gt;RECENT PARITY SEQUENCE&lt;/div&gt;
   &lt;div id=&quot;sequence&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;
- &lt;/section&gt;
+&lt;/section&gt;
 
 &lt;/main&gt;
 
@@ -1391,13 +1915,17 @@ document.querySelectorAll(&quot;.mode&quot;).forEach(b=&gt;b.onclick=()=&gt;{
  render();
 });
 $(&quot;market&quot;).onchange=render;
+$(&quot;refreshBtn&quot;).onclick=load;
 
 async function load(){
  try{
   const snap=await getDocs(collection(db,&quot;matka_records&quot;));
   records=snap.docs.map(d=&gt;({id:d.id,...d.data()}));
   const names=[...new Set(records.map(r=&gt;String(r.marketName||&quot;&quot;)).filter(Boolean))];
-  names.sort((a,b)=&gt;a.localeCompare(b));
+  const timeMin=(v)=&gt;{const m=String(v||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
+  const marketTimes={};
+  records.forEach(r=&gt;{if(r.marketName &amp;&amp; r.openTime &amp;&amp; marketTimes[r.marketName]===undefined) marketTimes[r.marketName]=r.openTime;});
+  names.sort((a,b)=&gt;timeMin(marketTimes[a])-timeMin(marketTimes[b])||a.localeCompare(b));
   $(&quot;market&quot;).innerHTML=`&lt;option value=&quot;ALL_MERGED&quot;&gt;All Markets&lt;/option&gt;`+
     names.map(n=&gt;`&lt;option value=&quot;${n.replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${n}&lt;/option&gt;`).join(&quot;&quot;);
   if(!records.length)throw new Error(&quot;No records found in matka_records.&quot;);
@@ -1421,6 +1949,67 @@ load();
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -1545,6 +2134,67 @@ load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);cons
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 &lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
@@ -1657,186 +2307,109 @@ load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);cons
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe><iframe class="page-frame" id="page-8" title="Digit Play Analysis" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
-&lt;title&gt;Odd Even Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+"></iframe><iframe class="page-frame" id="page-8" title="Digit Play Analysis" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;Digit Play Analysis&lt;/title&gt;
+&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js&quot;&gt;&lt;/script&gt;&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js&quot;&gt;&lt;/script&gt;
+&lt;style&gt;*{box-sizing:border-box}.card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}.btn{border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:8px 12px;font-size:11px;font-weight:800}.pill{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}&lt;/style&gt;
 &lt;style&gt;
-*{box-sizing:border-box}
-body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-.card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}
-.btn{border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:8px 12px;font-size:11px;font-weight:800}
-.btn.active{background:#111827;color:#fff;border-color:#111827}
-.badge{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}
-.modal{background:rgba(15,23,42,.62)}
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* Open Digit reference header — applied to Digit Play + Shortlist */
+body{background:#f1f5f9!important;color:#1e293b!important}
+.top-reference-card{
+  background:#fff!important;border-radius:16px!important;
+  border:1px solid #e2e8f0!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
 &lt;/style&gt;
 &lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;
-&lt;header class=&quot;bg-white sticky top-0 z-20 border-b border-slate-200&quot;&gt;
- &lt;div class=&quot;max-w-5xl mx-auto px-4 py-3 flex items-center justify-between&quot;&gt;
-  &lt;div&gt;&lt;div class=&quot;text-lg font-black tracking-tight&quot;&gt;DIGIT PLAY ANALYSIS&lt;/div&gt;
-  &lt;div class=&quot;text-[9px] text-slate-400 font-bold&quot;&gt;OPEN + CLOSE • PRIORITY SIGNAL&lt;/div&gt;&lt;/div&gt;
-  &lt;div id=&quot;status&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;Loading...&lt;/div&gt;
- &lt;/div&gt;
-&lt;/header&gt;
-&lt;main class=&quot;max-w-5xl mx-auto p-4 space-y-4&quot;&gt;
-
-&lt;section class=&quot;card p-4&quot;&gt;
- &lt;select id=&quot;market&quot; class=&quot;btn min-w-[190px]&quot;&gt;&lt;/select&gt;
- &lt;div class=&quot;text-[9px] text-slate-400 font-black mt-2&quot;&gt;SELECT MARKET • ALL-MERGED IS ALSO CHECKED&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;card p-5&quot;&gt;
- &lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;TODAY&#x27;S DIGIT PLAY SIGNAL&lt;/div&gt;
- &lt;div id=&quot;signal&quot; class=&quot;mt-2 text-4xl font-black text-slate-800&quot;&gt;—&lt;/div&gt;
- &lt;div id=&quot;signalSub&quot; class=&quot;mt-1 text-[11px] font-bold text-slate-500&quot;&gt;Comparing Open and Close strength...&lt;/div&gt;
- &lt;div id=&quot;signalDigits&quot; class=&quot;grid grid-cols-2 gap-3 mt-4&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;&gt;
- &lt;div id=&quot;openBox&quot; class=&quot;card p-4&quot;&gt;
-  &lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black text-indigo-500&quot;&gt;OPEN&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;Strongest Source&lt;/div&gt;&lt;/div&gt;
-  &lt;div id=&quot;openDelay&quot; class=&quot;text-3xl font-black text-orange-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
-  &lt;div id=&quot;openWinner&quot; class=&quot;mt-3 text-xs font-black&quot;&gt;—&lt;/div&gt;
-  &lt;div id=&quot;openDigits&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;
- &lt;/div&gt;
- &lt;div id=&quot;closeBox&quot; class=&quot;card p-4&quot;&gt;
-  &lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black text-emerald-500&quot;&gt;CLOSE&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;Strongest Source&lt;/div&gt;&lt;/div&gt;
-  &lt;div id=&quot;closeDelay&quot; class=&quot;text-3xl font-black text-orange-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
-  &lt;div id=&quot;closeWinner&quot; class=&quot;mt-3 text-xs font-black&quot;&gt;—&lt;/div&gt;
-  &lt;div id=&quot;closeDigits&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;
- &lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;card p-4&quot;&gt;
- &lt;div class=&quot;font-black text-sm&quot;&gt;6-SOURCE STRENGTH&lt;/div&gt;
- &lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;MARKET-WISE + ALL-MERGED • TOP 3 / MID 4 / RECENT 3&lt;/div&gt;
- &lt;div id=&quot;sources&quot; class=&quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;/main&gt;
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-slate-900/60 items-end sm:items-center justify-center p-3&quot;&gt;
- &lt;div class=&quot;bg-white w-full max-w-lg rounded-3xl p-5 max-h-[88vh] overflow-auto&quot;&gt;
-  &lt;div class=&quot;flex justify-between items-start&quot;&gt;&lt;div&gt;&lt;div id=&quot;mTitle&quot; class=&quot;text-xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;mSub&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;mClose&quot; class=&quot;btn&quot;&gt;CLOSE&lt;/button&gt;&lt;/div&gt;
-  &lt;div id=&quot;mBody&quot; class=&quot;mt-4&quot;&gt;&lt;/div&gt;
- &lt;/div&gt;
-&lt;/div&gt;
-&lt;script type=&quot;module&quot;&gt;
-import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js&quot;;
-import {getFirestore,collection,getDocs} from &quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js&quot;;
-const firebaseConfig={apiKey:&quot;AIzaSyC7vLQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
-const db=getFirestore(initializeApp(firebaseConfig)), $=id=&gt;document.getElementById(id);let records=[];
-function digit(v){if(v===undefined||v===null||v===&quot;&quot;)return null;const m=String(v).match(/\d/g);return m?Number(m[m.length-1]):null}
-function timeKey(r){const m=String(r.openTime||&quot;&quot;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
-function rows(market){return records.filter(r=&gt;r.date&amp;&amp;(!market||String(r.marketName)===market)&amp;&amp;digit(r.openAnk)!==null&amp;&amp;digit(r.closeAnk)!==null).sort((a,b)=&gt;String(a.date).localeCompare(String(b.date))||timeKey(a)-timeKey(b))}
-function ranking(rs,side){
- const n=rs.length,a=Array.from({length:10},(_,d)=&gt;({digit:d,occ:[],hits:0,last:-1,currentDelay:n,maxDelay:0,rate:0}));
- rs.forEach((r,i)=&gt;{const d=digit(side===&quot;OPEN&quot;?r.openAnk:r.closeAnk);if(d!==null){a[d].occ.push(i);a[d].hits++;a[d].last=i}});
- a.forEach(s=&gt;{const o=s.occ;s.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);s.rate=n?s.hits/n*100:0});
- const rank=a.slice().sort((x,y)=&gt;y.currentDelay-x.currentDelay||y.maxDelay-x.maxDelay||y.hits-x.hits||x.digit-y.digit);
- return {rows:rs,rank,TOP:rank.slice(0,3),MID:rank.slice(3,7),RECENT:rank.slice(7,10)};
-}
-function source(scope,group,data){
- const ds=data[group],rs=data.rows,n=rs.length;
- // Critical rule: any digit in the group appearing in a result resets the whole group.
- const hits=[];rs.forEach((r,i)=&gt;{const d=digit(r[scope===&quot;MARKET-WISE&quot;&amp;&amp;false?&quot;openAnk&quot;:&quot;openAnk&quot;]);});
- // source data is already ranked for the selected side; calculate group hit using the same side.
- return {scope,group,digits:ds,rows:rs};
-}
-function buildSide(side){
- const market=$(&quot;market&quot;).value;
- const md=ranking(rows(market),side),ad=ranking(rows(null),side);
- const ss=[&quot;TOP&quot;,&quot;MID&quot;,&quot;RECENT&quot;].map(g=&gt;groupSource(&quot;MARKET-WISE&quot;,g,md,side))
-   .concat([&quot;TOP&quot;,&quot;MID&quot;,&quot;RECENT&quot;].map(g=&gt;groupSource(&quot;ALL-MERGED&quot;,g,ad,side)));
- return {marketData:md,allData:ad,sources:ss,winner:ss.slice().sort((a,b)=&gt;b.delay-a.delay||b.max-a.max||b.hits-a.hits||(a.scope===&quot;MARKET-WISE&quot;?-1:1))[0]};
-}
-function groupSource(scope,group,data,side){
- const ds=data[group],rs=data.rows,n=rs.length;
- const hits=[];rs.forEach((r,i)=&gt;{const d=digit(side===&quot;OPEN&quot;?r.openAnk:r.closeAnk);if(ds.some(x=&gt;x.digit===d))hits.push(i)});
- const delay=hits.length?n-1-hits[hits.length-1]:n;
- const gaps=hits.length?[hits[0]]:[n];for(let i=1;i&lt;hits.length;i++)gaps.push(hits[i]-hits[i-1]-1);if(hits.length)gaps.push(n-1-hits[hits.length-1]);
- return {id:scope+&quot;_&quot;+group,scope,group,digits:ds,delay,max:Math.max(0,...gaps),hits:hits.length,games:n,side};
-}
-function render(){
- const o=buildSide(&quot;OPEN&quot;),c=buildSide(&quot;CLOSE&quot;);
- const winner=o.winner.delay===c.winner.delay
-   ? (o.winner.max&gt;=c.winner.max?o.winner:c.winner)
-   : (o.winner.delay&gt;c.winner.delay?o.winner:c.winner);
- const same=o.winner.delay===c.winner.delay;
- const chosenSide=winner.side;
- $(&quot;signal&quot;).textContent=`PLAY ${chosenSide}`;
- $(&quot;signal&quot;).className=`mt-2 text-4xl font-black ${chosenSide===&quot;OPEN&quot;?&quot;text-indigo-700&quot;:&quot;text-emerald-700&quot;}`;
- $(&quot;signalSub&quot;).textContent=`${winner.scope} → ${winner.group} • GROUP DELAY ${winner.delay}${same?&quot; • TIE BROKEN BY MAX DELAY&quot;:&quot;&quot;}`;
- $(&quot;signalDigits&quot;).innerHTML=winner.digits.map(d=&gt;`&lt;button data-d=&quot;${d.digit}&quot; class=&quot;rounded-xl border border-slate-200 bg-slate-50 p-3 text-center&quot;&gt;&lt;div class=&quot;text-2xl font-black text-indigo-700&quot;&gt;${d.digit}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-orange-600&quot;&gt;DIGIT DELAY ${d.currentDelay}&lt;/div&gt;&lt;/button&gt;`).join(&quot;&quot;);
- $(&quot;signalDigits&quot;).querySelectorAll(&quot;[data-d]&quot;).forEach(b=&gt;b.onclick=()=&gt;showDigit(winner.digits.find(x=&gt;String(x.digit)===b.dataset.d),winner));
- fillSide(&quot;OPEN&quot;,o);fillSide(&quot;CLOSE&quot;,c);
- const all=[...o.sources,...c.sources];
- $(&quot;sources&quot;).innerHTML=all.map(s=&gt;`&lt;button data-id=&quot;${s.side}_${s.id}&quot; class=&quot;text-left rounded-xl border ${s.side===chosenSide&amp;&amp;s.id===winner.id?&quot;border-orange-300 bg-orange-50/50&quot;:&quot;border-slate-200 bg-white&quot;} p-3 shadow-sm&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[8px] font-black ${s.side===&quot;OPEN&quot;?&quot;text-indigo-500&quot;:&quot;text-emerald-500&quot;}&quot;&gt;${s.side} • ${s.scope}&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;${s.group}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${s.delay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;${s.digits.map(d=&gt;`&lt;span class=&quot;pill bg-slate-100 text-slate-700&quot;&gt;${d.digit}&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-bold text-slate-400&quot;&gt;GROUP MAX ${s.max} • GROUP HITS ${s.hits}&lt;/div&gt;&lt;/button&gt;`).join(&quot;&quot;);
- $(&quot;sources&quot;).querySelectorAll(&quot;[data-id]&quot;).forEach(b=&gt;b.onclick=()=&gt;showSource(all.find(s=&gt;`${s.side}_${s.id}`===b.dataset.id)));
- $(&quot;status&quot;).textContent=`${$(&quot;market&quot;).value} • SIGNAL: ${chosenSide}`;
-try{
- parent.postMessage({
-  type:"DIGIT_PLAY_SIGNAL",
-  market:$("market").value,
-  side:chosenSide,
-  digits:winner.digits.map(x=>Number(x.digit)),
-  scope:winner.scope,
-  group:winner.group,
-  delay:winner.delay
- },"*");
-}catch(e){}
-try{
- parent.postMessage({
-  type:"DIGIT_PLAY_SIGNAL",
-  market:$("market").value,
-  side:chosenSide,
-  digits:winner.digits.map(x=>Number(x.digit)),
-  scope:winner.scope,
-  group:winner.group,
-  delay:winner.delay
- },"*");
-}catch(e){}
-
-}
-function fillSide(side,x){
- $(side.toLowerCase()+&quot;Delay&quot;).textContent=x.winner.delay;
- $(side.toLowerCase()+&quot;Winner&quot;).textContent=`${x.winner.scope} → ${x.winner.group}`;
- $(side.toLowerCase()+&quot;Digits&quot;).innerHTML=x.winner.digits.map(d=&gt;`&lt;span class=&quot;pill bg-slate-100 text-slate-700&quot;&gt;${d.digit} • ${d.currentDelay}&lt;/span&gt;`).join(&quot;&quot;);
-}
-function showSource(s){$(&quot;mTitle&quot;).textContent=`${s.side} • ${s.scope} • ${s.group}`;$(&quot;mSub&quot;).textContent=`Group delay ${s.delay} • Max ${s.max} • Hits ${s.hits}`;$(&quot;mBody&quot;).innerHTML=`&lt;div class=&quot;grid grid-cols-2 gap-2&quot;&gt;${s.digits.map(d=&gt;`&lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${d.digit}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-400 font-black&quot;&gt;DIGIT DELAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-orange-600&quot;&gt;${d.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-400&quot;&gt;MAX ${d.maxDelay} • ${d.hits} HITS&lt;/div&gt;&lt;/div&gt;`).join(&quot;&quot;)}&lt;/div&gt;`;openModal()}
-function showDigit(d,s){const rs=rows(s.scope===&quot;MARKET-WISE&quot;?$(&quot;market&quot;).value:null),hits=rs.filter(r=&gt;digit(s.side===&quot;OPEN&quot;?r.openAnk:r.closeAnk)===d.digit).reverse().slice(0,20);$(&quot;mTitle&quot;).textContent=`${s.side} DIGIT ${d.digit}`;$(&quot;mSub&quot;).textContent=`${s.scope} → ${s.group}`;$(&quot;mBody&quot;).innerHTML=`&lt;div class=&quot;grid grid-cols-2 gap-2&quot;&gt;&lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;DIGIT DELAY&lt;/div&gt;&lt;div class=&quot;text-2xl font-black text-orange-600&quot;&gt;${d.currentDelay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;MAX DELAY&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${d.maxDelay}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-4 text-[9px] font-black text-slate-400&quot;&gt;LAST 20 HITS&lt;/div&gt;&lt;div class=&quot;mt-2 space-y-1&quot;&gt;${hits.map(r=&gt;`&lt;div class=&quot;flex justify-between bg-slate-50 rounded-lg p-2 text-[9px]&quot;&gt;&lt;span&gt;${r.date}&lt;/span&gt;&lt;b&gt;${r.marketName}&lt;/b&gt;&lt;span&gt;${s.side} ${digit(s.side===&quot;OPEN&quot;?r.openAnk:r.closeAnk)}&lt;/span&gt;&lt;/div&gt;`).join(&quot;&quot;)||&quot;&lt;div class=&#x27;text-[10px] text-slate-400&#x27;&gt;No hits.&lt;/div&gt;&quot;}&lt;/div&gt;`;openModal()}
-function openModal(){$(&quot;modal&quot;).classList.remove(&quot;hidden&quot;);$(&quot;modal&quot;).classList.add(&quot;flex&quot;)}
-$(&quot;mClose&quot;).onclick=()=&gt;{$(&quot;modal&quot;).classList.add(&quot;hidden&quot;);$(&quot;modal&quot;).classList.remove(&quot;flex&quot;)};$(&quot;modal&quot;).onclick=e=&gt;{if(e.target===$(&quot;modal&quot;))$(&quot;mClose&quot;).click()};$(&quot;market&quot;).onchange=render;
-async function load(){try{const snap=await getDocs(collection(db,&quot;matka_records&quot;));records=snap.docs.map(d=&gt;({id:d.id,...d.data()}));const names=[...new Set(records.map(r=&gt;String(r.marketName||&quot;&quot;)).filter(Boolean))].sort();$(&quot;market&quot;).innerHTML=names.map(n=&gt;`&lt;option value=&quot;${n.replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${n}&lt;/option&gt;`).join(&quot;&quot;);if(!names.length)throw Error(&quot;No marketName records found.&quot;);render()}catch(e){console.error(e);$(&quot;status&quot;).textContent=&quot;DATA ERROR&quot;;$(&quot;sources&quot;).innerHTML=`&lt;div class=&quot;col-span-full rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-bold text-red-600&quot;&gt;${e.message}&lt;/div&gt;`}}
-function publishDigitPlaySignal(){
- try{
-  parent.postMessage({
-   type:"DIGIT_PLAY_SIGNAL",
-   market:$("market").value,
-   side:chosenSide,
-   digits:winner.digits.map(x=>Number(x.digit)),
-   scope:winner.scope,
-   group:winner.group,
-   delay:winner.delay
-  },"*");
- }catch(e){}
-}
-window.addEventListener("message",e=>{
- if(e.data && e.data.type==="REQUEST_DIGIT_PLAY_SIGNAL"){
-  try{publishDigitPlaySignal();}catch(err){}
- }
-});
-publishDigitPlaySignal();
-
-window.addEventListener("message",e=>{
- if(e.data && e.data.type==="REQUEST_DIGIT_PLAY_SIGNAL"){
-  try{render();}catch(err){}
- }
-});
-load();
+&lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
+  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
+    &lt;div&gt;
+      &lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;DIGIT PLAY ANALYSIS&lt;/div&gt;
+      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;OPEN + CLOSE • PRIORITY SIGNAL&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;select id=&quot;market&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;/select&gt;
+  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
+&lt;/div&gt;&lt;main class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;&lt;section class=&quot;card p-5&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;TODAY&#x27;S DIGIT PLAY SIGNAL&lt;/div&gt;&lt;div id=&quot;signal&quot; class=&quot;mt-2 text-4xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;signalSub&quot; class=&quot;mt-1 text-[11px] font-bold text-slate-500&quot;&gt;Loading analysis...&lt;/div&gt;&lt;div id=&quot;signalDigits&quot; class=&quot;grid grid-cols-3 gap-2 mt-4&quot;&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;&gt;&lt;div class=&quot;card p-4&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black text-indigo-500&quot;&gt;OPEN&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;Strongest Source&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;openDelay&quot; class=&quot;text-3xl font-black text-orange-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;openWinner&quot; class=&quot;mt-3 text-xs font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;openDigits&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;card p-4&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black text-emerald-500&quot;&gt;CLOSE&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;Strongest Source&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;closeDelay&quot; class=&quot;text-3xl font-black text-orange-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;closeWinner&quot; class=&quot;mt-3 text-xs font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;closeDigits&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;card p-4&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;6-SOURCE STRENGTH&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;MARKET-WISE + ALL-MERGED • TOP 3 / MID 4 / RECENT 3&lt;/div&gt;&lt;div id=&quot;sources&quot; class=&quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4&quot;&gt;&lt;/div&gt;&lt;/section&gt;&lt;/main&gt;
+&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-slate-900/60 items-end sm:items-center justify-center p-3&quot;&gt;&lt;div class=&quot;bg-white w-full max-w-lg rounded-3xl p-5 max-h-[88vh] overflow-auto&quot;&gt;&lt;div class=&quot;flex justify-between items-start&quot;&gt;&lt;div&gt;&lt;div id=&quot;mTitle&quot; class=&quot;text-xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;mSub&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;mClose&quot; class=&quot;btn&quot;&gt;CLOSE&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;mBody&quot; class=&quot;mt-4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script&gt;
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore(); const $=id=&gt;document.getElementById(id); let records=[],markets=[],lastSignal=null;
+function digit(v){if(v===undefined||v===null||v===&#x27;&#x27;)return null;const m=String(v).match(/\d/g);return m?Number(m[m.length-1]):null}
+function timeMin(v){const m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
+function rows(market){return records.filter(r=&gt;r.date&amp;&amp;(!market||market===&#x27;ALL_MERGED&#x27;||String(r.marketName)===market)&amp;&amp;digit(r.openAnk)!==null&amp;&amp;digit(r.closeAnk)!==null).sort((a,b)=&gt;String(a.date).localeCompare(String(b.date))||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)))}
+function ranking(rs,side){const n=rs.length,a=Array.from({length:10},(_,d)=&gt;({digit:d,occ:[],hits:0,last:-1,currentDelay:n,maxDelay:0}));rs.forEach((r,i)=&gt;{const d=digit(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].occ.push(i);a[d].hits++;a[d].last=i}});a.forEach(x=&gt;{const o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});const rank=a.slice().sort((x,y)=&gt;y.currentDelay-x.currentDelay||y.maxDelay-x.maxDelay||y.hits-x.hits||x.digit-y.digit);return {rows:rs,TOP:rank.slice(0,3),MID:rank.slice(3,7),RECENT:rank.slice(7,10)}}
+function groupSource(scope,group,data,side){const ds=data[group],rs=data.rows,n=rs.length,h=[];rs.forEach((r,i)=&gt;{const d=digit(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(ds.some(x=&gt;x.digit===d))h.push(i)});const delay=h.length?n-1-h[h.length-1]:n;const gaps=h.length?[h[0]]:[n];for(let i=1;i&lt;h.length;i++)gaps.push(h[i]-h[i-1]-1);if(h.length)gaps.push(n-1-h[h.length-1]);return {id:scope+&#x27;_&#x27;+group,scope,group,digits:ds,delay,max:Math.max(0,...gaps),hits:h.length,games:n,side}}
+function buildSide(side){const market=$(&#x27;market&#x27;).value,md=ranking(rows(market),side),ad=ranking(rows(&#x27;ALL_MERGED&#x27;),side);const ss=[&#x27;TOP&#x27;,&#x27;MID&#x27;,&#x27;RECENT&#x27;].map(g=&gt;groupSource(&#x27;MARKET-WISE&#x27;,g,md,side)).concat([&#x27;TOP&#x27;,&#x27;MID&#x27;,&#x27;RECENT&#x27;].map(g=&gt;groupSource(&#x27;ALL-MERGED&#x27;,g,ad,side)));return {marketData:md,allData:ad,sources:ss,winner:ss.slice().sort((a,b)=&gt;b.delay-a.delay||b.max-a.max||b.hits-a.hits||(a.scope===&#x27;MARKET-WISE&#x27;?-1:1))[0]}}
+function render(){try{const rs=rows($(&#x27;market&#x27;).value);if(!rs.length)throw Error(&#x27;No completed Open + Close records found.&#x27;);const o=buildSide(&#x27;OPEN&#x27;),c=buildSide(&#x27;CLOSE&#x27;);const winner=o.winner.delay===c.winner.delay?(o.winner.max&gt;=c.winner.max?o.winner:c.winner):(o.winner.delay&gt;c.winner.delay?o.winner:c.winner);const side=winner.side;const selected=winner.digits.map(x=&gt;Number(x.digit)).slice(0,3);lastSignal={market:$(&#x27;market&#x27;).value,side,digits:selected,scope:winner.scope,group:winner.group,delay:winner.delay};$(&#x27;signal&#x27;).textContent=&#x27;PLAY &#x27;+side;$(&#x27;signal&#x27;).className=&#x27;mt-2 text-4xl font-black &#x27;+(side===&#x27;OPEN&#x27;?&#x27;text-indigo-700&#x27;:&#x27;text-emerald-700&#x27;);$(&#x27;signalSub&#x27;).textContent=winner.scope+&#x27; → &#x27;+winner.group+&#x27; • GROUP DELAY &#x27;+winner.delay; $(&#x27;signalDigits&#x27;).innerHTML=selected.map(d=&gt;&#x27;&lt;div class=&quot;rounded-xl border border-slate-200 bg-slate-50 p-3 text-center&quot;&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;&#x27;+d+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;);fillSide(&#x27;OPEN&#x27;,o);fillSide(&#x27;CLOSE&#x27;,c);const all=[...o.sources,...c.sources];$(&#x27;sources&#x27;).innerHTML=all.map(s=&gt;&#x27;&lt;button class=&quot;text-left rounded-xl border &#x27;+(s.side===side&amp;&amp;s.id===winner.id?&#x27;border-orange-300 bg-orange-50/50&#x27;:&#x27;border-slate-200 bg-white&#x27;)+&#x27; p-3 shadow-sm&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[8px] font-black &#x27;+(s.side===&#x27;OPEN&#x27;?&#x27;text-indigo-500&#x27;:&#x27;text-emerald-500&#x27;)+&#x27;&quot;&gt;&#x27;+s.side+&#x27; • &#x27;+s.scope+&#x27;&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;&#x27;+s.group+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;&#x27;+s.delay+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&#x27;+s.digits.map(d=&gt;&#x27;&lt;span class=&quot;pill bg-slate-100&quot;&gt;&#x27;+d.digit+&#x27;&lt;/span&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-bold text-slate-400&quot;&gt;GROUP MAX &#x27;+s.max+&#x27; • GROUP HITS &#x27;+s.hits+&#x27;&lt;/div&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);$(&#x27;status&#x27;).textContent=($(&#x27;market&#x27;).value===&#x27;ALL_MERGED&#x27;?&#x27;ALL MARKETS&#x27;:$(&#x27;market&#x27;).value)+&#x27; • &#x27;+rs.length+&#x27; GAMES • PLAY &#x27;+side+&#x27; • 3 DIGITS&#x27;;try{parent.postMessage({type:&#x27;DIGIT_PLAY_SIGNAL&#x27;,...lastSignal},&#x27;*&#x27;)}catch(e){}}
+catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;DATA ERROR: &#x27;+e.message;$(&#x27;signalSub&#x27;).textContent=e.message;$(&#x27;sources&#x27;).innerHTML=&#x27;&lt;div class=&quot;text-xs font-bold text-red-600&quot;&gt;&#x27;+e.message+&#x27;&lt;/div&gt;&#x27;}}
+function fillSide(side,x){$(side.toLowerCase()+&#x27;Delay&#x27;).textContent=x.winner.delay;$(side.toLowerCase()+&#x27;Winner&#x27;).textContent=x.winner.scope+&#x27; → &#x27;+x.winner.group;$(side.toLowerCase()+&#x27;Digits&#x27;).innerHTML=x.winner.digits.map(d=&gt;&#x27;&lt;span class=&quot;pill bg-slate-100&quot;&gt;&#x27;+d.digit+&#x27; • &#x27;+d.currentDelay+&#x27;&lt;/span&gt;&#x27;).join(&#x27;&#x27;)}
+async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;const [ms,rs]=await Promise.all([db.collection(&#x27;markets&#x27;).get(),db.collection(&#x27;matka_records&#x27;).get()]);markets=ms.docs.map(d=&gt;({id:d.id,...d.data()})).filter(x=&gt;x.name);markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||String(a.name).localeCompare(String(b.name)));records=rs.docs.map(d=&gt;({id:d.id,...d.data()}));const cur=$(&#x27;market&#x27;).value;$(&#x27;market&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.map(m=&gt;&#x27;&lt;option value=&quot;&#x27;+String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)+&#x27;&quot;&gt;&#x27;+m.name+&#x27; • &#x27;+(m.openTime||&#x27;&#x27;)+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);if(cur&amp;&amp;[...$(&#x27;market&#x27;).options].some(o=&gt;o.value===cur))$(&#x27;market&#x27;).value=cur;render()}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;DATA ERROR: &#x27;+e.message;$(&#x27;sources&#x27;).innerHTML=&#x27;&lt;div class=&quot;text-xs font-bold text-red-600&quot;&gt;&#x27;+e.message+&#x27;&lt;/div&gt;&#x27;}}
+$(&#x27;market&#x27;).onchange=render;$(&#x27;refresh&#x27;).onclick=load;$(&#x27;mClose&#x27;).onclick=()=&gt;{$(&#x27;modal&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;modal&#x27;).classList.remove(&#x27;flex&#x27;)};$(&#x27;modal&#x27;).onclick=e=&gt;{if(e.target===$(&#x27;modal&#x27;))$(&#x27;mClose&#x27;).click()};window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.type===&#x27;REQUEST_DIGIT_PLAY_SIGNAL&#x27;){if(lastSignal)parent.postMessage({type:&#x27;DIGIT_PLAY_SIGNAL&#x27;,...lastSignal},&#x27;*&#x27;);else load()}});load();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-9" title="Panna Logger" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
@@ -1848,13 +2421,74 @@ load();
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 input,select{outline:none}input:focus,select:focus{box-shadow:0 0 0 3px rgba(79,70,229,.12);border-color:#6366f1}
 &lt;/style&gt;
+
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 p-3&quot;&gt;
 &lt;div class=&quot;max-w-xl mx-auto space-y-3&quot;&gt;
 &lt;header class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-4&quot;&gt;
  &lt;div class=&quot;flex items-center justify-between&quot;&gt;
   &lt;div&gt;&lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;PANNA LOGGER&lt;/div&gt;&lt;div class=&quot;text-[10px] font-bold text-slate-500&quot;&gt;OPEN / CLOSE • FAST ENTRY&lt;/div&gt;&lt;/div&gt;
-  &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-slate-100 text-xs font-black&quot;&gt;↻&lt;/button&gt;
+  &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
  &lt;/div&gt;
 &lt;/header&gt;
 
@@ -1937,7 +2571,8 @@ const today=()=&gt;{let d=new Date();return d.getFullYear()+&quot;-&quot;+String
 $(&quot;date&quot;).value=today();
 let markets=[],records=[],mode=&quot;open&quot;;
 
-function sortMarkets(){markets.sort((a,b)=&gt;String(a.openTime||&quot;23:59&quot;).localeCompare(String(b.openTime||&quot;23:59&quot;)))}
+function timeMin(v){const m=String(v||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
+function sortMarkets(){markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||String(a.name||&quot;&quot;).localeCompare(String(b.name||&quot;&quot;)))}
 function fillMarkets(){
  sortMarkets();
  let cur=$(&quot;market&quot;).value;
@@ -2039,18 +2674,92 @@ try{await loadMarkets();await loadRecords();$(&quot;openPanna&quot;).focus()}cat
 &lt;style&gt;
 *{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:#0f172a;font-family:Inter,Arial,sans-serif}
 .card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}
-&lt;/style&gt;&lt;/head&gt;
+&lt;/style&gt;
+&lt;style&gt;
+/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
+html,body{
+  margin:0!important;
+  padding:12px!important;
+  background:#f1f5f9!important;
+  color:#1e293b!important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
+  min-height:100%!important;
+}
+body{box-sizing:border-box!important;}
+body *{box-sizing:border-box;}
+.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
+  max-width:48rem!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card{
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+header.bg-white.sticky{
+  position:static!important;
+  background:#fff!important;
+  border:1px solid #e2e8f0!important;
+  border-radius:16px!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+  margin-bottom:12px!important;
+}
+header.bg-white.sticky&gt;div{
+  max-width:none!important;
+  padding:12px!important;
+}
+select{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0f172a!important;
+  font-weight:800!important;
+}
+button{font-family:inherit!important;}
+.btn{
+  border-radius:10px!important;
+  font-weight:900!important;
+}
+input{
+  border:1px solid #cbd5e1!important;
+  border-radius:10px!important;
+}
+.text-xl{font-size:18px!important;line-height:1.2!important;}
+.text-lg{font-size:18px!important;line-height:1.2!important;}
+section,.card{border-radius:16px!important;}
+@media(max-width:640px){
+  html,body{padding:12px!important;}
+  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
+  .grid{gap:8px!important;}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* Open Digit reference header — applied to Digit Play + Shortlist */
+body{background:#f1f5f9!important;color:#1e293b!important}
+.top-reference-card{
+  background:#fff!important;border-radius:16px!important;
+  border:1px solid #e2e8f0!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
+}
+&lt;/style&gt;
+&lt;/head&gt;
 &lt;body class=&quot;p-3 sm:p-5&quot;&gt;
-&lt;div class=&quot;max-w-4xl mx-auto space-y-3&quot;&gt;
- &lt;div class=&quot;card p-4&quot;&gt;
+&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
   &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-   &lt;div&gt;&lt;div class=&quot;text-xl font-black&quot;&gt;⭐ SHORTLIST&lt;/div&gt;
-   &lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;DIGIT PLAY SYNC • 3 DIGITS → 8 JODI&lt;/div&gt;&lt;/div&gt;
-   &lt;select id=&quot;market&quot; class=&quot;border rounded-xl px-3 py-2 text-sm bg-white&quot;&gt;&lt;/select&gt;
+    &lt;div&gt;
+      &lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;⭐ SHORTLIST&lt;/div&gt;
+      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;DIGIT PLAY SYNC • 3 DIGITS → 9 JODI&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
   &lt;/div&gt;
-  &lt;div id=&quot;status&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-3&quot;&gt;Loading...&lt;/div&gt;
- &lt;/div&gt;
- &lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
+  &lt;select id=&quot;market&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;/select&gt;
+  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;script type=&quot;module&quot;&gt;
@@ -2176,14 +2885,35 @@ async function load(){
   render();
  }catch(e){console.error(e);$(&quot;status&quot;).textContent=&quot;DATA ERROR: &quot;+(e.message||e);$(&quot;result&quot;).innerHTML=`&lt;div class=&quot;card p-4 text-xs font-bold text-red-600&quot;&gt;${e.message||e}&lt;/div&gt;`}
 }
-$(&quot;market&quot;).onchange=render;load();
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe> <nav class="bottom-nav"><button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button><button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button><button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button><button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button><button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button><button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button><button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button><button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button><button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button><button class="nav-btn" data-page="8"><span>🎯</span><span>Digit Play</span></button><button class="nav-btn" data-page="9"><span>📝</span><span>Panna Logger</span></button><button class="nav-btn" data-page="11"><span>⭐</span><span>Shortlist</span></button></nav>
+$(&quot;market&quot;).onchange=render;$(&quot;refresh&quot;).onclick=load;load();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe> <nav class="bottom-nav">
+  <button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
+  <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
+  <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
+  <button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+  <button class="nav-more" id="moreNav"><span>☰</span><span>More</span></button>
+</nav>
+<div class="more-panel" id="morePanel">
+  <button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button>
+  <button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button>
+  <button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
+  <button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button>
+  <button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button>
+  <button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button>
+  <button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button>
+  <button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button>
+</div>
 </div>
 <script>
 const buttons=[...document.querySelectorAll('.nav-btn')];
 const frames=[...document.querySelectorAll('.page-frame')];
+const moreNav=document.getElementById('moreNav');
+const morePanel=document.getElementById('morePanel');
+const morePages=[0,1,2,3,4,5,6,7];
 function openPage(index){
  buttons.forEach(b=>b.classList.toggle('active',Number(b.dataset.page)===index));
+ if(moreNav)moreNav.classList.toggle('active',morePages.includes(index));
+ if(morePanel)morePanel.classList.remove('show');
  frames.forEach(f=>f.style.display=Number((f.id||'').replace('page-',''))===index?'block':'none');
  try{localStorage.setItem('analysisPlatformPageV8',String(index));}catch(e){}
  if(index===11){
@@ -2192,6 +2922,8 @@ function openPage(index){
  }
 }
 buttons.forEach(b=>b.addEventListener('click',()=>openPage(Number(b.dataset.page))));
+if(moreNav){moreNav.addEventListener('click',(e)=>{e.stopPropagation();morePanel.classList.toggle('show');});}
+document.addEventListener('click',(e)=>{if(morePanel && !morePanel.contains(e.target) && e.target!==moreNav)morePanel.classList.remove('show');});
 window.addEventListener("message",e=>{
  if(!e.data || e.data.type!=="DIGIT_PLAY_SIGNAL")return;
  const target=document.getElementById("page-11");
@@ -2203,5 +2935,7 @@ try{saved=Number(localStorage.getItem('analysisPlatformPageV8')||10)}catch(e){}
 if(!Number.isInteger(saved)||saved<0||saved>11)saved=10;
 openPage(saved);
 </script>
+
+
 </body>
 </html>
