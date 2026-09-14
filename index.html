@@ -2914,11 +2914,28 @@ function openPage(index){
  buttons.forEach(b=>b.classList.toggle('active',Number(b.dataset.page)===index));
  if(moreNav)moreNav.classList.toggle('active',morePages.includes(index));
  if(morePanel)morePanel.classList.remove('show');
+
+ const target=frames.find(f=>Number((f.id||'').replace('page-',''))===index);
  frames.forEach(f=>f.style.display=Number((f.id||'').replace('page-',''))===index?'block':'none');
+
  try{localStorage.setItem('analysisPlatformPageV8',String(index));}catch(e){}
- if(index===11){
-  const dp=document.getElementById('page-8');
-  if(dp && dp.contentWindow)dp.contentWindow.postMessage({type:'REQUEST_DIGIT_PLAY_SIGNAL'},'*');
+
+ /* Refresh the selected page whenever navigation opens it.
+    Calculation/Firebase code inside each page remains untouched. */
+ if(target){
+   target.addEventListener('load',function navRefreshReady(){
+     target.removeEventListener('load',navRefreshReady);
+     if(index===11){
+       const dp=document.getElementById('page-8');
+       if(dp && dp.contentWindow)dp.contentWindow.postMessage({type:'REQUEST_DIGIT_PLAY_SIGNAL'},'*');
+     }
+   });
+   try{
+     if(target.contentWindow) target.contentWindow.location.reload();
+     else target.srcdoc=target.srcdoc;
+   }catch(e){
+     try{target.srcdoc=target.srcdoc;}catch(ignore){}
+   }
  }
 }
 buttons.forEach(b=>b.addEventListener('click',()=>openPage(Number(b.dataset.page))));
