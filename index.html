@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport"/>
 <title>Matka Analysis Platform</title>
 <style>
 *{box-sizing:border-box}
@@ -88,40 +89,18 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
   }
 }
 </style>
-
-<style id="final-nav-ui">
-@media(max-width:700px){
-  .bottom-nav{
-    height:74px!important;
-    min-height:74px!important;
-    padding:6px 5px!important;
-    gap:4px!important;
-  }
-  .bottom-nav .nav-btn,.bottom-nav .nav-more{
-    flex:1 1 20%!important;
-    min-width:0!important;
-    min-height:60px!important;
-    border-radius:12px!important;
-    font-size:10px!important;
-    font-weight:900!important;
-  }
-  .bottom-nav .nav-btn span:first-child,.bottom-nav .nav-more span:first-child{
-    font-size:19px!important;
-  }
-}
-</style>
 </head>
 <body>
 <div class="app">
- <header class="topbar">
-  <div class="brand">
-   <div class="brand-icon">M</div>
-   <div><div class="brand-title">ANALYSIS PLATFORM</div><div class="brand-sub">SINGLE DASHBOARD</div></div>
-  </div>
-  <button class="menu-btn" id="menuBtn">☰</button>
- </header>
- <div class="body">
-  <aside class="sidebar">
+<header class="topbar">
+<div class="brand">
+<div class="brand-icon">M</div>
+<div><div class="brand-title">ANALYSIS PLATFORM</div><div class="brand-sub">SINGLE DASHBOARD</div></div>
+</div>
+<button class="menu-btn" id="menuBtn">☰</button>
+</header>
+<div class="body">
+<aside class="sidebar">
 <button class="nav-btn" data-page="10"><span>🏠</span><span>Dashboard</span></button>
 <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
 <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
@@ -134,7 +113,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 <button class="nav-btn more-nav" data-page="6"><span>🔴</span><span>Close Digit</span></button>
 <button class="nav-btn more-nav" data-page="7"><span>➖</span><span>Difference Digit</span></button>
 </aside>
-  <main class="content"><iframe class="page-frame" id="page-10" title="Dashboard" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+<main class="content"><iframe class="page-frame" id="page-10" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -145,74 +124,13 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
 &lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-4xl mx-auto space-y-3&quot;&gt;
 &lt;header class=&quot;card p-4&quot;&gt;
  &lt;div class=&quot;flex items-center justify-between&quot;&gt;
   &lt;div&gt;&lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;DASHBOARD&lt;/div&gt;&lt;div id=&quot;date&quot; class=&quot;text-[10px] font-bold text-slate-500 mt-1&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-  &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
+  &lt;button id=&quot;refresh&quot; class=&quot;w-10 h-10 rounded-xl bg-slate-100 font-black&quot;&gt;↻&lt;/button&gt;
  &lt;/div&gt;
 &lt;/header&gt;
 
@@ -296,7 +214,7 @@ async function load(){
    focusSub=&quot;Use the time-based market list to prepare the next entry.&quot;;
    focusCls=&quot;bg-indigo-50 border-indigo-200 text-indigo-800&quot;;
  }else if(complete.length){
-   focusTitle=&quot;✅ Today&#x27;s entries are up to date&quot;;
+   focusTitle=&quot;✅ Today's entries are up to date&quot;;
    focusSub=&quot;Open the analysis modules when you want to review the recorded data.&quot;;
    focusCls=&quot;bg-emerald-50 border-emerald-200 text-emerald-800&quot;;
  }else{
@@ -305,84 +223,23 @@ async function load(){
    focusCls=&quot;bg-indigo-50 border-indigo-200 text-indigo-800&quot;;
  }
  $(&quot;focus&quot;).className=&quot;rounded-xl border p-3 &quot;+focusCls;
- $(&quot;focus&quot;).innerHTML=&#x27;&lt;div class=&quot;font-black text-sm&quot;&gt;&#x27;+focusTitle+&#x27;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-semibold mt-1 opacity-80&quot;&gt;&#x27;+focusSub+&#x27;&lt;/div&gt;&#x27;;
+ $(&quot;focus&quot;).innerHTML='&lt;div class=&quot;font-black text-sm&quot;&gt;'+focusTitle+'&lt;/div&gt;&lt;div class=&quot;text-[9px] font-semibold mt-1 opacity-80&quot;&gt;'+focusSub+'&lt;/div&gt;';
 
  $(&quot;markets&quot;).innerHTML=markets.length?markets.map(m=&gt;{
    const rs=tr.filter(r=&gt;r.marketName===m.name);
    const r=rs[rs.length-1];
    const state=r?.openPana&amp;&amp;r?.closePana?&quot;COMPLETE&quot;:r?.openPana?&quot;OPEN ENTERED&quot;:r?.closePana?&quot;CLOSE ONLY&quot;:&quot;PENDING&quot;;
    const cls=state===&quot;COMPLETE&quot;?&quot;text-emerald-600&quot;:state===&quot;OPEN ENTERED&quot;?&quot;text-orange-500&quot;:state===&quot;CLOSE ONLY&quot;?&quot;text-rose-600&quot;:&quot;text-slate-400&quot;;
-   return &#x27;&lt;div class=&quot;flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3&quot;&gt;&#x27;+
-   &#x27;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;&#x27;+String(m.name).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,&quot;&quot;)+&#x27;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-400&quot;&gt;OPEN &#x27;+timeText(m.openTime)+&#x27; • CLOSE &#x27;+timeText(m.closeTime)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;+
-   &#x27;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black &#x27;+cls+&#x27;&quot;&gt;&#x27;+state+&#x27;&lt;/div&gt;&#x27;+(r?.jodi?&#x27;&lt;div class=&quot;text-xs font-black&quot;&gt;JODI &#x27;+r.jodi+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;;
- }).join(&quot;&quot;):&#x27;&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;ADD MARKETS FROM LOGGER&lt;/div&gt;&#x27;;
+   return '&lt;div class=&quot;flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3&quot;&gt;'+
+   '&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;'+String(m.name).replace(/[&amp;&lt;&gt;&quot;']/g,&quot;&quot;)+'&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-400&quot;&gt;OPEN '+timeText(m.openTime)+' • CLOSE '+timeText(m.closeTime)+'&lt;/div&gt;&lt;/div&gt;'+
+   '&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black '+cls+'&quot;&gt;'+state+'&lt;/div&gt;'+(r?.jodi?'&lt;div class=&quot;text-xs font-black&quot;&gt;JODI '+r.jodi+'&lt;/div&gt;':'')+'&lt;/div&gt;&lt;/div&gt;';
+ }).join(&quot;&quot;):'&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;ADD MARKETS FROM LOGGER&lt;/div&gt;';
 }
 $(&quot;refresh&quot;).onclick=()=&gt;load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
 load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-0" title="Family Jodi" style="display:block" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
-&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+&lt;/html&gt;" style="display:none" title="Dashboard"></iframe><iframe class="page-frame" id="page-0" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
 &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;15 Groups • Group Delay • TOP 5 • MID 5 • RECENT 5&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
 &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-3 text-center shadow-sm&quot;&gt;
@@ -511,7 +368,7 @@ async function load() {
     markets.sort((a,b) =&gt; timeMin(a.openTime) - timeMin(b.openTime));
 
     const previous = el.market.value || &quot;ALL_MERGED&quot;;
-    el.market.innerHTML = &#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+    el.market.innerHTML = '&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
 
     markets.forEach(m =&gt; {
       if (!m.name) return;
@@ -542,9 +399,9 @@ async function load() {
     console.error(e);
     setStatus(&quot;ERROR: &quot; + (e?.message || String(e)), true);
     el.groupGrid.innerHTML =
-      &#x27;&lt;div class=&quot;col-span-full text-center py-6 text-xs font-bold text-red-600&quot;&gt;&#x27; +
-      &#x27;Firebase data load failed.&lt;br&gt;&lt;span class=&quot;text-[10px] text-slate-500&quot;&gt;&#x27; +
-      &#x27;Check Firebase configuration / Firestore access.&lt;/span&gt;&lt;/div&gt;&#x27;;
+      '&lt;div class=&quot;col-span-full text-center py-6 text-xs font-bold text-red-600&quot;&gt;' +
+      'Firebase data load failed.&lt;br&gt;&lt;span class=&quot;text-[10px] text-slate-500&quot;&gt;' +
+      'Check Firebase configuration / Firestore access.&lt;/span&gt;&lt;/div&gt;';
   }
 }
 
@@ -577,7 +434,7 @@ function calculate() {
 
     Example:
       Group 12 contains 12,17,21,26,62,67,71,76.
-      If today&#x27;s complete Jodi is 67,
+      If today's complete Jodi is 67,
       Group 12 HIT =&gt; Group 12 Delay = 0.
 
     The next completed game without any Group-12 Jodi:
@@ -724,11 +581,11 @@ function showDigit(d) {
   related.forEach(g =&gt; {
     const x = stats[g];
     const tag = b.top.has(g)
-      ? &#x27;&lt;span class=&quot;ml-1 text-[7px] font-black text-orange-700&quot;&gt;TOP&lt;/span&gt;&#x27;
+      ? '&lt;span class=&quot;ml-1 text-[7px] font-black text-orange-700&quot;&gt;TOP&lt;/span&gt;'
       : b.mid.has(g)
-      ? &#x27;&lt;span class=&quot;ml-1 text-[7px] font-black text-indigo-700&quot;&gt;MID&lt;/span&gt;&#x27;
+      ? '&lt;span class=&quot;ml-1 text-[7px] font-black text-indigo-700&quot;&gt;MID&lt;/span&gt;'
       : b.recent.has(g)
-      ? &#x27;&lt;span class=&quot;ml-1 text-[7px] font-black text-emerald-700&quot;&gt;RECENT&lt;/span&gt;&#x27;
+      ? '&lt;span class=&quot;ml-1 text-[7px] font-black text-emerald-700&quot;&gt;RECENT&lt;/span&gt;'
       : &quot;&quot;;
 
     const row = document.createElement(&quot;div&quot;);
@@ -777,7 +634,7 @@ el.modal.addEventListener(&quot;click&quot;, e =&gt; {
 initDigits();
 load();
 &lt;/script&gt;
-&lt;/body&gt;&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-1" title="Family Panna" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;/body&gt;&lt;/html&gt;" style="display:block" title="Family Jodi"></iframe><iframe class="page-frame" id="page-1" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -789,67 +646,6 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;
 .tab-active{transform:translateY(-1px);box-shadow:0 5px 14px rgba(15,23,42,.12)}
 .member{letter-spacing:.04em}
 &lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
@@ -860,7 +656,7 @@ section,.card{border-radius:16px!important;}
       &lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;FAMILY PANNA&lt;/div&gt;
       &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;35 GROUPS • TOP 10 / MID 15 / RECENT 10 • GROUP DELAY&lt;/div&gt;
     &lt;/div&gt;
-    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
+    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-black shadow-sm&quot;&gt;REFRESH&lt;/button&gt;
   &lt;/div&gt;
   &lt;select id=&quot;marketSelect&quot; class=&quot;mt-4 w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-white&quot;&gt;
     &lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;
@@ -961,7 +757,7 @@ async function loadMarkets(){
  const s=await getDocs(collection(db,&quot;markets&quot;));markets=[];
  s.forEach(x=&gt;{const d=x.data();if(d?.name)markets.push({name:d.name,openTime:d.openTime})});
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||a.name.localeCompare(b.name));
- el.market.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${m.name}&lt;/option&gt;`).join(&quot;&quot;);
+ el.market.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${m.name}&lt;/option&gt;`).join(&quot;&quot;);
 }
 async function loadRows(force=false){
  if(cacheLoaded&amp;&amp;!force)return allRows;
@@ -1049,7 +845,7 @@ function detail(group,s){
  &lt;div class=&quot;grid grid-cols-2 gap-2 mt-3&quot;&gt;&lt;div class=&quot;rounded-xl border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;RECENT 10&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;${x.recent10}&lt;/div&gt;&lt;/div&gt;
  &lt;div class=&quot;rounded-xl border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;RECENT 20&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;${x.recent20}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
  &lt;div class=&quot;mt-3 rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-500 mb-1&quot;&gt;LATEST GROUP HITS&lt;/div&gt;
- ${recent.length?recent.map(e=&gt;`&lt;div class=&quot;flex items-center justify-between py-1 border-b border-slate-200 last:border-0 text-[9px]&quot;&gt;&lt;span class=&quot;font-black&quot;&gt;${e.panna} &lt;span class=&quot;text-slate-400&quot;&gt;${e.side}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;text-slate-500&quot;&gt;${e.row.date}&lt;/span&gt;&lt;/div&gt;`).join(&quot;&quot;):&quot;&lt;div class=&#x27;text-[9px] text-slate-400&#x27;&gt;No hits found.&lt;/div&gt;&quot;}&lt;/div&gt;`;
+ ${recent.length?recent.map(e=&gt;`&lt;div class=&quot;flex items-center justify-between py-1 border-b border-slate-200 last:border-0 text-[9px]&quot;&gt;&lt;span class=&quot;font-black&quot;&gt;${e.panna} &lt;span class=&quot;text-slate-400&quot;&gt;${e.side}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;text-slate-500&quot;&gt;${e.row.date}&lt;/span&gt;&lt;/div&gt;`).join(&quot;&quot;):&quot;&lt;div class='text-[9px] text-slate-400'&gt;No hits found.&lt;/div&gt;&quot;}&lt;/div&gt;`;
  el.modal.classList.remove(&quot;hidden&quot;);
 }
 function setView(v){view=v;document.querySelectorAll(&quot;.tabBtn&quot;).forEach(b=&gt;b.classList.remove(&quot;tab-active&quot;));document.getElementById(v===&quot;TOP&quot;?&quot;topBtn&quot;:v===&quot;MID&quot;?&quot;midBtn&quot;:v===&quot;RECENT&quot;?&quot;recentBtn&quot;:&quot;allBtn&quot;)?.classList.add(&quot;tab-active&quot;);render()}
@@ -1064,7 +860,7 @@ refreshBtn.onclick=async()=&gt;{try{refreshBtn.disabled=true;el.status.textConte
 (async()=&gt;{try{await loadMaster();await loadMarkets();await loadRows();render()}catch(e){console.error(e);el.status.textContent=&quot;ERROR: &quot;+(e.message||e);el.insight.textContent=&quot;Could not load Firebase data.&quot;}})();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-2" title="Jodi 00–99" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;/html&gt;" style="display:none" title="Family Panna"></iframe><iframe class="page-frame" id="page-2" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -1074,67 +870,6 @@ refreshBtn.onclick=async()=&gt;{try{refreshBtn.disabled=true;el.status.textConte
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -1192,70 +927,70 @@ const firebaseConfig={
  appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
 };
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),jodiGrid=document.getElementById(&#x27;jodiGrid&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),digitGrid=document.getElementById('digitGrid'),statusEl=document.getElementById('status');
 let allRows=[], stats={}, top10=[], recent10=[];
 
-const digit=v=&gt;{ if(v===undefined||v===null||v===&#x27;&#x27;) return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
+const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
 const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);return o===null||c===null?null:`${o}${c}`;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
 function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
 
 async function load(){
- statusEl.textContent=&#x27;Loading Firebase data...&#x27;;
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);
- marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+ statusEl.textContent='Loading Firebase data...';
+ const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
+ marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
  const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});
+ markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
+ allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
  statusEl.textContent=`${allRows.length} raw records loaded`;
  calculate();
 }
 
 function calculate(){
- const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
- const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
- const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));
+ const selected=marketSelect.value||'ALL_MERGED';
+ const rows=sortRows(allRows.filter(r=&gt;selected==='ALL_MERGED'||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
+ const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,'0'));
  stats=Object.fromEntries(keys.map(k=&gt;[k,{occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
  rows.forEach((r,i)=&gt;{const j=jodiOf(r);stats[j].occ.push(i);stats[j].lastSeen=i;stats[j].count++;});
  keys.forEach(k=&gt;{const s=stats[k],o=s.occ,n=rows.length;s.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);});
  const arr=keys.map(j=&gt;({jodi:j,...stats[j]}));
  top10=arr.slice().sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||a.jodi.localeCompare(b.jodi)).slice(0,10);
  recent10=arr.slice().sort((a,b)=&gt;a.currentDelay-b.currentDelay||b.lastSeen-a.lastSeen||a.jodi.localeCompare(b.jodi)).slice(0,10);
- renderGrid(arr,&#x27;ALL&#x27;);
+ renderGrid(arr,'ALL');
  statusEl.textContent=`${rows.length} completed Jodi games • TOP 10 = highest delay • RECENT 10 = lowest delay`;
 }
 function badgeSet(){return {top:new Set(top10.map(x=&gt;x.jodi)),recent:new Set(recent10.map(x=&gt;x.jodi))};}
 function renderGrid(arr,mode){
  const bs=badgeSet();
  let list=arr;
- if(mode===&#x27;TOP&#x27;)list=top10;
- if(mode===&#x27;RECENT&#x27;)list=recent10;
- document.getElementById(&#x27;filterLabel&#x27;).textContent=mode;
- jodiGrid.innerHTML=&#x27;&#x27;;
+ if(mode==='TOP')list=top10;
+ if(mode==='RECENT')list=recent10;
+ document.getElementById('filterLabel').textContent=mode;
+ jodiGrid.innerHTML='';
  list.forEach(x=&gt;{
    const top=bs.top.has(x.jodi),recent=bs.recent.has(x.jodi);
-   const el=document.createElement(&#x27;button&#x27;);
-   el.className=`rounded-lg border p-2 text-center ${top?&#x27;border-orange-400 bg-orange-50&#x27;:recent?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;} hover:shadow-sm`;
+   const el=document.createElement('button');
+   el.className=`rounded-lg border p-2 text-center ${top?'border-orange-400 bg-orange-50':recent?'border-emerald-400 bg-emerald-50':'border-slate-200 bg-slate-50'} hover:shadow-sm`;
    el.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;`;
    el.title=`Jodi ${x.jodi} • Delay ${x.currentDelay} • Max ${x.maxDelay}`;
    jodiGrid.appendChild(el);
  });
 }
 function showDigit(d){
- const bs=badgeSet(),items=Array.from({length:10},(_,c)=&gt;`${d}${c}`),body=document.getElementById(&#x27;modalBody&#x27;);
- document.getElementById(&#x27;modalTitle&#x27;).textContent=`DIGIT ${d} • JODI ${d}0–${d}9`;
- body.innerHTML=&#x27;&#x27;;
- items.forEach(j=&gt;{const x=stats[j],top=bs.top.has(j),recent=bs.recent.has(j);const row=document.createElement(&#x27;div&#x27;);row.className=`flex items-center justify-between rounded-xl border p-2 ${top?&#x27;border-orange-300 bg-orange-50&#x27;:recent?&#x27;border-emerald-300 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;}`;row.innerHTML=`&lt;div&gt;&lt;span class=&quot;text-base font-black&quot;&gt;${j}&lt;/span&gt;${top?&#x27;&lt;span class=&quot;ml-1 text-[7px] font-black text-orange-700&quot;&gt;TOP&lt;/span&gt;&#x27;:&#x27;&#x27;}${recent?&#x27;&lt;span class=&quot;ml-1 text-[7px] font-black text-emerald-700&quot;&gt;RECENT&lt;/span&gt;&#x27;:&#x27;&#x27;}&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700&quot;&gt;Delay: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;Max Delay: ${x.maxDelay} • Hits: ${x.count}&lt;/div&gt;&lt;/div&gt;`;body.appendChild(row);});
- document.getElementById(&#x27;modal&#x27;).classList.remove(&#x27;hidden&#x27;);
+ const bs=badgeSet(),items=Array.from({length:10},(_,c)=&gt;`${d}${c}`),body=document.getElementById('modalBody');
+ document.getElementById('modalTitle').textContent=`DIGIT ${d} • JODI ${d}0–${d}9`;
+ body.innerHTML='';
+ items.forEach(j=&gt;{const x=stats[j],top=bs.top.has(j),recent=bs.recent.has(j);const row=document.createElement('div');row.className=`flex items-center justify-between rounded-xl border p-2 ${top?'border-orange-300 bg-orange-50':recent?'border-emerald-300 bg-emerald-50':'border-slate-200 bg-slate-50'}`;row.innerHTML=`&lt;div&gt;&lt;span class=&quot;text-base font-black&quot;&gt;${j}&lt;/span&gt;${top?'&lt;span class=&quot;ml-1 text-[7px] font-black text-orange-700&quot;&gt;TOP&lt;/span&gt;':''}${recent?'&lt;span class=&quot;ml-1 text-[7px] font-black text-emerald-700&quot;&gt;RECENT&lt;/span&gt;':''}&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700&quot;&gt;Delay: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;Max Delay: ${x.maxDelay} • Hits: ${x.count}&lt;/div&gt;&lt;/div&gt;`;body.appendChild(row);});
+ document.getElementById('modal').classList.remove('hidden');
 }
-function initDigits(){digitGrid.innerHTML=&#x27;&#x27;;for(let d=0;d&lt;=9;d++){const b=document.createElement(&#x27;button&#x27;);b.className=&#x27;py-2 rounded-xl bg-indigo-600 text-white font-black text-sm shadow-sm&#x27;;b.textContent=d;b.onclick=()=&gt;showDigit(d);digitGrid.appendChild(b);}}
-marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;renderGrid(top10,&#x27;TOP&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;renderGrid(recent10,&#x27;RECENT&#x27;);document.getElementById(&#x27;closeModal&#x27;).onclick=()=&gt;document.getElementById(&#x27;modal&#x27;).classList.add(&#x27;hidden&#x27;);document.getElementById(&#x27;modal&#x27;).addEventListener(&#x27;click&#x27;,e=&gt;{if(e.target.id===&#x27;modal&#x27;)e.currentTarget.classList.add(&#x27;hidden&#x27;);});
-initDigits();load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+function initDigits(){digitGrid.innerHTML='';for(let d=0;d&lt;=9;d++){const b=document.createElement('button');b.className='py-2 rounded-xl bg-indigo-600 text-white font-black text-sm shadow-sm';b.textContent=d;b.onclick=()=&gt;showDigit(d);digitGrid.appendChild(b);}}
+marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;renderGrid(top10,'TOP');document.getElementById('recentBtn').onclick=()=&gt;renderGrid(recent10,'RECENT');document.getElementById('closeModal').onclick=()=&gt;document.getElementById('modal').classList.add('hidden');document.getElementById('modal').addEventListener('click',e=&gt;{if(e.target.id==='modal')e.currentTarget.classList.add('hidden');});
+initDigits();load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe><iframe class="page-frame" id="page-3" title="Open Digit" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+" style="display:none" title="Jodi 00–99"></iframe><iframe class="page-frame" id="page-3" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -1265,67 +1000,6 @@ initDigits();load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.mes
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -1372,74 +1046,162 @@ const firebaseConfig={
  appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
 };
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),jodiGrid=document.getElementById(&#x27;jodiGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
 let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
 
-const digit=v=&gt;{ if(v===undefined||v===null||v===&#x27;&#x27;) return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
+const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
 const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return digit(r.openAnk);};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
 function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
 
 async function load(){
- statusEl.textContent=&#x27;Loading Firebase data...&#x27;;
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);
- marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+ statusEl.textContent='Loading Firebase data...';
+ const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
+ marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
  const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});
+ markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
+ allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
  statusEl.textContent=`${allRows.length} raw records loaded`;
  calculate();
 }
+
+let groupDelayState={top:0,mid:0,recent:0};
 
 function calculate(){
  const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
  const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
  analysisRowCount=rows.length;
- analysisRowCount=rows.length;
  const keys=Array.from({length:10},(_,i)=&gt;String(i));
- stats=Object.fromEntries(keys.map(k=&gt;[k,{occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
- rows.forEach((r,i)=&gt;{const j=jodiOf(r);stats[j].occ.push(i);stats[j].lastSeen=i;stats[j].count++;});
- keys.forEach(k=&gt;{const s=stats[k],o=s.occ,n=rows.length;s.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);});
- const arr=keys.map(j=&gt;({jodi:j,...stats[j]}));
- const delaySorted=arr.slice().sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||a.jodi.localeCompare(b.jodi));
-  top10=delaySorted.slice(0,3);
-  mid10=delaySorted.slice(3,7);
-  recent10=delaySorted.slice(-3).sort((a,b)=&gt;a.currentDelay-b.currentDelay||b.lastSeen-a.lastSeen||a.jodi.localeCompare(b.jodi));
+
+ function makeStats(history){
+   const n=history.length;
+   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
+   history.forEach((r,i)=&gt;{
+     const d=jodiOf(r);
+     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
+   });
+   keys.forEach(k=&gt;{
+     const s=a[k],o=s.occ;
+     s.currentDelay=o.length?n-1-o[o.length-1]:n;
+     let gaps=o.length?[o[0]]:[n];
+     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
+     if(o.length)gaps.push(n-1-o[o.length-1]);
+     s.maxDelay=Math.max(0,...gaps);
+   });
+   return a;
+ }
+
+ const currentStats=makeStats(rows);
+ stats=currentStats;
+
+ // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
+ function rankHistory(history){
+   const a=makeStats(history);
+   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
+     b.currentDelay-a.currentDelay||
+     b.maxDelay-a.maxDelay||
+     a.jodi.localeCompare(b.jodi)
+   );
+ }
+ function bucketDelay(list,historyLength){
+   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
+   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
+ }
+
+ let top=[],mid=[],recent=[];
+ let topDelay=0,midDelay=0,recentDelay=0;
+
+ if(rows.length===0){
+   const ranked=rankHistory(rows);
+   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
+ }else{
+   const previous=rows.slice(0,-1);
+   const rankedBefore=rankHistory(previous);
+   const pTop=rankedBefore.slice(0,3);
+   const pMid=rankedBefore.slice(3,7);
+   const pRecent=rankedBefore.slice(7,10);
+
+   topDelay=bucketDelay(pTop,previous.length);
+   midDelay=bucketDelay(pMid,previous.length);
+   recentDelay=bucketDelay(pRecent,previous.length);
+
+   const hit=jodiOf(rows[rows.length-1]);
+   const topHas=pTop.some(x=&gt;x.jodi===hit);
+   const midHas=pMid.some(x=&gt;x.jodi===hit);
+   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
+   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
+
+   if(topHas){
+     top=[...clean(pTop,hit)];
+     const fromMid=pMid[0];
+     const fromRecent=pRecent[0];
+     top.push(fromMid);
+     mid=[...pMid.slice(1)];
+     mid.push(fromRecent);
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     topDelay=0;
+     midDelay+=1;
+     recentDelay+=1;
+   }else if(midHas){
+     top=[...pTop];
+     mid=[...clean(pMid,hit),pRecent[0]];
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     midDelay=0;
+     topDelay+=1;
+     recentDelay+=1;
+   }else if(recentHas){
+     top=[...pTop];
+     mid=[...pMid];
+     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
+     recentDelay=0;
+     topDelay+=1;
+     midDelay+=1;
+   }else{
+     top=pTop;mid=pMid;recent=pRecent;
+     topDelay+=1;midDelay+=1;recentDelay+=1;
+   }
+ }
+
+ const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
+ top10=toCurrent(top);
+ mid10=toCurrent(mid);
+ recent10=toCurrent(recent);
+ groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
+
  renderGrid();
- statusEl.textContent=`${rows.length} records • Delay Count calculated from the latest occurrence • TOP 3 / MID 4 / RECENT 3`;
+ statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
 }
 
 function getGroupDelay(list){
- const lastSeen=list.reduce((mx,x)=&gt;Math.max(mx, Number.isFinite(x.lastSeen)?x.lastSeen:-1),-1);
- return lastSeen&gt;=0 ? Math.max(0, analysisRowCount-1-lastSeen) : analysisRowCount;
+ return groupDelayState.top;
 }
 function renderGroup(title,list,cls,id){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;);
- const box=document.createElement(&#x27;div&#x27;); box.id=id; box.className=&#x27;bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4&#x27;;
- const groupDelay=getGroupDelay(list);
+ const grid=document.getElementById('jodiGrid');
+ const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
+ const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
  box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement(&#x27;div&#x27;); row.className=&#x27;grid grid-cols-3 sm:grid-cols-4 gap-2&#x27;;
- list.forEach(x=&gt;{const el=document.createElement(&#x27;div&#x27;);el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
+ const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
+ list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
  box.appendChild(row);grid.appendChild(box);
 }
 function renderGrid(){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;); grid.innerHTML=&#x27;&#x27;;
- const topDelay=getGroupDelay(top10), midDelay=getGroupDelay(mid10), recentDelay=getGroupDelay(recent10);
- document.getElementById(&#x27;topBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;midBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;recentBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup(&#x27;🔥 TOP 3&#x27;,top10,&#x27;border-orange-300 bg-orange-50&#x27;,&#x27;topGroup&#x27;);
- renderGroup(&#x27;📊 MID 4&#x27;,mid10,&#x27;border-indigo-300 bg-indigo-50&#x27;,&#x27;midGroup&#x27;);
- renderGroup(&#x27;⚡ RECENT 3&#x27;,recent10,&#x27;border-emerald-300 bg-emerald-50&#x27;,&#x27;recentGroup&#x27;);
+ const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
+ const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
+ document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
+ document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
+ document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
+ renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
+ renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
+ renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
 }
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:&#x27;smooth&#x27;,block:&#x27;start&#x27;}); }
-marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;topGroup&#x27;);document.getElementById(&#x27;midBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;midGroup&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;recentGroup&#x27;);
-load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
+load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe><iframe class="page-frame" id="page-4" title="Total Digit" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+" style="display:none" title="Open Digit"></iframe><iframe class="page-frame" id="page-4" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -1449,67 +1211,6 @@ load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);cons
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -1556,80 +1257,168 @@ const firebaseConfig={
  appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
 };
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),jodiGrid=document.getElementById(&#x27;jodiGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
 let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
 
-const digit=v=&gt;{ if(v===undefined||v===null||v===&#x27;&#x27;) return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
-const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return ((digit(r.openAnk)+digit(r.closeAnk))%10);};
+const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
+const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (o+c)%10;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
 function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
 
 async function load(){
- statusEl.textContent=&#x27;Loading Firebase data...&#x27;;
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);
- marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+ statusEl.textContent='Loading Firebase data...';
+ const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
+ marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
  const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});
+ markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
+ allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
  statusEl.textContent=`${allRows.length} raw records loaded`;
  calculate();
 }
+
+let groupDelayState={top:0,mid:0,recent:0};
 
 function calculate(){
  const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
  const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
  analysisRowCount=rows.length;
- analysisRowCount=rows.length;
  const keys=Array.from({length:10},(_,i)=&gt;String(i));
- stats=Object.fromEntries(keys.map(k=&gt;[k,{occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
- rows.forEach((r,i)=&gt;{const j=jodiOf(r);stats[j].occ.push(i);stats[j].lastSeen=i;stats[j].count++;});
- keys.forEach(k=&gt;{const s=stats[k],o=s.occ,n=rows.length;s.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);});
- const arr=keys.map(j=&gt;({jodi:j,...stats[j]}));
- const delaySorted=arr.slice().sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||a.jodi.localeCompare(b.jodi));
-  top10=delaySorted.slice(0,3);
-  mid10=delaySorted.slice(3,7);
-  recent10=delaySorted.slice(-3).sort((a,b)=&gt;a.currentDelay-b.currentDelay||b.lastSeen-a.lastSeen||a.jodi.localeCompare(b.jodi));
+
+ function makeStats(history){
+   const n=history.length;
+   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
+   history.forEach((r,i)=&gt;{
+     const d=jodiOf(r);
+     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
+   });
+   keys.forEach(k=&gt;{
+     const s=a[k],o=s.occ;
+     s.currentDelay=o.length?n-1-o[o.length-1]:n;
+     let gaps=o.length?[o[0]]:[n];
+     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
+     if(o.length)gaps.push(n-1-o[o.length-1]);
+     s.maxDelay=Math.max(0,...gaps);
+   });
+   return a;
+ }
+
+ const currentStats=makeStats(rows);
+ stats=currentStats;
+
+ // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
+ function rankHistory(history){
+   const a=makeStats(history);
+   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
+     b.currentDelay-a.currentDelay||
+     b.maxDelay-a.maxDelay||
+     a.jodi.localeCompare(b.jodi)
+   );
+ }
+ function bucketDelay(list,historyLength){
+   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
+   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
+ }
+
+ let top=[],mid=[],recent=[];
+ let topDelay=0,midDelay=0,recentDelay=0;
+
+ if(rows.length===0){
+   const ranked=rankHistory(rows);
+   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
+ }else{
+   const previous=rows.slice(0,-1);
+   const rankedBefore=rankHistory(previous);
+   const pTop=rankedBefore.slice(0,3);
+   const pMid=rankedBefore.slice(3,7);
+   const pRecent=rankedBefore.slice(7,10);
+
+   topDelay=bucketDelay(pTop,previous.length);
+   midDelay=bucketDelay(pMid,previous.length);
+   recentDelay=bucketDelay(pRecent,previous.length);
+
+   const hit=jodiOf(rows[rows.length-1]);
+   const topHas=pTop.some(x=&gt;x.jodi===hit);
+   const midHas=pMid.some(x=&gt;x.jodi===hit);
+   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
+   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
+
+   if(topHas){
+     top=[...clean(pTop,hit)];
+     const fromMid=pMid[0];
+     const fromRecent=pRecent[0];
+     top.push(fromMid);
+     mid=[...pMid.slice(1)];
+     mid.push(fromRecent);
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     topDelay=0;
+     midDelay+=1;
+     recentDelay+=1;
+   }else if(midHas){
+     top=[...pTop];
+     mid=[...clean(pMid,hit),pRecent[0]];
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     midDelay=0;
+     topDelay+=1;
+     recentDelay+=1;
+   }else if(recentHas){
+     top=[...pTop];
+     mid=[...pMid];
+     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
+     recentDelay=0;
+     topDelay+=1;
+     midDelay+=1;
+   }else{
+     top=pTop;mid=pMid;recent=pRecent;
+     topDelay+=1;midDelay+=1;recentDelay+=1;
+   }
+ }
+
+ const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
+ top10=toCurrent(top);
+ mid10=toCurrent(mid);
+ recent10=toCurrent(recent);
+ groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
+
  renderGrid();
- statusEl.textContent=`${rows.length} records • Delay Count calculated from the latest occurrence • TOP 3 / MID 4 / RECENT 3`;
+ statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
 }
 
 function getGroupDelay(list){
- const lastSeen=list.reduce((mx,x)=&gt;Math.max(mx, Number.isFinite(x.lastSeen)?x.lastSeen:-1),-1);
- return lastSeen&gt;=0 ? Math.max(0, analysisRowCount-1-lastSeen) : analysisRowCount;
+ return groupDelayState.top;
 }
 function renderGroup(title,list,cls,id){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;);
- const box=document.createElement(&#x27;div&#x27;); box.id=id; box.className=&#x27;bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4&#x27;;
- const groupDelay=getGroupDelay(list);
+ const grid=document.getElementById('jodiGrid');
+ const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
+ const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
  box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement(&#x27;div&#x27;); row.className=&#x27;grid grid-cols-3 sm:grid-cols-4 gap-2&#x27;;
- list.forEach(x=&gt;{const el=document.createElement(&#x27;div&#x27;);el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
+ const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
+ list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
  box.appendChild(row);grid.appendChild(box);
 }
 function renderGrid(){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;); grid.innerHTML=&#x27;&#x27;;
- const topDelay=getGroupDelay(top10), midDelay=getGroupDelay(mid10), recentDelay=getGroupDelay(recent10);
- document.getElementById(&#x27;topBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;midBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;recentBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup(&#x27;🔥 TOP 3&#x27;,top10,&#x27;border-orange-300 bg-orange-50&#x27;,&#x27;topGroup&#x27;);
- renderGroup(&#x27;📊 MID 4&#x27;,mid10,&#x27;border-indigo-300 bg-indigo-50&#x27;,&#x27;midGroup&#x27;);
- renderGroup(&#x27;⚡ RECENT 3&#x27;,recent10,&#x27;border-emerald-300 bg-emerald-50&#x27;,&#x27;recentGroup&#x27;);
+ const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
+ const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
+ document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
+ document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
+ document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
+ renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
+ renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
+ renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
 }
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:&#x27;smooth&#x27;,block:&#x27;start&#x27;}); }
-marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;topGroup&#x27;);document.getElementById(&#x27;midBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;midGroup&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;recentGroup&#x27;);
-load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
+load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe><iframe class="page-frame" id="page-5" title="Odd / Even" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
+" style="display:none" title="Total Digit"></iframe><iframe class="page-frame" id="page-5" srcdoc='&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
 &lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;
 &lt;title&gt;Odd Even Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
 &lt;style&gt;
 *{box-sizing:border-box}
 body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
@@ -1639,174 +1428,107 @@ body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
 .badge{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}
 .modal{background:rgba(15,23,42,.62)}
 &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="bg-slate-100 min-h-screen text-slate-800 pb-10"&gt;
 
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
-&lt;style id=&quot;oddeven-reference-ui&quot;&gt;
-body{background:#f1f5f9!important;color:#1e293b!important}
-.mode{border-radius:12px!important;min-height:46px!important}
-.mode.active{background:#0f172a!important;color:#fff!important;border-color:#0f172a!important}
-&lt;/style&gt;&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;
-
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-
-&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-    &lt;div&gt;
-      &lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;ODD / EVEN&lt;/div&gt;
-      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;PARITY BASED ANALYSIS&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
+&lt;header class="bg-white sticky top-0 z-20 border-b border-slate-200"&gt;
+ &lt;div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between"&gt;
+  &lt;div&gt;
+   &lt;div class="text-lg font-black tracking-tight"&gt;ODD / EVEN&lt;/div&gt;
+   &lt;div class="text-[9px] text-slate-400 font-bold"&gt;PARITY BASED ANALYSIS&lt;/div&gt;
   &lt;/div&gt;
-  &lt;select id=&quot;market&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;/select&gt;
-  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-&lt;/div&gt;
+  &lt;div id="status" class="text-[9px] font-black text-slate-400"&gt;Loading...&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/header&gt;
 
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;text-sm font-black mb-2&quot;&gt;ANALYSIS MODE&lt;/div&gt;
-  &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
-    &lt;button class=&quot;btn mode active rounded-xl bg-slate-900 text-white p-3 text-sm font-black&quot; data-mode=&quot;JODI&quot;&gt;JODI&lt;/button&gt;
-    &lt;button class=&quot;btn mode rounded-xl bg-white border border-slate-200 p-3 text-sm font-black&quot; data-mode=&quot;OPEN&quot;&gt;OPEN&lt;/button&gt;
-    &lt;button class=&quot;btn mode rounded-xl bg-white border border-slate-200 p-3 text-sm font-black&quot; data-mode=&quot;CLOSE&quot;&gt;CLOSE&lt;/button&gt;
+&lt;main class="max-w-5xl mx-auto p-4 space-y-4"&gt;
+
+ &lt;section class="card p-4"&gt;
+  &lt;div class="flex flex-wrap gap-2 items-center"&gt;
+   &lt;select id="market" class="btn min-w-[160px]"&gt;&lt;/select&gt;
+   &lt;button class="btn mode active" data-mode="JODI"&gt;JODI&lt;/button&gt;
+   &lt;button class="btn mode" data-mode="OPEN"&gt;OPEN&lt;/button&gt;
+   &lt;button class="btn mode" data-mode="CLOSE"&gt;CLOSE&lt;/button&gt;
   &lt;/div&gt;
-&lt;/section&gt;
+ &lt;/section&gt;
 
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;
-    &lt;div&gt;
-      &lt;div class=&quot;font-black text-sm&quot;&gt;PARITY GROUPS&lt;/div&gt;
-      &lt;div id=&quot;subtitle&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;games&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;&lt;/div&gt;
+ &lt;section class="card p-4"&gt;
+  &lt;div class="flex items-center justify-between mb-3"&gt;
+   &lt;div&gt;
+    &lt;div class="font-black text-sm"&gt;Parity Groups&lt;/div&gt;
+    &lt;div id="subtitle" class="text-[9px] text-slate-400 font-bold mt-1"&gt;&lt;/div&gt;
+   &lt;/div&gt;
+   &lt;div id="games" class="text-[9px] font-black text-slate-400"&gt;&lt;/div&gt;
   &lt;/div&gt;
-  &lt;div id=&quot;grid&quot; class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-3&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
+  &lt;div id="grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"&gt;&lt;/div&gt;
+ &lt;/section&gt;
 
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;font-black text-sm&quot;&gt;ODD / EVEN INTELLIGENCE&lt;/div&gt;
-  &lt;div id=&quot;insight&quot; class=&quot;text-[10px] leading-5 text-slate-600 mt-2&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
+ &lt;section class="card p-4"&gt;
+  &lt;div class="font-black text-sm"&gt;Odd / Even Intelligence&lt;/div&gt;
+  &lt;div id="insight" class="text-[10px] leading-5 text-slate-600 mt-2"&gt;&lt;/div&gt;
+ &lt;/section&gt;
 
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;font-black text-sm&quot;&gt;RECENT PARITY SEQUENCE&lt;/div&gt;
-  &lt;div id=&quot;sequence&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
+ &lt;section class="card p-4"&gt;
+  &lt;div class="font-black text-sm"&gt;Recent Parity Sequence&lt;/div&gt;
+  &lt;div id="sequence" class="flex flex-wrap gap-1.5 mt-3"&gt;&lt;/div&gt;
+ &lt;/section&gt;
 
 &lt;/main&gt;
 
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 modal items-end sm:items-center justify-center p-3&quot;&gt;
- &lt;div class=&quot;bg-white w-full max-w-lg rounded-3xl p-5 max-h-[88vh] overflow-auto&quot;&gt;
-  &lt;div class=&quot;flex justify-between items-start&quot;&gt;
-   &lt;div&gt;&lt;div id=&quot;mTitle&quot; class=&quot;text-xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;mSub&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
-   &lt;button id=&quot;close&quot; class=&quot;btn&quot;&gt;CLOSE&lt;/button&gt;
+&lt;div id="modal" class="hidden fixed inset-0 z-50 modal items-end sm:items-center justify-center p-3"&gt;
+ &lt;div class="bg-white w-full max-w-lg rounded-3xl p-5 max-h-[88vh] overflow-auto"&gt;
+  &lt;div class="flex justify-between items-start"&gt;
+   &lt;div&gt;&lt;div id="mTitle" class="text-xl font-black"&gt;—&lt;/div&gt;&lt;div id="mSub" class="text-[9px] text-slate-400 font-bold mt-1"&gt;—&lt;/div&gt;&lt;/div&gt;
+   &lt;button id="close" class="btn"&gt;CLOSE&lt;/button&gt;
   &lt;/div&gt;
-  &lt;div id=&quot;mBody&quot; class=&quot;mt-4&quot;&gt;&lt;/div&gt;
+  &lt;div id="mBody" class="mt-4"&gt;&lt;/div&gt;
  &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;script type=&quot;module&quot;&gt;
-import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js&quot;;
-import {getFirestore,collection,getDocs} from &quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js&quot;;
+&lt;script type="module"&gt;
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig={
- apiKey:&quot;AIzaSyC7vLQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
- authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,
- projectId:&quot;m-record-f9c51&quot;,
- storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,
- messagingSenderId:&quot;479303152172&quot;,
- appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
+ apiKey:"AIzaSyC7vLQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ",
+ authDomain:"m-record-f9c51.firebaseapp.com",
+ projectId:"m-record-f9c51",
+ storageBucket:"m-record-f9c51.firebasestorage.app",
+ messagingSenderId:"479303152172",
+ appId:"1:479303152172:web:3cc53dcecc9e8ce1ebd789"
 };
 const app=initializeApp(firebaseConfig),db=getFirestore(app);
 const $=id=&gt;document.getElementById(id);
 
-let records=[],mode=&quot;JODI&quot;;
+let records=[],mode="JODI";
 
 const JODI=[
- {key:&quot;OO&quot;,label:&quot;OO&quot;,name:&quot;ODD → ODD&quot;,desc:&quot;Open Odd • Close Odd&quot;},
- {key:&quot;OE&quot;,label:&quot;OE&quot;,name:&quot;ODD → EVEN&quot;,desc:&quot;Open Odd • Close Even&quot;},
- {key:&quot;EO&quot;,label:&quot;EO&quot;,name:&quot;EVEN → ODD&quot;,desc:&quot;Open Even • Close Odd&quot;},
- {key:&quot;EE&quot;,label:&quot;EE&quot;,name:&quot;EVEN → EVEN&quot;,desc:&quot;Open Even • Close Even&quot;}
+ {key:"OO",label:"OO",name:"ODD → ODD",desc:"Open Odd • Close Odd"},
+ {key:"OE",label:"OE",name:"ODD → EVEN",desc:"Open Odd • Close Even"},
+ {key:"EO",label:"EO",name:"EVEN → ODD",desc:"Open Even • Close Odd"},
+ {key:"EE",label:"EE",name:"EVEN → EVEN",desc:"Open Even • Close Even"}
 ];
 const SINGLE=[
- {key:&quot;O&quot;,label:&quot;ODD&quot;,name:&quot;ODD&quot;,desc:&quot;Odd digit&quot;},
- {key:&quot;E&quot;,label:&quot;EVEN&quot;,name:&quot;EVEN&quot;,desc:&quot;Even digit&quot;}
+ {key:"O",label:"ODD",name:"ODD",desc:"Odd digit"},
+ {key:"E",label:"EVEN",name:"EVEN",desc:"Even digit"}
 ];
 
 function digitOf(v){
- if(v===undefined||v===null||v===&quot;&quot;)return null;
+ if(v===undefined||v===null||v==="")return null;
  const s=String(v).trim();
  const m=s.match(/\d/g);
  return m&amp;&amp;m.length?Number(m[m.length-1]):null;
 }
-function parity(v){const d=digitOf(v);return d===null?null:(d%2?&quot;O&quot;:&quot;E&quot;);}
+function parity(v){const d=digitOf(v);return d===null?null:(d%2?"O":"E");}
 function openDigit(r){return digitOf(r.openAnk);}
 function closeDigit(r){return digitOf(r.closeAnk);}
 function pattern(r){
  const o=parity(r.openAnk),c=parity(r.closeAnk);
- if(mode===&quot;OPEN&quot;)return o;
- if(mode===&quot;CLOSE&quot;)return c;
+ if(mode==="OPEN")return o;
+ if(mode==="CLOSE")return c;
  return o&amp;&amp;c?o+c:null;
 }
-function dateKey(r){return String(r.date||&quot;&quot;);}
+function dateKey(r){return String(r.date||"");}
 function timeMinutes(v){
  if(v===undefined||v===null)return 1439;
  const m=String(v).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);
@@ -1814,16 +1536,16 @@ function timeMinutes(v){
  return Number(m[1])*60+Number(m[2]);
 }
 function rowsForMarket(){
- const selected=$(&quot;market&quot;).value||&quot;ALL_MERGED&quot;;
+ const selected=$("market").value||"ALL_MERGED";
  return records.filter(r=&gt;{
    if(!r.date||!r.marketName)return false;
    if(openDigit(r)===null||closeDigit(r)===null)return false;
-   return selected===&quot;ALL_MERGED&quot;||String(r.marketName)===selected;
+   return selected==="ALL_MERGED"||String(r.marketName)===selected;
  }).sort((a,b)=&gt;dateKey(a).localeCompare(dateKey(b))||
    timeMinutes(a.openTime)-timeMinutes(b.openTime));
 }
 function calculate(){
- const rows=rowsForMarket(),defs=mode===&quot;JODI&quot;?JODI:SINGLE,n=rows.length;
+ const rows=rowsForMarket(),defs=mode==="JODI"?JODI:SINGLE,n=rows.length;
  const stats=Object.fromEntries(defs.map(d=&gt;[d.key,{
    ...d,occ:[],hits:0,last:-1,currentDelay:n,maxDelay:0,
    recent10:0,recent20:0,rate:0
@@ -1848,98 +1570,94 @@ function calculate(){
  return {rows,stats,ranked};
 }
 function card(s){
- return `&lt;button data-key=&quot;${s.key}&quot; class=&quot;text-left bg-white rounded-xl border border-slate-200 p-3 shadow-sm hover:shadow-md transition&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between&quot;&gt;
-   &lt;div class=&quot;flex items-center gap-2&quot;&gt;
-    &lt;span class=&quot;inline-flex items-center justify-center min-w-10 h-8 px-2 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-black&quot;&gt;${s.label}&lt;/span&gt;
-    &lt;div&gt;&lt;div class=&quot;text-[11px] font-black text-slate-700&quot;&gt;${s.name}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;${s.desc}&lt;/div&gt;&lt;/div&gt;
+ return `&lt;button data-key="${s.key}" class="text-left bg-white rounded-xl border border-slate-200 p-3 shadow-sm hover:shadow-md transition"&gt;
+  &lt;div class="flex items-center justify-between"&gt;
+   &lt;div class="flex items-center gap-2"&gt;
+    &lt;span class="inline-flex items-center justify-center min-w-10 h-8 px-2 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-black"&gt;${s.label}&lt;/span&gt;
+    &lt;div&gt;&lt;div class="text-[11px] font-black text-slate-700"&gt;${s.name}&lt;/div&gt;&lt;div class="text-[8px] font-bold text-slate-400"&gt;${s.desc}&lt;/div&gt;&lt;/div&gt;
    &lt;/div&gt;
-   &lt;span class=&quot;text-[8px] font-black text-slate-400&quot;&gt;${s.hits} HITS&lt;/span&gt;
+   &lt;span class="text-[8px] font-black text-slate-400"&gt;${s.hits} HITS&lt;/span&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;grid grid-cols-4 gap-2 mt-3&quot;&gt;
-   &lt;div&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;DELAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-orange-600&quot;&gt;${s.currentDelay}&lt;/div&gt;&lt;/div&gt;
-   &lt;div&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;MAX&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-slate-700&quot;&gt;${s.maxDelay}&lt;/div&gt;&lt;/div&gt;
-   &lt;div&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;10 GAMES&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-blue-600&quot;&gt;${s.recent10}&lt;/div&gt;&lt;/div&gt;
-   &lt;div&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;RATE&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-emerald-600&quot;&gt;${s.rate.toFixed(1)}%&lt;/div&gt;&lt;/div&gt;
+  &lt;div class="grid grid-cols-4 gap-2 mt-3"&gt;
+   &lt;div&gt;&lt;div class="text-[7px] font-black text-slate-400"&gt;DELAY&lt;/div&gt;&lt;div class="text-lg font-black text-orange-600"&gt;${s.currentDelay}&lt;/div&gt;&lt;/div&gt;
+   &lt;div&gt;&lt;div class="text-[7px] font-black text-slate-400"&gt;MAX&lt;/div&gt;&lt;div class="text-lg font-black text-slate-700"&gt;${s.maxDelay}&lt;/div&gt;&lt;/div&gt;
+   &lt;div&gt;&lt;div class="text-[7px] font-black text-slate-400"&gt;10 GAMES&lt;/div&gt;&lt;div class="text-lg font-black text-blue-600"&gt;${s.recent10}&lt;/div&gt;&lt;/div&gt;
+   &lt;div&gt;&lt;div class="text-[7px] font-black text-slate-400"&gt;RATE&lt;/div&gt;&lt;div class="text-lg font-black text-emerald-600"&gt;${s.rate.toFixed(1)}%&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
  &lt;/button&gt;`;
 }
 function render(){
  const c=calculate();
- $(&quot;subtitle&quot;).textContent=`${mode} parity • complete Open + Close records • historical delay analysis`;
- $(&quot;games&quot;).textContent=`${c.rows.length} GAMES`;
- $(&quot;grid&quot;).innerHTML=c.ranked.map(card).join(&quot;&quot;);
- $(&quot;grid&quot;).querySelectorAll(&quot;[data-key]&quot;).forEach(b=&gt;b.onclick=()=&gt;detail(b.dataset.key,c));
+ $("subtitle").textContent=`${mode} parity • complete Open + Close records • historical delay analysis`;
+ $("games").textContent=`${c.rows.length} GAMES`;
+ $("grid").innerHTML=c.ranked.map(card).join("");
+ $("grid").querySelectorAll("[data-key]").forEach(b=&gt;b.onclick=()=&gt;detail(b.dataset.key,c));
 
  const seq=c.rows.slice(-30);
- $(&quot;sequence&quot;).innerHTML=seq.map(r=&gt;{
-   const k=pattern(r),cls=k.includes(&quot;O&quot;)?&quot;bg-amber-50 text-amber-700 border-amber-200&quot;:&quot;bg-blue-50 text-blue-700 border-blue-200&quot;;
-   return `&lt;span class=&quot;badge border ${cls}&quot;&gt;${k}&lt;/span&gt;`;
- }).join(&quot;&quot;);
+ $("sequence").innerHTML=seq.map(r=&gt;{
+   const k=pattern(r),cls=k.includes("O")?"bg-amber-50 text-amber-700 border-amber-200":"bg-blue-50 text-blue-700 border-blue-200";
+   return `&lt;span class="badge border ${cls}"&gt;${k}&lt;/span&gt;`;
+ }).join("");
 
  const max=c.ranked[0],min=[...c.ranked].sort((a,b)=&gt;a.currentDelay-b.currentDelay)[0];
- $(&quot;insight&quot;).innerHTML=`&lt;b&gt;Analysis method:&lt;/b&gt; Odd/Even is treated as a separate pattern layer over the actual Jodi. 
+ $("insight").innerHTML=`&lt;b&gt;Analysis method:&lt;/b&gt; Odd/Even is treated as a separate pattern layer over the actual Jodi. 
  In JODI mode every completed result becomes one of &lt;b&gt;OO / OE / EO / EE&lt;/b&gt;.
  &lt;b&gt;Current Delay&lt;/b&gt; = number of completed games since the last occurrence; latest occurrence = &lt;b&gt;0&lt;/b&gt;.
  &lt;b&gt;Max Delay&lt;/b&gt; = largest historical gap, including the present unfinished gap.
  &lt;b&gt;Rate&lt;/b&gt; = historical hit percentage.
- &lt;br&gt;&lt;br&gt;&lt;b&gt;Highest current delay:&lt;/b&gt; ${max?max.label+&quot; = &quot;+max.currentDelay:&quot;—&quot;} 
- &amp;nbsp; • &amp;nbsp; &lt;b&gt;Lowest:&lt;/b&gt; ${min?min.label+&quot; = &quot;+min.currentDelay:&quot;—&quot;}
- &lt;br&gt;&lt;br&gt;&lt;span class=&quot;text-slate-400&quot;&gt;Odd/Even should be used as a supporting statistical layer, not as a guarantee of the next result.&lt;/span&gt;`;
- $(&quot;status&quot;).textContent=`${c.rows.length} records • ${$(&quot;market&quot;).value===&quot;ALL_MERGED&quot;?&quot;ALL MARKETS&quot;:$(&quot;market&quot;).value}`;
+ &lt;br&gt;&lt;br&gt;&lt;b&gt;Highest current delay:&lt;/b&gt; ${max?max.label+" = "+max.currentDelay:"—"} 
+ &amp;nbsp; • &amp;nbsp; &lt;b&gt;Lowest:&lt;/b&gt; ${min?min.label+" = "+min.currentDelay:"—"}
+ &lt;br&gt;&lt;br&gt;&lt;span class="text-slate-400"&gt;Odd/Even should be used as a supporting statistical layer, not as a guarantee of the next result.&lt;/span&gt;`;
+ $("status").textContent=`${c.rows.length} records • ${$("market").value==="ALL_MERGED"?"ALL MARKETS":$("market").value}`;
 }
 function detail(key,c){
  const s=c.stats[key];if(!s)return;
  const hitRows=s.occ.slice().reverse().slice(0,20).map(i=&gt;c.rows[i]);
  const latest=s.last&gt;=0?c.rows[s.last]:null;
- $(&quot;mTitle&quot;).textContent=`${s.label} • ${s.name}`;
- $(&quot;mSub&quot;).textContent=s.desc;
- $(&quot;mBody&quot;).innerHTML=`
- &lt;div class=&quot;grid grid-cols-2 gap-2&quot;&gt;
-  &lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;CURRENT DELAY&lt;/div&gt;&lt;div class=&quot;text-2xl font-black text-orange-600&quot;&gt;${s.currentDelay}&lt;/div&gt;&lt;/div&gt;
-  &lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;MAX DELAY&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${s.maxDelay}&lt;/div&gt;&lt;/div&gt;
-  &lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;TOTAL HITS&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;${s.hits}&lt;/div&gt;&lt;/div&gt;
-  &lt;div class=&quot;bg-slate-50 rounded-xl p-3&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;HIT RATE&lt;/div&gt;&lt;div class=&quot;text-2xl font-black text-emerald-600&quot;&gt;${s.rate.toFixed(1)}%&lt;/div&gt;&lt;/div&gt;
+ $("mTitle").textContent=`${s.label} • ${s.name}`;
+ $("mSub").textContent=s.desc;
+ $("mBody").innerHTML=`
+ &lt;div class="grid grid-cols-2 gap-2"&gt;
+  &lt;div class="bg-slate-50 rounded-xl p-3"&gt;&lt;div class="text-[8px] font-black text-slate-400"&gt;CURRENT DELAY&lt;/div&gt;&lt;div class="text-2xl font-black text-orange-600"&gt;${s.currentDelay}&lt;/div&gt;&lt;/div&gt;
+  &lt;div class="bg-slate-50 rounded-xl p-3"&gt;&lt;div class="text-[8px] font-black text-slate-400"&gt;MAX DELAY&lt;/div&gt;&lt;div class="text-2xl font-black"&gt;${s.maxDelay}&lt;/div&gt;&lt;/div&gt;
+  &lt;div class="bg-slate-50 rounded-xl p-3"&gt;&lt;div class="text-[8px] font-black text-slate-400"&gt;TOTAL HITS&lt;/div&gt;&lt;div class="text-2xl font-black"&gt;${s.hits}&lt;/div&gt;&lt;/div&gt;
+  &lt;div class="bg-slate-50 rounded-xl p-3"&gt;&lt;div class="text-[8px] font-black text-slate-400"&gt;HIT RATE&lt;/div&gt;&lt;div class="text-2xl font-black text-emerald-600"&gt;${s.rate.toFixed(1)}%&lt;/div&gt;&lt;/div&gt;
  &lt;/div&gt;
- &lt;div class=&quot;mt-4 text-[9px] font-black text-slate-400&quot;&gt;LATEST HIT&lt;/div&gt;
- &lt;div class=&quot;mt-1 bg-indigo-50 rounded-xl p-3 text-[10px] font-bold text-indigo-800&quot;&gt;${latest?`${latest.date} • ${latest.marketName} • Open ${openDigit(latest)} • Close ${closeDigit(latest)}`:&quot;No historical hit&quot;}&lt;/div&gt;
- &lt;div class=&quot;mt-4 text-[9px] font-black text-slate-400&quot;&gt;LAST 20 HITS&lt;/div&gt;
- &lt;div class=&quot;mt-2 space-y-1&quot;&gt;${hitRows.map(r=&gt;`&lt;div class=&quot;flex items-center justify-between bg-slate-50 rounded-lg px-2 py-1.5 text-[9px]&quot;&gt;&lt;span&gt;${r.date}&lt;/span&gt;&lt;b&gt;${r.marketName}&lt;/b&gt;&lt;span&gt;${openDigit(r)}-${closeDigit(r)}&lt;/span&gt;&lt;/div&gt;`).join(&quot;&quot;)||`&lt;div class=&quot;text-[10px] text-slate-400&quot;&gt;No hits found.&lt;/div&gt;`}&lt;/div&gt;`;
- $(&quot;modal&quot;).classList.remove(&quot;hidden&quot;);$(&quot;modal&quot;).classList.add(&quot;flex&quot;);
+ &lt;div class="mt-4 text-[9px] font-black text-slate-400"&gt;LATEST HIT&lt;/div&gt;
+ &lt;div class="mt-1 bg-indigo-50 rounded-xl p-3 text-[10px] font-bold text-indigo-800"&gt;${latest?`${latest.date} • ${latest.marketName} • Open ${openDigit(latest)} • Close ${closeDigit(latest)}`:"No historical hit"}&lt;/div&gt;
+ &lt;div class="mt-4 text-[9px] font-black text-slate-400"&gt;LAST 20 HITS&lt;/div&gt;
+ &lt;div class="mt-2 space-y-1"&gt;${hitRows.map(r=&gt;`&lt;div class="flex items-center justify-between bg-slate-50 rounded-lg px-2 py-1.5 text-[9px]"&gt;&lt;span&gt;${r.date}&lt;/span&gt;&lt;b&gt;${r.marketName}&lt;/b&gt;&lt;span&gt;${openDigit(r)}-${closeDigit(r)}&lt;/span&gt;&lt;/div&gt;`).join("")||`&lt;div class="text-[10px] text-slate-400"&gt;No hits found.&lt;/div&gt;`}&lt;/div&gt;`;
+ $("modal").classList.remove("hidden");$("modal").classList.add("flex");
 }
-$(&quot;close&quot;).onclick=()=&gt;{$(&quot;modal&quot;).classList.add(&quot;hidden&quot;);$(&quot;modal&quot;).classList.remove(&quot;flex&quot;)};
-$(&quot;modal&quot;).onclick=e=&gt;{if(e.target===$(&quot;modal&quot;))$(&quot;close&quot;).click()};
-document.querySelectorAll(&quot;.mode&quot;).forEach(b=&gt;b.onclick=()=&gt;{
+$("close").onclick=()=&gt;{$("modal").classList.add("hidden");$("modal").classList.remove("flex")};
+$("modal").onclick=e=&gt;{if(e.target===$("modal"))$("close").click()};
+document.querySelectorAll(".mode").forEach(b=&gt;b.onclick=()=&gt;{
  mode=b.dataset.mode;
- document.querySelectorAll(&quot;.mode&quot;).forEach(x=&gt;x.classList.toggle(&quot;active&quot;,x===b));
+ document.querySelectorAll(".mode").forEach(x=&gt;x.classList.toggle("active",x===b));
  render();
 });
-$(&quot;market&quot;).onchange=render;
-$(&quot;refreshBtn&quot;).onclick=load;
+$("market").onchange=render;
 
 async function load(){
  try{
-  const snap=await getDocs(collection(db,&quot;matka_records&quot;));
+  const snap=await getDocs(collection(db,"matka_records"));
   records=snap.docs.map(d=&gt;({id:d.id,...d.data()}));
-  const names=[...new Set(records.map(r=&gt;String(r.marketName||&quot;&quot;)).filter(Boolean))];
-  const timeMin=(v)=&gt;{const m=String(v||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-  const marketTimes={};
-  records.forEach(r=&gt;{if(r.marketName &amp;&amp; r.openTime &amp;&amp; marketTimes[r.marketName]===undefined) marketTimes[r.marketName]=r.openTime;});
-  names.sort((a,b)=&gt;timeMin(marketTimes[a])-timeMin(marketTimes[b])||a.localeCompare(b));
-  $(&quot;market&quot;).innerHTML=`&lt;option value=&quot;ALL_MERGED&quot;&gt;All Markets&lt;/option&gt;`+
-    names.map(n=&gt;`&lt;option value=&quot;${n.replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${n}&lt;/option&gt;`).join(&quot;&quot;);
-  if(!records.length)throw new Error(&quot;No records found in matka_records.&quot;);
+  const names=[...new Set(records.map(r=&gt;String(r.marketName||"")).filter(Boolean))];
+  names.sort((a,b)=&gt;a.localeCompare(b));
+  $("market").innerHTML=`&lt;option value="ALL_MERGED"&gt;All Markets&lt;/option&gt;`+
+    names.map(n=&gt;`&lt;option value="${n.replace(/"/g,"&amp;quot;")}"&gt;${n}&lt;/option&gt;`).join("");
+  if(!records.length)throw new Error("No records found in matka_records.");
   render();
  }catch(e){
   console.error(e);
-  $(&quot;status&quot;).textContent=&quot;DATA ERROR&quot;;
-  $(&quot;grid&quot;).innerHTML=`&lt;div class=&quot;col-span-full rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-bold text-red-600&quot;&gt;Data fetch error: ${e.message}&lt;/div&gt;`;
+  $("status").textContent="DATA ERROR";
+  $("grid").innerHTML=`&lt;div class="col-span-full rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-bold text-red-600"&gt;Data fetch error: ${e.message}&lt;/div&gt;`;
  }
 }
 load();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-6" title="Close Digit" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;/html&gt;' style="display:none" title="Odd / Even"></iframe><iframe class="page-frame" id="page-6" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -1949,67 +1667,6 @@ load();
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -2056,74 +1713,162 @@ const firebaseConfig={
  appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
 };
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),jodiGrid=document.getElementById(&#x27;jodiGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
 let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
 
-const digit=v=&gt;{ if(v===undefined||v===null||v===&#x27;&#x27;) return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
+const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
 const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return digit(r.closeAnk);};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
 function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
 
 async function load(){
- statusEl.textContent=&#x27;Loading Firebase data...&#x27;;
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);
- marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+ statusEl.textContent='Loading Firebase data...';
+ const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
+ marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
  const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});
+ markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
+ allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
  statusEl.textContent=`${allRows.length} raw records loaded`;
  calculate();
 }
+
+let groupDelayState={top:0,mid:0,recent:0};
 
 function calculate(){
  const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
  const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
  analysisRowCount=rows.length;
- analysisRowCount=rows.length;
  const keys=Array.from({length:10},(_,i)=&gt;String(i));
- stats=Object.fromEntries(keys.map(k=&gt;[k,{occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
- rows.forEach((r,i)=&gt;{const j=jodiOf(r);stats[j].occ.push(i);stats[j].lastSeen=i;stats[j].count++;});
- keys.forEach(k=&gt;{const s=stats[k],o=s.occ,n=rows.length;s.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);});
- const arr=keys.map(j=&gt;({jodi:j,...stats[j]}));
- const delaySorted=arr.slice().sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||a.jodi.localeCompare(b.jodi));
-  top10=delaySorted.slice(0,3);
-  mid10=delaySorted.slice(3,7);
-  recent10=delaySorted.slice(-3).sort((a,b)=&gt;a.currentDelay-b.currentDelay||b.lastSeen-a.lastSeen||a.jodi.localeCompare(b.jodi));
+
+ function makeStats(history){
+   const n=history.length;
+   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
+   history.forEach((r,i)=&gt;{
+     const d=jodiOf(r);
+     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
+   });
+   keys.forEach(k=&gt;{
+     const s=a[k],o=s.occ;
+     s.currentDelay=o.length?n-1-o[o.length-1]:n;
+     let gaps=o.length?[o[0]]:[n];
+     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
+     if(o.length)gaps.push(n-1-o[o.length-1]);
+     s.maxDelay=Math.max(0,...gaps);
+   });
+   return a;
+ }
+
+ const currentStats=makeStats(rows);
+ stats=currentStats;
+
+ // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
+ function rankHistory(history){
+   const a=makeStats(history);
+   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
+     b.currentDelay-a.currentDelay||
+     b.maxDelay-a.maxDelay||
+     a.jodi.localeCompare(b.jodi)
+   );
+ }
+ function bucketDelay(list,historyLength){
+   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
+   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
+ }
+
+ let top=[],mid=[],recent=[];
+ let topDelay=0,midDelay=0,recentDelay=0;
+
+ if(rows.length===0){
+   const ranked=rankHistory(rows);
+   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
+ }else{
+   const previous=rows.slice(0,-1);
+   const rankedBefore=rankHistory(previous);
+   const pTop=rankedBefore.slice(0,3);
+   const pMid=rankedBefore.slice(3,7);
+   const pRecent=rankedBefore.slice(7,10);
+
+   topDelay=bucketDelay(pTop,previous.length);
+   midDelay=bucketDelay(pMid,previous.length);
+   recentDelay=bucketDelay(pRecent,previous.length);
+
+   const hit=jodiOf(rows[rows.length-1]);
+   const topHas=pTop.some(x=&gt;x.jodi===hit);
+   const midHas=pMid.some(x=&gt;x.jodi===hit);
+   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
+   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
+
+   if(topHas){
+     top=[...clean(pTop,hit)];
+     const fromMid=pMid[0];
+     const fromRecent=pRecent[0];
+     top.push(fromMid);
+     mid=[...pMid.slice(1)];
+     mid.push(fromRecent);
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     topDelay=0;
+     midDelay+=1;
+     recentDelay+=1;
+   }else if(midHas){
+     top=[...pTop];
+     mid=[...clean(pMid,hit),pRecent[0]];
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     midDelay=0;
+     topDelay+=1;
+     recentDelay+=1;
+   }else if(recentHas){
+     top=[...pTop];
+     mid=[...pMid];
+     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
+     recentDelay=0;
+     topDelay+=1;
+     midDelay+=1;
+   }else{
+     top=pTop;mid=pMid;recent=pRecent;
+     topDelay+=1;midDelay+=1;recentDelay+=1;
+   }
+ }
+
+ const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
+ top10=toCurrent(top);
+ mid10=toCurrent(mid);
+ recent10=toCurrent(recent);
+ groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
+
  renderGrid();
- statusEl.textContent=`${rows.length} records • Delay Count calculated from the latest occurrence • TOP 3 / MID 4 / RECENT 3`;
+ statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
 }
 
 function getGroupDelay(list){
- const lastSeen=list.reduce((mx,x)=&gt;Math.max(mx, Number.isFinite(x.lastSeen)?x.lastSeen:-1),-1);
- return lastSeen&gt;=0 ? Math.max(0, analysisRowCount-1-lastSeen) : analysisRowCount;
+ return groupDelayState.top;
 }
 function renderGroup(title,list,cls,id){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;);
- const box=document.createElement(&#x27;div&#x27;); box.id=id; box.className=&#x27;bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4&#x27;;
- const groupDelay=getGroupDelay(list);
+ const grid=document.getElementById('jodiGrid');
+ const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
+ const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
  box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement(&#x27;div&#x27;); row.className=&#x27;grid grid-cols-3 sm:grid-cols-4 gap-2&#x27;;
- list.forEach(x=&gt;{const el=document.createElement(&#x27;div&#x27;);el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
+ const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
+ list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
  box.appendChild(row);grid.appendChild(box);
 }
 function renderGrid(){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;); grid.innerHTML=&#x27;&#x27;;
- const topDelay=getGroupDelay(top10), midDelay=getGroupDelay(mid10), recentDelay=getGroupDelay(recent10);
- document.getElementById(&#x27;topBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;midBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;recentBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup(&#x27;🔥 TOP 3&#x27;,top10,&#x27;border-orange-300 bg-orange-50&#x27;,&#x27;topGroup&#x27;);
- renderGroup(&#x27;📊 MID 4&#x27;,mid10,&#x27;border-indigo-300 bg-indigo-50&#x27;,&#x27;midGroup&#x27;);
- renderGroup(&#x27;⚡ RECENT 3&#x27;,recent10,&#x27;border-emerald-300 bg-emerald-50&#x27;,&#x27;recentGroup&#x27;);
+ const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
+ const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
+ document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
+ document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
+ document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
+ renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
+ renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
+ renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
 }
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:&#x27;smooth&#x27;,block:&#x27;start&#x27;}); }
-marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;topGroup&#x27;);document.getElementById(&#x27;midBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;midGroup&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;recentGroup&#x27;);
-load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
+load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe><iframe class="page-frame" id="page-7" title="Difference Digit" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+" style="display:none" title="Close Digit"></iframe><iframe class="page-frame" id="page-7" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -2133,67 +1878,6 @@ load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);cons
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
@@ -2240,177 +1924,185 @@ const firebaseConfig={
  appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
 };
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),jodiGrid=document.getElementById(&#x27;jodiGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
 let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
 
-const digit=v=&gt;{ if(v===undefined||v===null||v===&#x27;&#x27;) return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
-const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return ((10+digit(r.closeAnk)-digit(r.openAnk))%10);};
+const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
+const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (c-o+10)%10;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
 function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
 
 async function load(){
- statusEl.textContent=&#x27;Loading Firebase data...&#x27;;
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);
- marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+ statusEl.textContent='Loading Firebase data...';
+ const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
+ marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
  const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});
+ markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
+ allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
  statusEl.textContent=`${allRows.length} raw records loaded`;
  calculate();
 }
+
+let groupDelayState={top:0,mid:0,recent:0};
 
 function calculate(){
  const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
  const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
  analysisRowCount=rows.length;
- analysisRowCount=rows.length;
  const keys=Array.from({length:10},(_,i)=&gt;String(i));
- stats=Object.fromEntries(keys.map(k=&gt;[k,{occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
- rows.forEach((r,i)=&gt;{const j=jodiOf(r);stats[j].occ.push(i);stats[j].lastSeen=i;stats[j].count++;});
- keys.forEach(k=&gt;{const s=stats[k],o=s.occ,n=rows.length;s.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);});
- const arr=keys.map(j=&gt;({jodi:j,...stats[j]}));
- const delaySorted=arr.slice().sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||a.jodi.localeCompare(b.jodi));
-  top10=delaySorted.slice(0,3);
-  mid10=delaySorted.slice(3,7);
-  recent10=delaySorted.slice(-3).sort((a,b)=&gt;a.currentDelay-b.currentDelay||b.lastSeen-a.lastSeen||a.jodi.localeCompare(b.jodi));
+
+ function makeStats(history){
+   const n=history.length;
+   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
+   history.forEach((r,i)=&gt;{
+     const d=jodiOf(r);
+     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
+   });
+   keys.forEach(k=&gt;{
+     const s=a[k],o=s.occ;
+     s.currentDelay=o.length?n-1-o[o.length-1]:n;
+     let gaps=o.length?[o[0]]:[n];
+     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
+     if(o.length)gaps.push(n-1-o[o.length-1]);
+     s.maxDelay=Math.max(0,...gaps);
+   });
+   return a;
+ }
+
+ const currentStats=makeStats(rows);
+ stats=currentStats;
+
+ // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
+ function rankHistory(history){
+   const a=makeStats(history);
+   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
+     b.currentDelay-a.currentDelay||
+     b.maxDelay-a.maxDelay||
+     a.jodi.localeCompare(b.jodi)
+   );
+ }
+ function bucketDelay(list,historyLength){
+   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
+   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
+ }
+
+ let top=[],mid=[],recent=[];
+ let topDelay=0,midDelay=0,recentDelay=0;
+
+ if(rows.length===0){
+   const ranked=rankHistory(rows);
+   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
+ }else{
+   const previous=rows.slice(0,-1);
+   const rankedBefore=rankHistory(previous);
+   const pTop=rankedBefore.slice(0,3);
+   const pMid=rankedBefore.slice(3,7);
+   const pRecent=rankedBefore.slice(7,10);
+
+   topDelay=bucketDelay(pTop,previous.length);
+   midDelay=bucketDelay(pMid,previous.length);
+   recentDelay=bucketDelay(pRecent,previous.length);
+
+   const hit=jodiOf(rows[rows.length-1]);
+   const topHas=pTop.some(x=&gt;x.jodi===hit);
+   const midHas=pMid.some(x=&gt;x.jodi===hit);
+   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
+   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
+
+   if(topHas){
+     top=[...clean(pTop,hit)];
+     const fromMid=pMid[0];
+     const fromRecent=pRecent[0];
+     top.push(fromMid);
+     mid=[...pMid.slice(1)];
+     mid.push(fromRecent);
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     topDelay=0;
+     midDelay+=1;
+     recentDelay+=1;
+   }else if(midHas){
+     top=[...pTop];
+     mid=[...clean(pMid,hit),pRecent[0]];
+     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
+     midDelay=0;
+     topDelay+=1;
+     recentDelay+=1;
+   }else if(recentHas){
+     top=[...pTop];
+     mid=[...pMid];
+     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
+     recentDelay=0;
+     topDelay+=1;
+     midDelay+=1;
+   }else{
+     top=pTop;mid=pMid;recent=pRecent;
+     topDelay+=1;midDelay+=1;recentDelay+=1;
+   }
+ }
+
+ const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
+ top10=toCurrent(top);
+ mid10=toCurrent(mid);
+ recent10=toCurrent(recent);
+ groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
+
  renderGrid();
- statusEl.textContent=`${rows.length} records • Delay Count calculated from the latest occurrence • TOP 3 / MID 4 / RECENT 3`;
+ statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
 }
 
 function getGroupDelay(list){
- const lastSeen=list.reduce((mx,x)=&gt;Math.max(mx, Number.isFinite(x.lastSeen)?x.lastSeen:-1),-1);
- return lastSeen&gt;=0 ? Math.max(0, analysisRowCount-1-lastSeen) : analysisRowCount;
+ return groupDelayState.top;
 }
 function renderGroup(title,list,cls,id){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;);
- const box=document.createElement(&#x27;div&#x27;); box.id=id; box.className=&#x27;bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4&#x27;;
- const groupDelay=getGroupDelay(list);
+ const grid=document.getElementById('jodiGrid');
+ const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
+ const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
  box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement(&#x27;div&#x27;); row.className=&#x27;grid grid-cols-3 sm:grid-cols-4 gap-2&#x27;;
- list.forEach(x=&gt;{const el=document.createElement(&#x27;div&#x27;);el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
+ const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
+ list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
  box.appendChild(row);grid.appendChild(box);
 }
 function renderGrid(){
- const grid=document.getElementById(&#x27;jodiGrid&#x27;); grid.innerHTML=&#x27;&#x27;;
- const topDelay=getGroupDelay(top10), midDelay=getGroupDelay(mid10), recentDelay=getGroupDelay(recent10);
- document.getElementById(&#x27;topBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;midBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById(&#x27;recentBtn&#x27;).innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup(&#x27;🔥 TOP 3&#x27;,top10,&#x27;border-orange-300 bg-orange-50&#x27;,&#x27;topGroup&#x27;);
- renderGroup(&#x27;📊 MID 4&#x27;,mid10,&#x27;border-indigo-300 bg-indigo-50&#x27;,&#x27;midGroup&#x27;);
- renderGroup(&#x27;⚡ RECENT 3&#x27;,recent10,&#x27;border-emerald-300 bg-emerald-50&#x27;,&#x27;recentGroup&#x27;);
+ const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
+ const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
+ document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
+ document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
+ document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
+ renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
+ renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
+ renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
 }
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:&#x27;smooth&#x27;,block:&#x27;start&#x27;}); }
-marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;topGroup&#x27;);document.getElementById(&#x27;midBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;midGroup&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;goToGroup(&#x27;recentGroup&#x27;);
-load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
+load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-"></iframe><iframe class="page-frame" id="page-8" title="Digit Play Analysis" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;Digit Play Analysis&lt;/title&gt;
+" style="display:none" title="Difference Digit"></iframe><iframe class="page-frame" id="page-8" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;Digit Play Analysis&lt;/title&gt;
 &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js&quot;&gt;&lt;/script&gt;&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js&quot;&gt;&lt;/script&gt;
-&lt;style&gt;*{box-sizing:border-box}.card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}.btn{border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:8px 12px;font-size:11px;font-weight:800}.pill{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}&lt;/style&gt;
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* Open Digit reference header — applied to Digit Play + Shortlist */
-body{background:#f1f5f9!important;color:#1e293b!important}
-.top-reference-card{
-  background:#fff!important;border-radius:16px!important;
-  border:1px solid #e2e8f0!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-    &lt;div&gt;
-      &lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;DIGIT PLAY ANALYSIS&lt;/div&gt;
-      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;OPEN + CLOSE • PRIORITY SIGNAL&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;select id=&quot;market&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;/select&gt;
-  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-&lt;/div&gt;&lt;main class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;&lt;section class=&quot;card p-5&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;TODAY&#x27;S DIGIT PLAY SIGNAL&lt;/div&gt;&lt;div id=&quot;signal&quot; class=&quot;mt-2 text-4xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;signalSub&quot; class=&quot;mt-1 text-[11px] font-bold text-slate-500&quot;&gt;Loading analysis...&lt;/div&gt;&lt;div id=&quot;signalDigits&quot; class=&quot;grid grid-cols-3 gap-2 mt-4&quot;&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;style&gt;*{box-sizing:border-box}.card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}.btn{border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:8px 12px;font-size:11px;font-weight:800}.pill{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}&lt;/style&gt;&lt;/head&gt;
+&lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;&lt;header class=&quot;bg-white sticky top-0 z-20 border-b border-slate-200&quot;&gt;&lt;div class=&quot;max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black tracking-tight&quot;&gt;DIGIT PLAY ANALYSIS&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400 font-bold&quot;&gt;OPEN + CLOSE • PRIORITY SIGNAL&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refresh&quot; class=&quot;btn&quot;&gt;↻ REFRESH&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;main class=&quot;max-w-5xl mx-auto p-4 space-y-4&quot;&gt;&lt;section class=&quot;card p-4&quot;&gt;&lt;div class=&quot;flex items-center gap-2&quot;&gt;&lt;select id=&quot;market&quot; class=&quot;btn flex-1&quot;&gt;&lt;/select&gt;&lt;/div&gt;&lt;div id=&quot;status&quot; class=&quot;text-[9px] text-slate-400 font-black mt-2&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;card p-5&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;TODAY'S DIGIT PLAY SIGNAL&lt;/div&gt;&lt;div id=&quot;signal&quot; class=&quot;mt-2 text-4xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;signalSub&quot; class=&quot;mt-1 text-[11px] font-bold text-slate-500&quot;&gt;Loading analysis...&lt;/div&gt;&lt;div id=&quot;signalDigits&quot; class=&quot;grid grid-cols-3 gap-2 mt-4&quot;&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;&gt;&lt;div class=&quot;card p-4&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black text-indigo-500&quot;&gt;OPEN&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;Strongest Source&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;openDelay&quot; class=&quot;text-3xl font-black text-orange-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;openWinner&quot; class=&quot;mt-3 text-xs font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;openDigits&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;card p-4&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black text-emerald-500&quot;&gt;CLOSE&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;Strongest Source&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;closeDelay&quot; class=&quot;text-3xl font-black text-orange-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;closeWinner&quot; class=&quot;mt-3 text-xs font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;closeDigits&quot; class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;card p-4&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;6-SOURCE STRENGTH&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;MARKET-WISE + ALL-MERGED • TOP 3 / MID 4 / RECENT 3&lt;/div&gt;&lt;div id=&quot;sources&quot; class=&quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4&quot;&gt;&lt;/div&gt;&lt;/section&gt;&lt;/main&gt;
 &lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-slate-900/60 items-end sm:items-center justify-center p-3&quot;&gt;&lt;div class=&quot;bg-white w-full max-w-lg rounded-3xl p-5 max-h-[88vh] overflow-auto&quot;&gt;&lt;div class=&quot;flex justify-between items-start&quot;&gt;&lt;div&gt;&lt;div id=&quot;mTitle&quot; class=&quot;text-xl font-black&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;mSub&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;mClose&quot; class=&quot;btn&quot;&gt;CLOSE&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;mBody&quot; class=&quot;mt-4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;script&gt;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 firebase.initializeApp(firebaseConfig); const db=firebase.firestore(); const $=id=&gt;document.getElementById(id); let records=[],markets=[],lastSignal=null;
-function digit(v){if(v===undefined||v===null||v===&#x27;&#x27;)return null;const m=String(v).match(/\d/g);return m?Number(m[m.length-1]):null}
-function timeMin(v){const m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
-function rows(market){return records.filter(r=&gt;r.date&amp;&amp;(!market||market===&#x27;ALL_MERGED&#x27;||String(r.marketName)===market)&amp;&amp;digit(r.openAnk)!==null&amp;&amp;digit(r.closeAnk)!==null).sort((a,b)=&gt;String(a.date).localeCompare(String(b.date))||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)))}
-function ranking(rs,side){const n=rs.length,a=Array.from({length:10},(_,d)=&gt;({digit:d,occ:[],hits:0,last:-1,currentDelay:n,maxDelay:0}));rs.forEach((r,i)=&gt;{const d=digit(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].occ.push(i);a[d].hits++;a[d].last=i}});a.forEach(x=&gt;{const o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});const rank=a.slice().sort((x,y)=&gt;y.currentDelay-x.currentDelay||y.maxDelay-x.maxDelay||y.hits-x.hits||x.digit-y.digit);return {rows:rs,TOP:rank.slice(0,3),MID:rank.slice(3,7),RECENT:rank.slice(7,10)}}
-function groupSource(scope,group,data,side){const ds=data[group],rs=data.rows,n=rs.length,h=[];rs.forEach((r,i)=&gt;{const d=digit(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(ds.some(x=&gt;x.digit===d))h.push(i)});const delay=h.length?n-1-h[h.length-1]:n;const gaps=h.length?[h[0]]:[n];for(let i=1;i&lt;h.length;i++)gaps.push(h[i]-h[i-1]-1);if(h.length)gaps.push(n-1-h[h.length-1]);return {id:scope+&#x27;_&#x27;+group,scope,group,digits:ds,delay,max:Math.max(0,...gaps),hits:h.length,games:n,side}}
-function buildSide(side){const market=$(&#x27;market&#x27;).value,md=ranking(rows(market),side),ad=ranking(rows(&#x27;ALL_MERGED&#x27;),side);const ss=[&#x27;TOP&#x27;,&#x27;MID&#x27;,&#x27;RECENT&#x27;].map(g=&gt;groupSource(&#x27;MARKET-WISE&#x27;,g,md,side)).concat([&#x27;TOP&#x27;,&#x27;MID&#x27;,&#x27;RECENT&#x27;].map(g=&gt;groupSource(&#x27;ALL-MERGED&#x27;,g,ad,side)));return {marketData:md,allData:ad,sources:ss,winner:ss.slice().sort((a,b)=&gt;b.delay-a.delay||b.max-a.max||b.hits-a.hits||(a.scope===&#x27;MARKET-WISE&#x27;?-1:1))[0]}}
-function render(){try{const rs=rows($(&#x27;market&#x27;).value);if(!rs.length)throw Error(&#x27;No completed Open + Close records found.&#x27;);const o=buildSide(&#x27;OPEN&#x27;),c=buildSide(&#x27;CLOSE&#x27;);const winner=o.winner.delay===c.winner.delay?(o.winner.max&gt;=c.winner.max?o.winner:c.winner):(o.winner.delay&gt;c.winner.delay?o.winner:c.winner);const side=winner.side;const selected=winner.digits.map(x=&gt;Number(x.digit)).slice(0,3);lastSignal={market:$(&#x27;market&#x27;).value,side,digits:selected,scope:winner.scope,group:winner.group,delay:winner.delay};$(&#x27;signal&#x27;).textContent=&#x27;PLAY &#x27;+side;$(&#x27;signal&#x27;).className=&#x27;mt-2 text-4xl font-black &#x27;+(side===&#x27;OPEN&#x27;?&#x27;text-indigo-700&#x27;:&#x27;text-emerald-700&#x27;);$(&#x27;signalSub&#x27;).textContent=winner.scope+&#x27; → &#x27;+winner.group+&#x27; • GROUP DELAY &#x27;+winner.delay; $(&#x27;signalDigits&#x27;).innerHTML=selected.map(d=&gt;&#x27;&lt;div class=&quot;rounded-xl border border-slate-200 bg-slate-50 p-3 text-center&quot;&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;&#x27;+d+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;);fillSide(&#x27;OPEN&#x27;,o);fillSide(&#x27;CLOSE&#x27;,c);const all=[...o.sources,...c.sources];$(&#x27;sources&#x27;).innerHTML=all.map(s=&gt;&#x27;&lt;button class=&quot;text-left rounded-xl border &#x27;+(s.side===side&amp;&amp;s.id===winner.id?&#x27;border-orange-300 bg-orange-50/50&#x27;:&#x27;border-slate-200 bg-white&#x27;)+&#x27; p-3 shadow-sm&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[8px] font-black &#x27;+(s.side===&#x27;OPEN&#x27;?&#x27;text-indigo-500&#x27;:&#x27;text-emerald-500&#x27;)+&#x27;&quot;&gt;&#x27;+s.side+&#x27; • &#x27;+s.scope+&#x27;&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;&#x27;+s.group+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;&#x27;+s.delay+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;&#x27;+s.digits.map(d=&gt;&#x27;&lt;span class=&quot;pill bg-slate-100&quot;&gt;&#x27;+d.digit+&#x27;&lt;/span&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-bold text-slate-400&quot;&gt;GROUP MAX &#x27;+s.max+&#x27; • GROUP HITS &#x27;+s.hits+&#x27;&lt;/div&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);$(&#x27;status&#x27;).textContent=($(&#x27;market&#x27;).value===&#x27;ALL_MERGED&#x27;?&#x27;ALL MARKETS&#x27;:$(&#x27;market&#x27;).value)+&#x27; • &#x27;+rs.length+&#x27; GAMES • PLAY &#x27;+side+&#x27; • 3 DIGITS&#x27;;try{parent.postMessage({type:&#x27;DIGIT_PLAY_SIGNAL&#x27;,...lastSignal},&#x27;*&#x27;)}catch(e){}}
-catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;DATA ERROR: &#x27;+e.message;$(&#x27;signalSub&#x27;).textContent=e.message;$(&#x27;sources&#x27;).innerHTML=&#x27;&lt;div class=&quot;text-xs font-bold text-red-600&quot;&gt;&#x27;+e.message+&#x27;&lt;/div&gt;&#x27;}}
-function fillSide(side,x){$(side.toLowerCase()+&#x27;Delay&#x27;).textContent=x.winner.delay;$(side.toLowerCase()+&#x27;Winner&#x27;).textContent=x.winner.scope+&#x27; → &#x27;+x.winner.group;$(side.toLowerCase()+&#x27;Digits&#x27;).innerHTML=x.winner.digits.map(d=&gt;&#x27;&lt;span class=&quot;pill bg-slate-100&quot;&gt;&#x27;+d.digit+&#x27; • &#x27;+d.currentDelay+&#x27;&lt;/span&gt;&#x27;).join(&#x27;&#x27;)}
-async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;const [ms,rs]=await Promise.all([db.collection(&#x27;markets&#x27;).get(),db.collection(&#x27;matka_records&#x27;).get()]);markets=ms.docs.map(d=&gt;({id:d.id,...d.data()})).filter(x=&gt;x.name);markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||String(a.name).localeCompare(String(b.name)));records=rs.docs.map(d=&gt;({id:d.id,...d.data()}));const cur=$(&#x27;market&#x27;).value;$(&#x27;market&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.map(m=&gt;&#x27;&lt;option value=&quot;&#x27;+String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)+&#x27;&quot;&gt;&#x27;+m.name+&#x27; • &#x27;+(m.openTime||&#x27;&#x27;)+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);if(cur&amp;&amp;[...$(&#x27;market&#x27;).options].some(o=&gt;o.value===cur))$(&#x27;market&#x27;).value=cur;render()}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;DATA ERROR: &#x27;+e.message;$(&#x27;sources&#x27;).innerHTML=&#x27;&lt;div class=&quot;text-xs font-bold text-red-600&quot;&gt;&#x27;+e.message+&#x27;&lt;/div&gt;&#x27;}}
-$(&#x27;market&#x27;).onchange=render;$(&#x27;refresh&#x27;).onclick=load;$(&#x27;mClose&#x27;).onclick=()=&gt;{$(&#x27;modal&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;modal&#x27;).classList.remove(&#x27;flex&#x27;)};$(&#x27;modal&#x27;).onclick=e=&gt;{if(e.target===$(&#x27;modal&#x27;))$(&#x27;mClose&#x27;).click()};window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.type===&#x27;REQUEST_DIGIT_PLAY_SIGNAL&#x27;){if(lastSignal)parent.postMessage({type:&#x27;DIGIT_PLAY_SIGNAL&#x27;,...lastSignal},&#x27;*&#x27;);else load()}});load();
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe><iframe class="page-frame" id="page-9" title="Panna Logger" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+function digit(v){if(v===undefined||v===null||v==='')return null;const m=String(v).match(/\d/g);return m?Number(m[m.length-1]):null}
+function timeMin(v){const m=String(v||'').match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
+function rows(market){return records.filter(r=&gt;r.date&amp;&amp;(!market||market==='ALL_MERGED'||String(r.marketName)===market)&amp;&amp;digit(r.openAnk)!==null&amp;&amp;digit(r.closeAnk)!==null).sort((a,b)=&gt;String(a.date).localeCompare(String(b.date))||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||'').localeCompare(String(b.marketName||'')))}
+function ranking(rs,side){const n=rs.length,a=Array.from({length:10},(_,d)=&gt;({digit:d,occ:[],hits:0,last:-1,currentDelay:n,maxDelay:0}));rs.forEach((r,i)=&gt;{const d=digit(side==='OPEN'?r.openAnk:r.closeAnk);if(d!==null){a[d].occ.push(i);a[d].hits++;a[d].last=i}});a.forEach(x=&gt;{const o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});const rank=a.slice().sort((x,y)=&gt;y.currentDelay-x.currentDelay||y.maxDelay-x.maxDelay||y.hits-x.hits||x.digit-y.digit);return {rows:rs,TOP:rank.slice(0,3),MID:rank.slice(3,7),RECENT:rank.slice(7,10)}}
+function groupSource(scope,group,data,side){const ds=data[group],rs=data.rows,n=rs.length,h=[];rs.forEach((r,i)=&gt;{const d=digit(side==='OPEN'?r.openAnk:r.closeAnk);if(ds.some(x=&gt;x.digit===d))h.push(i)});const delay=h.length?n-1-h[h.length-1]:n;const gaps=h.length?[h[0]]:[n];for(let i=1;i&lt;h.length;i++)gaps.push(h[i]-h[i-1]-1);if(h.length)gaps.push(n-1-h[h.length-1]);return {id:scope+'_'+group,scope,group,digits:ds,delay,max:Math.max(0,...gaps),hits:h.length,games:n,side}}
+function buildSide(side){const market=$('market').value,md=ranking(rows(market),side),ad=ranking(rows('ALL_MERGED'),side);const ss=['TOP','MID','RECENT'].map(g=&gt;groupSource('MARKET-WISE',g,md,side)).concat(['TOP','MID','RECENT'].map(g=&gt;groupSource('ALL-MERGED',g,ad,side)));return {marketData:md,allData:ad,sources:ss,winner:ss.slice().sort((a,b)=&gt;b.delay-a.delay||b.max-a.max||b.hits-a.hits||(a.scope==='MARKET-WISE'?-1:1))[0]}}
+function render(){try{const rs=rows($('market').value);if(!rs.length)throw Error('No completed Open + Close records found.');const o=buildSide('OPEN'),c=buildSide('CLOSE');const winner=o.winner.delay===c.winner.delay?(o.winner.max&gt;=c.winner.max?o.winner:c.winner):(o.winner.delay&gt;c.winner.delay?o.winner:c.winner);const side=winner.side;const selected=winner.digits.map(x=&gt;Number(x.digit)).slice(0,3);lastSignal={market:$('market').value,side,digits:selected,scope:winner.scope,group:winner.group,delay:winner.delay};$('signal').textContent='PLAY '+side;$('signal').className='mt-2 text-4xl font-black '+(side==='OPEN'?'text-indigo-700':'text-emerald-700');$('signalSub').textContent=winner.scope+' → '+winner.group+' • GROUP DELAY '+winner.delay; $('signalDigits').innerHTML=selected.map(d=&gt;'&lt;div class=&quot;rounded-xl border border-slate-200 bg-slate-50 p-3 text-center&quot;&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;'+d+'&lt;/div&gt;&lt;/div&gt;').join('');fillSide('OPEN',o);fillSide('CLOSE',c);const all=[...o.sources,...c.sources];$('sources').innerHTML=all.map(s=&gt;'&lt;button class=&quot;text-left rounded-xl border '+(s.side===side&amp;&amp;s.id===winner.id?'border-orange-300 bg-orange-50/50':'border-slate-200 bg-white')+' p-3 shadow-sm&quot;&gt;&lt;div class=&quot;flex justify-between&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[8px] font-black '+(s.side==='OPEN'?'text-indigo-500':'text-emerald-500')+'&quot;&gt;'+s.side+' • '+s.scope+'&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;'+s.group+'&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-2xl font-black&quot;&gt;'+s.delay+'&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;flex flex-wrap gap-1.5 mt-3&quot;&gt;'+s.digits.map(d=&gt;'&lt;span class=&quot;pill bg-slate-100&quot;&gt;'+d.digit+'&lt;/span&gt;').join('')+'&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-bold text-slate-400&quot;&gt;GROUP MAX '+s.max+' • GROUP HITS '+s.hits+'&lt;/div&gt;&lt;/button&gt;').join('');$('status').textContent=($('market').value==='ALL_MERGED'?'ALL MARKETS':$('market').value)+' • '+rs.length+' GAMES • PLAY '+side+' • 3 DIGITS';try{parent.postMessage({type:'DIGIT_PLAY_SIGNAL',...lastSignal},'*')}catch(e){}}
+catch(e){console.error(e);$('status').textContent='DATA ERROR: '+e.message;$('signalSub').textContent=e.message;$('sources').innerHTML='&lt;div class=&quot;text-xs font-bold text-red-600&quot;&gt;'+e.message+'&lt;/div&gt;'}}
+function fillSide(side,x){$(side.toLowerCase()+'Delay').textContent=x.winner.delay;$(side.toLowerCase()+'Winner').textContent=x.winner.scope+' → '+x.winner.group;$(side.toLowerCase()+'Digits').innerHTML=x.winner.digits.map(d=&gt;'&lt;span class=&quot;pill bg-slate-100&quot;&gt;'+d.digit+' • '+d.currentDelay+'&lt;/span&gt;').join('')}
+async function load(){try{$('status').textContent='Loading Firebase data...';const [ms,rs]=await Promise.all([db.collection('markets').get(),db.collection('matka_records').get()]);markets=ms.docs.map(d=&gt;({id:d.id,...d.data()})).filter(x=&gt;x.name);markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||String(a.name).localeCompare(String(b.name)));records=rs.docs.map(d=&gt;({id:d.id,...d.data()}));const cur=$('market').value;$('market').innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.map(m=&gt;'&lt;option value=&quot;'+String(m.name).replace(/&quot;/g,'&amp;quot;')+'&quot;&gt;'+m.name+' • '+(m.openTime||'')+'&lt;/option&gt;').join('');if(cur&amp;&amp;[...$('market').options].some(o=&gt;o.value===cur))$('market').value=cur;render()}catch(e){console.error(e);$('status').textContent='DATA ERROR: '+e.message;$('sources').innerHTML='&lt;div class=&quot;text-xs font-bold text-red-600&quot;&gt;'+e.message+'&lt;/div&gt;'}}
+$('market').onchange=render;$('refresh').onclick=load;$('mClose').onclick=()=&gt;{$('modal').classList.add('hidden');$('modal').classList.remove('flex')};$('modal').onclick=e=&gt;{if(e.target===$('modal'))$('mClose').click()};window.addEventListener('message',e=&gt;{if(e.data&amp;&amp;e.data.type==='REQUEST_DIGIT_PLAY_SIGNAL'){if(lastSignal)parent.postMessage({type:'DIGIT_PLAY_SIGNAL',...lastSignal},'*');else load()}});load();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Digit Play Analysis"></iframe><iframe class="page-frame" id="page-9" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -2421,74 +2113,13 @@ $(&#x27;market&#x27;).onchange=render;$(&#x27;refresh&#x27;).onclick=load;$(&#x2
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 input,select{outline:none}input:focus,select:focus{box-shadow:0 0 0 3px rgba(79,70,229,.12);border-color:#6366f1}
 &lt;/style&gt;
-
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 p-3&quot;&gt;
 &lt;div class=&quot;max-w-xl mx-auto space-y-3&quot;&gt;
 &lt;header class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-4&quot;&gt;
  &lt;div class=&quot;flex items-center justify-between&quot;&gt;
   &lt;div&gt;&lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;PANNA LOGGER&lt;/div&gt;&lt;div class=&quot;text-[10px] font-bold text-slate-500&quot;&gt;OPEN / CLOSE • FAST ENTRY&lt;/div&gt;&lt;/div&gt;
-  &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
+  &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-slate-100 text-xs font-black&quot;&gt;↻&lt;/button&gt;
  &lt;/div&gt;
 &lt;/header&gt;
 
@@ -2569,20 +2200,19 @@ const $=x=&gt;document.getElementById(x);
 const ank=p=&gt;/^\d{3}$/.test(p)?(+p[0]+ +p[1]+ +p[2])%10:null;
 const today=()=&gt;{let d=new Date();return d.getFullYear()+&quot;-&quot;+String(d.getMonth()+1).padStart(2,&quot;0&quot;)+&quot;-&quot;+String(d.getDate()).padStart(2,&quot;0&quot;)};
 $(&quot;date&quot;).value=today();
-let markets=[],records=[],mode=&quot;open&quot;;
+let markets=[],records=[],mode=&quot;open&quot;,editingId=null;
 
-function timeMin(v){const m=String(v||&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
-function sortMarkets(){markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||String(a.name||&quot;&quot;).localeCompare(String(b.name||&quot;&quot;)))}
+function sortMarkets(){markets.sort((a,b)=&gt;String(a.openTime||&quot;23:59&quot;).localeCompare(String(b.openTime||&quot;23:59&quot;)))}
 function fillMarkets(){
  sortMarkets();
  let cur=$(&quot;market&quot;).value;
- $(&quot;market&quot;).innerHTML=&#x27;&lt;option value=&quot;&quot;&gt;SELECT MARKET&lt;/option&gt;&#x27;;
+ $(&quot;market&quot;).innerHTML='&lt;option value=&quot;&quot;&gt;SELECT MARKET&lt;/option&gt;';
  markets.forEach(m=&gt;{let o=document.createElement(&quot;option&quot;);o.value=m.name;o.textContent=(m.openTime||&quot;--:--&quot;)+&quot;  •  &quot;+m.name;$(&quot;market&quot;).appendChild(o)});
  if(markets.some(m=&gt;m.name===cur))$(&quot;market&quot;).value=cur;
  fillEdit();
 }
 function fillEdit(){
- $(&quot;editMarket&quot;).innerHTML=&#x27;&lt;option value=&quot;&quot;&gt;NEW MARKET&lt;/option&gt;&#x27;;
+ $(&quot;editMarket&quot;).innerHTML='&lt;option value=&quot;&quot;&gt;NEW MARKET&lt;/option&gt;';
  markets.forEach(m=&gt;{let o=document.createElement(&quot;option&quot;);o.value=m.id;o.textContent=(m.openTime||&quot;--:--&quot;)+&quot; • &quot;+m.name;$(&quot;editMarket&quot;).appendChild(o)});
 }
 async function loadMarkets(){
@@ -2603,36 +2233,15 @@ async function loadRecords(){
  records=[];s.forEach(d=&gt;records.push({id:d.id,...d.data()}));records.sort((a,b)=&gt;String(b.openTime||&quot;&quot;).localeCompare(String(a.openTime||&quot;&quot;)));render();
 }
 function render(){
- $(&quot;count&quot;).textContent=records.length+&quot; RECORDS&quot;;$(&quot;records&quot;).innerHTML=&quot;&quot;;
- if(!records.length){$(&quot;records&quot;).innerHTML=&#x27;&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;NO RECORDS&lt;/div&gt;&#x27;;return}
- records.forEach(r=&gt;{let d=document.createElement(&quot;div&quot;);d.className=&quot;rounded-xl bg-slate-50 border border-slate-200 p-3 flex justify-between items-center&quot;;
- d.innerHTML=&#x27;&lt;div&gt;&lt;div class=&quot;font-black&quot;&gt;&lt;span class=&quot;text-indigo-700&quot;&gt;&#x27;+(r.openPana||&quot;—&quot;)+&#x27;&lt;/span&gt; &lt;span class=&quot;text-slate-400&quot;&gt;→&lt;/span&gt; &lt;span class=&quot;text-rose-700&quot;&gt;&#x27;+(r.closePana||&quot;—&quot;)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400&quot;&gt;Open Ank: &#x27;+(r.openAnk??&quot;—&quot;)+&#x27; • Close Ank: &#x27;+(r.closeAnk??&quot;—&quot;)+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;font-black text-xs&quot;&gt;JODI &#x27;+(r.jodi||&quot;—&quot;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;;
- $(&quot;records&quot;).appendChild(d)});
+ $(&quot;count&quot;).textContent=records.length+&quot; RECORDS&quot;;$(&quot;records&quot;).innerHTML=&quot;&quot;;if(records.length&gt;1){$(&quot;status&quot;).textContent=&quot;⚠ DUPLICATE ENTRIES FOUND — MODIFY CORRECT ONE OR DELETE WRONG ENTRY&quot;;$(&quot;status&quot;).className=&quot;text-center text-[10px] font-black min-h-4 text-red-600&quot;} 
+ if(!records.length){$(&quot;records&quot;).innerHTML='&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;NO RECORDS&lt;/div&gt;';return}
+ records.forEach(r=&gt;{let d=document.createElement(&quot;div&quot;);d.className=&quot;rounded-xl bg-slate-50 border border-slate-200 p-3&quot;;d.innerHTML='&lt;div class=&quot;flex justify-between items-start gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black&quot;&gt;&lt;span class=&quot;text-indigo-700&quot;&gt;'+(r.openPana||&quot;—&quot;)+'&lt;/span&gt; &lt;span class=&quot;text-slate-400&quot;&gt;→&lt;/span&gt; &lt;span class=&quot;text-rose-700&quot;&gt;'+(r.closePana||&quot;—&quot;)+'&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400&quot;&gt;Open Ank: '+(r.openAnk??&quot;—&quot;)+' • Close Ank: '+(r.closeAnk??&quot;—&quot;)+'&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;font-black text-xs&quot;&gt;JODI '+(r.jodi||&quot;—&quot;)+'&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 gap-2 mt-2&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;rounded-lg bg-indigo-600 text-white py-2 text-[10px] font-black&quot; data-edit=&quot;'+r.id+'&quot;&gt;✏ MODIFY&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rounded-lg bg-rose-600 text-white py-2 text-[10px] font-black&quot; data-delete=&quot;'+r.id+'&quot;&gt;🗑 DELETE&lt;/button&gt;&lt;/div&gt;';$(&quot;records&quot;).appendChild(d)});document.querySelectorAll(&quot;[data-edit]&quot;).forEach(b=&gt;b.onclick=()=&gt;editRecord(b.dataset.edit));document.querySelectorAll(&quot;[data-delete]&quot;).forEach(b=&gt;b.onclick=()=&gt;deleteRecord(b.dataset.delete));
 }
-async function saveOpen(){
- let date=$(&quot;date&quot;).value,m=$(&quot;market&quot;).value,p=$(&quot;openPanna&quot;).value.trim();
- if(!date||!m||!/^\d{3}$/.test(p)){msg(&quot;Date, Market &amp; valid 3-digit Open Panna required&quot;,1);return}
- let market=markets.find(x=&gt;x.name===m),oa=ank(p);
- let data={date,marketName:m,openPana:p,openAnk:oa,openTime:market?.openTime||&quot;00:00&quot;,closeTime:market?.closeTime||&quot;&quot;,updatedAt:new Date().toISOString()};
- let existing=records.find(r=&gt;r.openPana==null);
- if(existing)await updateDoc(doc(db,&quot;matka_records&quot;,existing.id),data); else await addDoc(collection(db,&quot;matka_records&quot;),data);
- msg(&quot;✓ OPEN SAVED&quot;);$(&quot;openPanna&quot;).value=&quot;&quot;;updatePreview();await loadRecords();$(&quot;closePanna&quot;).focus();
-}
-async function saveClose(){
- let date=$(&quot;date&quot;).value,m=$(&quot;market&quot;).value,p=$(&quot;closePanna&quot;).value.trim();
- if(!date||!m||!/^\d{3}$/.test(p)){msg(&quot;Date, Market &amp; valid 3-digit Close Panna required&quot;,1);return}
- let s=await getDocs(query(collection(db,&quot;matka_records&quot;),where(&quot;date&quot;,&quot;==&quot;,date),where(&quot;marketName&quot;,&quot;==&quot;,m)));
- let found=null;s.forEach(d=&gt;{let r={id:d.id,...d.data()};if(!found&amp;&amp;r.openPana)found=r});
- let ca=ank(p);
- if(found){
-  let oa=ank(found.openPana),data={closePana:p,closeAnk:ca,jodi:String(oa)+String(ca),difference:(ca-oa+10)%10,updatedAt:new Date().toISOString()};
-  await updateDoc(doc(db,&quot;matka_records&quot;,found.id),data);
- }else{
-  let market=markets.find(x=&gt;x.name===m),data={date,marketName:m,closePana:p,closeAnk:ca,openPana:&quot;&quot;,openAnk:null,jodi:&quot;&quot;,difference:null,openTime:market?.openTime||&quot;00:00&quot;,closeTime:market?.closeTime||&quot;&quot;,updatedAt:new Date().toISOString()};
-  await addDoc(collection(db,&quot;matka_records&quot;),data);
- }
- msg(&quot;✓ CLOSE SAVED&quot;);$(&quot;closePanna&quot;).value=&quot;&quot;;updatePreview();await loadRecords();
-}
+function clearEdit(){editingId=null;$(&quot;saveOpen&quot;).textContent=&quot;SAVE OPEN&quot;;$(&quot;saveClose&quot;).textContent=&quot;SAVE CLOSE&quot;}
+function editRecord(id){const r=records.find(x=&gt;x.id===id);if(!r)return;editingId=id;$(&quot;date&quot;).value=r.date||$(&quot;date&quot;).value;$(&quot;market&quot;).value=r.marketName||$(&quot;market&quot;).value;$(&quot;openPanna&quot;).value=r.openPana||&quot;&quot;;$(&quot;closePanna&quot;).value=r.closePana||&quot;&quot;;updatePreview();$(&quot;saveOpen&quot;).textContent=&quot;UPDATE OPEN&quot;;$(&quot;saveClose&quot;).textContent=&quot;UPDATE CLOSE&quot;;switchMode(r.closePana?&quot;close&quot;:&quot;open&quot;);msg(&quot;✏ MODIFY MODE — WRONG ENTRY CORRECT કરો&quot;);window.scrollTo({top:0,behavior:&quot;smooth&quot;})}
+async function deleteRecord(id){const r=records.find(x=&gt;x.id===id);if(!r)return;if(!confirm(&quot;Delete this entry?\n&quot;+(r.marketName||&quot;&quot;)+&quot; • &quot;+(r.date||&quot;&quot;)+&quot;\n&quot;+(r.openPana||&quot;—&quot;)+&quot; → &quot;+(r.closePana||&quot;—&quot;)+&quot;\nThis cannot be undone.&quot;))return;try{await deleteDoc(doc(db,&quot;matka_records&quot;,id));if(editingId===id)clearEdit();msg(&quot;✓ ENTRY DELETED&quot;);await loadRecords()}catch(e){msg(&quot;DELETE ERROR: &quot;+(e.message||e),1)}}
+async function saveOpen(){let date=$(&quot;date&quot;).value,m=$(&quot;market&quot;).value,p=$(&quot;openPanna&quot;).value.trim();if(!date||!m||!/^[0-9]{3}$/.test(p)){msg(&quot;Date, Market &amp; valid 3-digit Open Panna required&quot;,1);return}let market=markets.find(x=&gt;x.name===m),oa=ank(p);try{if(editingId){const old=records.find(r=&gt;r.id===editingId);if(!old){clearEdit();msg(&quot;Entry no longer exists. Refresh and try again.&quot;,1);return}const duplicate=records.find(r=&gt;r.id!==editingId&amp;&amp;r.date===date&amp;&amp;r.marketName===m);if(duplicate){msg(&quot;⚠ THIS MARKET + DATE ALREADY HAS ANOTHER ENTRY — DELETE/MODIFY THE WRONG ENTRY FIRST&quot;,1);return}const data={date,marketName:m,openPana:p,openAnk:oa,openTime:market?.openTime||old.openTime||&quot;00:00&quot;,closeTime:market?.closeTime||old.closeTime||&quot;&quot;,updatedAt:new Date().toISOString()};if(old.closePana){const ca=ank(old.closePana);data.closePana=old.closePana;data.closeAnk=ca;data.jodi=String(oa)+String(ca);data.difference=(ca-oa+10)%10}await updateDoc(doc(db,&quot;matka_records&quot;,editingId),data);clearEdit();msg(&quot;✓ OPEN ENTRY MODIFIED&quot;);await loadRecords();return}if(records.length){msg(&quot;⚠ ENTRY ALREADY EXISTS — use MODIFY, do not create duplicate&quot;,1);return}await addDoc(collection(db,&quot;matka_records&quot;),{date,marketName:m,openPana:p,openAnk:oa,openTime:market?.openTime||&quot;00:00&quot;,closeTime:market?.closeTime||&quot;&quot;,updatedAt:new Date().toISOString()});msg(&quot;✓ OPEN SAVED&quot;);$(&quot;openPanna&quot;).value=&quot;&quot;;updatePreview();await loadRecords();$(&quot;closePanna&quot;).focus()}catch(e){msg(&quot;SAVE ERROR: &quot;+(e.message||e),1)}}
+async function saveClose(){let date=$(&quot;date&quot;).value,m=$(&quot;market&quot;).value,p=$(&quot;closePanna&quot;).value.trim();if(!date||!m||!/^[0-9]{3}$/.test(p)){msg(&quot;Date, Market &amp; valid 3-digit Close Panna required&quot;,1);return}try{let s=await getDocs(query(collection(db,&quot;matka_records&quot;),where(&quot;date&quot;,&quot;==&quot;,date),where(&quot;marketName&quot;,&quot;==&quot;,m)));let matches=[];s.forEach(d=&gt;matches.push({id:d.id,...d.data()}));let found=editingId?matches.find(r=&gt;r.id===editingId):matches[0];if(editingId&amp;&amp;!found){clearEdit();msg(&quot;Entry no longer exists. Refresh and try again.&quot;,1);return}let ca=ank(p);if(found){let oa=ank(found.openPana),market=markets.find(x=&gt;x.name===m),data={date,marketName:m,closePana:p,closeAnk:ca,openTime:market?.openTime||found.openTime||&quot;00:00&quot;,closeTime:market?.closeTime||found.closeTime||&quot;&quot;,updatedAt:new Date().toISOString()};if(oa!==null){data.openPana=found.openPana;data.openAnk=oa;data.jodi=String(oa)+String(ca);data.difference=(ca-oa+10)%10}await updateDoc(doc(db,&quot;matka_records&quot;,found.id),data);clearEdit();msg(&quot;✓ CLOSE ENTRY MODIFIED&quot;)}else{if(matches.length){msg(&quot;⚠ ENTRY ALREADY EXISTS — use MODIFY, do not create duplicate&quot;,1);return}let market=markets.find(x=&gt;x.name===m);await addDoc(collection(db,&quot;matka_records&quot;),{date,marketName:m,closePana:p,closeAnk:ca,openPana:&quot;&quot;,openAnk:null,jodi:&quot;&quot;,difference:null,openTime:market?.openTime||&quot;00:00&quot;,closeTime:market?.closeTime||&quot;&quot;,updatedAt:new Date().toISOString()});msg(&quot;✓ CLOSE SAVED&quot;)}$(&quot;closePanna&quot;).value=&quot;&quot;;updatePreview();await loadRecords()}catch(e){msg(&quot;SAVE ERROR: &quot;+(e.message||e),1)}}
 function msg(t,e=0){$(&quot;status&quot;).textContent=t;$(&quot;status&quot;).className=&quot;text-center text-[10px] font-black min-h-4 &quot;+(e?&quot;text-red-500&quot;:&quot;text-emerald-600&quot;)}
 function switchMode(x){
  mode=x;$(&quot;openBox&quot;).classList.toggle(&quot;hidden&quot;,x!==&quot;open&quot;);$(&quot;closeBox&quot;).classList.toggle(&quot;hidden&quot;,x!==&quot;close&quot;);
@@ -2644,7 +2253,7 @@ $(&quot;openTab&quot;).onclick=()=&gt;switchMode(&quot;open&quot;);$(&quot;close
 $(&quot;openPanna&quot;).oninput=e=&gt;{e.target.value=e.target.value.replace(/\D/g,&quot;&quot;).slice(0,3);updatePreview()};
 $(&quot;closePanna&quot;).oninput=e=&gt;{e.target.value=e.target.value.replace(/\D/g,&quot;&quot;).slice(0,3);updatePreview()};
 $(&quot;saveOpen&quot;).onclick=saveOpen;$(&quot;saveClose&quot;).onclick=saveClose;
-$(&quot;market&quot;).onchange=loadRecords;$(&quot;date&quot;).onchange=loadRecords;$(&quot;refresh&quot;).onclick=async()=&gt;{await loadMarkets();await loadRecords();msg(&quot;✓ UPDATED&quot;)};
+$(&quot;market&quot;).onchange=()=&gt;{if(editingId)clearEdit();loadRecords()};$(&quot;date&quot;).onchange=()=&gt;{if(editingId)clearEdit();loadRecords()};$(&quot;refresh&quot;).onclick=async()=&gt;{await loadMarkets();await loadRecords();msg(&quot;✓ UPDATED&quot;)};
 
 $(&quot;marketBtn&quot;).onclick=()=&gt;{$(&quot;marketModal&quot;).classList.remove(&quot;hidden&quot;);$(&quot;marketStatus&quot;).textContent=&quot;&quot;};
 $(&quot;closeMarket&quot;).onclick=()=&gt;$(&quot;marketModal&quot;).classList.add(&quot;hidden&quot;);
@@ -2664,9 +2273,9 @@ $(&quot;deleteMarket&quot;).onclick=async()=&gt;{
 try{await loadMarkets();await loadRecords();$(&quot;openPanna&quot;).focus()}catch(e){msg(&quot;ERROR: &quot;+(e.message||e),1)}
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;"></iframe></main>
- </div>
-<iframe class="page-frame" id="page-11" title="Shortlist" style="display:none" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;/html&gt;" style="display:none" title="Panna Logger"></iframe></main>
+</div>
+<iframe class="page-frame" id="page-11" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;&lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
 &lt;title&gt;Shortlist&lt;/title&gt;
@@ -2674,92 +2283,18 @@ try{await loadMarkets();await loadRecords();$(&quot;openPanna&quot;).focus()}cat
 &lt;style&gt;
 *{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:#0f172a;font-family:Inter,Arial,sans-serif}
 .card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}
-&lt;/style&gt;
-&lt;style&gt;
-/* FINAL COMMON UI — based on Family Jodi reference. Calculation/JS untouched. */
-html,body{
-  margin:0!important;
-  padding:12px!important;
-  background:#f1f5f9!important;
-  color:#1e293b!important;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif!important;
-  min-height:100%!important;
-}
-body{box-sizing:border-box!important;}
-body *{box-sizing:border-box;}
-.max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{
-  max-width:48rem!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.card{
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-header.bg-white.sticky{
-  position:static!important;
-  background:#fff!important;
-  border:1px solid #e2e8f0!important;
-  border-radius:16px!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-  margin-bottom:12px!important;
-}
-header.bg-white.sticky&gt;div{
-  max-width:none!important;
-  padding:12px!important;
-}
-select{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  color:#0f172a!important;
-  font-weight:800!important;
-}
-button{font-family:inherit!important;}
-.btn{
-  border-radius:10px!important;
-  font-weight:900!important;
-}
-input{
-  border:1px solid #cbd5e1!important;
-  border-radius:10px!important;
-}
-.text-xl{font-size:18px!important;line-height:1.2!important;}
-.text-lg{font-size:18px!important;line-height:1.2!important;}
-section,.card{border-radius:16px!important;}
-@media(max-width:640px){
-  html,body{padding:12px!important;}
-  .max-w-3xl,.max-w-4xl,.max-w-5xl,.max-w-xl{width:100%!important;}
-  .grid{gap:8px!important;}
-}
-&lt;/style&gt;
-
-&lt;style&gt;
-/* Open Digit reference header — applied to Digit Play + Shortlist */
-body{background:#f1f5f9!important;color:#1e293b!important}
-.top-reference-card{
-  background:#fff!important;border-radius:16px!important;
-  border:1px solid #e2e8f0!important;
-  box-shadow:0 1px 2px rgba(15,23,42,.05)!important;
-}
-&lt;/style&gt;
-&lt;/head&gt;
+&lt;/style&gt;&lt;/head&gt;
 &lt;body class=&quot;p-3 sm:p-5&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
+&lt;div class=&quot;max-w-4xl mx-auto space-y-3&quot;&gt;
+ &lt;div class=&quot;card p-4&quot;&gt;
   &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-    &lt;div&gt;
-      &lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;⭐ SHORTLIST&lt;/div&gt;
-      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;DIGIT PLAY SYNC • 3 DIGITS → 9 JODI&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;button id=&quot;refresh&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
+   &lt;div&gt;&lt;div class=&quot;text-xl font-black&quot;&gt;⭐ SHORTLIST&lt;/div&gt;
+   &lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;DIGIT PLAY SYNC • 3 DIGITS → 8 JODI&lt;/div&gt;&lt;/div&gt;
+   &lt;div class=&quot;flex items-center gap-2&quot;&gt;&lt;select id=&quot;market&quot; class=&quot;border rounded-xl px-3 py-2 text-sm bg-white&quot;&gt;&lt;/select&gt;&lt;button id=&quot;refresh&quot; class=&quot;border rounded-xl px-3 py-2 text-sm font-black bg-indigo-600 text-white&quot;&gt;↻&lt;/button&gt;&lt;/div&gt;
   &lt;/div&gt;
-  &lt;select id=&quot;market&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;/select&gt;
-  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;status&quot; class=&quot;text-[9px] text-slate-400 font-bold mt-3&quot;&gt;Loading...&lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;script type=&quot;module&quot;&gt;
@@ -2863,7 +2398,7 @@ function render(){
    &lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;GAME SIDE&lt;/div&gt;
    &lt;div class=&quot;mt-2 text-4xl font-black ${side===&quot;CLOSE&quot;?&quot;text-rose-600&quot;:&quot;text-indigo-700&quot;}&quot;&gt;PLAY ${side}&lt;/div&gt;
    &lt;div class=&quot;text-[10px] font-bold text-slate-500 mt-1&quot;&gt;${winner.scope} → ${winner.group} • DIGIT DELAY ${winner.delay}&lt;/div&gt;
-   &lt;div class=&quot;flex justify-center items-center gap-2 mt-4&quot;&gt;${selected.map((d,i)=&gt;`${i?&#x27;&lt;span class=&quot;text-2xl text-slate-300 font-black&quot;&gt;•&lt;/span&gt;&#x27;:&quot;&quot;}&lt;div class=&quot;w-14 h-14 rounded-2xl ${side===&quot;CLOSE&quot;?&quot;bg-rose-50 text-rose-700&quot;:&quot;bg-indigo-50 text-indigo-700&quot;} flex items-center justify-center text-2xl font-black&quot;&gt;${d}&lt;/div&gt;`).join(&quot;&quot;)}&lt;/div&gt;
+   &lt;div class=&quot;flex justify-center items-center gap-2 mt-4&quot;&gt;${selected.map((d,i)=&gt;`${i?'&lt;span class=&quot;text-2xl text-slate-300 font-black&quot;&gt;•&lt;/span&gt;':&quot;&quot;}&lt;div class=&quot;w-14 h-14 rounded-2xl ${side===&quot;CLOSE&quot;?&quot;bg-rose-50 text-rose-700&quot;:&quot;bg-indigo-50 text-indigo-700&quot;} flex items-center justify-center text-2xl font-black&quot;&gt;${d}&lt;/div&gt;`).join(&quot;&quot;)}&lt;/div&gt;
    &lt;div class=&quot;mt-3 text-[9px] font-black text-slate-600&quot;&gt;JODI LOGIC: COMMON FACTOR FIRST&lt;/div&gt;
    &lt;div class=&quot;mt-1 text-[8px] text-slate-400 font-bold&quot;&gt;TOTAL + DIFFERENCE + FAMILY JODI + ODD/EVEN&lt;/div&gt;
   &lt;/div&gt;
@@ -2886,22 +2421,22 @@ async function load(){
  }catch(e){console.error(e);$(&quot;status&quot;).textContent=&quot;DATA ERROR: &quot;+(e.message||e);$(&quot;result&quot;).innerHTML=`&lt;div class=&quot;card p-4 text-xs font-bold text-red-600&quot;&gt;${e.message||e}&lt;/div&gt;`}
 }
 $(&quot;market&quot;).onchange=render;$(&quot;refresh&quot;).onclick=load;load();
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe> <nav class="bottom-nav">
-  <button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
-  <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
-  <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
-  <button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
-  <button class="nav-more" id="moreNav"><span>☰</span><span>More</span></button>
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Shortlist"></iframe> <nav class="bottom-nav">
+<button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
+<button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
+<button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
+<button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+<button class="nav-more" id="moreNav"><span>☰</span><span>More</span></button>
 </nav>
 <div class="more-panel" id="morePanel">
-  <button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button>
-  <button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button>
-  <button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
-  <button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button>
-  <button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button>
-  <button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button>
-  <button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button>
-  <button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button>
+<button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button>
+<button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button>
+<button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
+<button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button>
+<button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button>
+<button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button>
+<button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button>
+<button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button>
 </div>
 </div>
 <script>
@@ -2935,7 +2470,5 @@ try{saved=Number(localStorage.getItem('analysisPlatformPageV8')||10)}catch(e){}
 if(!Number.isInteger(saved)||saved<0||saved>11)saved=10;
 openPage(saved);
 </script>
-
-
 </body>
 </html>
