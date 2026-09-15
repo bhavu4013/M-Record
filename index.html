@@ -107,10 +107,9 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 <button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
 <div class="nav-more-title">MORE</div>
 <button class="nav-btn more-nav" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
-<button class="nav-btn more-nav" data-page="3"><span>🟢</span><span>Open Digit</span></button>
+<button class="nav-btn more-nav" data-page="3"><span>🔢</span><span>Digit</span></button>
 <button class="nav-btn more-nav" data-page="4"><span>➕</span><span>Total Digit</span></button>
 <button class="nav-btn more-nav" data-page="5"><span>⚖️</span><span>Odd / Even</span></button>
-<button class="nav-btn more-nav" data-page="6"><span>🔴</span><span>Close Digit</span></button>
 <button class="nav-btn more-nav" data-page="7"><span>➖</span><span>Difference Digit</span></button>
 </aside>
 <main class="content"><iframe class="page-frame" id="page-10" srcdoc="&lt;!DOCTYPE html&gt;
@@ -171,7 +170,7 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;
   &lt;button onclick=&quot;go(0)&quot; class=&quot;rounded-xl bg-indigo-50 border border-indigo-200 p-3 text-left&quot;&gt;&lt;div&gt;👨‍👩‍👧‍👦&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;/button&gt;
   &lt;button onclick=&quot;go(1)&quot; class=&quot;rounded-xl bg-amber-50 border border-amber-200 p-3 text-left&quot;&gt;&lt;div&gt;🔺&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;FAMILY PANNA&lt;/div&gt;&lt;/button&gt;
   &lt;button onclick=&quot;go(3)&quot; class=&quot;rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-left&quot;&gt;&lt;div&gt;🟢&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;OPEN DIGIT&lt;/div&gt;&lt;/button&gt;
-  &lt;button onclick=&quot;go(6)&quot; class=&quot;rounded-xl bg-rose-50 border border-rose-200 p-3 text-left&quot;&gt;&lt;div&gt;🔴&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;CLOSE DIGIT&lt;/div&gt;&lt;/button&gt;
+  &lt;button onclick=&quot;go(3)&quot; class=&quot;rounded-xl bg-rose-50 border border-rose-200 p-3 text-left&quot;&gt;&lt;div&gt;🔴&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DIGIT ANALYSIS&lt;/div&gt;&lt;/button&gt;
  &lt;/div&gt;
 &lt;/section&gt;
 &lt;div id=&quot;error&quot; class=&quot;text-center text-[10px] font-black text-red-500&quot;&gt;&lt;/div&gt;
@@ -635,232 +634,36 @@ initDigits();
 load();
 &lt;/script&gt;
 &lt;/body&gt;&lt;/html&gt;" style="display:block" title="Family Jodi"></iframe><iframe class="page-frame" id="page-1" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,viewport-fit=cover&quot;&gt;
-&lt;title&gt;Family Panna Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-.tab-active{transform:translateY(-1px);box-shadow:0 5px 14px rgba(15,23,42,.12)}
-.member{letter-spacing:.04em}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
-
-&lt;section class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-  &lt;div class=&quot;flex items-start justify-between gap-2&quot;&gt;
-    &lt;div&gt;
-      &lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;FAMILY PANNA&lt;/div&gt;
-      &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;35 GROUPS • TOP 10 / MID 15 / RECENT 10 • GROUP DELAY&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-black shadow-sm&quot;&gt;REFRESH&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;select id=&quot;marketSelect&quot; class=&quot;mt-4 w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-white&quot;&gt;
-    &lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;
-  &lt;/select&gt;
-  &lt;div class=&quot;grid grid-cols-3 gap-2 mt-2&quot;&gt;
-    &lt;button id=&quot;openMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white&quot;&gt;OPEN&lt;/button&gt;
-    &lt;button id=&quot;closeMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white&quot;&gt;CLOSE&lt;/button&gt;
-    &lt;button id=&quot;mergedMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&quot;&gt;OPEN → CLOSE&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;grid grid-cols-3 gap-2&quot;&gt;
-  &lt;button id=&quot;topBtn&quot; class=&quot;tabBtn tab-active rounded-2xl bg-orange-500 text-white p-3 text-left shadow-sm&quot;&gt;
-    &lt;div class=&quot;text-xs font-black&quot;&gt;🔥 TOP 10&lt;/div&gt;&lt;div class=&quot;text-[9px] opacity-90&quot;&gt;Highest group delay&lt;/div&gt;
-    &lt;div id=&quot;topDelay&quot; class=&quot;text-[10px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;
-  &lt;/button&gt;
-  &lt;button id=&quot;midBtn&quot; class=&quot;tabBtn rounded-2xl bg-indigo-600 text-white p-3 text-left shadow-sm&quot;&gt;
-    &lt;div class=&quot;text-xs font-black&quot;&gt;💠 MID 15&lt;/div&gt;&lt;div class=&quot;text-[9px] opacity-90&quot;&gt;Middle 15 groups&lt;/div&gt;
-    &lt;div id=&quot;midDelay&quot; class=&quot;text-[10px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;
-  &lt;/button&gt;
-  &lt;button id=&quot;recentBtn&quot; class=&quot;tabBtn rounded-2xl bg-emerald-600 text-white p-3 text-left shadow-sm&quot;&gt;
-    &lt;div class=&quot;text-xs font-black&quot;&gt;⚡ RECENT 10&lt;/div&gt;&lt;div class=&quot;text-[9px] opacity-90&quot;&gt;Lowest group delay&lt;/div&gt;
-    &lt;div id=&quot;recentDelay&quot; class=&quot;text-[10px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-    &lt;div&gt;&lt;div class=&quot;text-xs font-black text-slate-700&quot;&gt;FAMILY PANNA GROUPS&lt;/div&gt;
-    &lt;div id=&quot;sectionMeta&quot; class=&quot;text-[9px] text-slate-400 font-semibold&quot;&gt;TOP 10&lt;/div&gt;&lt;/div&gt;
-    &lt;button id=&quot;allBtn&quot; class=&quot;text-[9px] font-black px-3 py-2 rounded-lg bg-slate-100 text-slate-600&quot;&gt;ALL 35&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;div id=&quot;groupGrid&quot; class=&quot;grid grid-cols-2 gap-2 mt-3&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;text-xs font-black text-slate-700&quot;&gt;QUICK INSIGHT&lt;/div&gt;
-  &lt;div id=&quot;insight&quot; class=&quot;mt-2 text-[10px] leading-relaxed text-slate-600&quot;&gt;Loading analysis...&lt;/div&gt;
-&lt;/section&gt;
-&lt;/div&gt;
-
-&lt;div id=&quot;detailModal&quot; class=&quot;hidden fixed inset-0 bg-slate-950/50 z-50 p-4 overflow-y-auto&quot;&gt;
-  &lt;div class=&quot;max-w-md mx-auto mt-8 bg-white rounded-2xl shadow-xl overflow-hidden&quot;&gt;
-    &lt;div class=&quot;p-3 border-b border-slate-200 flex items-center justify-between&quot;&gt;
-      &lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;text-lg font-black text-indigo-700&quot;&gt;FAMILY PANNA&lt;/div&gt;
-      &lt;div id=&quot;modalSub&quot; class=&quot;text-[9px] font-semibold text-slate-400&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;closeModal&quot; class=&quot;w-9 h-9 rounded-full bg-slate-100 text-slate-500 font-black&quot;&gt;×&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;modalBody&quot; class=&quot;p-3&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
+&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,viewport-fit=cover&quot;&gt;&lt;title&gt;Family Panna Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;
+&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
+&lt;section class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-start justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-xl font-black text-indigo-700&quot;&gt;FAMILY PANNA&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;35 GROUPS • Current Delay • Max Delay • Hits&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-black shadow-sm&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;
+&lt;select id=&quot;marketSelect&quot; class=&quot;mt-4 w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-2 mt-2&quot;&gt;&lt;button id=&quot;openMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white&quot;&gt;OPEN&lt;/button&gt;&lt;button id=&quot;closeMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white&quot;&gt;CLOSE&lt;/button&gt;&lt;button id=&quot;mergedMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&quot;&gt;OPEN → CLOSE&lt;/button&gt;&lt;/div&gt;
+&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;grid grid-cols-3 gap-2&quot;&gt;&lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 10&lt;/div&gt;&lt;div id=&quot;topDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 15&lt;/div&gt;&lt;div id=&quot;midDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 10&lt;/div&gt;&lt;div id=&quot;recentDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/section&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;35 FAMILY PANNA GROUPS&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL 35&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;groupGrid&quot; class=&quot;grid grid-cols-3 sm:grid-cols-5 gap-1.5&quot;&gt;&lt;/div&gt;&lt;/section&gt;&lt;/div&gt;
 &lt;script type=&quot;module&quot;&gt;
-import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
-import {getFirestore,collection,getDocs,doc,getDoc} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
-
-const firebaseConfig={
- apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
- authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,
- projectId:&quot;m-record-f9c51&quot;,
- storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,
- messagingSenderId:&quot;479303152172&quot;,
- appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
-};
-const db=getFirestore(initializeApp(firebaseConfig));
-
-const DEFAULT_FAMILY_PANNA_GROUPS={
+import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;import {getFirestore,collection,getDocs,doc,getDoc} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};const db=getFirestore(initializeApp(firebaseConfig));
+let FAMILY_PANNA_GROUPS={
   &quot;222&quot;:[&quot;777&quot;,&quot;222&quot;,&quot;227&quot;,&quot;277&quot;],&quot;444&quot;:[&quot;444&quot;,&quot;999&quot;,&quot;499&quot;,&quot;449&quot;],&quot;666&quot;:[&quot;111&quot;,&quot;666&quot;,&quot;166&quot;,&quot;116&quot;],&quot;888&quot;:[&quot;888&quot;,&quot;333&quot;,&quot;338&quot;,&quot;388&quot;],&quot;000&quot;:[&quot;555&quot;,&quot;000&quot;,&quot;500&quot;,&quot;550&quot;],
   &quot;123&quot;:[&quot;128&quot;,&quot;123&quot;,&quot;678&quot;,&quot;178&quot;,&quot;236&quot;,&quot;367&quot;,&quot;137&quot;,&quot;268&quot;],&quot;345&quot;:[&quot;345&quot;,&quot;890&quot;,&quot;390&quot;,&quot;340&quot;,&quot;480&quot;,&quot;458&quot;,&quot;589&quot;,&quot;359&quot;],&quot;567&quot;:[&quot;157&quot;,&quot;567&quot;,&quot;120&quot;,&quot;260&quot;,&quot;670&quot;,&quot;170&quot;,&quot;256&quot;,&quot;125&quot;],&quot;789&quot;:[&quot;789&quot;,&quot;234&quot;,&quot;248&quot;,&quot;478&quot;,&quot;239&quot;,&quot;289&quot;,&quot;347&quot;,&quot;379&quot;],&quot;456&quot;:[&quot;456&quot;,&quot;145&quot;,&quot;140&quot;,&quot;190&quot;,&quot;690&quot;,&quot;460&quot;,&quot;159&quot;,&quot;569&quot;],
   &quot;470&quot;:[&quot;470&quot;,&quot;240&quot;,&quot;290&quot;,&quot;790&quot;,&quot;245&quot;,&quot;259&quot;,&quot;579&quot;,&quot;457&quot;],&quot;246&quot;:[&quot;246&quot;,&quot;269&quot;,&quot;129&quot;,&quot;124&quot;,&quot;147&quot;,&quot;179&quot;,&quot;679&quot;,&quot;467&quot;],&quot;369&quot;:[&quot;346&quot;,&quot;369&quot;,&quot;148&quot;,&quot;134&quot;,&quot;139&quot;,&quot;189&quot;,&quot;689&quot;,&quot;468&quot;],&quot;130&quot;:[&quot;130&quot;,&quot;180&quot;,&quot;680&quot;,&quot;360&quot;,&quot;356&quot;,&quot;568&quot;,&quot;158&quot;,&quot;135&quot;],&quot;230&quot;:[&quot;230&quot;,&quot;280&quot;,&quot;780&quot;,&quot;370&quot;,&quot;258&quot;,&quot;235&quot;,&quot;357&quot;,&quot;578&quot;],
   &quot;100&quot;:[&quot;100&quot;,&quot;600&quot;,&quot;155&quot;,&quot;556&quot;,&quot;560&quot;,&quot;150&quot;],&quot;200&quot;:[&quot;200&quot;,&quot;700&quot;,&quot;255&quot;,&quot;557&quot;,&quot;570&quot;,&quot;250&quot;],&quot;300&quot;:[&quot;300&quot;,&quot;800&quot;,&quot;355&quot;,&quot;558&quot;,&quot;580&quot;,&quot;350&quot;],&quot;400&quot;:[&quot;400&quot;,&quot;900&quot;,&quot;455&quot;,&quot;559&quot;,&quot;590&quot;,&quot;450&quot;],
   &quot;366&quot;:[&quot;366&quot;,&quot;668&quot;,&quot;113&quot;,&quot;118&quot;,&quot;168&quot;,&quot;136&quot;],&quot;330&quot;:[&quot;335&quot;,&quot;330&quot;,&quot;588&quot;,&quot;880&quot;,&quot;380&quot;,&quot;358&quot;],&quot;110&quot;:[&quot;110&quot;,&quot;115&quot;,&quot;660&quot;,&quot;566&quot;,&quot;156&quot;,&quot;160&quot;],&quot;440&quot;:[&quot;445&quot;,&quot;440&quot;,&quot;599&quot;,&quot;990&quot;,&quot;490&quot;,&quot;459&quot;],&quot;220&quot;:[&quot;220&quot;,&quot;225&quot;,&quot;770&quot;,&quot;577&quot;,&quot;257&quot;,&quot;270&quot;],&quot;334&quot;:[&quot;339&quot;,&quot;334&quot;,&quot;889&quot;,&quot;488&quot;,&quot;348&quot;,&quot;389&quot;],&quot;399&quot;:[&quot;399&quot;,&quot;899&quot;,&quot;344&quot;,&quot;448&quot;,&quot;489&quot;,&quot;349&quot;],&quot;377&quot;:[&quot;778&quot;,&quot;377&quot;,&quot;228&quot;,&quot;223&quot;,&quot;237&quot;,&quot;278&quot;],&quot;477&quot;:[&quot;779&quot;,&quot;477&quot;,&quot;229&quot;,&quot;224&quot;,&quot;247&quot;,&quot;279&quot;],&quot;144&quot;:[&quot;446&quot;,&quot;144&quot;,&quot;699&quot;,&quot;199&quot;,&quot;149&quot;,&quot;469&quot;],&quot;177&quot;:[&quot;177&quot;,&quot;677&quot;,&quot;122&quot;,&quot;226&quot;,&quot;267&quot;,&quot;127&quot;],&quot;114&quot;:[&quot;119&quot;,&quot;114&quot;,&quot;669&quot;,&quot;466&quot;,&quot;146&quot;,&quot;169&quot;],&quot;133&quot;:[&quot;336&quot;,&quot;133&quot;,&quot;688&quot;,&quot;188&quot;,&quot;138&quot;,&quot;368&quot;],&quot;233&quot;:[&quot;337&quot;,&quot;233&quot;,&quot;788&quot;,&quot;288&quot;,&quot;238&quot;,&quot;378&quot;],&quot;266&quot;:[&quot;266&quot;,&quot;667&quot;,&quot;112&quot;,&quot;117&quot;,&quot;167&quot;,&quot;126&quot;],&quot;244&quot;:[&quot;447&quot;,&quot;244&quot;,&quot;799&quot;,&quot;299&quot;,&quot;249&quot;,&quot;479&quot;]
-};
-let FAMILY_PANNA_GROUPS=DEFAULT_FAMILY_PANNA_GROUPS;
-let PANNA_TO_GROUP={};
-
-const el={
- market:document.getElementById(&quot;marketSelect&quot;),status:document.getElementById(&quot;status&quot;),
- grid:document.getElementById(&quot;groupGrid&quot;),insight:document.getElementById(&quot;insight&quot;),
- sectionMeta:document.getElementById(&quot;sectionMeta&quot;),topDelay:document.getElementById(&quot;topDelay&quot;),
- midDelay:document.getElementById(&quot;midDelay&quot;),recentDelay:document.getElementById(&quot;recentDelay&quot;),
- modal:document.getElementById(&quot;detailModal&quot;),modalTitle:document.getElementById(&quot;modalTitle&quot;),
- modalSub:document.getElementById(&quot;modalSub&quot;),modalBody:document.getElementById(&quot;modalBody&quot;)
-};
-let markets=[],allRows=[],mode=&quot;MERGED&quot;,view=&quot;TOP&quot;,cacheLoaded=false;
-
-const numP=v=&gt;{const s=String(v??&quot;&quot;).replace(/\D/g,&quot;&quot;);return /^\d{3}$/.test(s)?s:null};
-const timeMin=v=&gt;{const m=String(v??&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-
+};let PANNA_TO_GROUP={};let markets=[],allRows=[],mode=&quot;MERGED&quot;,view=&quot;ALL&quot;;
+const el={market:document.getElementById(&#x27;marketSelect&#x27;),status:document.getElementById(&#x27;status&#x27;),grid:document.getElementById(&#x27;groupGrid&#x27;),filterLabel:document.getElementById(&#x27;filterLabel&#x27;),topDelay:document.getElementById(&#x27;topDelay&#x27;),midDelay:document.getElementById(&#x27;midDelay&#x27;),recentDelay:document.getElementById(&#x27;recentDelay&#x27;)};
+const numP=v=&gt;{const s=String(v??&quot;&quot;).replace(/\D/g,&quot;&quot;);return /^\d{3}$/.test(s)?s:null};const timeMin=v=&gt;{const m=String(v??&quot;&quot;).match(/(\d{1,2}):(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
 function rebuild(){PANNA_TO_GROUP={};Object.entries(FAMILY_PANNA_GROUPS).forEach(([g,a])=&gt;a.forEach(p=&gt;PANNA_TO_GROUP[p]=g))}
-async function loadMaster(){
- try{const s=await getDoc(doc(db,&quot;masterData&quot;,&quot;familyPanna&quot;));if(s.exists()&amp;&amp;s.data().groups)FAMILY_PANNA_GROUPS=s.data().groups}
- catch(e){console.warn(&quot;Master data read failed; local baseline used.&quot;,e)}
- rebuild();
-}
-async function loadMarkets(){
- const s=await getDocs(collection(db,&quot;markets&quot;));markets=[];
- s.forEach(x=&gt;{const d=x.data();if(d?.name)markets.push({name:d.name,openTime:d.openTime})});
- markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||a.name.localeCompare(b.name));
- el.market.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&quot;&amp;quot;&quot;)}&quot;&gt;${m.name}&lt;/option&gt;`).join(&quot;&quot;);
-}
-async function loadRows(force=false){
- if(cacheLoaded&amp;&amp;!force)return allRows;
- const s=await getDocs(collection(db,&quot;matka_records&quot;));allRows=[];
- s.forEach(x=&gt;{const d=x.data();if(d?.date&amp;&amp;d?.marketName)allRows.push({id:x.id,...d})});
- const dateValue=v=&gt;{
- if(v&amp;&amp;typeof v.toDate===&quot;function&quot;){const d=v.toDate();return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}
- if(v&amp;&amp;typeof v.seconds===&quot;number&quot;)return v.seconds*1000;
- const d=new Date(v);return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0;
-};
-allRows.sort((a,b)=&gt;
- dateValue(a.date)-dateValue(b.date)||
- timeMin(a.openTime??markets.find(m=&gt;m.name===a.marketName)?.openTime)-
- timeMin(b.openTime??markets.find(m=&gt;m.name===b.marketName)?.openTime)
-);
- cacheLoaded=true;return allRows;
-}
-function selectedRows(){const m=el.market.value;return allRows.filter(r=&gt;m===&quot;ALL_MERGED&quot;||r.marketName===m)}
-function stream(rows){
- if(mode===&quot;OPEN&quot;)return rows.map(r=&gt;({row:r,panna:numP(r.openPana),side:&quot;OPEN&quot;})).filter(x=&gt;x.panna);
- if(mode===&quot;CLOSE&quot;)return rows.map(r=&gt;({row:r,panna:numP(r.closePana),side:&quot;CLOSE&quot;})).filter(x=&gt;x.panna);
- const a=[];rows.forEach(r=&gt;{const o=numP(r.openPana),c=numP(r.closePana);if(o)a.push({row:r,panna:o,side:&quot;OPEN&quot;});if(c)a.push({row:r,panna:c,side:&quot;CLOSE&quot;})});return a;
-}
-function calc(rows){
- const st=stream(rows),n=st.length,keys=Object.keys(FAMILY_PANNA_GROUPS);
- const stats=Object.fromEntries(keys.map(g=&gt;[g,{group:g,members:FAMILY_PANNA_GROUPS[g],occ:[],last:-1,hits:0,currentDelay:n,maxDelay:n,recent10:0,recent20:0,lastPanna:null,lastDate:null,lastSide:null}]));
- st.forEach((e,i)=&gt;{const g=PANNA_TO_GROUP[e.panna];if(!g)return;const s=stats[g];s.occ.push(i);s.last=i;s.hits++;s.lastPanna=e.panna;s.lastDate=e.row.date;s.lastSide=e.side});
- keys.forEach(g=&gt;{const s=stats[g],o=s.occ;s.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);s.recent10=o.filter(i=&gt;i&gt;=Math.max(0,n-10)).length;s.recent20=o.filter(i=&gt;i&gt;=Math.max(0,n-20)).length});
- const arr=keys.map(g=&gt;stats[g]);
- // EXACT FAMILY PANNA GROUP DELAY:
- // Group Delay = events since the latest hit of ANY member Panna
- // in that Family Panna group.
- // Max Delay is informational only and is NOT used for ranking.
- const ranked=arr.slice().sort((a,b)=&gt;
-  b.currentDelay-a.currentDelay ||
-  a.group.localeCompare(b.group)
- );
- // 35 groups =&gt; exactly TOP 10 / MID 15 / RECENT 10.
- const top=ranked.slice(0,10);
- const mid=ranked.slice(10,25);
- const recent=ranked.slice(25,35);
- return {stream:st,n,arr,ranked,top,mid,recent};
-}
-function label(){return mode===&quot;OPEN&quot;?&quot;OPEN PANNA&quot;:mode===&quot;CLOSE&quot;?&quot;CLOSE PANNA&quot;:&quot;MERGED • OPEN → CLOSE&quot;}
-function card(x,i){
- const hit=x.currentDelay===0,hot=!hit&amp;&amp;x.currentDelay&gt;=Math.max(3,x.maxDelay*.75);
- const bg=hit?&quot;bg-emerald-50 border-emerald-400&quot;:hot?&quot;bg-orange-50 border-orange-300&quot;:&quot;bg-white border-slate-200&quot;;
- return `&lt;button data-group=&quot;${x.group}&quot; class=&quot;text-left rounded-xl border ${bg} p-2.5 shadow-sm hover:shadow transition&quot;&gt;
- &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div class=&quot;flex items-center gap-2&quot;&gt;&lt;span class=&quot;text-[9px] font-black text-slate-400&quot;&gt;${i+1}&lt;/span&gt;&lt;span class=&quot;text-sm font-black text-indigo-700&quot;&gt;${x.group}&lt;/span&gt;&lt;/div&gt;
- &lt;span class=&quot;text-[8px] font-black px-1.5 py-0.5 rounded-full ${hit?&quot;bg-emerald-100 text-emerald-700&quot;:hot?&quot;bg-orange-100 text-orange-700&quot;:&quot;bg-slate-100 text-slate-500&quot;}&quot;&gt;${hit?&quot;HIT&quot;:&quot;D &quot;+x.currentDelay}&lt;/span&gt;&lt;/div&gt;
- &lt;div class=&quot;grid grid-cols-3 gap-1 mt-2 text-center&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[7px] text-slate-400 font-bold&quot;&gt;DELAY&lt;/div&gt;&lt;div class=&quot;text-xs font-black&quot;&gt;${x.currentDelay}&lt;/div&gt;&lt;/div&gt;
- &lt;div&gt;&lt;div class=&quot;text-[7px] text-slate-400 font-bold&quot;&gt;MAX&lt;/div&gt;&lt;div class=&quot;text-xs font-black&quot;&gt;${x.maxDelay}&lt;/div&gt;&lt;/div&gt;
- &lt;div&gt;&lt;div class=&quot;text-[7px] text-slate-400 font-bold&quot;&gt;HITS&lt;/div&gt;&lt;div class=&quot;text-xs font-black&quot;&gt;${x.hits}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;mt-2 text-[8px] text-slate-500 truncate&quot;&gt;Panna: &lt;span class=&quot;font-black text-slate-700&quot;&gt;${x.members.join(&quot; • &quot;)}&lt;/span&gt;&lt;/div&gt;&lt;/button&gt;`;
-}
-function getGroupDelay(list,n){
- const lastSeen=list.reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x.last)?x.last:-1),-1);
- return lastSeen&gt;=0?Math.max(0,n-1-lastSeen):n;
-}
-function render(){
- const s=calc(selectedRows()),cur=view===&quot;TOP&quot;?s.top:view===&quot;MID&quot;?s.mid:view===&quot;RECENT&quot;?s.recent:s.ranked;
- el.topDelay.textContent=`DELAY: ${getGroupDelay(s.top,s.n)}`;
- el.midDelay.textContent=`DELAY: ${getGroupDelay(s.mid,s.n)}`;
- el.recentDelay.textContent=`DELAY: ${getGroupDelay(s.recent,s.n)}`;
- const title=view===&quot;TOP&quot;?&quot;TOP 10&quot;:view===&quot;MID&quot;?&quot;MID 15&quot;:view===&quot;RECENT&quot;?&quot;RECENT 10&quot;:&quot;ALL 35&quot;;el.sectionMeta.textContent=`${title} • ${label()}`;
- el.grid.innerHTML=cur.length?cur.map(card).join(&quot;&quot;):`&lt;div class=&quot;col-span-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[10px] font-bold text-amber-800&quot;&gt;No valid Panna data found.&lt;/div&gt;`;
- el.grid.querySelectorAll(&quot;[data-group]&quot;).forEach(b=&gt;b.onclick=()=&gt;detail(b.dataset.group,s));
- const longest=s.ranked[0],hits=s.arr.filter(x=&gt;x.currentDelay===0).length,market=el.market.value===&quot;ALL_MERGED&quot;?&quot;ALL MARKETS&quot;:el.market.value;
- el.status.textContent=`${s.n} Panna events • ${market} • ${label()}`;
- el.insight.innerHTML=`&lt;div class=&quot;grid grid-cols-2 gap-2&quot;&gt;
- &lt;div class=&quot;rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;LONGEST CURRENT DELAY&lt;/div&gt;&lt;div class=&quot;text-sm font-black text-orange-600&quot;&gt;${longest?.group||&quot;—&quot;} • ${longest?.currentDelay??0}&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;CURRENT HITS&lt;/div&gt;&lt;div class=&quot;text-sm font-black text-emerald-600&quot;&gt;${hits} / ${keysCount()}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;mt-2&quot;&gt;Family Panna group hit = &lt;b&gt;any member Panna occurs&lt;/b&gt;. Delay is measured in the selected event stream; latest hit = &lt;b&gt;0&lt;/b&gt;. Max Delay = largest historical gap including the current unfinished gap.&lt;/div&gt;`;
-}
-function keysCount(){return Object.keys(FAMILY_PANNA_GROUPS).length}
-function detail(group,s){
- const x=s.arr.find(a=&gt;a.group===group);if(!x)return;
- el.modalTitle.textContent=`FAMILY ${x.group}`;el.modalSub.textContent=`${label()} • ${el.market.value===&quot;ALL_MERGED&quot;?&quot;ALL MARKETS&quot;:el.market.value}`;
- const recent=s.stream.slice(-30).filter(e=&gt;PANNA_TO_GROUP[e.panna]===group).reverse().slice(0,10);
- el.modalBody.innerHTML=`&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
- &lt;div class=&quot;rounded-xl bg-indigo-50 border border-indigo-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-indigo-400&quot;&gt;CURRENT&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;${x.currentDelay}&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;rounded-xl bg-orange-50 border border-orange-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-orange-400&quot;&gt;MAX&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-orange-700&quot;&gt;${x.maxDelay}&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;rounded-xl bg-emerald-50 border border-emerald-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-emerald-400&quot;&gt;HITS&lt;/div&gt;&lt;div class=&quot;text-lg font-black text-emerald-700&quot;&gt;${x.hits}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;mt-3&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500 mb-1&quot;&gt;GROUP MEMBERS (${x.members.length})&lt;/div&gt;&lt;div class=&quot;flex flex-wrap gap-1&quot;&gt;${x.members.map(p=&gt;`&lt;span class=&quot;member px-2 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[10px] font-black&quot;&gt;${p}&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;grid grid-cols-2 gap-2 mt-3&quot;&gt;&lt;div class=&quot;rounded-xl border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;RECENT 10&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;${x.recent10}&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;rounded-xl border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[7px] font-black text-slate-400&quot;&gt;RECENT 20&lt;/div&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;${x.recent20}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;mt-3 rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-500 mb-1&quot;&gt;LATEST GROUP HITS&lt;/div&gt;
- ${recent.length?recent.map(e=&gt;`&lt;div class=&quot;flex items-center justify-between py-1 border-b border-slate-200 last:border-0 text-[9px]&quot;&gt;&lt;span class=&quot;font-black&quot;&gt;${e.panna} &lt;span class=&quot;text-slate-400&quot;&gt;${e.side}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;text-slate-500&quot;&gt;${e.row.date}&lt;/span&gt;&lt;/div&gt;`).join(&quot;&quot;):&quot;&lt;div class='text-[9px] text-slate-400'&gt;No hits found.&lt;/div&gt;&quot;}&lt;/div&gt;`;
- el.modal.classList.remove(&quot;hidden&quot;);
-}
-function setView(v){view=v;document.querySelectorAll(&quot;.tabBtn&quot;).forEach(b=&gt;b.classList.remove(&quot;tab-active&quot;));document.getElementById(v===&quot;TOP&quot;?&quot;topBtn&quot;:v===&quot;MID&quot;?&quot;midBtn&quot;:v===&quot;RECENT&quot;?&quot;recentBtn&quot;:&quot;allBtn&quot;)?.classList.add(&quot;tab-active&quot;);render()}
-function setMode(m){mode=m;document.querySelectorAll(&quot;.modeBtn&quot;).forEach(b=&gt;b.className=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white&quot;);const id=m===&quot;OPEN&quot;?&quot;openMode&quot;:m===&quot;CLOSE&quot;?&quot;closeMode&quot;:&quot;mergedMode&quot;;document.getElementById(id).className=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&quot;;render()}
-
-topBtn.onclick=()=&gt;setView(&quot;TOP&quot;);midBtn.onclick=()=&gt;setView(&quot;MID&quot;);recentBtn.onclick=()=&gt;setView(&quot;RECENT&quot;);allBtn.onclick=()=&gt;setView(&quot;ALL&quot;);
-openMode.onclick=()=&gt;setMode(&quot;OPEN&quot;);closeMode.onclick=()=&gt;setMode(&quot;CLOSE&quot;);mergedMode.onclick=()=&gt;setMode(&quot;MERGED&quot;);
-closeModal.onclick=()=&gt;el.modal.classList.add(&quot;hidden&quot;);el.modal.onclick=e=&gt;{if(e.target===el.modal)el.modal.classList.add(&quot;hidden&quot;)};
-el.market.onchange=render;
-refreshBtn.onclick=async()=&gt;{try{refreshBtn.disabled=true;el.status.textContent=&quot;Refreshing...&quot;;cacheLoaded=false;await loadMarkets();await loadRows(true);render()}catch(e){el.status.textContent=&quot;ERROR: &quot;+(e.message||e)}finally{refreshBtn.disabled=false}};
-
-(async()=&gt;{try{await loadMaster();await loadMarkets();await loadRows();render()}catch(e){console.error(e);el.status.textContent=&quot;ERROR: &quot;+(e.message||e);el.insight.textContent=&quot;Could not load Firebase data.&quot;}})();
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;" style="display:none" title="Family Panna"></iframe><iframe class="page-frame" id="page-2" srcdoc="&lt;!DOCTYPE html&gt;
+async function loadMaster(){try{const s=await getDoc(doc(db,&quot;masterData&quot;,&quot;familyPanna&quot;));if(s.exists()&amp;&amp;s.data().groups)FAMILY_PANNA_GROUPS=s.data().groups}catch(e){console.warn(e)}rebuild()}
+async function load(){el.status.textContent=&#x27;Loading Firebase data...&#x27;;const [ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(x=&gt;{const d=x.data();if(d?.name)markets.push({name:d.name,openTime:d.openTime})});markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||a.name.localeCompare(b.name));const selected=el.market.value||&#x27;ALL_MERGED&#x27;;el.market.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${m.name}&lt;/option&gt;`).join(&#x27;&#x27;);if(selected!==&#x27;ALL_MERGED&#x27;&amp;&amp;markets.some(m=&gt;m.name===selected))el.market.value=selected;allRows=[];rs.forEach(x=&gt;{const d=x.data();if(d?.date&amp;&amp;d?.marketName)allRows.push({id:x.id,...d})});allRows.sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime??markets.find(m=&gt;m.name===a.marketName)?.openTime)-timeMin(b.openTime??markets.find(m=&gt;m.name===b.marketName)?.openTime));calculate()}
+function stream(rows){if(mode===&#x27;OPEN&#x27;)return rows.map(r=&gt;({row:r,panna:numP(r.openPana),side:&#x27;OPEN&#x27;})).filter(x=&gt;x.panna);if(mode===&#x27;CLOSE&#x27;)return rows.map(r=&gt;({row:r,panna:numP(r.closePana),side:&#x27;CLOSE&#x27;})).filter(x=&gt;x.panna);const a=[];rows.forEach(r=&gt;{const o=numP(r.openPana),c=numP(r.closePana);if(o)a.push({row:r,panna:o,side:&#x27;OPEN&#x27;});if(c)a.push({row:r,panna:c,side:&#x27;CLOSE&#x27;})});return a}
+function calculate(){const rows=allRows.filter(r=&gt;el.market.value===&#x27;ALL_MERGED&#x27;||r.marketName===el.market.value);const st=stream(rows),n=st.length,keys=Object.keys(FAMILY_PANNA_GROUPS);const stats=Object.fromEntries(keys.map(g=&gt;[g,{jodi:g,members:FAMILY_PANNA_GROUPS[g],occ:[],last:-1,count:0,currentDelay:n,maxDelay:0}]));st.forEach((e,i)=&gt;{const g=PANNA_TO_GROUP[e.panna];if(g&amp;&amp;stats[g]){stats[g].occ.push(i);stats[g].last=i;stats[g].count++}});keys.forEach(g=&gt;{const x=stats[g],o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});const ranked=keys.map(g=&gt;stats[g]).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi));const top=ranked.slice(0,10),mid=ranked.slice(10,25),recent=ranked.slice(25,35);const groupDelay=list=&gt;{const last=list.reduce((m,x)=&gt;Math.max(m,x.last),-1);return last&gt;=0?Math.max(0,n-1-last):n};render(ranked,top,mid,recent,groupDelay);el.status.textContent=`${n} Panna events • ${el.market.value===&#x27;ALL_MERGED&#x27;?&#x27;ALL MARKETS&#x27;:el.market.value} • ${mode===&#x27;MERGED&#x27;?&#x27;OPEN → CLOSE&#x27;:mode}`}
+function render(all,top,mid,recent,gd){let list=view===&#x27;TOP&#x27;?top:view===&#x27;MID&#x27;?mid:view===&#x27;RECENT&#x27;?recent:all;el.filterLabel.textContent=view===&#x27;ALL&#x27;?&#x27;ALL 35&#x27;:`${view} ${list.length}`;el.topDelay.textContent=`DELAY: ${gd(top)}`;el.midDelay.textContent=`DELAY: ${gd(mid)}`;el.recentDelay.textContent=`DELAY: ${gd(recent)}`;const ts=new Set(top.map(x=&gt;x.jodi)),ms=new Set(mid.map(x=&gt;x.jodi)),rs=new Set(recent.map(x=&gt;x.jodi));el.grid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=ts.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:ms.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:&#x27;border-emerald-400 bg-emerald-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black text-indigo-700&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;el.grid.appendChild(b)})}
+function setView(v){view=v;calculate()}function setMode(m){mode=m;document.querySelectorAll(&#x27;.modeBtn&#x27;).forEach(b=&gt;b.className=&#x27;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white&#x27;);const id=m===&#x27;OPEN&#x27;?&#x27;openMode&#x27;:m===&#x27;CLOSE&#x27;?&#x27;closeMode&#x27;:&#x27;mergedMode&#x27;;document.getElementById(id).className=&#x27;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&#x27;;view=&#x27;ALL&#x27;;calculate()}
+topBtn.onclick=()=&gt;setView(&#x27;TOP&#x27;);midBtn.onclick=()=&gt;setView(&#x27;MID&#x27;);recentBtn.onclick=()=&gt;setView(&#x27;RECENT&#x27;);openMode.onclick=()=&gt;setMode(&#x27;OPEN&#x27;);closeMode.onclick=()=&gt;setMode(&#x27;CLOSE&#x27;);mergedMode.onclick=()=&gt;setMode(&#x27;MERGED&#x27;);el.market.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};refreshBtn.onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};
+(async()=&gt;{try{await loadMaster();await load()}catch(e){el.status.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e)}})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Family Panna"></iframe><iframe class="page-frame" id="page-2" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -990,429 +793,74 @@ initDigits();load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);c
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" style="display:none" title="Jodi 00–99"></iframe><iframe class="page-frame" id="page-3" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;gu&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-&lt;title&gt;Open Digit Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
-body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-  &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-    &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-      &lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;OPEN DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;10 DIGITS • TOP 3 / MID 4 / RECENT 3 • Delay / Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
-    &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
-    &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Highest delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Middle delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Lowest delay&lt;/div&gt;&lt;/button&gt;
-  &lt;/div&gt;
-
-  &lt;div id=&quot;jodiGrid&quot; class=&quot;space-y-3&quot;&gt;&lt;/div&gt;
-
-&lt;/div&gt;
-
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;
-  &lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[85vh] overflow-hidden&quot;&gt;
-    &lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;
-      &lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT 1&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-500&quot;&gt;OPEN Digit • Delay • Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;modalBody&quot; class=&quot;p-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
+" style="display:none" title="Jodi 00–99"></iframe><iframe class="page-frame" id="page-3" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;DIGIT ANALYSIS&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div id=&quot;title&quot; class=&quot;text-lg font-black text-indigo-700&quot;&gt;OPEN DIGIT&lt;/div&gt;&lt;div id=&quot;sub&quot; class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;OPEN DIGIT • 10 DIGITS • Current Delay • Max Delay&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;&lt;button id=&quot;openTab&quot; class=&quot;rounded-xl border p-2.5 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&quot;&gt;OPEN&lt;/button&gt;&lt;button id=&quot;closeTab&quot; class=&quot;rounded-xl border p-2.5 text-[10px] font-black bg-white&quot;&gt;CLOSE&lt;/button&gt;&lt;button id=&quot;otcTab&quot; class=&quot;rounded-xl border p-2.5 text-[10px] font-black bg-white&quot;&gt;OTC&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;&lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div id=&quot;topDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div id=&quot;midDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div id=&quot;recentDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div id=&quot;gridTitle&quot; class=&quot;font-black text-sm&quot;&gt;10 OPEN DIGIT&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL 10&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-5 sm:grid-cols-10 gap-1.5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {initializeApp} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;; import {getFirestore,collection,getDocs} from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGvV2-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;}; const db=getFirestore(initializeApp(firebaseConfig));
+const $=id=&gt;document.getElementById(id); let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&#x27;ALL&#x27;,mode=&#x27;OPEN&#x27;;
+function digit(v){if(v===undefined||v===null||v===&#x27;&#x27;)return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null}
+function timeMin(v){const m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
+function dateValue(v){if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;){const d=v.toDate();return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}if(v&amp;&amp;typeof v.seconds===&#x27;number&#x27;)return v.seconds*1000;const d=new Date(v);return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}
+function sortRows(a){return a.slice().sort((x,y)=&gt;dateValue(x.date)-dateValue(y.date)||timeMin(x.openTime)-timeMin(y.openTime)||String(x.marketName||&#x27;&#x27;).localeCompare(String(y.marketName||&#x27;&#x27;)))}
+function valueOf(r,side){const o=digit(r.openAnk),c=digit(r.closeAnk);if(mode===&#x27;OPEN&#x27;)return o;if(mode===&#x27;CLOSE&#x27;)return c;return [o,c].filter(x=&gt;x!==null)}
+function stream(rows){if(mode!==&#x27;OTC&#x27;)return rows.map(r=&gt;({r,d:valueOf(r,mode)})).filter(x=&gt;x.d!==null);const out=[];rows.forEach(r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o!==null)out.push({r,d:o,side:&#x27;OPEN&#x27;});if(c!==null)out.push({r,d:c,side:&#x27;CLOSE&#x27;})});return out}
+function makeStats(history){const n=history.length,a=Object.fromEntries(Array.from({length:10},(_,i)=&gt;[String(i),{jodi:String(i),occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((e,i)=&gt;{if(e.d!==null){a[String(e.d)].occ.push(i);a[String(e.d)].lastSeen=i;a[String(e.d)].count++}});Object.values(a).forEach(x=&gt;{const o=x.occ,n=history.length;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
+function calculate(){const selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)));const st=stream(rows),n=st.length;stats=makeStats(st);const keys=Array.from({length:10},(_,i)=&gt;String(i));const rankHistory=h=&gt;keys.map(k=&gt;makeStats(h)[k]).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi));const bucketDelay=(list,len)=&gt;{const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);return last&gt;=0?Math.max(0,len-1-last):len};let top,mid,recent,td=0,md=0,rd=0;if(!st.length){const r=rankHistory(st);top=r.slice(0,3);mid=r.slice(3,7);recent=r.slice(7,10)}else{const previous=st.slice(0,-1),ranked=rankHistory(previous),pTop=ranked.slice(0,3),pMid=ranked.slice(3,7),pRecent=ranked.slice(7,10);td=bucketDelay(pTop,previous.length);md=bucketDelay(pMid,previous.length);rd=bucketDelay(pRecent,previous.length);const hit=st[st.length-1].d, hs=String(hit), topHas=pTop.some(x=&gt;x.jodi===hs),midHas=pMid.some(x=&gt;x.jodi===hs),recentHas=pRecent.some(x=&gt;x.jodi===hs),clean=(l,v)=&gt;l.filter(x=&gt;x.jodi!==v);if(topHas){top=[...clean(pTop,hs),pMid[0]];mid=[...pMid.slice(1),pRecent[0]];recent=[{...stats[hs]} ,...pRecent.slice(1).filter(x=&gt;x.jodi!==hs)];td=0;md++;rd++}else if(midHas){top=[...pTop];mid=[...clean(pMid,hs),pRecent[0]];recent=[{...stats[hs]},...pRecent.slice(1).filter(x=&gt;x.jodi!==hs)];md=0;td++;rd++}else if(recentHas){top=[...pTop];mid=[...pMid];recent=[{...stats[hs]},...pRecent.filter(x=&gt;x.jodi!==hs)];rd=0;td++;md++}else{top=pTop;mid=pMid;recent=pRecent;td++;md++;rd++}}
+ top10=top.map(x=&gt;stats[x.jodi]).filter(Boolean);mid10=mid.map(x=&gt;stats[x.jodi]).filter(Boolean);recent10=recent.map(x=&gt;stats[x.jodi]).filter(Boolean);groupDelayState={top:td,mid:md,recent:rd};render();$(&#x27;status&#x27;).textContent=`${n} ${mode===&#x27;OTC&#x27;?&#x27;OTC events&#x27;:mode+&#x27; games&#x27;} • ${selected===&#x27;ALL_MERGED&#x27;?&#x27;ALL MARKETS&#x27;:selected}`}
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;$(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;$(&#x27;topDelay&#x27;).textContent=&#x27;DELAY: &#x27;+groupDelayState.top;$(&#x27;midDelay&#x27;).textContent=&#x27;DELAY: &#x27;+groupDelayState.mid;$(&#x27;recentDelay&#x27;).textContent=&#x27;DELAY: &#x27;+groupDelayState.recent;$(&#x27;digitGrid&#x27;).innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:&#x27;border-emerald-400 bg-emerald-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;$(&#x27;digitGrid&#x27;).appendChild(b)})}
+function setMode(m){mode=m;view=&#x27;ALL&#x27;;document.querySelectorAll(&#x27;.modeTab&#x27;).forEach(()=&gt;{});[[&#x27;openTab&#x27;,&#x27;OPEN&#x27;],[&#x27;closeTab&#x27;,&#x27;CLOSE&#x27;],[&#x27;otcTab&#x27;,&#x27;OTC&#x27;]].forEach(([id,v])=&gt;{$(id).className=&#x27;rounded-xl border p-2.5 text-[10px] font-black bg-white&#x27;;if(v===m)$(id).className=&#x27;rounded-xl border p-2.5 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&#x27;});$(&#x27;title&#x27;).textContent=m===&#x27;OTC&#x27;?&#x27;OTC DIGIT&#x27;:m+&#x27; DIGIT&#x27;;$(&#x27;sub&#x27;).textContent=m===&#x27;OTC&#x27;?&#x27;OTC • OPEN → CLOSE SEQUENCE • 20 EVENTS PER 10 GAMES&#x27;:&#x27; &#x27;+m+&#x27; DIGIT • 10 DIGITS • Current Delay • Max Delay&#x27;;$(&#x27;gridTitle&#x27;).textContent=m===&#x27;OTC&#x27;?&#x27;10 OTC DIGIT&#x27;:&#x27;10 &#x27;+m+&#x27; DIGIT&#x27;;calculate()}
+async function load(){ $(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;const [ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;$(&#x27;marketSelect&#x27;).appendChild(o)});allRows=[];rs.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;})});calculate()}
+$(&#x27;marketSelect&#x27;).onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};$(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};$(&#x27;topBtn&#x27;).onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};$(&#x27;midBtn&#x27;).onclick=()=&gt;{view=&#x27;MID&#x27;;render()};$(&#x27;recentBtn&#x27;).onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};$(&#x27;openTab&#x27;).onclick=()=&gt;setMode(&#x27;OPEN&#x27;);$(&#x27;closeTab&#x27;).onclick=()=&gt;setMode(&#x27;CLOSE&#x27;);$(&#x27;otcTab&#x27;).onclick=()=&gt;setMode(&#x27;OTC&#x27;);load().catch(e=&gt;{$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e)});
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Digit Analysis"></iframe><iframe class="page-frame" id="page-4" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;TOTAL DIGIT&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;TOTAL DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;TOTAL DIGIT • 10 DIGITS • Current Delay • Max Delay&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;&lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div id=&quot;topDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div id=&quot;midDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div id=&quot;recentDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;10 TOTAL DIGIT&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL 10&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-5 sm:grid-cols-10 gap-1.5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;script type=&quot;module&quot;&gt;
 import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
 import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
-
-const firebaseConfig={
- apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
- authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,
- projectId:&quot;m-record-f9c51&quot;,
- storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,
- messagingSenderId:&quot;479303152172&quot;,
- appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
-};
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
-let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
-
-const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
-const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return digit(r.openAnk);};
+const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&#x27;ALL&#x27;;
+const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
+const metricOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (o+c)%10;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
-
-async function load(){
- statusEl.textContent='Loading Firebase data...';
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
- marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
- const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
- markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
- statusEl.textContent=`${allRows.length} raw records loaded`;
- calculate();
-}
-
-let groupDelayState={top:0,mid:0,recent:0};
-
+function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)));}
+async function load(){statusEl.textContent=&#x27;Loading Firebase data...&#x27;;const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});calculate();}
+function makeStats(history){const n=history.length,keys=Array.from({length:10},(_,i)=&gt;String(i)),a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((r,i)=&gt;{const d=metricOf(r);if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}});keys.forEach(k=&gt;{const x=a[k],o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps);});return a;}
 function calculate(){
  const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
- const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
- analysisRowCount=rows.length;
+ const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)&amp;&amp;metricOf(r)!==null));
  const keys=Array.from({length:10},(_,i)=&gt;String(i));
-
- function makeStats(history){
-   const n=history.length;
-   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
-   history.forEach((r,i)=&gt;{
-     const d=jodiOf(r);
-     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
-   });
-   keys.forEach(k=&gt;{
-     const s=a[k],o=s.occ;
-     s.currentDelay=o.length?n-1-o[o.length-1]:n;
-     let gaps=o.length?[o[0]]:[n];
-     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
-     if(o.length)gaps.push(n-1-o[o.length-1]);
-     s.maxDelay=Math.max(0,...gaps);
-   });
-   return a;
+ const currentStats=makeStats(rows); stats=currentStats;
+ const rankHistory=h=&gt;{const hs=makeStats(h);return keys.map(k=&gt;hs[k]).filter(Boolean).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||String(a.jodi).localeCompare(String(b.jodi)))};
+ const bucketDelay=(list,n)=&gt;{const last=(list||[]).reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x?.lastSeen)?x.lastSeen:-1),-1);return last&gt;=0?Math.max(0,n-1-last):n;};
+ let top=[],mid=[],recent=[],td=0,md=0,rd=0;
+ if(!rows.length){const r=rankHistory(rows);top=r.slice(0,3);mid=r.slice(3,7);recent=r.slice(7,10);}
+ else{
+  const previous=rows.slice(0,-1),ranked=rankHistory(previous),pTop=ranked.slice(0,3),pMid=ranked.slice(3,7),pRecent=ranked.slice(7,10);
+  td=bucketDelay(pTop,previous.length);md=bucketDelay(pMid,previous.length);rd=bucketDelay(pRecent,previous.length);
+  const hit=metricOf(rows[rows.length-1]),hitKey=hit===null?null:String(hit);
+  const topHas=hitKey!==null&amp;&amp;pTop.some(x=&gt;String(x.jodi)===hitKey),midHas=hitKey!==null&amp;&amp;pMid.some(x=&gt;String(x.jodi)===hitKey),recentHas=hitKey!==null&amp;&amp;pRecent.some(x=&gt;String(x.jodi)===hitKey);
+  const clean=(l,v)=&gt;(l||[]).filter(x=&gt;String(x.jodi)!==String(v));
+  if(topHas){top=[...clean(pTop,hitKey),pMid[0]].filter(Boolean).slice(0,3);mid=[...pMid.slice(1),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent.slice(0,3)].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);td=0;md+=1;rd+=1;}
+  else if(midHas){top=pTop.slice(0,3);mid=[...clean(pMid,hitKey),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);md=0;td+=1;rd+=1;}
+  else if(recentHas){top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);rd=0;td+=1;md+=1;}
+  else{top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=pRecent.slice(0,3);td+=1;md+=1;rd+=1;}
  }
-
- const currentStats=makeStats(rows);
- stats=currentStats;
-
- // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
- function rankHistory(history){
-   const a=makeStats(history);
-   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
-     b.currentDelay-a.currentDelay||
-     b.maxDelay-a.maxDelay||
-     a.jodi.localeCompare(b.jodi)
-   );
- }
- function bucketDelay(list,historyLength){
-   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
-   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
- }
-
- let top=[],mid=[],recent=[];
- let topDelay=0,midDelay=0,recentDelay=0;
-
- if(rows.length===0){
-   const ranked=rankHistory(rows);
-   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
- }else{
-   const previous=rows.slice(0,-1);
-   const rankedBefore=rankHistory(previous);
-   const pTop=rankedBefore.slice(0,3);
-   const pMid=rankedBefore.slice(3,7);
-   const pRecent=rankedBefore.slice(7,10);
-
-   topDelay=bucketDelay(pTop,previous.length);
-   midDelay=bucketDelay(pMid,previous.length);
-   recentDelay=bucketDelay(pRecent,previous.length);
-
-   const hit=jodiOf(rows[rows.length-1]);
-   const topHas=pTop.some(x=&gt;x.jodi===hit);
-   const midHas=pMid.some(x=&gt;x.jodi===hit);
-   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
-   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
-
-   if(topHas){
-     top=[...clean(pTop,hit)];
-     const fromMid=pMid[0];
-     const fromRecent=pRecent[0];
-     top.push(fromMid);
-     mid=[...pMid.slice(1)];
-     mid.push(fromRecent);
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     topDelay=0;
-     midDelay+=1;
-     recentDelay+=1;
-   }else if(midHas){
-     top=[...pTop];
-     mid=[...clean(pMid,hit),pRecent[0]];
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     midDelay=0;
-     topDelay+=1;
-     recentDelay+=1;
-   }else if(recentHas){
-     top=[...pTop];
-     mid=[...pMid];
-     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
-     recentDelay=0;
-     topDelay+=1;
-     midDelay+=1;
-   }else{
-     top=pTop;mid=pMid;recent=pRecent;
-     topDelay+=1;midDelay+=1;recentDelay+=1;
-   }
- }
-
- const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
- top10=toCurrent(top);
- mid10=toCurrent(mid);
- recent10=toCurrent(recent);
- groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
-
- renderGrid();
- statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
+ top10=top.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
+ mid10=mid.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,4);
+ recent10=recent.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
+ groupDelayState={top:td,mid:md,recent:rd};render();
+ statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3`;
 }
-
-function getGroupDelay(list){
- return groupDelayState.top;
-}
-function renderGroup(title,list,cls,id){
- const grid=document.getElementById('jodiGrid');
- const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
- const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
- box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
- list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
- box.appendChild(row);grid.appendChild(box);
-}
-function renderGrid(){
- const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
- const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
- document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
- renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
- renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
-}
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
-load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-" style="display:none" title="Open Digit"></iframe><iframe class="page-frame" id="page-4" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;gu&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-&lt;title&gt;Total Digit Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
-body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-  &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-    &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-      &lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;TOTAL DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;10 DIGITS • TOP 3 / MID 4 / RECENT 3 • Delay / Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
-    &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
-    &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Highest delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Middle delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Lowest delay&lt;/div&gt;&lt;/button&gt;
-  &lt;/div&gt;
-
-  &lt;div id=&quot;jodiGrid&quot; class=&quot;space-y-3&quot;&gt;&lt;/div&gt;
-
-&lt;/div&gt;
-
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;
-  &lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[85vh] overflow-hidden&quot;&gt;
-    &lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;
-      &lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT 1&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-500&quot;&gt;TOTAL Digit • Delay • Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;modalBody&quot; class=&quot;p-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script type=&quot;module&quot;&gt;
-import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
-import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
-
-const firebaseConfig={
- apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
- authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,
- projectId:&quot;m-record-f9c51&quot;,
- storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,
- messagingSenderId:&quot;479303152172&quot;,
- appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
-};
-const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
-let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
-
-const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
-const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (o+c)%10;};
-const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
-
-async function load(){
- statusEl.textContent='Loading Firebase data...';
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
- marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
- const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
- markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
- statusEl.textContent=`${allRows.length} raw records loaded`;
- calculate();
-}
-
-let groupDelayState={top:0,mid:0,recent:0};
-
-function calculate(){
- const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
- const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
- analysisRowCount=rows.length;
- const keys=Array.from({length:10},(_,i)=&gt;String(i));
-
- function makeStats(history){
-   const n=history.length;
-   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
-   history.forEach((r,i)=&gt;{
-     const d=jodiOf(r);
-     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
-   });
-   keys.forEach(k=&gt;{
-     const s=a[k],o=s.occ;
-     s.currentDelay=o.length?n-1-o[o.length-1]:n;
-     let gaps=o.length?[o[0]]:[n];
-     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
-     if(o.length)gaps.push(n-1-o[o.length-1]);
-     s.maxDelay=Math.max(0,...gaps);
-   });
-   return a;
- }
-
- const currentStats=makeStats(rows);
- stats=currentStats;
-
- // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
- function rankHistory(history){
-   const a=makeStats(history);
-   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
-     b.currentDelay-a.currentDelay||
-     b.maxDelay-a.maxDelay||
-     a.jodi.localeCompare(b.jodi)
-   );
- }
- function bucketDelay(list,historyLength){
-   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
-   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
- }
-
- let top=[],mid=[],recent=[];
- let topDelay=0,midDelay=0,recentDelay=0;
-
- if(rows.length===0){
-   const ranked=rankHistory(rows);
-   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
- }else{
-   const previous=rows.slice(0,-1);
-   const rankedBefore=rankHistory(previous);
-   const pTop=rankedBefore.slice(0,3);
-   const pMid=rankedBefore.slice(3,7);
-   const pRecent=rankedBefore.slice(7,10);
-
-   topDelay=bucketDelay(pTop,previous.length);
-   midDelay=bucketDelay(pMid,previous.length);
-   recentDelay=bucketDelay(pRecent,previous.length);
-
-   const hit=jodiOf(rows[rows.length-1]);
-   const topHas=pTop.some(x=&gt;x.jodi===hit);
-   const midHas=pMid.some(x=&gt;x.jodi===hit);
-   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
-   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
-
-   if(topHas){
-     top=[...clean(pTop,hit)];
-     const fromMid=pMid[0];
-     const fromRecent=pRecent[0];
-     top.push(fromMid);
-     mid=[...pMid.slice(1)];
-     mid.push(fromRecent);
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     topDelay=0;
-     midDelay+=1;
-     recentDelay+=1;
-   }else if(midHas){
-     top=[...pTop];
-     mid=[...clean(pMid,hit),pRecent[0]];
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     midDelay=0;
-     topDelay+=1;
-     recentDelay+=1;
-   }else if(recentHas){
-     top=[...pTop];
-     mid=[...pMid];
-     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
-     recentDelay=0;
-     topDelay+=1;
-     midDelay+=1;
-   }else{
-     top=pTop;mid=pMid;recent=pRecent;
-     topDelay+=1;midDelay+=1;recentDelay+=1;
-   }
- }
-
- const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
- top10=toCurrent(top);
- mid10=toCurrent(mid);
- recent10=toCurrent(recent);
- groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
-
- renderGrid();
- statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
-}
-
-function getGroupDelay(list){
- return groupDelayState.top;
-}
-function renderGroup(title,list,cls,id){
- const grid=document.getElementById('jodiGrid');
- const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
- const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
- box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
- list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
- box.appendChild(row);grid.appendChild(box);
-}
-function renderGrid(){
- const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
- const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
- document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
- renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
- renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
-}
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
-load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-" style="display:none" title="Total Digit"></iframe><iframe class="page-frame" id="page-5" srcdoc='&lt;!DOCTYPE html&gt;
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;document.getElementById(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;document.getElementById(&#x27;topDelay&#x27;).textContent=`DELAY: ${groupDelayState.top}`;document.getElementById(&#x27;midDelay&#x27;).textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById(&#x27;recentDelay&#x27;).textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
+marketSelect.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};document.getElementById(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};midBtn.onclick=()=&gt;{view=&#x27;MID&#x27;;render()};recentBtn.onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Total Digit"></iframe><iframe class="page-frame" id="page-5" srcdoc='&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
 &lt;meta charset="UTF-8"&gt;
@@ -1657,429 +1105,52 @@ async function load(){
 load();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;' style="display:none" title="Odd / Even"></iframe><iframe class="page-frame" id="page-6" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;gu&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-&lt;title&gt;Close Digit Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
-body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-  &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-    &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-      &lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;CLOSE DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;10 DIGITS • TOP 3 / MID 4 / RECENT 3 • Delay / Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
-    &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
-    &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Highest delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Middle delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Lowest delay&lt;/div&gt;&lt;/button&gt;
-  &lt;/div&gt;
-
-  &lt;div id=&quot;jodiGrid&quot; class=&quot;space-y-3&quot;&gt;&lt;/div&gt;
-
-&lt;/div&gt;
-
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;
-  &lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[85vh] overflow-hidden&quot;&gt;
-    &lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;
-      &lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT 1&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-500&quot;&gt;CLOSE Digit • Delay • Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;modalBody&quot; class=&quot;p-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
+&lt;/html&gt;' style="display:none" title="Odd / Even"></iframe><iframe class="page-frame" id="page-7" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;DIFFERENCE DIGIT&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;DIFFERENCE DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;DIFFERENCE DIGIT • 10 DIGITS • Current Delay • Max Delay&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;&lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div id=&quot;topDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div id=&quot;midDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div id=&quot;recentDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;10 DIFFERENCE DIGIT&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL 10&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-5 sm:grid-cols-10 gap-1.5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;script type=&quot;module&quot;&gt;
 import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
 import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
-
-const firebaseConfig={
- apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
- authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,
- projectId:&quot;m-record-f9c51&quot;,
- storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,
- messagingSenderId:&quot;479303152172&quot;,
- appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
-};
+const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
-let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
-
-const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
-const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return digit(r.closeAnk);};
+const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&#x27;ALL&#x27;;
+const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
+const metricOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (c-o+10)%10;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
-
-async function load(){
- statusEl.textContent='Loading Firebase data...';
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
- marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
- const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
- markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
- statusEl.textContent=`${allRows.length} raw records loaded`;
- calculate();
-}
-
-let groupDelayState={top:0,mid:0,recent:0};
-
+function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)));}
+async function load(){statusEl.textContent=&#x27;Loading Firebase data...&#x27;;const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});calculate();}
+function makeStats(history){const n=history.length,keys=Array.from({length:10},(_,i)=&gt;String(i)),a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((r,i)=&gt;{const d=metricOf(r);if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}});keys.forEach(k=&gt;{const x=a[k],o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps);});return a;}
 function calculate(){
  const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
- const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
- analysisRowCount=rows.length;
+ const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)&amp;&amp;metricOf(r)!==null));
  const keys=Array.from({length:10},(_,i)=&gt;String(i));
-
- function makeStats(history){
-   const n=history.length;
-   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
-   history.forEach((r,i)=&gt;{
-     const d=jodiOf(r);
-     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
-   });
-   keys.forEach(k=&gt;{
-     const s=a[k],o=s.occ;
-     s.currentDelay=o.length?n-1-o[o.length-1]:n;
-     let gaps=o.length?[o[0]]:[n];
-     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
-     if(o.length)gaps.push(n-1-o[o.length-1]);
-     s.maxDelay=Math.max(0,...gaps);
-   });
-   return a;
+ const currentStats=makeStats(rows); stats=currentStats;
+ const rankHistory=h=&gt;{const hs=makeStats(h);return keys.map(k=&gt;hs[k]).filter(Boolean).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||String(a.jodi).localeCompare(String(b.jodi)))};
+ const bucketDelay=(list,n)=&gt;{const last=(list||[]).reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x?.lastSeen)?x.lastSeen:-1),-1);return last&gt;=0?Math.max(0,n-1-last):n;};
+ let top=[],mid=[],recent=[],td=0,md=0,rd=0;
+ if(!rows.length){const r=rankHistory(rows);top=r.slice(0,3);mid=r.slice(3,7);recent=r.slice(7,10);}
+ else{
+  const previous=rows.slice(0,-1),ranked=rankHistory(previous),pTop=ranked.slice(0,3),pMid=ranked.slice(3,7),pRecent=ranked.slice(7,10);
+  td=bucketDelay(pTop,previous.length);md=bucketDelay(pMid,previous.length);rd=bucketDelay(pRecent,previous.length);
+  const hit=metricOf(rows[rows.length-1]),hitKey=hit===null?null:String(hit);
+  const topHas=hitKey!==null&amp;&amp;pTop.some(x=&gt;String(x.jodi)===hitKey),midHas=hitKey!==null&amp;&amp;pMid.some(x=&gt;String(x.jodi)===hitKey),recentHas=hitKey!==null&amp;&amp;pRecent.some(x=&gt;String(x.jodi)===hitKey);
+  const clean=(l,v)=&gt;(l||[]).filter(x=&gt;String(x.jodi)!==String(v));
+  if(topHas){top=[...clean(pTop,hitKey),pMid[0]].filter(Boolean).slice(0,3);mid=[...pMid.slice(1),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent.slice(0,3)].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);td=0;md+=1;rd+=1;}
+  else if(midHas){top=pTop.slice(0,3);mid=[...clean(pMid,hitKey),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);md=0;td+=1;rd+=1;}
+  else if(recentHas){top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);rd=0;td+=1;md+=1;}
+  else{top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=pRecent.slice(0,3);td+=1;md+=1;rd+=1;}
  }
-
- const currentStats=makeStats(rows);
- stats=currentStats;
-
- // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
- function rankHistory(history){
-   const a=makeStats(history);
-   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
-     b.currentDelay-a.currentDelay||
-     b.maxDelay-a.maxDelay||
-     a.jodi.localeCompare(b.jodi)
-   );
- }
- function bucketDelay(list,historyLength){
-   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
-   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
- }
-
- let top=[],mid=[],recent=[];
- let topDelay=0,midDelay=0,recentDelay=0;
-
- if(rows.length===0){
-   const ranked=rankHistory(rows);
-   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
- }else{
-   const previous=rows.slice(0,-1);
-   const rankedBefore=rankHistory(previous);
-   const pTop=rankedBefore.slice(0,3);
-   const pMid=rankedBefore.slice(3,7);
-   const pRecent=rankedBefore.slice(7,10);
-
-   topDelay=bucketDelay(pTop,previous.length);
-   midDelay=bucketDelay(pMid,previous.length);
-   recentDelay=bucketDelay(pRecent,previous.length);
-
-   const hit=jodiOf(rows[rows.length-1]);
-   const topHas=pTop.some(x=&gt;x.jodi===hit);
-   const midHas=pMid.some(x=&gt;x.jodi===hit);
-   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
-   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
-
-   if(topHas){
-     top=[...clean(pTop,hit)];
-     const fromMid=pMid[0];
-     const fromRecent=pRecent[0];
-     top.push(fromMid);
-     mid=[...pMid.slice(1)];
-     mid.push(fromRecent);
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     topDelay=0;
-     midDelay+=1;
-     recentDelay+=1;
-   }else if(midHas){
-     top=[...pTop];
-     mid=[...clean(pMid,hit),pRecent[0]];
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     midDelay=0;
-     topDelay+=1;
-     recentDelay+=1;
-   }else if(recentHas){
-     top=[...pTop];
-     mid=[...pMid];
-     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
-     recentDelay=0;
-     topDelay+=1;
-     midDelay+=1;
-   }else{
-     top=pTop;mid=pMid;recent=pRecent;
-     topDelay+=1;midDelay+=1;recentDelay+=1;
-   }
- }
-
- const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
- top10=toCurrent(top);
- mid10=toCurrent(mid);
- recent10=toCurrent(recent);
- groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
-
- renderGrid();
- statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
+ top10=top.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
+ mid10=mid.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,4);
+ recent10=recent.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
+ groupDelayState={top:td,mid:md,recent:rd};render();
+ statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3`;
 }
-
-function getGroupDelay(list){
- return groupDelayState.top;
-}
-function renderGroup(title,list,cls,id){
- const grid=document.getElementById('jodiGrid');
- const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
- const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
- box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
- list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
- box.appendChild(row);grid.appendChild(box);
-}
-function renderGrid(){
- const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
- const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
- document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
- renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
- renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
-}
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
-load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-" style="display:none" title="Close Digit"></iframe><iframe class="page-frame" id="page-7" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;gu&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-&lt;title&gt;Difference Digit Analysis&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
-body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
-  &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;
-    &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-      &lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;DIFFERENCE DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;10 DIGITS • TOP 3 / MID 4 / RECENT 3 • Delay / Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
-    &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
-    &lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Highest delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Middle delay&lt;/div&gt;&lt;/button&gt;
-    &lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[8px] opacity-90&quot;&gt;Lowest delay&lt;/div&gt;&lt;/button&gt;
-  &lt;/div&gt;
-
-  &lt;div id=&quot;jodiGrid&quot; class=&quot;space-y-3&quot;&gt;&lt;/div&gt;
-
-&lt;/div&gt;
-
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;
-  &lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[85vh] overflow-hidden&quot;&gt;
-    &lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;
-      &lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT 1&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-500&quot;&gt;DIFFERENCE Digit • Delay • Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;modalBody&quot; class=&quot;p-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script type=&quot;module&quot;&gt;
-import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
-import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
-
-const firebaseConfig={
- apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
- authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,
- projectId:&quot;m-record-f9c51&quot;,
- storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,
- messagingSenderId:&quot;479303152172&quot;,
- appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
-};
-const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),statusEl=document.getElementById('status');
-let allRows=[], stats={}, top10=[], mid10=[], recent10=[], analysisRowCount=0;
-
-const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
-const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (c-o+10)%10;};
-const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
-
-async function load(){
- statusEl.textContent='Loading Firebase data...';
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
- marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
- const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
- markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
- statusEl.textContent=`${allRows.length} raw records loaded`;
- calculate();
-}
-
-let groupDelayState={top:0,mid:0,recent:0};
-
-function calculate(){
- const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
- const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
- analysisRowCount=rows.length;
- const keys=Array.from({length:10},(_,i)=&gt;String(i));
-
- function makeStats(history){
-   const n=history.length;
-   const a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
-   history.forEach((r,i)=&gt;{
-     const d=jodiOf(r);
-     if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}
-   });
-   keys.forEach(k=&gt;{
-     const s=a[k],o=s.occ;
-     s.currentDelay=o.length?n-1-o[o.length-1]:n;
-     let gaps=o.length?[o[0]]:[n];
-     for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
-     if(o.length)gaps.push(n-1-o[o.length-1]);
-     s.maxDelay=Math.max(0,...gaps);
-   });
-   return a;
- }
-
- const currentStats=makeStats(rows);
- stats=currentStats;
-
- // GROUP-FOLLOW MODEL: TOP/MID/RECENT are persistent 3/4/3 buckets.
- function rankHistory(history){
-   const a=makeStats(history);
-   return keys.map(k=&gt;a[k]).sort((a,b)=&gt;
-     b.currentDelay-a.currentDelay||
-     b.maxDelay-a.maxDelay||
-     a.jodi.localeCompare(b.jodi)
-   );
- }
- function bucketDelay(list,historyLength){
-   const last=list.reduce((mx,x)=&gt;Math.max(mx,x.lastSeen),-1);
-   return last&gt;=0?Math.max(0,historyLength-1-last):historyLength;
- }
-
- let top=[],mid=[],recent=[];
- let topDelay=0,midDelay=0,recentDelay=0;
-
- if(rows.length===0){
-   const ranked=rankHistory(rows);
-   top=ranked.slice(0,3);mid=ranked.slice(3,7);recent=ranked.slice(7,10);
- }else{
-   const previous=rows.slice(0,-1);
-   const rankedBefore=rankHistory(previous);
-   const pTop=rankedBefore.slice(0,3);
-   const pMid=rankedBefore.slice(3,7);
-   const pRecent=rankedBefore.slice(7,10);
-
-   topDelay=bucketDelay(pTop,previous.length);
-   midDelay=bucketDelay(pMid,previous.length);
-   recentDelay=bucketDelay(pRecent,previous.length);
-
-   const hit=jodiOf(rows[rows.length-1]);
-   const topHas=pTop.some(x=&gt;x.jodi===hit);
-   const midHas=pMid.some(x=&gt;x.jodi===hit);
-   const recentHas=pRecent.some(x=&gt;x.jodi===hit);
-   const clean=(list,value)=&gt;list.filter(x=&gt;x.jodi!==value);
-
-   if(topHas){
-     top=[...clean(pTop,hit)];
-     const fromMid=pMid[0];
-     const fromRecent=pRecent[0];
-     top.push(fromMid);
-     mid=[...pMid.slice(1)];
-     mid.push(fromRecent);
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     topDelay=0;
-     midDelay+=1;
-     recentDelay+=1;
-   }else if(midHas){
-     top=[...pTop];
-     mid=[...clean(pMid,hit),pRecent[0]];
-     recent=[hit,...pRecent.slice(1).filter(x=&gt;x.jodi!==hit)];
-     midDelay=0;
-     topDelay+=1;
-     recentDelay+=1;
-   }else if(recentHas){
-     top=[...pTop];
-     mid=[...pMid];
-     recent=[hit,...pRecent.filter(x=&gt;x.jodi!==hit)];
-     recentDelay=0;
-     topDelay+=1;
-     midDelay+=1;
-   }else{
-     top=pTop;mid=pMid;recent=pRecent;
-     topDelay+=1;midDelay+=1;recentDelay+=1;
-   }
- }
-
- const toCurrent=list=&gt;list.map(x=&gt;currentStats[x.jodi]);
- top10=toCurrent(top);
- mid10=toCurrent(mid);
- recent10=toCurrent(recent);
- groupDelayState={top:topDelay,mid:midDelay,recent:recentDelay};
-
- renderGrid();
- statusEl.textContent=`${rows.length} records • Group-follow delay • TOP 3 / MID 4 / RECENT 3`;
-}
-
-function getGroupDelay(list){
- return groupDelayState.top;
-}
-function renderGroup(title,list,cls,id){
- const grid=document.getElementById('jodiGrid');
- const box=document.createElement('div'); box.id=id; box.className='bg-white rounded-2xl border border-slate-200 shadow-sm p-3 scroll-mt-4';
- const groupDelay=id==='topGroup'?groupDelayState.top:(id==='midGroup'?groupDelayState.mid:groupDelayState.recent);
- box.innerHTML=`&lt;div class=&quot;flex items-center justify-between mb-2 gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700 mt-1&quot;&gt;GROUP DELAY COUNT: ${groupDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] text-slate-500&quot;&gt;Any digit in this group = group hit/reset&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-500&quot;&gt;${list.length} DIGITS&lt;/div&gt;&lt;/div&gt;`;
- const row=document.createElement('div'); row.className='grid grid-cols-3 sm:grid-cols-4 gap-2';
- list.forEach(x=&gt;{const el=document.createElement('div');el.className=`rounded-xl border p-3 text-center ${cls}`;el.innerHTML=`&lt;div class=&quot;text-xl font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;mt-1 text-[11px] font-black text-indigo-700&quot;&gt;DELAY COUNT: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-semibold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;`;row.appendChild(el);});
- box.appendChild(row);grid.appendChild(box);
-}
-function renderGrid(){
- const grid=document.getElementById('jodiGrid'); grid.innerHTML='';
- const topDelay=groupDelayState.top, midDelay=groupDelayState.mid, recentDelay=groupDelayState.recent;
- document.getElementById('topBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${topDelay}&lt;/div&gt;`;
- document.getElementById('midBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${midDelay}&lt;/div&gt;`;
- document.getElementById('recentBtn').innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${recentDelay}&lt;/div&gt;`;
- renderGroup('🔥 TOP 3',top10,'border-orange-300 bg-orange-50','topGroup');
- renderGroup('📊 MID 4',mid10,'border-indigo-300 bg-indigo-50','midGroup');
- renderGroup('⚡ RECENT 3',recent10,'border-emerald-300 bg-emerald-50','recentGroup');
-}
-function goToGroup(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;goToGroup('topGroup');document.getElementById('midBtn').onclick=()=&gt;goToGroup('midGroup');document.getElementById('recentBtn').onclick=()=&gt;goToGroup('recentGroup');
-load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-" style="display:none" title="Difference Digit"></iframe><iframe class="page-frame" id="page-8" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;Digit Play Analysis&lt;/title&gt;
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;document.getElementById(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;document.getElementById(&#x27;topDelay&#x27;).textContent=`DELAY: ${groupDelayState.top}`;document.getElementById(&#x27;midDelay&#x27;).textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById(&#x27;recentDelay&#x27;).textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
+marketSelect.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};document.getElementById(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};midBtn.onclick=()=&gt;{view=&#x27;MID&#x27;;render()};recentBtn.onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Difference Digit"></iframe><iframe class="page-frame" id="page-8" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;Digit Play Analysis&lt;/title&gt;
 &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js&quot;&gt;&lt;/script&gt;&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js&quot;&gt;&lt;/script&gt;
 &lt;style&gt;*{box-sizing:border-box}.card{background:#fff;border:1px solid #e9edf3;border-radius:18px;box-shadow:0 7px 22px rgba(15,23,42,.06)}.btn{border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:8px 12px;font-size:11px;font-weight:800}.pill{border-radius:9px;padding:4px 7px;font-size:9px;font-weight:900}&lt;/style&gt;&lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen text-slate-800 pb-10&quot;&gt;&lt;header class=&quot;bg-white sticky top-0 z-20 border-b border-slate-200&quot;&gt;&lt;div class=&quot;max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black tracking-tight&quot;&gt;DIGIT PLAY ANALYSIS&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400 font-bold&quot;&gt;OPEN + CLOSE • PRIORITY SIGNAL&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refresh&quot; class=&quot;btn&quot;&gt;↻ REFRESH&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
@@ -2432,8 +1503,7 @@ $(&quot;market&quot;).onchange=render;$(&quot;refresh&quot;).onclick=load;load()
 <button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi</span></button>
 <button class="nav-btn" data-page="1"><span>🔺</span><span>Family Panna</span></button>
 <button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
-<button class="nav-btn" data-page="3"><span>🟢</span><span>Open Digit</span></button>
-<button class="nav-btn" data-page="6"><span>🔴</span><span>Close Digit</span></button>
+<button class="nav-btn" data-page="3"><span>🔢</span><span>Digit</span></button>
 <button class="nav-btn" data-page="4"><span>➕</span><span>Total Digit</span></button>
 <button class="nav-btn" data-page="7"><span>➖</span><span>Difference Digit</span></button>
 <button class="nav-btn" data-page="5"><span>⚖️</span><span>Odd / Even</span></button>
@@ -2469,6 +1539,6 @@ let saved=10;
 try{saved=Number(localStorage.getItem('analysisPlatformPageV8')||10)}catch(e){}
 if(!Number.isInteger(saved)||saved<0||saved>11)saved=10;
 openPage(saved);
-</script>
+window.addEventListener("message",e=>{if(e.data&&e.data.type==="OPEN_DIGIT_COMBINED")go(3)});</script>
 </body>
 </html>
