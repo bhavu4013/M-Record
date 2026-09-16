@@ -928,42 +928,37 @@ import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/fir
 import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),digitGrid=document.getElementById('digitGrid'),statusEl=document.getElementById('status');
-let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view='ALL';
-const digit=v=&gt;{if(v===undefined||v===null||v==='')return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
+const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&#x27;ALL&#x27;;
+const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
 const metricOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (o+c)%10;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||'').localeCompare(String(b.marketName||'')));}
-async function load(){statusEl.textContent='Loading Firebase data...';const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});calculate();}
+function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)));}
+async function load(){statusEl.textContent=&#x27;Loading Firebase data...&#x27;;const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});calculate();}
 function makeStats(history){const n=history.length,keys=Array.from({length:10},(_,i)=&gt;String(i)),a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((r,i)=&gt;{const d=metricOf(r);if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}});keys.forEach(k=&gt;{const x=a[k],o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps);});return a;}
 function calculate(){
- const selected=marketSelect.value||'ALL_MERGED';
- const rows=sortRows(allRows.filter(r=&gt;(selected==='ALL_MERGED'||r.marketName===selected)&amp;&amp;metricOf(r)!==null));
- const keys=Array.from({length:10},(_,i)=&gt;String(i));
- const currentStats=makeStats(rows); stats=currentStats;
- const rankHistory=h=&gt;{const hs=makeStats(h);return keys.map(k=&gt;hs[k]).filter(Boolean).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||String(a.jodi).localeCompare(String(b.jodi)))};
- const bucketDelay=(list,n)=&gt;{const last=(list||[]).reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x?.lastSeen)?x.lastSeen:-1),-1);return last&gt;=0?Math.max(0,n-1-last):n;};
- let top=[],mid=[],recent=[],td=0,md=0,rd=0;
- if(!rows.length){const r=rankHistory(rows);top=r.slice(0,3);mid=r.slice(3,7);recent=r.slice(7,10);}
- else{
-  const previous=rows.slice(0,-1),ranked=rankHistory(previous),pTop=ranked.slice(0,3),pMid=ranked.slice(3,7),pRecent=ranked.slice(7,10);
-  td=bucketDelay(pTop,previous.length);md=bucketDelay(pMid,previous.length);rd=bucketDelay(pRecent,previous.length);
-  const hit=metricOf(rows[rows.length-1]),hitKey=hit===null?null:String(hit);
-  const topHas=hitKey!==null&amp;&amp;pTop.some(x=&gt;String(x.jodi)===hitKey),midHas=hitKey!==null&amp;&amp;pMid.some(x=&gt;String(x.jodi)===hitKey),recentHas=hitKey!==null&amp;&amp;pRecent.some(x=&gt;String(x.jodi)===hitKey);
-  const clean=(l,v)=&gt;(l||[]).filter(x=&gt;String(x.jodi)!==String(v));
-  if(topHas){top=[...clean(pTop,hitKey),pMid[0]].filter(Boolean).slice(0,3);mid=[...pMid.slice(1),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent.slice(0,3)].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);td=0;md+=1;rd+=1;}
-  else if(midHas){top=pTop.slice(0,3);mid=[...clean(pMid,hitKey),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);md=0;td+=1;rd+=1;}
-  else if(recentHas){top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);rd=0;td+=1;md+=1;}
-  else{top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=pRecent.slice(0,3);td+=1;md+=1;rd+=1;}
- }
- top10=top.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
- mid10=mid.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,4);
- recent10=recent.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
- groupDelayState={top:td,mid:md,recent:rd};render();
- statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3`;
+ const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
+ const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)&amp;&amp;metricOf(r)!==null));
+ const st=rows.map(r=&gt;({d:metricOf(r),...r}));
+ stats=makeStats(rows);
+ const ranked=Object.values(stats).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||Number(a.jodi)-Number(b.jodi));
+ top10=ranked.slice(0,3); mid10=ranked.slice(3,7); recent10=ranked.slice(7,10);
+ let top=top10.map(x=&gt;x.jodi),mid=mid10.map(x=&gt;x.jodi),recent=recent10.map(x=&gt;x.jodi);
+ let td=0,md=0,rd=0;
+ st.forEach(e=&gt;{
+   const d=String(e.d);
+   const inTop=top.includes(d),inMid=mid.includes(d),inRecent=recent.includes(d);
+   if(inTop){td=0;md++;rd++;}
+   else if(inMid){td++;md=0;rd++;}
+   else if(inRecent){td++;md++;rd=0;}
+   else{td++;md++;rd++;}
+ });
+ groupDelayState={top:td,mid:md,recent:rd};
+ render();
+ statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3 • 3-GROUP COUNTER`;
 }
-function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view==='TOP')list=top10;if(view==='MID')list=mid10;if(view==='RECENT')list=recent10;document.getElementById('filterLabel').textContent=view==='ALL'?'ALL 10':view+' '+list.length;document.getElementById('topDelay').textContent=`DELAY: ${groupDelayState.top}`;document.getElementById('midDelay').textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById('recentDelay').textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML='';list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?'border-orange-400 bg-orange-50':midSet.has(x.jodi)?'border-indigo-400 bg-indigo-50':recentSet.has(x.jodi)?'border-emerald-400 bg-emerald-50':'border-slate-200 bg-slate-50';const b=document.createElement('div');b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
-marketSelect.onchange=()=&gt;{view='ALL';calculate()};document.getElementById('refreshBtn').onclick=async()=&gt;{view='ALL';await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view='TOP';render()};midBtn.onclick=()=&gt;{view='MID';render()};recentBtn.onclick=()=&gt;{view='RECENT';render()};load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;document.getElementById(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;document.getElementById(&#x27;topDelay&#x27;).textContent=`DELAY: ${groupDelayState.top}`;document.getElementById(&#x27;midDelay&#x27;).textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById(&#x27;recentDelay&#x27;).textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
+marketSelect.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};document.getElementById(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};midBtn.onclick=()=&gt;{view=&#x27;MID&#x27;;render()};recentBtn.onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Total Digit"></iframe><iframe class="page-frame" id="page-5" srcdoc='&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
@@ -1218,126 +1213,207 @@ import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/fir
 import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),digitGrid=document.getElementById('digitGrid'),statusEl=document.getElementById('status');
-let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view='ALL';
-const digit=v=&gt;{if(v===undefined||v===null||v==='')return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
+const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&#x27;ALL&#x27;;
+const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
 const metricOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return (c-o+10)%10;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||'').localeCompare(String(b.marketName||'')));}
-async function load(){statusEl.textContent='Loading Firebase data...';const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});calculate();}
+function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)));}
+async function load(){statusEl.textContent=&#x27;Loading Firebase data...&#x27;;const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});calculate();}
 function makeStats(history){const n=history.length,keys=Array.from({length:10},(_,i)=&gt;String(i)),a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((r,i)=&gt;{const d=metricOf(r);if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}});keys.forEach(k=&gt;{const x=a[k],o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps);});return a;}
 function calculate(){
- const selected=marketSelect.value||'ALL_MERGED';
- const rows=sortRows(allRows.filter(r=&gt;(selected==='ALL_MERGED'||r.marketName===selected)&amp;&amp;metricOf(r)!==null));
- const keys=Array.from({length:10},(_,i)=&gt;String(i));
- const currentStats=makeStats(rows); stats=currentStats;
- const rankHistory=h=&gt;{const hs=makeStats(h);return keys.map(k=&gt;hs[k]).filter(Boolean).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||String(a.jodi).localeCompare(String(b.jodi)))};
- const bucketDelay=(list,n)=&gt;{const last=(list||[]).reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x?.lastSeen)?x.lastSeen:-1),-1);return last&gt;=0?Math.max(0,n-1-last):n;};
- let top=[],mid=[],recent=[],td=0,md=0,rd=0;
- if(!rows.length){const r=rankHistory(rows);top=r.slice(0,3);mid=r.slice(3,7);recent=r.slice(7,10);}
- else{
-  const previous=rows.slice(0,-1),ranked=rankHistory(previous),pTop=ranked.slice(0,3),pMid=ranked.slice(3,7),pRecent=ranked.slice(7,10);
-  td=bucketDelay(pTop,previous.length);md=bucketDelay(pMid,previous.length);rd=bucketDelay(pRecent,previous.length);
-  const hit=metricOf(rows[rows.length-1]),hitKey=hit===null?null:String(hit);
-  const topHas=hitKey!==null&amp;&amp;pTop.some(x=&gt;String(x.jodi)===hitKey),midHas=hitKey!==null&amp;&amp;pMid.some(x=&gt;String(x.jodi)===hitKey),recentHas=hitKey!==null&amp;&amp;pRecent.some(x=&gt;String(x.jodi)===hitKey);
-  const clean=(l,v)=&gt;(l||[]).filter(x=&gt;String(x.jodi)!==String(v));
-  if(topHas){top=[...clean(pTop,hitKey),pMid[0]].filter(Boolean).slice(0,3);mid=[...pMid.slice(1),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent.slice(0,3)].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);td=0;md+=1;rd+=1;}
-  else if(midHas){top=pTop.slice(0,3);mid=[...clean(pMid,hitKey),pRecent[0]].filter(Boolean).slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);md=0;td+=1;rd+=1;}
-  else if(recentHas){top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=[pRecent.find(x=&gt;String(x.jodi)===hitKey)||pRecent[0],...pRecent].filter(Boolean).filter((x,i,a)=&gt;a.findIndex(y=&gt;y.jodi===x.jodi)===i).slice(0,3);rd=0;td+=1;md+=1;}
-  else{top=pTop.slice(0,3);mid=pMid.slice(0,4);recent=pRecent.slice(0,3);td+=1;md+=1;rd+=1;}
- }
- top10=top.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
- mid10=mid.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,4);
- recent10=recent.map(x=&gt;currentStats[String(x.jodi)]).filter(Boolean).slice(0,3);
- groupDelayState={top:td,mid:md,recent:rd};render();
- statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3`;
+ const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
+ const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)&amp;&amp;metricOf(r)!==null));
+ const st=rows.map(r=&gt;({d:metricOf(r),...r}));
+ stats=makeStats(rows);
+ const ranked=Object.values(stats).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||Number(a.jodi)-Number(b.jodi));
+ top10=ranked.slice(0,3); mid10=ranked.slice(3,7); recent10=ranked.slice(7,10);
+ let top=top10.map(x=&gt;x.jodi),mid=mid10.map(x=&gt;x.jodi),recent=recent10.map(x=&gt;x.jodi);
+ let td=0,md=0,rd=0;
+ st.forEach(e=&gt;{
+   const d=String(e.d);
+   const inTop=top.includes(d),inMid=mid.includes(d),inRecent=recent.includes(d);
+   if(inTop){td=0;md++;rd++;}
+   else if(inMid){td++;md=0;rd++;}
+   else if(inRecent){td++;md++;rd=0;}
+   else{td++;md++;rd++;}
+ });
+ groupDelayState={top:td,mid:md,recent:rd};
+ render();
+ statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3 • 3-GROUP COUNTER`;
 }
-function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view==='TOP')list=top10;if(view==='MID')list=mid10;if(view==='RECENT')list=recent10;document.getElementById('filterLabel').textContent=view==='ALL'?'ALL 10':view+' '+list.length;document.getElementById('topDelay').textContent=`DELAY: ${groupDelayState.top}`;document.getElementById('midDelay').textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById('recentDelay').textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML='';list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?'border-orange-400 bg-orange-50':midSet.has(x.jodi)?'border-indigo-400 bg-indigo-50':recentSet.has(x.jodi)?'border-emerald-400 bg-emerald-50':'border-slate-200 bg-slate-50';const b=document.createElement('div');b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
-marketSelect.onchange=()=&gt;{view='ALL';calculate()};document.getElementById('refreshBtn').onclick=async()=&gt;{view='ALL';await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view='TOP';render()};midBtn.onclick=()=&gt;{view='MID';render()};recentBtn.onclick=()=&gt;{view='RECENT';render()};load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;document.getElementById(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;document.getElementById(&#x27;topDelay&#x27;).textContent=`DELAY: ${groupDelayState.top}`;document.getElementById(&#x27;midDelay&#x27;).textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById(&#x27;recentDelay&#x27;).textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
+marketSelect.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};document.getElementById(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};midBtn.onclick=()=&gt;{view=&#x27;MID&#x27;;render()};recentBtn.onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Difference Digit"></iframe><iframe class="page-frame" id="page-8" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;SHORTLIST&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
 &lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;SHORTLIST&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;MAXIMUM DELAYED GROUP → PLAY DIGIT → FILTERED JODI&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;WINNING GROUP&lt;/div&gt;&lt;div id=&quot;winnerSide&quot; class=&quot;px-2.5 py-1 rounded-lg text-[9px] font-black bg-slate-100 text-slate-600&quot;&gt;WAITING&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;winnerCard&quot; class=&quot;rounded-2xl border-2 border-slate-200 bg-slate-50 p-3&quot;&gt;&lt;div class=&quot;text-center text-[10px] font-bold text-slate-400 py-4&quot;&gt;Calculating maximum delayed group...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;PLAY DIGIT&lt;/div&gt;&lt;div id=&quot;digitLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;WINNING GROUP DIGITS&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;digitButtons&quot; class=&quot;grid grid-cols-3 sm:grid-cols-4 gap-2&quot;&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FILTERED JODI&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL WINNING-DIGIT JODI&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;jodiWindow&quot; class=&quot;min-h-[110px] rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Calculating...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;RANKING FACTORS&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;MULTI-FACTOR&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[8px] font-black&quot;&gt;&lt;div class=&quot;rounded-lg bg-indigo-50 p-2&quot;&gt;J-DELAY &lt;b&gt;25%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;RECENT FREQ &lt;b&gt;15%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;FREQ &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;OPEN/CLOSE DELAY &lt;b&gt;15%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;TOTAL &lt;b&gt;7.5%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;DIFF &lt;b&gt;7.5%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;FAMILY &lt;b&gt;7.5%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;PAIR/REPEAT &lt;b&gt;12.5%&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-semibold text-slate-500&quot;&gt;Score is a historical ranking aid: every factor is normalized within the current dataset/window. It does not establish a future outcome.&lt;/div&gt;&lt;/section&gt;
 &lt;/div&gt;&lt;script type=&quot;module&quot;&gt;
 import{initializeApp}from&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;import{getFirestore,collection,getDocs}from&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));const $=id=&gt;document.getElementById(id);let rows=[],markets=[],winner=null,selectedDigit=null;
-const dig=v=&gt;{if(v===undefined||v===null||v==='')return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
-const tmin=v=&gt;{let m=String(v||'').match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate==='function')return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
+const dig=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
+const tmin=v=&gt;{let m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
+const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
 function sort(a){return a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
 function completed(r){return dig(r.openAnk)!==null&amp;&amp;dig(r.closeAnk)!==null}
-function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side==='OPEN'?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side==='OPEN'?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
+function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
 function follow(h,side){
- const field=side==='OPEN'?'openAnk':'closeAnk';
- const digit=v=>{if(v===undefined||v===null||v==='')return null;const m=String(v).match(/\d/g);return m&&m.length?Number(m[m.length-1]):null};
- const statsFor=history=>{const n=history.length,a=Array.from({length:10},(_,d)=>({d,last:-1,hits:0,delay:n,maxDelay:0}));history.forEach((r,i)=>{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=>x.delay=x.last>=0?n-1-x.last:n);return a};
- const rank=history=>statsFor(history).slice().sort((a,b)=>b.delay-a.delay||b.hits-a.hits||a.d-b.d);
- const uniq=arr=>{const out=[];for(const x of arr){if(x&&!out.some(y=>y.d===x.d))out.push(x)}return out};
- const most=(arr,exclude=[])=>arr.filter(x=>x&&!exclude.includes(x.d)).slice().sort((a,b)=>b.delay-a.delay||b.hits-a.hits||a.d-b.d)[0]||null;
+ const field=side===&#x27;OPEN&#x27;?&#x27;openAnk&#x27;:&#x27;closeAnk&#x27;;
+ const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null};
+ const statsFor=history=&gt;{const n=history.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));history.forEach((r,i)=&gt;{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;x.delay=x.last&gt;=0?n-1-x.last:n);return a};
+ const rank=history=&gt;statsFor(history).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
+ const uniq=arr=&gt;{const out=[];for(const x of arr){if(x&amp;&amp;!out.some(y=&gt;y.d===x.d))out.push(x)}return out};
+ const most=(arr,exclude=[])=&gt;arr.filter(x=&gt;x&amp;&amp;!exclude.includes(x.d)).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d)[0]||null;
  const previous=rank(h.slice(0,-1));
  let top=previous.slice(0,3), mid=previous.slice(3,7), recent=previous.slice(7,10);
  const hit=h.length?digit(h[h.length-1][field]):null;
- const source=hit!==null?(top.some(x=>x.d===hit)?'TOP':mid.some(x=>x.d===hit)?'MID':recent.some(x=>x.d===hit)?'RECENT':'NONE'):'NONE';
+ const source=hit!==null?(top.some(x=&gt;x.d===hit)?&#x27;TOP&#x27;:mid.some(x=&gt;x.d===hit)?&#x27;MID&#x27;:recent.some(x=&gt;x.d===hit)?&#x27;RECENT&#x27;:&#x27;NONE&#x27;):&#x27;NONE&#x27;;
 
  // Sequence movement is independent from group counters.
- // TOP hit: TOP -> RECENT, RECENT -> MID, MID -> TOP.
+ // TOP hit: TOP -&gt; RECENT, RECENT -&gt; MID, MID -&gt; TOP.
  // The hit digit is removed from TOP and inserted into RECENT.
- if(source==='TOP'){
-   const hitObj=top.find(x=>x.d===hit);
-   top=top.filter(x=>x.d!==hit);
+ if(source===&#x27;TOP&#x27;){
+   const hitObj=top.find(x=&gt;x.d===hit);
+   top=top.filter(x=&gt;x.d!==hit);
    const rToMid=most(recent,[hit]);
-   if(rToMid) recent=recent.filter(x=>x.d!==rToMid.d);
+   if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d);
    if(rToMid) mid=uniq([...mid,rToMid]);
    const mToTop=most(mid,[hit]);
-   if(mToTop) mid=mid.filter(x=>x.d!==mToTop.d);
+   if(mToTop) mid=mid.filter(x=&gt;x.d!==mToTop.d);
    if(mToTop) top=uniq([...top,mToTop]);
    if(hitObj) recent=uniq([...recent,hitObj]);
  }
  // MID hit: hit goes to RECENT; the most-delayed RECENT digit goes to MID.
- else if(source==='MID'){
-   const hitObj=mid.find(x=>x.d===hit);
-   mid=mid.filter(x=>x.d!==hit);
+ else if(source===&#x27;MID&#x27;){
+   const hitObj=mid.find(x=&gt;x.d===hit);
+   mid=mid.filter(x=&gt;x.d!==hit);
    const rToMid=most(recent,[hit]);
-   if(rToMid) recent=recent.filter(x=>x.d!==rToMid.d);
+   if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d);
    if(rToMid) mid=uniq([...mid,rToMid]);
    if(hitObj) recent=uniq([...recent,hitObj]);
  }
  // RECENT hit stays in RECENT. No duplicate insertion.
- else if(source==='RECENT'){
+ else if(source===&#x27;RECENT&#x27;){
    recent=uniq(recent);
  }
 
  // Safety: always return exactly 3 / 4 / 3 unique digits.
  // If a bucket is short, fill from the remaining ranked digits by individual delay.
- const used=new Set([...top,...mid,...recent].map(x=>x.d));
- const fill=(bucket,size)=>{for(const x of rank(h.slice(0,-1))){if(bucket.length>=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};
+ const used=new Set([...top,...mid,...recent].map(x=&gt;x.d));
+ const fill=(bucket,size)=&gt;{for(const x of rank(h.slice(0,-1))){if(bucket.length&gt;=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};
  top=fill(uniq(top),3);mid=fill(uniq(mid),4);recent=fill(uniq(recent),3);
 
  // Group delay counters are separate from individual digit delay.
  let delay={top:0,mid:0,recent:0};
- if(h.length>1)delay=follow(h.slice(0,-1),side).delay;
- delay=source==='TOP'?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
-       source==='MID'?{top:delay.top+1,mid:0,recent:delay.recent+1}:
-       source==='RECENT'?{top:delay.top+1,mid:delay.mid+1,recent:0}:
+ if(h.length&gt;1)delay=follow(h.slice(0,-1),side).delay;
+ delay=source===&#x27;TOP&#x27;?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
+       source===&#x27;MID&#x27;?{top:delay.top+1,mid:0,recent:delay.recent+1}:
+       source===&#x27;RECENT&#x27;?{top:delay.top+1,mid:delay.mid+1,recent:0}:
        {top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};
  return {top,mid,recent,delay};
 }
-function scopeGroups(h,side){let f=follow(h,side);return[{name:'TOP',digits:f.top,delay:f.delay.top},{name:'MID',digits:f.mid,delay:f.delay.mid},{name:'RECENT',digits:f.recent,delay:f.delay.recent}]}
+function scopeGroups(h,side){let f=follow(h,side);return[{name:&#x27;TOP&#x27;,digits:f.top,delay:f.delay.top},{name:&#x27;MID&#x27;,digits:f.mid,delay:f.delay.mid},{name:&#x27;RECENT&#x27;,digits:f.recent,delay:f.delay.recent}]}
 function familyKey(j){const G={&quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],&quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],&quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],&quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],&quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],&quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],&quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],&quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],&quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],&quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],&quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],&quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],&quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],&quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],&quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]};for(const [k,v] of Object.entries(G))if(v.includes(j))return k;return null}
-function mergedJodiStats(){let h=sort(rows.filter(completed)),n=h.length,keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,'0'));let j=Object.fromEntries(keys.map(k=&gt;({jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:'',oeDelay:n,fam:null,famDelay:n} ).jodi===k?[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:'',oeDelay:n,fam:null,famDelay:n}]:null).filter(Boolean));
-keys.forEach(k=&gt;j[k]={jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:'',oeDelay:n,fam:familyKey(k),famDelay:n});
-let totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),oeOcc={OO:[],OE:[],EE:[]},famOcc=Object.fromEntries(Object.keys(j).map(k=&gt;[k,[]]));
-h.forEach((r,i)=&gt;{let o=dig(r.openAnk),c=dig(r.closeAnk),jd=String(o)+String(c),s=j[jd];s.last=i;s.hits++;let t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?'O':'E')+(c%2?'O':'E');totalOcc[t].push(i);diffOcc[d].push(i);(oeOcc[oe]||(oeOcc[oe]=[])).push(i);let fk=familyKey(jd);if(fk)famOcc[fk].push(i)});
-function calcOcc(arr,n){let out=[];for(let d=0;d&lt;10;d++){let o=arr[d]||[];let delay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);out[d]={delay,max:Math.max(0,...gaps)}}return out}
-let td=calcOcc(totalOcc,n),dd=calcOcc(diffOcc,n),od={};for(const k of ['OO','OE','EE']){let o=oeOcc[k]||[];od[k]={delay:o.length?n-1-o[o.length-1]:n,max:(()=&gt;{let g=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)g.push(o[i]-o[i-1]-1);if(o.length)g.push(n-1-o[o.length-1]);return Math.max(0,...g)})()}}let fd={};for(const k of Object.keys(famOcc)){let o=famOcc[k],del=o.length?n-1-o[o.length-1]:n;fd[k]=del}
-for(const k of keys){let s=j[k],o=dig(k[0]),c=dig(k[1]),t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?'O':'E')+(c%2?'O':'E');s.delay=s.last&gt;=0?n-1-s.last:n;s.total=t;s.totalDelay=td[t].delay;s.diff=d;s.diffDelay=dd[d].delay;s.oe=oe;s.oeDelay=od[oe]?.delay??n;s.famDelay=fd[s.fam]??n;let occ=[];h.forEach((r,i)=&gt;{if(String(dig(r.openAnk))+String(dig(r.closeAnk))===k)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);s.maxDelay=Math.max(0,...gaps)}return j}
-function calculate(){let selected=$('marketSelect').value||'ALL_MERGED';let marketRows=sort(rows.filter(completed).filter(r=&gt;selected==='ALL_MERGED'||r.marketName===selected));let allRows=sort(rows.filter(completed));let candidates=[];for(const side of ['OPEN','CLOSE']){for(const scope of ['MARKET','ALL']){let h=scope==='MARKET'?marketRows:allRows;let g=scopeGroups(h,side);for(const b of g)candidates.push({side,scope,name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&gt;x.maxDelay))})}}winner=candidates.slice().sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||a.side.localeCompare(b.side)||a.scope.localeCompare(b.scope)||a.name.localeCompare(b.name))[0]||null;renderWinner();renderJodi()}
-function renderWinner(){if(!winner){$('winnerSide').textContent='NO DATA';$('winnerCard').innerHTML='&lt;div class=&quot;py-5 text-center text-[10px] font-bold text-slate-400&quot;&gt;No completed data found&lt;/div&gt;';$('digitButtons').innerHTML='';return}let open=winner.side==='OPEN';$('winnerSide').textContent=open?'OPEN SIDE':'CLOSE SIDE';$('winnerSide').className='px-2.5 py-1 rounded-lg text-[9px] font-black '+(open?'bg-indigo-100 text-indigo-700':'bg-rose-100 text-rose-700');$('winnerCard').innerHTML=`&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black ${open?'text-indigo-600':'text-rose-600'}&quot;&gt;MAXIMUM DELAYED GROUP&lt;/div&gt;&lt;div class=&quot;text-xl font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${winner.name}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;${winner.scope==='MARKET'?'SELECTED MARKET':'ALL MARKETS'} • GROUP DELAY ${winner.delay} • MAX DELAY ${winner.maxDelay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;PLAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${open?'OPEN':'CLOSE'}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;$('digitButtons').innerHTML=winner.digits.map(x=&gt;`&lt;button data-d=&quot;${x.d}&quot; class=&quot;winDigit rounded-xl border-2 ${open?'border-indigo-200':'border-rose-200'} bg-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-xl font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${x.d}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-slate-600&quot;&gt;DELAY ${x.delay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;MAX ${x.maxDelay}&lt;/div&gt;&lt;/button&gt;`).join('');document.querySelectorAll('.winDigit').forEach(b=&gt;b.onclick=()=&gt;{selectedDigit=Number(b.dataset.d);document.querySelectorAll('.winDigit').forEach(x=&gt;x.classList.remove('ring-2','ring-indigo-500','ring-rose-500'));b.classList.add('ring-2',open?'ring-indigo-500':'ring-rose-500');renderJodi()})}
-function renderJodi(){if(!winner){$('jodiWindow').innerHTML='';return}let st=mergedJodiStats(),digits=winner.digits.map(x=&gt;x.d),side=winner.side,arr=Object.values(st).filter(x=&gt;digits.includes(side==='OPEN'?Number(x.jodi[0]):Number(x.jodi[1])));arr.forEach(x=&gt;x.score=x.delay*1.5+x.totalDelay+x.diffDelay+x.oeDelay+x.famDelay);let byDigit=new Map();for(const d of digits){let a=arr.filter(x=&gt;(side==='OPEN'?Number(x.jodi[0]):Number(x.jodi[1]))===d).sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||a.jodi.localeCompare(b.jodi));byDigit.set(d,a)}let all=[];for(const d of digits)all.push(...(byDigit.get(d)||[]).slice(0,3));if(selectedDigit!==null)all=(byDigit.get(selectedDigit)||[]).slice(0,3);$('filterLabel').textContent=selectedDigit===null?'ALL WINNING-DIGIT JODI':`${side} DIGIT ${selectedDigit} • FILTERED JODI`;$('jodiWindow').innerHTML=all.length?`&lt;div class=&quot;grid grid-cols-3 sm:grid-cols-6 gap-1.5&quot;&gt;${all.map(x=&gt;`&lt;div class=&quot;rounded-lg border ${side==='OPEN'?'border-indigo-200 bg-indigo-50':'border-rose-200 bg-rose-50'} p-2 text-center&quot;&gt;&lt;div class=&quot;text-sm font-black ${side==='OPEN'?'text-indigo-700':'text-rose-700'}&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;J ${x.delay} • T ${x.totalDelay} • D ${x.diffDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;${x.oe} • F ${x.famDelay}&lt;/div&gt;&lt;/div&gt;`).join('')}&lt;/div&gt;`:'&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;No filtered Jodi found&lt;/div&gt;'}
-async function load(){try{$('status').textContent='Loading Firebase data...';let[ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$('marketSelect').value||'ALL_MERGED';$('marketSelect').innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,'&amp;quot;')}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join('');if(markets.some(m=&gt;m.name===old))$('marketSelect').value=old;rows=[];rs.forEach(d=&gt;{let r=d.data();if(r.date&amp;&amp;r.marketName)rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'})});rows=sort(rows);selectedDigit=null;calculate();$('status').textContent=`${rows.filter(completed).length} completed games • 12 group comparison • winner selected`;}catch(e){console.error(e);$('status').textContent='ERROR: '+(e.message||e)}}
-$('marketSelect').onchange=()=&gt;{selectedDigit=null;calculate()};$('refreshBtn').onclick=()=&gt;load();load();
+function mergedJodiStats(){
+ let h=sort(rows.filter(completed)),n=h.length;
+ const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));
+ const j=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:&#x27;&#x27;,oeDelay:n,fam:familyKey(k),famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,score:0,parts:{}}]));
+ const totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),oeOcc={OO:[],OE:[],EO:[],EE:[]},famOcc={};
+ const recentN=Math.min(30,n), recentStart=Math.max(0,n-recentN);
+ const recentCounts=Object.fromEntries(keys.map(k=&gt;[k,0]));
+ h.forEach((r,i)=&gt;{
+   const o=dig(r.openAnk),c=dig(r.closeAnk); if(o===null||c===null)return;
+   const jd=String(o)+String(c),s=j[jd]; s.last=i;s.hits++;
+   if(i&gt;=recentStart)s.recentHits++;
+   const t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?&#x27;O&#x27;:&#x27;E&#x27;)+(c%2?&#x27;O&#x27;:&#x27;E&#x27;);
+   totalOcc[t].push(i);diffOcc[d].push(i);(oeOcc[oe]||(oeOcc[oe]=[])).push(i);
+   const fk=familyKey(jd); if(fk){(famOcc[fk]||(famOcc[fk]=[])).push(i)}
+ });
+ function metricOcc(occ){
+   const out=[]; for(let d=0;d&lt;occ.length;d++){
+     const a=occ[d]||[],delay=a.length?n-1-a[a.length-1]:n;
+     let gaps=a.length?[a[0]]:[n]; for(let i=1;i&lt;a.length;i++)gaps.push(a[i]-a[i-1]-1); if(a.length)gaps.push(n-1-a[a.length-1]);
+     out[d]={delay,max:Math.max(0,...gaps)};
+   } return out;
+ }
+ const td=metricOcc(totalOcc),dd=metricOcc(diffOcc),od={};
+ for(const k of Object.keys(oeOcc)){const a=oeOcc[k]||[],delay=a.length?n-1-a[a.length-1]:n;od[k]={delay};}
+ const fd={}; for(const k of Object.keys(famOcc)){const a=famOcc[k]||[];fd[k]=a.length?n-1-a[a.length-1]:n;}
+ // Repeat-gap and reverse-pair metrics.
+ for(const k of keys){
+   const s=j[k],occ=[];h.forEach((r,i)=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);if(o!==null&amp;&amp;c!==null&amp;&amp;String(o)+String(c)===k)occ.push(i)});
+   let gaps=[];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);
+   s.avgGap=gaps.length?gaps.reduce((a,b)=&gt;a+b,0)/gaps.length:n;
+   s.repeatGap=gaps.length?gaps[gaps.length-1]:n;
+   const rk=k[1]+k[0];s.reverseDelay=j[rk]?.last&gt;=0?n-1-j[rk].last:n;
+   s.delay=s.last&gt;=0?n-1-s.last:n;s.total=(Number(k[0])+Number(k[1]))%10;s.totalDelay=td[s.total].delay;s.diff=(Number(k[1])-Number(k[0])+10)%10;s.diffDelay=dd[s.diff].delay;s.oe=(Number(k[0])%2?&#x27;O&#x27;:&#x27;E&#x27;)+(Number(k[1])%2?&#x27;O&#x27;:&#x27;E&#x27;);s.oeDelay=od[s.oe]?.delay??n;s.famDelay=fd[s.fam]??n;
+   let gaps2=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps2.push(occ[i]-occ[i-1]-1);if(occ.length)gaps2.push(n-1-occ[occ.length-1]);s.maxDelay=Math.max(0,...gaps2);
+ }
+ return j;
+}
+function norm(values,high=true){
+ const finite=values.filter(v=&gt;Number.isFinite(v)); if(!finite.length)return ()=&gt;50;
+ const lo=Math.min(...finite),hi=Math.max(...finite); if(hi===lo)return ()=&gt;50;
+ return v=&gt;{const x=(Number(v)-lo)/(hi-lo);return Math.round((high?x:1-x)*1000)/10};
+}
+function scoreJodis(st){
+ const arr=Object.values(st);
+ const nd=norm(arr.map(x=&gt;x.delay),true),nr=norm(arr.map(x=&gt;x.recentHits),true),nf=norm(arr.map(x=&gt;x.hits),true),no=norm(arr.map(x=&gt;x.delayOpen),true),nc=norm(arr.map(x=&gt;x.delayClose),true),nt=norm(arr.map(x=&gt;x.totalDelay),true),nq=norm(arr.map(x=&gt;x.diffDelay),true),nfa=norm(arr.map(x=&gt;x.famDelay),true),np=norm(arr.map(x=&gt;x.pairMetric),true);
+ arr.forEach(x=&gt;{
+   const openDigit=Number(x.jodi[0]),closeDigit=Number(x.jodi[1]);
+   x.delayOpen=st[&#x27;00&#x27;]?digitDelayFromHistory(openDigit,&#x27;OPEN&#x27;):x.delayOpen;
+   x.delayClose=st[&#x27;00&#x27;]?digitDelayFromHistory(closeDigit,&#x27;CLOSE&#x27;):x.delayClose;
+ });
+ // Rebuild normalizers after Open/Close delay values are attached.
+ const oN=norm(arr.map(x=&gt;x.delayOpen),true),cN=norm(arr.map(x=&gt;x.delayClose),true),pN=norm(arr.map(x=&gt;x.pairMetric),true);
+ arr.forEach(x=&gt;{
+   const parts={
+     jDelay:nd(x.delay)*0.25,recent:nr(x.recentHits)*0.15,freq:nf(x.hits)*0.10,
+     open:oN(x.delayOpen)*0.075,close:cN(x.delayClose)*0.075,total:nt(x.totalDelay)*0.075,diff:nq(x.diffDelay)*0.075,family:nfa(x.famDelay)*0.075,pair:pN(x.pairMetric)*0.125
+   };
+   x.parts=parts;x.score=Object.values(parts).reduce((a,b)=&gt;a+b,0);
+ });
+ return arr;
+}
+function digitDelayFromHistory(d,side){
+ const field=side===&#x27;OPEN&#x27;?&#x27;openAnk&#x27;:&#x27;closeAnk&#x27;,h=sort(rows.filter(completed));let last=-1;h.forEach((r,i)=&gt;{if(dig(r[field])===d)last=i});return last&gt;=0?h.length-1-last:h.length;
+}
+function prepareJodiRanking(st){
+ const arr=Object.values(st);
+ arr.forEach(x=&gt;{const rev=st[x.jodi[1]+x.jodi[0]];x.pairMetric=(rev&amp;&amp;rev.hits?Math.max(0,100-rev.delay*2):0)+(x.repeatGap&lt;=x.avgGap&amp;&amp;x.avgGap&gt;0?50:0);});
+ scoreJodis(st);
+ return arr.sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||b.hits-a.hits||a.jodi.localeCompare(b.jodi));
+}
+function calculate(){
+ let selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;
+ let marketRows=sort(rows.filter(completed).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));
+ let allRows=sort(rows.filter(completed));
+ let candidates=[];
+ for(const side of [&#x27;OPEN&#x27;,&#x27;CLOSE&#x27;])for(const scope of [&#x27;MARKET&#x27;,&#x27;ALL&#x27;]){let h=scope===&#x27;MARKET&#x27;?marketRows:allRows,g=scopeGroups(h,side);for(const b of g)candidates.push({side,scope,name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&gt;x.maxDelay))});}
+ winner=candidates.slice().sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||a.side.localeCompare(b.side)||a.scope.localeCompare(b.scope)||a.name.localeCompare(b.name))[0]||null;
+ renderWinner();renderJodi();
+}
+function renderWinner(){
+ if(!winner){$(&#x27;winnerSide&#x27;).textContent=&#x27;NO DATA&#x27;;$(&#x27;winnerCard&#x27;).innerHTML=&#x27;&lt;div class=&quot;py-5 text-center text-[10px] font-bold text-slate-400&quot;&gt;No completed data found&lt;/div&gt;&#x27;;$(&#x27;digitButtons&#x27;).innerHTML=&#x27;&#x27;;return}
+ let open=winner.side===&#x27;OPEN&#x27;;$(&#x27;winnerSide&#x27;).textContent=open?&#x27;OPEN SIDE&#x27;:&#x27;CLOSE SIDE&#x27;;$(&#x27;winnerSide&#x27;).className=&#x27;px-2.5 py-1 rounded-lg text-[9px] font-black &#x27;+(open?&#x27;bg-indigo-100 text-indigo-700&#x27;:&#x27;bg-rose-100 text-rose-700&#x27;);
+ $(&#x27;winnerCard&#x27;).innerHTML=`&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black ${open?&#x27;text-indigo-600&#x27;:&#x27;text-rose-600&#x27;}&quot;&gt;MAXIMUM DELAYED GROUP&lt;/div&gt;&lt;div class=&quot;text-xl font-black ${open?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${winner.name}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;${winner.scope===&#x27;MARKET&#x27;?&#x27;SELECTED MARKET&#x27;:&#x27;ALL MARKETS&#x27;} • GROUP DELAY ${winner.delay} • MAX DELAY ${winner.maxDelay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;PLAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black ${open?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${open?&#x27;OPEN&#x27;:&#x27;CLOSE&#x27;}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;
+ $(&#x27;digitButtons&#x27;).innerHTML=winner.digits.map(x=&gt;`&lt;button data-d=&quot;${x.d}&quot; class=&quot;winDigit rounded-xl border-2 ${open?&#x27;border-indigo-200&#x27;:&#x27;border-rose-200&#x27;} bg-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-xl font-black ${open?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${x.d}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-slate-600&quot;&gt;DELAY ${x.delay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;MAX ${x.maxDelay}&lt;/div&gt;&lt;/button&gt;`).join(&#x27;&#x27;);
+ document.querySelectorAll(&#x27;.winDigit&#x27;).forEach(b=&gt;b.onclick=()=&gt;{selectedDigit=Number(b.dataset.d);document.querySelectorAll(&#x27;.winDigit&#x27;).forEach(x=&gt;x.classList.remove(&#x27;ring-2&#x27;,&#x27;ring-indigo-500&#x27;,&#x27;ring-rose-500&#x27;));b.classList.add(&#x27;ring-2&#x27;,open?&#x27;ring-indigo-500&#x27;:&#x27;ring-rose-500&#x27;);renderJodi()});
+}
+function renderJodi(){
+ if(!winner){$(&#x27;jodiWindow&#x27;).innerHTML=&#x27;&#x27;;return}
+ const st=mergedJodiStats();const ranked=prepareJodiRanking(st),digits=winner.digits.map(x=&gt;x.d),side=winner.side;
+ const arr=ranked.filter(x=&gt;digits.includes(side===&#x27;OPEN&#x27;?Number(x.jodi[0]):Number(x.jodi[1])));
+ const byDigit=new Map();for(const d of digits)byDigit.set(d,arr.filter(x=&gt;(side===&#x27;OPEN&#x27;?Number(x.jodi[0]):Number(x.jodi[1]))===d));
+ let all=[];for(const d of digits)all.push(...(byDigit.get(d)||[]).slice(0,3));if(selectedDigit!==null)all=(byDigit.get(selectedDigit)||[]).slice(0,3);
+ $(&#x27;filterLabel&#x27;).textContent=selectedDigit===null?&#x27;ALL WINNING-DIGIT JODI&#x27;:`${side} DIGIT ${selectedDigit} • FILTERED JODI`;
+ $(&#x27;jodiWindow&#x27;).innerHTML=all.length?`&lt;div class=&quot;grid grid-cols-3 sm:grid-cols-6 gap-1.5&quot;&gt;${all.map((x,i)=&gt;`&lt;div class=&quot;rounded-lg border ${side===&#x27;OPEN&#x27;?&#x27;border-indigo-200 bg-indigo-50&#x27;:&#x27;border-rose-200 bg-rose-50&#x27;} p-2 text-center&quot;&gt;&lt;div class=&quot;flex items-center justify-between&quot;&gt;&lt;span class=&quot;text-[7px] font-black text-slate-400&quot;&gt;#${i+1}&lt;/span&gt;&lt;span class=&quot;text-[8px] font-black text-emerald-600&quot;&gt;${x.score.toFixed(1)}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-sm font-black ${side===&#x27;OPEN&#x27;?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-500&quot;&gt;J ${x.delay} • F ${x.hits} • R ${x.recentHits}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;O ${x.delayOpen} • C ${x.delayClose}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;T ${x.totalDelay} • D ${x.diffDelay} • FAM ${x.famDelay}&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;`:&#x27;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;No filtered Jodi found&lt;/div&gt;&#x27;;
+}
+async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;let[ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;rows=[];rs.forEach(d=&gt;{let r=d.data();if(r.date&amp;&amp;r.marketName)rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;})});rows=sort(rows);selectedDigit=null;calculate();$(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed games • 12 group comparison • MULTI-FACTOR JODI RANKING`;}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e)}}
+$(&#x27;marketSelect&#x27;).onchange=()=&gt;{selectedDigit=null;calculate()};$(&#x27;refreshBtn&#x27;).onclick=()=&gt;load();load();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Play Result Test"></iframe><iframe class="page-frame" id="page-9" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
