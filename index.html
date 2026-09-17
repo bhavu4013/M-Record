@@ -105,7 +105,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 <button class="nav-btn" data-page="10"><span>🏠</span><span>Dashboard</span></button>
 <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
 <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
-<button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+<button class="nav-btn" data-page="11"><span>📌</span><span>Backtest</span></button>
 <div class="nav-more-title">MORE</div>
 <button class="nav-btn more-nav" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
 <button class="nav-btn more-nav" data-page="3"><span>🔢</span><span>Digit</span></button>
@@ -1708,150 +1708,37 @@ try{await loadMarkets();await loadRecords();$(&quot;openPanna&quot;).focus()}cat
 &lt;/body&gt;
 &lt;/html&gt;" style="display:none" title="Panna Logger"></iframe></main>
 </div>
-<iframe class="page-frame" id="page-11" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
-&lt;title&gt;Shortlist&lt;/title&gt;
-&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
-&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
-    &lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;⭐ SHORTLIST&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;12-GROUP DELAY → WINNING GROUP → JODI&lt;/div&gt;&lt;/div&gt;
-    &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;↻ REFRESH&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
-  &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
- &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;12 GROUP DELAY&lt;/div&gt;&lt;div id=&quot;winnerLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;CALCULATING...&lt;/div&gt;&lt;/div&gt;
- &lt;div class=&quot;text-[9px] font-bold text-slate-400 mb-2&quot;&gt;Selected Market: 6 groups • All Market: 6 groups&lt;/div&gt;
- &lt;div class=&quot;text-[9px] font-black text-slate-500 mb-1&quot;&gt;OPEN SIDE&lt;/div&gt;
- &lt;div id=&quot;openGroups&quot; class=&quot;grid grid-cols-2 sm:grid-cols-3 gap-2&quot;&gt;&lt;/div&gt;
- &lt;div class=&quot;text-[9px] font-black text-slate-500 mt-3 mb-1&quot;&gt;CLOSE SIDE&lt;/div&gt;
- &lt;div id=&quot;closeGroups&quot; class=&quot;grid grid-cols-2 sm:grid-cols-3 gap-2&quot;&gt;&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
- &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;WINNING GROUP DIGITS&lt;/div&gt;&lt;div id=&quot;sideLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
- &lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-4 sm:grid-cols-6 gap-2&quot;&gt;&lt;/div&gt;
- &lt;div class=&quot;mt-2 text-[9px] font-semibold text-slate-500&quot;&gt;The maximum-delay group from the 12 groups is selected automatically. Its digits are used for the next Jodi calculation.&lt;/div&gt;
-&lt;/section&gt;
-
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
- &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FILTERED JODI&lt;/div&gt;&lt;div id=&quot;selectedLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL WINNING DIGITS&lt;/div&gt;&lt;/div&gt;
- &lt;div id=&quot;jodiWindow&quot; class=&quot;rounded-xl bg-slate-50 border border-slate-200 p-3 min-h-[90px]&quot;&gt;&lt;div class=&quot;text-[10px] text-center font-bold text-slate-400 py-5&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
-&lt;/section&gt;
-&lt;/div&gt;
-&lt;script type=&quot;module&quot;&gt;
-import{initializeApp}from&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js&quot;;
-import{getFirestore,collection,getDocs}from&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js&quot;;
+<iframe class="page-frame" id="page-11" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;BACKTEST&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;BACKTEST&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;PLAY LOGIC → HISTORICAL GAME CHECK&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;↻ RUN&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3&quot;&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;select id=&quot;windowSelect&quot; class=&quot;w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;30&quot;&gt;LAST 30 GAMES&lt;/option&gt;&lt;option value=&quot;60&quot;&gt;LAST 60 GAMES&lt;/option&gt;&lt;option value=&quot;90&quot;&gt;LAST 90 GAMES&lt;/option&gt;&lt;option value=&quot;ALL&quot;&gt;ALL AVAILABLE GAMES&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;font-black text-sm mb-2&quot;&gt;BACKTEST SUMMARY&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 sm:grid-cols-4 gap-2&quot;&gt;&lt;div class=&quot;rounded-xl bg-slate-50 border border-slate-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;TESTS&lt;/div&gt;&lt;div id=&quot;tests&quot; class=&quot;text-xl font-black&quot;&gt;-&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rounded-xl bg-emerald-50 border border-emerald-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-emerald-600&quot;&gt;HIT&lt;/div&gt;&lt;div id=&quot;hits&quot; class=&quot;text-xl font-black text-emerald-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rounded-xl bg-rose-50 border border-rose-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-rose-600&quot;&gt;MISS&lt;/div&gt;&lt;div id=&quot;misses&quot; class=&quot;text-xl font-black text-rose-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rounded-xl bg-indigo-50 border border-indigo-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-indigo-600&quot;&gt;HIT RATE&lt;/div&gt;&lt;div id=&quot;rate&quot; class=&quot;text-xl font-black text-indigo-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;method&quot; class=&quot;mt-2 text-[8px] font-semibold text-slate-500&quot;&gt;Each test uses only results before the target game. The target result is not included in the calculation.&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;HISTORICAL TESTS&lt;/div&gt;&lt;div id=&quot;resultLabel&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;-&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;results&quot; class=&quot;space-y-2&quot;&gt;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Run backtest...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;/div&gt;&lt;script type=&quot;module&quot;&gt;
+import{initializeApp}from&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;import{getFirestore,collection,getDocs}from&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
-const db=getFirestore(initializeApp(firebaseConfig));
-const $=id=&gt;document.getElementById(id);
-let records=[],markets=[],selectedDigit=null,lastWinner=null;
-const digit=v=&gt;{if(v===undefined||v===null||v==='')return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null};
-const dtime=v=&gt;{if(v&amp;&amp;typeof v.toDate==='function')return v.toDate().getTime();const d=new Date(v);return isNaN(d)?0:d.getTime()};
-const tmin=v=&gt;{const m=String(v||'').match(/(\d{1,2})[:.](\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-const sortRows=a=&gt;a.slice().sort((x,y)=&gt;dtime(x.date)-dtime(y.date)||tmin(x.openTime)-tmin(y.openTime)||String(x.marketName||'').localeCompare(String(y.marketName||'')));
-const esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;&quot;']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','&quot;':'&amp;quot;',&quot;'&quot;:'&amp;#39;'}[c]));
-
-// A bucket's delay is the number of completed games since ANY digit in that bucket last appeared.
-// TOP/MID/RECENT are built independently for the supplied history, then their group-delay is used.
-function digitRanking(rs,field){
- const n=rs.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,max:n,occ:[]}));
- rs.forEach((r,i)=&gt;{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++;a[d].occ.push(i)}});
- a.forEach(x=&gt;{if(x.last&gt;=0){x.delay=n-1-x.last;const gaps=[];if(x.occ.length)gaps.push(x.occ[0]);for(let i=1;i&lt;x.occ.length;i++)gaps.push(x.occ[i]-x.occ[i-1]-1);gaps.push(n-1-x.last);x.max=Math.max(...gaps)}});
- const z=a.slice().sort((x,y)=&gt;y.delay-x.delay||y.max-x.max||y.hits-x.hits||x.d-y.d);
- return{TOP:z.slice(0,3),MID:z.slice(3,7),RECENT:z.slice(7,10)};
-}
-function groupDelay(items){return items.length?Math.min(...items.map(x=&gt;x.delay)):0}
-function historyFor(market){return sortRows(records.filter(r=&gt;r.date&amp;&amp;digit(r.openAnk)!==null&amp;&amp;digit(r.closeAnk)!==null&amp;&amp;(market==='ALL_MERGED'||r.marketName===market)))}
-function makeSixGroups(rs,side){
- const field=side==='OPEN'?'openAnk':'closeAnk';const r=digitRanking(rs,field);
- return [
-  {scope:'MARKET',bucket:'TOP',items:r.TOP},
-  {scope:'MARKET',bucket:'MID',items:r.MID},
-  {scope:'MARKET',bucket:'RECENT',items:r.RECENT}
- ];
-}
-function makeGroupSet(selectedMarket){
- const selected=historyFor(selectedMarket);const all=historyFor('ALL_MERGED');
- const out=[];
- ['OPEN','CLOSE'].forEach(side=&gt;{
-   const six=[];
-   makeSixGroups(selected,side).forEach(g=&gt;six.push({...g,side,items:g.items,delay:groupDelay(g.items)}));
-   makeSixGroups(all,side).forEach(g=&gt;six.push({...g,scope:'ALL-MARKET',side,items:g.items,delay:groupDelay(g.items)}));
-   out.push(...six);
- });
- return out;
-}
-function renderGroup(container,groups){
- $(container).innerHTML=groups.map(g=&gt;{
-   const win=lastWinner&amp;&amp;lastWinner.side===g.side&amp;&amp;lastWinner.scope===g.scope&amp;&amp;lastWinner.bucket===g.bucket;
-   const cls=win?'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-100':'border-slate-200 bg-white';
-   const digits=g.items.map(x=&gt;x.d).join(' • ');
-   return `&lt;button data-gkey=&quot;${esc(g.side+'|'+g.scope+'|'+g.bucket)}&quot; class=&quot;rounded-xl border-2 ${cls} p-2 text-left shadow-sm w-full&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-1&quot;&gt;&lt;span class=&quot;text-[8px] font-black ${win?'text-indigo-700':'text-slate-500'}&quot;&gt;${g.scope}&lt;/span&gt;&lt;span class=&quot;text-[8px] font-black text-slate-400&quot;&gt;${g.bucket}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;mt-1 text-xl font-black ${win?'text-indigo-700':'text-slate-800'}&quot;&gt;${g.delay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;GROUP DELAY&lt;/div&gt;&lt;div class=&quot;mt-1 text-[9px] font-black text-slate-600 truncate&quot;&gt;${digits||'—'}&lt;/div&gt;&lt;/button&gt;`;
- }).join('');
-}
-function renderAll(){
- const market=$('marketSelect').value||'ALL_MERGED';const groups=makeGroupSet(market);
- const maxDelay=Math.max(...groups.map(g=&gt;g.delay),0);
- // deterministic tie-break: OPEN before CLOSE, MARKET before ALL-MARKET, TOP before MID before RECENT.
- const rankScope={'MARKET':0,'ALL-MARKET':1},rankBucket={TOP:0,MID:1,RECENT:2},rankSide={OPEN:0,CLOSE:1};
- lastWinner=groups.slice().sort((a,b)=&gt;b.delay-a.delay||rankSide[a.side]-rankSide[b.side]||rankScope[a.scope]-rankScope[b.scope]||rankBucket[a.bucket]-rankBucket[b.bucket])[0]||null;
- renderGroup('openGroups',groups.filter(g=&gt;g.side==='OPEN'));renderGroup('closeGroups',groups.filter(g=&gt;g.side==='CLOSE'));
- $('winnerLabel').textContent=lastWinner?`${lastWinner.side} SIDE • ${lastWinner.scope} ${lastWinner.bucket} • DELAY ${lastWinner.delay}`:'NO GROUP';
- $('sideLabel').textContent=lastWinner?`${lastWinner.side} • ${lastWinner.scope} ${lastWinner.bucket}`:'—';
- if(lastWinner){
-   const activeDigits=lastWinner.items.map(x=&gt;x.d);
-   if(selectedDigit!==null&amp;&amp;!activeDigits.includes(selectedDigit))selectedDigit=null;
-   $('digitGrid').innerHTML=activeDigits.map(d=&gt;{const active=selectedDigit===d;return `&lt;button data-digit=&quot;${d}&quot; class=&quot;rounded-xl border-2 p-3 text-center ${active?'bg-indigo-600 text-white border-indigo-600':'bg-white border-slate-200 text-indigo-700'}&quot;&gt;&lt;div class=&quot;text-xl font-black&quot;&gt;${d}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black ${active?'text-indigo-100':'text-slate-500'}&quot;&gt;SELECT&lt;/div&gt;&lt;/button&gt;`}).join('');
-   document.querySelectorAll('[data-digit]').forEach(b=&gt;b.onclick=()=&gt;{selectedDigit=Number(b.dataset.digit);renderAll();renderJodis()});
-   renderJodis();
- }else{$('digitGrid').innerHTML='';$('jodiWindow').innerHTML='&lt;div class=&quot;py-6 text-center text-[10px] font-bold text-slate-400&quot;&gt;No completed data&lt;/div&gt;'}
- $('status').textContent=`${market==='ALL_MERGED'?'All markets merged':market} • ${groups.length} groups checked • maximum delay ${maxDelay}`;
-}
-function jodiStats(rs,sd,side){
- const out=Array.from({length:10},(_,c)=&gt;({j:side==='OPEN'?`${sd}${c}`:`${c}${sd}`,hits:0,last:-1,delay:rs.length,max:0,occ:[]}));
- rs.forEach((r,i)=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return;const jside=side==='OPEN'?o:c;if(jside!==sd)return;const other=side==='OPEN'?c:o;const x=out[other];x.hits++;x.last=i;x.occ.push(i)});
- out.forEach(x=&gt;{if(x.occ.length){x.delay=rs.length-1-x.last;const gaps=[x.occ[0]];for(let i=1;i&lt;x.occ.length;i++)gaps.push(x.occ[i]-x.occ[i-1]-1);gaps.push(rs.length-1-x.last);x.max=Math.max(...gaps)}});
- out.sort((a,b)=&gt;b.delay-a.delay||b.max-a.max||b.hits-a.hits||a.j.localeCompare(b.j));
- return out.slice(0,3);
-}
-function renderJodis(){
- if(!lastWinner)return;const market=$('marketSelect').value||'ALL_MERGED';const rs=historyFor(market);const side=lastWinner.side;const digits=lastWinner.items.map(x=&gt;x.d);const selected=selectedDigit===null?digits:[selectedDigit];let merged=[];
- selected.forEach(d=&gt;merged.push(...jodiStats(rs,d,side).map(x=&gt;({...x,sourceDigit:d}))));
- $('selectedLabel').textContent=selectedDigit===null?`ALL ${digits.length} DIGITS • ${merged.length} JODI`:`DIGIT ${selectedDigit} • ${side} • 3 JODI`;
- $('jodiWindow').innerHTML=merged.length?`&lt;div class=&quot;grid grid-cols-2 sm:grid-cols-5 gap-1.5&quot;&gt;${merged.map(x=&gt;`&lt;div class=&quot;rounded-lg border border-slate-200 bg-white p-2 text-center&quot;&gt;&lt;div class=&quot;text-base font-black text-indigo-700&quot;&gt;${x.j}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;D ${x.delay} • M ${x.max}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;H ${x.hits}&lt;/div&gt;&lt;/div&gt;`).join('')}&lt;/div&gt;`:'&lt;div class=&quot;py-6 text-center text-[10px] font-bold text-slate-400&quot;&gt;No matching Jodi found&lt;/div&gt;';
-}
-async function load(){
- try{
-  $('status').textContent='Loading Firebase data...';
-  const[ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
-  markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));
-  const old=$('marketSelect').value;
-  $('marketSelect').innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${esc(m.name)}&quot;&gt;${esc(m.name)}&lt;/option&gt;`).join('');
-  if(markets.some(m=&gt;m.name===old))$('marketSelect').value=old;else $('marketSelect').value='ALL_MERGED';
-  records=[];rs.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)records.push({...r,id:d.id})});
-  selectedDigit=null;lastWinner=null;renderAll();
- }catch(e){console.error(e);$('status').textContent='ERROR: '+(e.message||e)}
-}
-$('marketSelect').onchange=()=&gt;{selectedDigit=null;lastWinner=null;renderAll()};$('refreshBtn').onclick=load;load();
-&lt;/script&gt;
-&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Shortlist"></iframe> <nav class="bottom-nav">
+const db=getFirestore(initializeApp(firebaseConfig));const $=id=&gt;document.getElementById(id);let rows=[],markets=[];
+const dig=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
+const tmin=v=&gt;{let m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
+const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
+function sort(a){return a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
+function completed(r){return dig(r.openAnk)!==null&amp;&amp;dig(r.closeAnk)!==null}
+function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
+function follow(h,side){const field=side===&#x27;OPEN&#x27;?&#x27;openAnk&#x27;:&#x27;closeAnk&#x27;;const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null};const statsFor=history=&gt;{const n=history.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));history.forEach((r,i)=&gt;{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;x.delay=x.last&gt;=0?n-1-x.last:n);return a};const rank=history=&gt;statsFor(history).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);const uniq=arr=&gt;{const out=[];for(const x of arr){if(x&amp;&amp;!out.some(y=&gt;y.d===x.d))out.push(x)}return out};const most=(arr,exclude=[])=&gt;arr.filter(x=&gt;x&amp;&amp;!exclude.includes(x.d)).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d)[0]||null;const previous=rank(h.slice(0,-1));let top=previous.slice(0,3),mid=previous.slice(3,7),recent=previous.slice(7,10);const hit=h.length?digit(h[h.length-1][field]):null;const source=hit!==null?(top.some(x=&gt;x.d===hit)?&#x27;TOP&#x27;:mid.some(x=&gt;x.d===hit)?&#x27;MID&#x27;:recent.some(x=&gt;x.d===hit)?&#x27;RECENT&#x27;:&#x27;NONE&#x27;):&#x27;NONE&#x27;;if(source===&#x27;TOP&#x27;){const hitObj=top.find(x=&gt;x.d===hit);top=top.filter(x=&gt;x.d!==hit);const rToMid=most(recent,[hit]);if(rToMid)recent=recent.filter(x=&gt;x.d!==rToMid.d);if(rToMid)mid=uniq([...mid,rToMid]);const mToTop=most(mid,[hit]);if(mToTop)mid=mid.filter(x=&gt;x.d!==mToTop.d);if(mToTop)top=uniq([...top,mToTop]);if(hitObj)recent=uniq([...recent,hitObj]);}else if(source===&#x27;MID&#x27;){const hitObj=mid.find(x=&gt;x.d===hit);mid=mid.filter(x=&gt;x.d!==hit);const rToMid=most(recent,[hit]);if(rToMid)recent=recent.filter(x=&gt;x.d!==rToMid.d);if(rToMid)mid=uniq([...mid,rToMid]);if(hitObj)recent=uniq([...recent,hitObj]);}else if(source===&#x27;RECENT&#x27;){recent=uniq(recent);}const used=new Set([...top,...mid,...recent].map(x=&gt;x.d));const fill=(bucket,size)=&gt;{for(const x of rank(h.slice(0,-1))){if(bucket.length&gt;=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};top=fill(uniq(top),3);mid=fill(uniq(mid),4);recent=fill(uniq(recent),3);let delay={top:0,mid:0,recent:0};if(h.length&gt;1)delay=follow(h.slice(0,-1),side).delay;delay=source===&#x27;TOP&#x27;?{top:0,mid:delay.mid+1,recent:delay.recent+1}:source===&#x27;MID&#x27;?{top:delay.top+1,mid:0,recent:delay.recent+1}:source===&#x27;RECENT&#x27;?{top:delay.top+1,mid:delay.mid+1,recent:0}:{top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};return{top,mid,recent,delay}}
+function scopeGroups(h,side){let f=follow(h,side);return[{name:&#x27;TOP&#x27;,digits:f.top,delay:f.delay.top},{name:&#x27;MID&#x27;,digits:f.mid,delay:f.delay.mid},{name:&#x27;RECENT&#x27;,digits:f.recent,delay:f.delay.recent}]}
+function familyKey(j){const G={&quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],&quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],&quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],&quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],&quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],&quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],&quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],&quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],&quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],&quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],&quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],&quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],&quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],&quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],&quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]};for(const[k,v]of Object.entries(G))if(v.includes(j))return k;return null}
+function jodiStats(h){let n=h.length;const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));const j=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:&#x27;&#x27;,oeDelay:n,fam:familyKey(k),famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,score:0,parts:{}}]));const totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),oeOcc={OO:[],OE:[],EO:[],EE:[]},famOcc={};const recentN=Math.min(30,n),recentStart=Math.max(0,n-recentN);h.forEach((r,i)=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);if(o===null||c===null)return;const jd=String(o)+String(c),s=j[jd];s.last=i;s.hits++;if(i&gt;=recentStart)s.recentHits++;const t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?&#x27;O&#x27;:&#x27;E&#x27;)+(c%2?&#x27;O&#x27;:&#x27;E&#x27;);totalOcc[t].push(i);diffOcc[d].push(i);(oeOcc[oe]||(oeOcc[oe]=[])).push(i);const fk=familyKey(jd);if(fk)(famOcc[fk]||(famOcc[fk]=[])).push(i)});function metricOcc(occ){const out=[];for(let d=0;d&lt;occ.length;d++){const a=occ[d]||[],delay=a.length?n-1-a[a.length-1]:n;let gaps=a.length?[a[0]]:[n];for(let i=1;i&lt;a.length;i++)gaps.push(a[i]-a[i-1]-1);if(a.length)gaps.push(n-1-a[a.length-1]);out[d]={delay,max:Math.max(0,...gaps)}}return out}const td=metricOcc(totalOcc),dd=metricOcc(diffOcc),od={};for(const k of Object.keys(oeOcc)){const a=oeOcc[k]||[],delay=a.length?n-1-a[a.length-1]:n;od[k]={delay}}const fd={};for(const k of Object.keys(famOcc)){const a=famOcc[k]||[];fd[k]=a.length?n-1-a[a.length-1]:n}for(const k of keys){const s=j[k],occ=[];h.forEach((r,i)=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);if(o!==null&amp;&amp;c!==null&amp;&amp;String(o)+String(c)===k)occ.push(i)});let gaps=[];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);s.avgGap=gaps.length?gaps.reduce((a,b)=&gt;a+b,0)/gaps.length:n;s.repeatGap=gaps.length?gaps[gaps.length-1]:n;const rk=k[1]+k[0];s.reverseDelay=j[rk]?.last&gt;=0?n-1-j[rk].last:n;s.delay=s.last&gt;=0?n-1-s.last:n;s.total=(Number(k[0])+Number(k[1]))%10;s.totalDelay=td[s.total].delay;s.diff=(Number(k[1])-Number(k[0])+10)%10;s.diffDelay=dd[s.diff].delay;s.oe=(Number(k[0])%2?&#x27;O&#x27;:&#x27;E&#x27;)+(Number(k[1])%2?&#x27;O&#x27;:&#x27;E&#x27;);s.oeDelay=od[s.oe]?.delay??n;s.famDelay=fd[s.fam]??n;let gaps2=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps2.push(occ[i]-occ[i-1]-1);if(occ.length)gaps2.push(n-1-occ[occ.length-1]);s.maxDelay=Math.max(0,...gaps2)}return j}
+function norm(values,high=true){const finite=values.filter(v=&gt;Number.isFinite(v));if(!finite.length)return()=&gt;50;const lo=Math.min(...finite),hi=Math.max(...finite);if(hi===lo)return()=&gt;50;return v=&gt;{const x=(Number(v)-lo)/(hi-lo);return Math.round((high?x:1-x)*1000)/10}}
+function digitDelayFromHistory(h,d,side){const field=side===&#x27;OPEN&#x27;?&#x27;openAnk&#x27;:&#x27;closeAnk&#x27;;let last=-1;h.forEach((r,i)=&gt;{if(dig(r[field])===d)last=i});return last&gt;=0?h.length-1-last:h.length}
+function prepareJodiRanking(h,st){const arr=Object.values(st);arr.forEach(x=&gt;{const rev=st[x.jodi[1]+x.jodi[0]];x.pairMetric=(rev&amp;&amp;rev.hits?Math.max(0,100-rev.delay*2):0)+(x.repeatGap&lt;=x.avgGap&amp;&amp;x.avgGap&gt;0?50:0)});const nd=norm(arr.map(x=&gt;x.delay),true),nr=norm(arr.map(x=&gt;x.recentHits),true),nf=norm(arr.map(x=&gt;x.hits),true),nt=norm(arr.map(x=&gt;x.totalDelay),true),nq=norm(arr.map(x=&gt;x.diffDelay),true),nfa=norm(arr.map(x=&gt;x.famDelay),true);arr.forEach(x=&gt;{x.delayOpen=digitDelayFromHistory(h,Number(x.jodi[0]),&#x27;OPEN&#x27;);x.delayClose=digitDelayFromHistory(h,Number(x.jodi[1]),&#x27;CLOSE&#x27;)});const oN=norm(arr.map(x=&gt;x.delayOpen),true),cN=norm(arr.map(x=&gt;x.delayClose),true),pN=norm(arr.map(x=&gt;x.pairMetric),true);arr.forEach(x=&gt;{const parts={jDelay:nd(x.delay)*.25,recent:nr(x.recentHits)*.15,freq:nf(x.hits)*.10,open:oN(x.delayOpen)*.075,close:cN(x.delayClose)*.075,total:nt(x.totalDelay)*.075,diff:nq(x.diffDelay)*.075,family:nfa(x.famDelay)*.075,pair:pN(x.pairMetric)*.125};x.parts=parts;x.score=Object.values(parts).reduce((a,b)=&gt;a+b,0)});return arr.sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||b.hits-a.hits||a.jodi.localeCompare(b.jodi))}
+function playAt(history){const h=sort(history.filter(completed));if(!h.length)return null;let candidates=[];for(const side of [&#x27;OPEN&#x27;,&#x27;CLOSE&#x27;]){const g=scopeGroups(h,side);for(const b of g)candidates.push({side,scope:&#x27;MARKET&#x27;,name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&gt;x.maxDelay))})}const winner=candidates.slice().sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||a.side.localeCompare(b.side)||a.name.localeCompare(b.name))[0]||null;if(!winner||!winner.digits.length)return null;const st=jodiStats(h),ranked=prepareJodiRanking(h,st),digits=winner.digits.map(x=&gt;x.d),side=winner.side;const arr=ranked.filter(x=&gt;digits.includes(side===&#x27;OPEN&#x27;?Number(x.jodi[0]):Number(x.jodi[1])));let all=[];for(const d of digits){const q=arr.filter(x=&gt;(side===&#x27;OPEN&#x27;?Number(x.jodi[0]):Number(x.jodi[1]))===d);all.push(...q.slice(0,3).map(x=&gt;x.jodi))}return{winner,digits,shortlist:[...new Set(all)]}}
+function formatDate(v){if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().toLocaleDateString();const d=new Date(v);return isNaN(d)?String(v||&#x27;&#x27;):d.toLocaleDateString()}
+function runBacktest(){const selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;let all=sort(rows.filter(completed));let targets=selected===&#x27;ALL_MERGED&#x27;?all:all.filter(r=&gt;r.marketName===selected);let limit=$(&#x27;windowSelect&#x27;).value;targets=limit===&#x27;ALL&#x27;?targets:targets.slice(-Number(limit));const out=[];for(const target of targets){const idx=all.indexOf(target);const history=all.slice(0,idx);const training=selected===&#x27;ALL_MERGED&#x27;?history:history.filter(r=&gt;r.marketName===selected);const play=playAt(training);if(!play)continue;const actual=String(dig(target.openAnk))+String(dig(target.closeAnk));const hit=play.shortlist.includes(actual);out.push({target,play,actual,hit})}const hits=out.filter(x=&gt;x.hit).length,miss=out.length-hits;$(&#x27;tests&#x27;).textContent=out.length;$(&#x27;hits&#x27;).textContent=hits;$(&#x27;misses&#x27;).textContent=miss;$(&#x27;rate&#x27;).textContent=out.length?((hits/out.length)*100).toFixed(1)+&#x27;%&#x27;:&#x27;-&#x27;;$(&#x27;resultLabel&#x27;).textContent=`${out.length} historical games checked`;$(&#x27;status&#x27;).textContent=`${all.length} completed games available • ${selected===&#x27;ALL_MERGED&#x27;?&#x27;merged history&#x27;:&#x27;selected-market history&#x27;} • Play logic replayed without target-game data`;if(!out.length){$(&#x27;results&#x27;).innerHTML=&#x27;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Not enough history to run the selected backtest.&lt;/div&gt;&#x27;;return}$(&#x27;results&#x27;).innerHTML=out.slice().reverse().map((x,i)=&gt;{const w=x.play.winner;const date=formatDate(x.target.date);const market=String(x.target.marketName||&#x27;&#x27;);const side=w.side;const cls=x.hit?&#x27;border-emerald-200 bg-emerald-50&#x27;:&#x27;border-rose-200 bg-rose-50&#x27;;const badge=x.hit?&#x27;HIT&#x27;:&#x27;MISS&#x27;;const color=x.hit?&#x27;text-emerald-700&#x27;:&#x27;text-rose-700&#x27;;return `&lt;div class=&quot;rounded-xl border ${cls} p-2.5&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-500&quot;&gt;${date} • ${market}&lt;/div&gt;&lt;div class=&quot;px-2 py-1 rounded-lg bg-white ${color} text-[8px] font-black&quot;&gt;${badge}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-1 grid grid-cols-2 gap-1 text-[8px] font-bold&quot;&gt;&lt;div&gt;PLAY: &lt;b class=&quot;${side===&#x27;OPEN&#x27;?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${side}&lt;/b&gt; • GROUP &lt;b&gt;${w.name}&lt;/b&gt; • DELAY &lt;b&gt;${w.delay}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;ACTUAL JODI: &lt;b class=&quot;text-slate-900 text-sm&quot;&gt;${x.actual}&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-1 text-[8px] font-bold text-slate-500&quot;&gt;PLAY DIGITS: ${x.play.digits.join(&#x27; , &#x27;)} • SHORTLIST: ${x.play.shortlist.join(&#x27; , &#x27;)}&lt;/div&gt;&lt;/div&gt;`}).join(&#x27;&#x27;)}
+async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;const[ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;rows=rs.docs.map(d=&gt;{const r=d.data();return{...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;}}).filter(r=&gt;r.date&amp;&amp;r.marketName);rows=sort(rows);$(&#x27;marketSelect&#x27;).onchange=runBacktest;$(&#x27;windowSelect&#x27;).onchange=runBacktest;runBacktest()}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e);$(&#x27;results&#x27;).innerHTML=`&lt;div class=&quot;rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-600&quot;&gt;${e.message||e}&lt;/div&gt;`}}
+$(&#x27;refreshBtn&#x27;).onclick=load;load();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Backtest"></iframe> <nav class="bottom-nav">
 <button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
 <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
 <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
-<button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+<button class="nav-btn" data-page="11"><span>📌</span><span>Backtest</span></button>
 <button class="nav-more" id="moreNav"><span>☰</span><span>More</span></button>
 </nav>
 <div class="more-panel" id="morePanel">
