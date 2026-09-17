@@ -242,7 +242,411 @@ load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.messa
 &lt;/html&gt;" style="display:none" title="Dashboard"></iframe><iframe class="page-frame" id="page-0" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,viewport-fit=cover&quot;&gt;&lt;title&gt;Family Jodi + Family Panna&lt;/title&gt;&lt;style&gt;
 *{box-sizing:border-box}body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.wrap{width:100%;height:100%;padding:10px 10px 18px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.tab{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:14px;padding:12px 8px;font-size:12px;font-weight:900;cursor:pointer}.tab.active{background:#4f46e5;color:#fff;border-color:#4f46e5}.panel{display:none;height:calc(100% - 58px)}.panel.active{display:block}.frame{width:100%;height:100%;min-height:0;border:0;background:#f1f5f9}.note{text-align:center;font-size:8px;font-weight:800;color:#64748b;margin:0 0 7px}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;tabs&quot;&gt;&lt;button class=&quot;tab active&quot; id=&quot;jodiTab&quot;&gt;👨‍👩‍👧‍👦 FAMILY JODI&lt;/button&gt;&lt;button class=&quot;tab&quot; id=&quot;pannaTab&quot;&gt;🔺 FAMILY PANNA&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;note&quot;&gt;FAMILY JODI + FAMILY PANNA • Existing calculation logic unchanged&lt;/div&gt;&lt;div id=&quot;jodiPanel&quot; class=&quot;panel active&quot;&gt;&lt;iframe class=&quot;frame&quot; id=&quot;jodiFrame&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;div id=&quot;pannaPanel&quot; class=&quot;panel&quot;&gt;&lt;iframe class=&quot;frame&quot; id=&quot;pannaFrame&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;&lt;script&gt;
-const jodiSrc=&quot;&lt;!DOCTYPE html&gt;&lt;html lang=\&quot;gu\&quot;&gt;&lt;head&gt;&lt;meta charset=\&quot;UTF-8\&quot;&gt;&lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width, initial-scale=1.0\&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=\&quot;https://cdn.tailwindcss.com\&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,\&quot;Segoe UI\&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=\&quot;bg-slate-100 min-h-screen p-3 text-slate-800\&quot;&gt;&lt;div class=\&quot;max-w-3xl mx-auto space-y-3\&quot;&gt;\n&lt;div class=\&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3\&quot;&gt;&lt;div class=\&quot;flex items-center justify-between gap-2\&quot;&gt;&lt;div&gt;&lt;div class=\&quot;text-lg font-black text-indigo-700\&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;div class=\&quot;text-[10px] font-semibold text-slate-500\&quot;&gt;15 Groups • Group Delay • TOP 5 • MID 5 • RECENT 5&lt;/div&gt;&lt;/div&gt;&lt;button id=\&quot;refreshBtn\&quot; class=\&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black\&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=\&quot;marketSelect\&quot; class=\&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white\&quot;&gt;&lt;option value=\&quot;ALL_MERGED\&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=\&quot;status\&quot; class=\&quot;mt-2 text-[10px] font-bold text-slate-500\&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;\n&lt;div class=\&quot;grid grid-cols-3 gap-2\&quot;&gt;\n&lt;button id=\&quot;topBtn\&quot; class=\&quot;rounded-xl bg-orange-500 text-white p-3 text-center shadow-sm\&quot;&gt;\n  &lt;div class=\&quot;text-[11px] font-black\&quot;&gt;🔥 TOP 5&lt;/div&gt;\n  &lt;div id=\&quot;topDelaySummary\&quot; class=\&quot;text-[11px] font-black mt-2\&quot;&gt;DELAY: -&lt;/div&gt;\n&lt;/button&gt;\n&lt;button id=\&quot;midBtn\&quot; class=\&quot;rounded-xl bg-indigo-600 text-white p-3 text-center shadow-sm\&quot;&gt;\n  &lt;div class=\&quot;text-[11px] font-black\&quot;&gt;📊 MID 5&lt;/div&gt;\n  &lt;div id=\&quot;midDelaySummary\&quot; class=\&quot;text-[11px] font-black mt-2\&quot;&gt;DELAY: -&lt;/div&gt;\n&lt;/button&gt;\n&lt;button id=\&quot;recentBtn\&quot; class=\&quot;rounded-xl bg-emerald-600 text-white p-3 text-center shadow-sm\&quot;&gt;\n  &lt;div class=\&quot;text-[11px] font-black\&quot;&gt;⚡ RECENT 5&lt;/div&gt;\n  &lt;div id=\&quot;recentDelaySummary\&quot; class=\&quot;text-[11px] font-black mt-2\&quot;&gt;DELAY: -&lt;/div&gt;\n&lt;/button&gt;\n&lt;/div&gt;\n&lt;div class=\&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3\&quot;&gt;&lt;div class=\&quot;flex justify-between items-center mb-2\&quot;&gt;&lt;div class=\&quot;font-black text-sm\&quot;&gt;15 FAMILY JODI GROUPS&lt;/div&gt;&lt;div id=\&quot;filterLabel\&quot; class=\&quot;text-[9px] font-black text-indigo-600\&quot;&gt;ALL&lt;/div&gt;&lt;/div&gt;&lt;div id=\&quot;groupGrid\&quot; class=\&quot;grid grid-cols-3 sm:grid-cols-5 gap-1.5\&quot;&gt;&lt;/div&gt;&lt;/div&gt;\n&lt;div class=\&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3\&quot;&gt;&lt;div class=\&quot;text-sm font-black mb-2\&quot;&gt;DIGIT FILTER&lt;/div&gt;&lt;div id=\&quot;digitGrid\&quot; class=\&quot;grid grid-cols-5 gap-2\&quot;&gt;&lt;/div&gt;&lt;div class=\&quot;mt-2 text-[9px] font-semibold text-slate-500\&quot;&gt;Digit પર ક્લિક કરવાથી તે digit સાથે સંબંધિત Family Jodi Groups popupમાં દેખાશે.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;\n&lt;div id=\&quot;modal\&quot; class=\&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center\&quot;&gt;&lt;div class=\&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[85vh] overflow-hidden\&quot;&gt;&lt;div class=\&quot;p-3 border-b flex items-center justify-between\&quot;&gt;&lt;div&gt;&lt;div id=\&quot;modalTitle\&quot; class=\&quot;font-black text-indigo-700\&quot;&gt;DIGIT&lt;/div&gt;&lt;div class=\&quot;text-[9px] text-slate-500\&quot;&gt;Family Group • Group Delay • Hits&lt;/div&gt;&lt;/div&gt;&lt;button id=\&quot;closeModal\&quot; class=\&quot;w-8 h-8 rounded-full bg-slate-100 font-black\&quot;&gt;×&lt;/button&gt;&lt;/div&gt;&lt;div id=\&quot;modalBody\&quot; class=\&quot;p-3 overflow-y-auto space-y-1\&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;\n\n&lt;script type=\&quot;module\&quot;&gt;\nimport { initializeApp } from \&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js\&quot;;\nimport { getFirestore, collection, getDocs } from \&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js\&quot;;\n\nconst firebaseConfig = {\n  apiKey: \&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ\&quot;,\n  authDomain: \&quot;m-record-f9c51.firebaseapp.com\&quot;,\n  projectId: \&quot;m-record-f9c51\&quot;,\n  storageBucket: \&quot;m-record-f9c51.firebasestorage.app\&quot;,\n  messagingSenderId: \&quot;479303152172\&quot;,\n  appId: \&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789\&quot;\n};\n\nconst db = getFirestore(initializeApp(firebaseConfig));\n\nconst el = {\n  market: document.getElementById(\&quot;marketSelect\&quot;),\n  status: document.getElementById(\&quot;status\&quot;),\n  refresh: document.getElementById(\&quot;refreshBtn\&quot;),\n  top: document.getElementById(\&quot;topBtn\&quot;),\n  mid: document.getElementById(\&quot;midBtn\&quot;),\n  recent: document.getElementById(\&quot;recentBtn\&quot;),\n  topDelaySummary: document.getElementById(\&quot;topDelaySummary\&quot;),\n  midDelaySummary: document.getElementById(\&quot;midDelaySummary\&quot;),\n  recentDelaySummary: document.getElementById(\&quot;recentDelaySummary\&quot;),\n  filterLabel: document.getElementById(\&quot;filterLabel\&quot;),\n  groupGrid: document.getElementById(\&quot;groupGrid\&quot;),\n  digitGrid: document.getElementById(\&quot;digitGrid\&quot;),\n  modal: document.getElementById(\&quot;modal\&quot;),\n  modalTitle: document.getElementById(\&quot;modalTitle\&quot;),\n  modalBody: document.getElementById(\&quot;modalBody\&quot;),\n  closeModal: document.getElementById(\&quot;closeModal\&quot;)\n};\n\nconst FAMILY_JODI_GROUPS = {\n  \&quot;11\&quot;:[\&quot;11\&quot;,\&quot;16\&quot;,\&quot;61\&quot;,\&quot;66\&quot;],\n  \&quot;12\&quot;:[\&quot;12\&quot;,\&quot;17\&quot;,\&quot;21\&quot;,\&quot;26\&quot;,\&quot;62\&quot;,\&quot;67\&quot;,\&quot;71\&quot;,\&quot;76\&quot;],\n  \&quot;13\&quot;:[\&quot;13\&quot;,\&quot;18\&quot;,\&quot;31\&quot;,\&quot;36\&quot;,\&quot;63\&quot;,\&quot;68\&quot;,\&quot;81\&quot;,\&quot;86\&quot;],\n  \&quot;14\&quot;:[\&quot;14\&quot;,\&quot;19\&quot;,\&quot;41\&quot;,\&quot;46\&quot;,\&quot;64\&quot;,\&quot;69\&quot;,\&quot;91\&quot;,\&quot;96\&quot;],\n  \&quot;15\&quot;:[\&quot;10\&quot;,\&quot;15\&quot;,\&quot;60\&quot;,\&quot;65\&quot;,\&quot;01\&quot;,\&quot;06\&quot;,\&quot;51\&quot;,\&quot;56\&quot;],\n  \&quot;22\&quot;:[\&quot;22\&quot;,\&quot;27\&quot;,\&quot;72\&quot;,\&quot;77\&quot;],\n  \&quot;23\&quot;:[\&quot;23\&quot;,\&quot;28\&quot;,\&quot;32\&quot;,\&quot;37\&quot;,\&quot;73\&quot;,\&quot;78\&quot;,\&quot;82\&quot;,\&quot;87\&quot;],\n  \&quot;24\&quot;:[\&quot;24\&quot;,\&quot;29\&quot;,\&quot;42\&quot;,\&quot;47\&quot;,\&quot;74\&quot;,\&quot;79\&quot;,\&quot;92\&quot;,\&quot;97\&quot;],\n  \&quot;25\&quot;:[\&quot;20\&quot;,\&quot;25\&quot;,\&quot;52\&quot;,\&quot;57\&quot;,\&quot;70\&quot;,\&quot;75\&quot;,\&quot;02\&quot;,\&quot;07\&quot;],\n  \&quot;33\&quot;:[\&quot;33\&quot;,\&quot;38\&quot;,\&quot;83\&quot;,\&quot;88\&quot;],\n  \&quot;34\&quot;:[\&quot;34\&quot;,\&quot;39\&quot;,\&quot;43\&quot;,\&quot;48\&quot;,\&quot;84\&quot;,\&quot;89\&quot;,\&quot;93\&quot;,\&quot;98\&quot;],\n  \&quot;35\&quot;:[\&quot;30\&quot;,\&quot;35\&quot;,\&quot;53\&quot;,\&quot;58\&quot;,\&quot;80\&quot;,\&quot;85\&quot;,\&quot;03\&quot;,\&quot;08\&quot;],\n  \&quot;44\&quot;:[\&quot;44\&quot;,\&quot;49\&quot;,\&quot;94\&quot;,\&quot;99\&quot;],\n  \&quot;45\&quot;:[\&quot;40\&quot;,\&quot;45\&quot;,\&quot;54\&quot;,\&quot;59\&quot;,\&quot;90\&quot;,\&quot;95\&quot;,\&quot;04\&quot;,\&quot;09\&quot;],\n  \&quot;55\&quot;:[\&quot;00\&quot;,\&quot;05\&quot;,\&quot;50\&quot;,\&quot;55\&quot;]\n};\n\nconst groups = Object.keys(FAMILY_JODI_GROUPS);\nlet allRows = [], stats = {}, top5 = [], mid5 = [], recent5 = [];\n\nfunction digit(v) {\n  if (v === undefined || v === null || v === \&quot;\&quot;) return null;\n  const n = parseInt(v, 10);\n  return Number.isFinite(n) ? ((n % 10) + 10) % 10 : null;\n}\n\nfunction jodiOf(r) {\n  const o = digit(r.openAnk ?? r.openDigit ?? r.open);\n  const c = digit(r.closeAnk ?? r.closeDigit ?? r.close);\n  return o === null || c === null ? null : String(o) + String(c);\n}\n\nfunction timeMin(s) {\n  if (!s) return 1439;\n  const m = String(s).match(/(\\d{1,2}):(\\d{2})/);\n  return m ? parseInt(m[1],10) * 60 + parseInt(m[2],10) : 1439;\n}\n\nfunction dateValue(v) {\n  if (v &amp;&amp; typeof v.toDate === \&quot;function\&quot;) {\n    const d = v.toDate();\n    return d instanceof Date &amp;&amp; !isNaN(d) ? d.getTime() : 0;\n  }\n  if (v &amp;&amp; typeof v.seconds === \&quot;number\&quot;) return v.seconds * 1000;\n  const d = new Date(v);\n  return d instanceof Date &amp;&amp; !isNaN(d) ? d.getTime() : 0;\n}\n\nfunction sortRows(rows) {\n  return rows.slice().sort((a,b) =&gt;\n    dateValue(a.date) - dateValue(b.date) ||\n    timeMin(a.openTime) - timeMin(b.openTime)\n  );\n}\n\nfunction setStatus(text, error=false) {\n  el.status.textContent = text;\n  el.status.className = \&quot;mt-2 text-[10px] font-bold \&quot; +\n    (error ? \&quot;text-red-600\&quot; : \&quot;text-slate-500\&quot;);\n}\n\nasync function load() {\n  setStatus(\&quot;Loading Firebase data...\&quot;);\n  try {\n    const [mSnap, rSnap] = await Promise.all([\n      getDocs(collection(db, \&quot;markets\&quot;)),\n      getDocs(collection(db, \&quot;matka_records\&quot;))\n    ]);\n\n    const markets = [];\n    mSnap.forEach(d =&gt; markets.push({id:d.id, ...d.data()}));\n    markets.sort((a,b) =&gt; timeMin(a.openTime) - timeMin(b.openTime));\n\n    const previous = el.market.value || \&quot;ALL_MERGED\&quot;;\n    el.market.innerHTML = '&lt;option value=\&quot;ALL_MERGED\&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';\n\n    markets.forEach(m =&gt; {\n      if (!m.name) return;\n      const opt = document.createElement(\&quot;option\&quot;);\n      opt.value = m.name;\n      opt.textContent = m.name;\n      el.market.appendChild(opt);\n    });\n\n    el.market.value = [...el.market.options].some(o =&gt; o.value === previous)\n      ? previous : \&quot;ALL_MERGED\&quot;;\n\n    allRows = [];\n    rSnap.forEach(d =&gt; {\n      const r = d.data();\n      if (r.date &amp;&amp; r.marketName) {\n        allRows.push({\n          ...r,\n          id:d.id,\n          openTime:r.openTime ||\n            markets.find(m =&gt; m.name === r.marketName)?.openTime || \&quot;00:00\&quot;\n        });\n      }\n    });\n\n    calculate();\n  } catch(e) {\n    console.error(e);\n    setStatus(\&quot;ERROR: \&quot; + (e?.message || String(e)), true);\n    el.groupGrid.innerHTML =\n      '&lt;div class=\&quot;col-span-full text-center py-6 text-xs font-bold text-red-600\&quot;&gt;' +\n      'Firebase data load failed.&lt;br&gt;&lt;span class=\&quot;text-[10px] text-slate-500\&quot;&gt;' +\n      'Check Firebase configuration / Firestore access.&lt;/span&gt;&lt;/div&gt;';\n  }\n}\n\nfunction calculate() {\n  const selected = el.market.value || \&quot;ALL_MERGED\&quot;;\n\n  // Only completed Jodi results are counted.\n  // A completed game = Open + Close both available.\n  const rows = sortRows(\n    allRows\n      .filter(r =&gt; selected === \&quot;ALL_MERGED\&quot; || r.marketName === selected)\n      .filter(r =&gt; jodiOf(r) !== null)\n  );\n\n  const n = rows.length;\n\n  stats = Object.fromEntries(groups.map(g =&gt; [g, {\n    occurrences: [],\n    currentDelay: n,\n    maxDelay: n,\n    lastSeen: -1,\n    count: 0\n  }]));\n\n  /*\n    LOCKED FAMILY JODI DELAY RULE:\n\n    If the Jodi of a completed game belongs to a Family-Jodi group,\n    THAT GROUP is considered HIT for that game.\n\n    Example:\n      Group 12 contains 12,17,21,26,62,67,71,76.\n      If today's complete Jodi is 67,\n      Group 12 HIT =&gt; Group 12 Delay = 0.\n\n    The next completed game without any Group-12 Jodi:\n      Delay = 1\n    next:\n      Delay = 2\n    next:\n      Delay = 3\n\n    So delay is ALWAYS reset by the latest Jodi hit of that group.\n  */\n\n  // Build a direct Jodi -&gt; Family Group map.\n  // Every Jodi belongs to exactly one locked Family Group.\n  const jodiToGroup = {};\n  groups.forEach(g =&gt; {\n    FAMILY_JODI_GROUPS[g].forEach(j =&gt; {\n      jodiToGroup[String(j).padStart(2, \&quot;0\&quot;)] = g;\n    });\n  });\n\n  // Record EVERY hit of each Family Group.\n  // A group is hit when ANY Jodi/member belonging to that group occurs.\n  rows.forEach((r, i) =&gt; {\n    const j = jodiOf(r);\n    const group = jodiToGroup[j];\n\n    if (group) {\n      stats[group].occurrences.push(i);\n      stats[group].lastSeen = i;\n      stats[group].count++;\n    }\n  });\n\n  groups.forEach(g =&gt; {\n    const s = stats[g];\n    const hits = s.occurrences;\n\n    // EXACT GROUP DELAY COUNT:\n    // Find the latest hit of ANY member Jodi in this Family Group.\n    // Group delay = completed games since that latest group hit.\n    s.currentDelay = hits.length\n      ? n - 1 - hits[hits.length - 1]\n      : n;\n\n    // Keep Max Delay only as informational data.\n    const gaps = hits.length ? [hits[0]] : [n];\n\n    for (let i = 1; i &lt; hits.length; i++) {\n      gaps.push(hits[i] - hits[i - 1] - 1);\n    }\n\n    if (hits.length) {\n      gaps.push(n - 1 - hits[hits.length - 1]);\n    }\n\n    s.maxDelay = Math.max(0, ...gaps);\n  });\n\n  const arr = groups.map(g =&gt; ({ group: g, ...stats[g] }));\n\n  // TOP/MID/RECENT are based ONLY on the 15 FAMILY GROUP names\n  // and their GROUP DELAY COUNT.\n  // Max Delay is NOT used for this classification.\n  const delaySorted = arr.slice().sort((a, b) =&gt;\n    b.currentDelay - a.currentDelay ||\n    a.group.localeCompare(b.group)\n  );\n\n  top5 = delaySorted.slice(0, 5);\n  mid5 = delaySorted.slice(5, 10);\n  recent5 = delaySorted.slice(10, 15);\n\n  // Category delay uses the latest hit of ANY member in the category,\n  // exactly like the uploaded Open Digit Analysis page.\n  function getGroupDelay(list) {\n    const lastSeen = list.reduce(\n      (mx, x) =&gt; Math.max(mx, Number.isFinite(x.lastSeen) ? x.lastSeen : -1),\n      -1\n    );\n    return lastSeen &gt;= 0 ? Math.max(0, n - 1 - lastSeen) : n;\n  }\n\n  el.topDelaySummary.textContent =\n    `DELAY: ${getGroupDelay(top5)}`;\n  el.midDelaySummary.textContent =\n    `DELAY: ${getGroupDelay(mid5)}`;\n  el.recentDelaySummary.textContent =\n    `DELAY: ${getGroupDelay(recent5)}`;\n\n  renderGroups(arr, \&quot;ALL\&quot;);\n\n  setStatus(\n    `${n} completed Jodi games • Group hit = any member Jodi occurred`\n  );\n}\n\nfunction badges() {\n  return {\n    top:new Set(top5.map(x=&gt;x.group)),\n    mid:new Set(mid5.map(x=&gt;x.group)),\n    recent:new Set(recent5.map(x=&gt;x.group))\n  };\n}\n\nfunction renderGroups(arr, mode) {\n  const b = badges();\n  let list = arr;\n  if (mode === \&quot;TOP\&quot;) list = top5;\n  if (mode === \&quot;MID\&quot;) list = mid5;\n  if (mode === \&quot;RECENT\&quot;) list = recent5;\n\n  el.filterLabel.textContent = mode;\n  el.groupGrid.innerHTML = \&quot;\&quot;;\n\n  list.forEach(x =&gt; {\n    const cls = b.top.has(x.group)\n      ? \&quot;border-orange-400 bg-orange-50\&quot;\n      : b.mid.has(x.group)\n      ? \&quot;border-indigo-400 bg-indigo-50\&quot;\n      : b.recent.has(x.group)\n      ? \&quot;border-emerald-400 bg-emerald-50\&quot;\n      : \&quot;border-slate-200 bg-slate-50\&quot;;\n\n    const card = document.createElement(\&quot;div\&quot;);\n    card.className = `rounded-lg border p-2 text-center ${cls}`;\n    card.innerHTML = `\n      &lt;div class=\&quot;text-sm font-black\&quot;&gt;${x.group}&lt;/div&gt;\n      &lt;div class=\&quot;text-[9px] font-bold text-indigo-700\&quot;&gt;D ${x.currentDelay}&lt;/div&gt;\n      &lt;div class=\&quot;text-[8px] font-bold text-slate-500\&quot;&gt;H ${x.count}&lt;/div&gt;`;\n    el.groupGrid.appendChild(card);\n  });\n}\n\nfunction showDigit(d) {\n  const related = groups.filter(g =&gt;\n    FAMILY_JODI_GROUPS[g].some(j =&gt; j.includes(String(d)))\n  );\n  const b = badges();\n\n  el.modalTitle.textContent = `DIGIT ${d} • FAMILY JODI`;\n  el.modalBody.innerHTML = \&quot;\&quot;;\n\n  related.forEach(g =&gt; {\n    const x = stats[g];\n    const tag = b.top.has(g)\n      ? '&lt;span class=\&quot;ml-1 text-[7px] font-black text-orange-700\&quot;&gt;TOP&lt;/span&gt;'\n      : b.mid.has(g)\n      ? '&lt;span class=\&quot;ml-1 text-[7px] font-black text-indigo-700\&quot;&gt;MID&lt;/span&gt;'\n      : b.recent.has(g)\n      ? '&lt;span class=\&quot;ml-1 text-[7px] font-black text-emerald-700\&quot;&gt;RECENT&lt;/span&gt;'\n      : \&quot;\&quot;;\n\n    const row = document.createElement(\&quot;div\&quot;);\n    row.className = \&quot;rounded-xl border p-2 bg-slate-50\&quot;;\n    row.innerHTML = `\n      &lt;div class=\&quot;flex items-center justify-between\&quot;&gt;\n        &lt;div&gt;&lt;span class=\&quot;text-base font-black\&quot;&gt;${g}&lt;/span&gt;${tag}&lt;/div&gt;\n        &lt;div class=\&quot;text-right\&quot;&gt;\n          &lt;div class=\&quot;text-[10px] font-black text-indigo-700\&quot;&gt;Delay: ${x.currentDelay}&lt;/div&gt;\n          &lt;div class=\&quot;text-[9px] font-bold text-slate-500\&quot;&gt;\n            Hits: ${x.count}\n          &lt;/div&gt;\n        &lt;/div&gt;\n      &lt;/div&gt;\n      &lt;div class=\&quot;mt-1 text-[8px] font-semibold text-slate-500\&quot;&gt;\n        Jodi: ${FAMILY_JODI_GROUPS[g].join(\&quot;, \&quot;)}\n      &lt;/div&gt;`;\n    el.modalBody.appendChild(row);\n  });\n\n  el.modal.classList.remove(\&quot;hidden\&quot;);\n}\n\nfunction initDigits() {\n  el.digitGrid.innerHTML = \&quot;\&quot;;\n  for (let d=0; d&lt;=9; d++) {\n    const btn = document.createElement(\&quot;button\&quot;);\n    btn.className =\n      \&quot;py-2 rounded-xl bg-indigo-600 text-white font-black text-sm shadow-sm active:scale-95 transition\&quot;;\n    btn.textContent = d;\n    btn.addEventListener(\&quot;click\&quot;, () =&gt; showDigit(d));\n    el.digitGrid.appendChild(btn);\n  }\n}\n\nel.market.addEventListener(\&quot;change\&quot;, calculate);\nel.refresh.addEventListener(\&quot;click\&quot;, load);\nel.top.addEventListener(\&quot;click\&quot;, () =&gt; renderGroups(top5, \&quot;TOP\&quot;));\nel.mid.addEventListener(\&quot;click\&quot;, () =&gt; renderGroups(mid5, \&quot;MID\&quot;));\nel.recent.addEventListener(\&quot;click\&quot;, () =&gt; renderGroups(recent5, \&quot;RECENT\&quot;));\nel.closeModal.addEventListener(\&quot;click\&quot;, () =&gt; el.modal.classList.add(\&quot;hidden\&quot;));\nel.modal.addEventListener(\&quot;click\&quot;, e =&gt; {\n  if (e.target === el.modal) el.modal.classList.add(\&quot;hidden\&quot;);\n});\n\ninitDigits();\nload();\n&lt;/script&gt;\n&lt;/body&gt;&lt;/html&gt;&quot;; const pannaSrc=&quot;&lt;!DOCTYPE html&gt;\n&lt;html lang=\&quot;en\&quot;&gt;&lt;head&gt;&lt;meta charset=\&quot;UTF-8\&quot;&gt;&lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width,initial-scale=1.0,viewport-fit=cover\&quot;&gt;&lt;title&gt;Family Panna Analysis&lt;/title&gt;&lt;script src=\&quot;https://cdn.tailwindcss.com\&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,\&quot;Segoe UI\&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;\n&lt;body class=\&quot;bg-slate-100 min-h-screen p-3 text-slate-800\&quot;&gt;&lt;div class=\&quot;max-w-3xl mx-auto space-y-3 pb-8\&quot;&gt;\n&lt;section class=\&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3\&quot;&gt;&lt;div class=\&quot;flex items-start justify-between gap-2\&quot;&gt;&lt;div&gt;&lt;div class=\&quot;text-xl font-black text-indigo-700\&quot;&gt;FAMILY PANNA&lt;/div&gt;&lt;div class=\&quot;text-[10px] font-semibold text-slate-500\&quot;&gt;35 GROUPS • Current Delay • Max Delay • Hits&lt;/div&gt;&lt;/div&gt;&lt;button id=\&quot;refreshBtn\&quot; class=\&quot;px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-black shadow-sm\&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;\n&lt;select id=\&quot;marketSelect\&quot; class=\&quot;mt-4 w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-white\&quot;&gt;&lt;option value=\&quot;ALL_MERGED\&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;\n&lt;div class=\&quot;grid grid-cols-3 gap-2 mt-2\&quot;&gt;&lt;button id=\&quot;openMode\&quot; class=\&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white\&quot;&gt;OPEN&lt;/button&gt;&lt;button id=\&quot;closeMode\&quot; class=\&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white\&quot;&gt;CLOSE&lt;/button&gt;&lt;button id=\&quot;mergedMode\&quot; class=\&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700\&quot;&gt;OPEN → CLOSE&lt;/button&gt;&lt;/div&gt;\n&lt;div id=\&quot;status\&quot; class=\&quot;mt-2 text-[10px] font-bold text-slate-500\&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;\n&lt;section class=\&quot;grid grid-cols-3 gap-2\&quot;&gt;&lt;button id=\&quot;topBtn\&quot; class=\&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm\&quot;&gt;&lt;div class=\&quot;text-[10px] font-black\&quot;&gt;🔥 TOP 10&lt;/div&gt;&lt;div id=\&quot;topDelay\&quot; class=\&quot;text-[9px] font-black mt-1\&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=\&quot;midBtn\&quot; class=\&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm\&quot;&gt;&lt;div class=\&quot;text-[10px] font-black\&quot;&gt;📊 MID 15&lt;/div&gt;&lt;div id=\&quot;midDelay\&quot; class=\&quot;text-[9px] font-black mt-1\&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=\&quot;recentBtn\&quot; class=\&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm\&quot;&gt;&lt;div class=\&quot;text-[10px] font-black\&quot;&gt;⚡ RECENT 10&lt;/div&gt;&lt;div id=\&quot;recentDelay\&quot; class=\&quot;text-[9px] font-black mt-1\&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/section&gt;\n&lt;section class=\&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3\&quot;&gt;&lt;div class=\&quot;flex items-center justify-between mb-2\&quot;&gt;&lt;div class=\&quot;font-black text-sm\&quot;&gt;35 FAMILY PANNA GROUPS&lt;/div&gt;&lt;div id=\&quot;filterLabel\&quot; class=\&quot;text-[9px] font-black text-indigo-600\&quot;&gt;ALL 35&lt;/div&gt;&lt;/div&gt;&lt;div id=\&quot;groupGrid\&quot; class=\&quot;grid grid-cols-3 sm:grid-cols-5 gap-1.5\&quot;&gt;&lt;/div&gt;&lt;/section&gt;&lt;/div&gt;\n&lt;script type=\&quot;module\&quot;&gt;\nimport {initializeApp} from \&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js\&quot;;import {getFirestore,collection,getDocs,doc,getDoc} from \&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js\&quot;;\nconst firebaseConfig={apiKey:\&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ\&quot;,authDomain:\&quot;m-record-f9c51.firebaseapp.com\&quot;,projectId:\&quot;m-record-f9c51\&quot;,storageBucket:\&quot;m-record-f9c51.firebasestorage.app\&quot;,messagingSenderId:\&quot;479303152172\&quot;,appId:\&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789\&quot;};const db=getFirestore(initializeApp(firebaseConfig));\nlet FAMILY_PANNA_GROUPS={\n  \&quot;222\&quot;:[\&quot;777\&quot;,\&quot;222\&quot;,\&quot;227\&quot;,\&quot;277\&quot;],\&quot;444\&quot;:[\&quot;444\&quot;,\&quot;999\&quot;,\&quot;499\&quot;,\&quot;449\&quot;],\&quot;666\&quot;:[\&quot;111\&quot;,\&quot;666\&quot;,\&quot;166\&quot;,\&quot;116\&quot;],\&quot;888\&quot;:[\&quot;888\&quot;,\&quot;333\&quot;,\&quot;338\&quot;,\&quot;388\&quot;],\&quot;000\&quot;:[\&quot;555\&quot;,\&quot;000\&quot;,\&quot;500\&quot;,\&quot;550\&quot;],\n  \&quot;123\&quot;:[\&quot;128\&quot;,\&quot;123\&quot;,\&quot;678\&quot;,\&quot;178\&quot;,\&quot;236\&quot;,\&quot;367\&quot;,\&quot;137\&quot;,\&quot;268\&quot;],\&quot;345\&quot;:[\&quot;345\&quot;,\&quot;890\&quot;,\&quot;390\&quot;,\&quot;340\&quot;,\&quot;480\&quot;,\&quot;458\&quot;,\&quot;589\&quot;,\&quot;359\&quot;],\&quot;567\&quot;:[\&quot;157\&quot;,\&quot;567\&quot;,\&quot;120\&quot;,\&quot;260\&quot;,\&quot;670\&quot;,\&quot;170\&quot;,\&quot;256\&quot;,\&quot;125\&quot;],\&quot;789\&quot;:[\&quot;789\&quot;,\&quot;234\&quot;,\&quot;248\&quot;,\&quot;478\&quot;,\&quot;239\&quot;,\&quot;289\&quot;,\&quot;347\&quot;,\&quot;379\&quot;],\&quot;456\&quot;:[\&quot;456\&quot;,\&quot;145\&quot;,\&quot;140\&quot;,\&quot;190\&quot;,\&quot;690\&quot;,\&quot;460\&quot;,\&quot;159\&quot;,\&quot;569\&quot;],\n  \&quot;470\&quot;:[\&quot;470\&quot;,\&quot;240\&quot;,\&quot;290\&quot;,\&quot;790\&quot;,\&quot;245\&quot;,\&quot;259\&quot;,\&quot;579\&quot;,\&quot;457\&quot;],\&quot;246\&quot;:[\&quot;246\&quot;,\&quot;269\&quot;,\&quot;129\&quot;,\&quot;124\&quot;,\&quot;147\&quot;,\&quot;179\&quot;,\&quot;679\&quot;,\&quot;467\&quot;],\&quot;369\&quot;:[\&quot;346\&quot;,\&quot;369\&quot;,\&quot;148\&quot;,\&quot;134\&quot;,\&quot;139\&quot;,\&quot;189\&quot;,\&quot;689\&quot;,\&quot;468\&quot;],\&quot;130\&quot;:[\&quot;130\&quot;,\&quot;180\&quot;,\&quot;680\&quot;,\&quot;360\&quot;,\&quot;356\&quot;,\&quot;568\&quot;,\&quot;158\&quot;,\&quot;135\&quot;],\&quot;230\&quot;:[\&quot;230\&quot;,\&quot;280\&quot;,\&quot;780\&quot;,\&quot;370\&quot;,\&quot;258\&quot;,\&quot;235\&quot;,\&quot;357\&quot;,\&quot;578\&quot;],\n  \&quot;100\&quot;:[\&quot;100\&quot;,\&quot;600\&quot;,\&quot;155\&quot;,\&quot;556\&quot;,\&quot;560\&quot;,\&quot;150\&quot;],\&quot;200\&quot;:[\&quot;200\&quot;,\&quot;700\&quot;,\&quot;255\&quot;,\&quot;557\&quot;,\&quot;570\&quot;,\&quot;250\&quot;],\&quot;300\&quot;:[\&quot;300\&quot;,\&quot;800\&quot;,\&quot;355\&quot;,\&quot;558\&quot;,\&quot;580\&quot;,\&quot;350\&quot;],\&quot;400\&quot;:[\&quot;400\&quot;,\&quot;900\&quot;,\&quot;455\&quot;,\&quot;559\&quot;,\&quot;590\&quot;,\&quot;450\&quot;],\n  \&quot;366\&quot;:[\&quot;366\&quot;,\&quot;668\&quot;,\&quot;113\&quot;,\&quot;118\&quot;,\&quot;168\&quot;,\&quot;136\&quot;],\&quot;330\&quot;:[\&quot;335\&quot;,\&quot;330\&quot;,\&quot;588\&quot;,\&quot;880\&quot;,\&quot;380\&quot;,\&quot;358\&quot;],\&quot;110\&quot;:[\&quot;110\&quot;,\&quot;115\&quot;,\&quot;660\&quot;,\&quot;566\&quot;,\&quot;156\&quot;,\&quot;160\&quot;],\&quot;440\&quot;:[\&quot;445\&quot;,\&quot;440\&quot;,\&quot;599\&quot;,\&quot;990\&quot;,\&quot;490\&quot;,\&quot;459\&quot;],\&quot;220\&quot;:[\&quot;220\&quot;,\&quot;225\&quot;,\&quot;770\&quot;,\&quot;577\&quot;,\&quot;257\&quot;,\&quot;270\&quot;],\&quot;334\&quot;:[\&quot;339\&quot;,\&quot;334\&quot;,\&quot;889\&quot;,\&quot;488\&quot;,\&quot;348\&quot;,\&quot;389\&quot;],\&quot;399\&quot;:[\&quot;399\&quot;,\&quot;899\&quot;,\&quot;344\&quot;,\&quot;448\&quot;,\&quot;489\&quot;,\&quot;349\&quot;],\&quot;377\&quot;:[\&quot;778\&quot;,\&quot;377\&quot;,\&quot;228\&quot;,\&quot;223\&quot;,\&quot;237\&quot;,\&quot;278\&quot;],\&quot;477\&quot;:[\&quot;779\&quot;,\&quot;477\&quot;,\&quot;229\&quot;,\&quot;224\&quot;,\&quot;247\&quot;,\&quot;279\&quot;],\&quot;144\&quot;:[\&quot;446\&quot;,\&quot;144\&quot;,\&quot;699\&quot;,\&quot;199\&quot;,\&quot;149\&quot;,\&quot;469\&quot;],\&quot;177\&quot;:[\&quot;177\&quot;,\&quot;677\&quot;,\&quot;122\&quot;,\&quot;226\&quot;,\&quot;267\&quot;,\&quot;127\&quot;],\&quot;114\&quot;:[\&quot;119\&quot;,\&quot;114\&quot;,\&quot;669\&quot;,\&quot;466\&quot;,\&quot;146\&quot;,\&quot;169\&quot;],\&quot;133\&quot;:[\&quot;336\&quot;,\&quot;133\&quot;,\&quot;688\&quot;,\&quot;188\&quot;,\&quot;138\&quot;,\&quot;368\&quot;],\&quot;233\&quot;:[\&quot;337\&quot;,\&quot;233\&quot;,\&quot;788\&quot;,\&quot;288\&quot;,\&quot;238\&quot;,\&quot;378\&quot;],\&quot;266\&quot;:[\&quot;266\&quot;,\&quot;667\&quot;,\&quot;112\&quot;,\&quot;117\&quot;,\&quot;167\&quot;,\&quot;126\&quot;],\&quot;244\&quot;:[\&quot;447\&quot;,\&quot;244\&quot;,\&quot;799\&quot;,\&quot;299\&quot;,\&quot;249\&quot;,\&quot;479\&quot;]\n};let PANNA_TO_GROUP={};let markets=[],allRows=[],mode=\&quot;MERGED\&quot;,view=\&quot;ALL\&quot;;\nconst el={market:document.getElementById('marketSelect'),status:document.getElementById('status'),grid:document.getElementById('groupGrid'),filterLabel:document.getElementById('filterLabel'),topDelay:document.getElementById('topDelay'),midDelay:document.getElementById('midDelay'),recentDelay:document.getElementById('recentDelay')};\nconst numP=v=&gt;{const s=String(v??\&quot;\&quot;).replace(/\\D/g,\&quot;\&quot;);return /^\\d{3}$/.test(s)?s:null};const timeMin=v=&gt;{const m=String(v??\&quot;\&quot;).match(/(\\d{1,2}):(\\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};\nfunction rebuild(){PANNA_TO_GROUP={};Object.entries(FAMILY_PANNA_GROUPS).forEach(([g,a])=&gt;a.forEach(p=&gt;PANNA_TO_GROUP[p]=g))}\nasync function loadMaster(){try{const s=await getDoc(doc(db,\&quot;masterData\&quot;,\&quot;familyPanna\&quot;));if(s.exists()&amp;&amp;s.data().groups)FAMILY_PANNA_GROUPS=s.data().groups}catch(e){console.warn(e)}rebuild()}\nasync function load(){el.status.textContent='Loading Firebase data...';const [ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);markets=[];ms.forEach(x=&gt;{const d=x.data();if(d?.name)markets.push({name:d.name,openTime:d.openTime})});markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||a.name.localeCompare(b.name));const selected=el.market.value||'ALL_MERGED';el.market.innerHTML='&lt;option value=\&quot;ALL_MERGED\&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.map(m=&gt;`&lt;option value=\&quot;${String(m.name).replace(/\&quot;/g,'&amp;quot;')}\&quot;&gt;${m.name}&lt;/option&gt;`).join('');if(selected!=='ALL_MERGED'&amp;&amp;markets.some(m=&gt;m.name===selected))el.market.value=selected;allRows=[];rs.forEach(x=&gt;{const d=x.data();if(d?.date&amp;&amp;d?.marketName)allRows.push({id:x.id,...d})});allRows.sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime??markets.find(m=&gt;m.name===a.marketName)?.openTime)-timeMin(b.openTime??markets.find(m=&gt;m.name===b.marketName)?.openTime));calculate()}\nfunction stream(rows){if(mode==='OPEN')return rows.map(r=&gt;({row:r,panna:numP(r.openPana),side:'OPEN'})).filter(x=&gt;x.panna);if(mode==='CLOSE')return rows.map(r=&gt;({row:r,panna:numP(r.closePana),side:'CLOSE'})).filter(x=&gt;x.panna);const a=[];rows.forEach(r=&gt;{const o=numP(r.openPana),c=numP(r.closePana);if(o)a.push({row:r,panna:o,side:'OPEN'});if(c)a.push({row:r,panna:c,side:'CLOSE'})});return a}\nfunction calculate(){\n  const selected=$(&quot;; const jf=document.getElementById('jodiFrame'),pf=document.getElementById('pannaFrame'); jf.srcdoc=jodiSrc; pf.srcdoc=pannaSrc; const jt=document.getElementById('jodiTab'),pt=document.getElementById('pannaTab'),jp=document.getElementById('jodiPanel'),pp=document.getElementById('pannaPanel'); function show(v){const j=v==='jodi';jt.classList.toggle('active',j);pt.classList.toggle('active',!j);jp.classList.toggle('active',j);pp.classList.toggle('active',!j);try{sessionStorage.setItem('familyMergedTab',v)}catch(e){}} jt.onclick=()=&gt;show('jodi');pt.onclick=()=&gt;show('panna');try{if(sessionStorage.getItem('familyMergedTab')==='panna')show('panna')}catch(e){}
+const jodiSrc=&quot;&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;&lt;title&gt;Family Jodi Delay Analysis&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}.modalGroupBtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:8px}.modalGroupBtn{border-radius:12px;padding:9px 6px;color:#fff;font-weight:900;text-align:center;cursor:pointer;border:0}.modalGroupBtn.top{background:#f97316}.modalGroupBtn.mid{background:#4f46e5}.modalGroupBtn.recent{background:#059669}.modalGroupBtn.active{box-shadow:0 0 0 2px #111827 inset}.modalGroupDelay{font-size:9px;font-weight:900;margin-top:3px}.modalJodi{border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px;padding:9px;margin-bottom:6px}.modalJodi.top{border-color:#fdba74;background:#fff7ed}.modalJodi.mid{border-color:#a5b4fc;background:#eef2ff}.modalJodi.recent{border-color:#6ee7b7;background:#ecfdf5}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;FAMILY JODI&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;15 Groups • Group Delay • TOP 5 • MID 5 • RECENT 5&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;
+&lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-3 text-center shadow-sm&quot;&gt;
+  &lt;div class=&quot;text-[11px] font-black&quot;&gt;🔥 TOP 5&lt;/div&gt;
+  &lt;div id=&quot;topDelaySummary&quot; class=&quot;text-[11px] font-black mt-2&quot;&gt;DELAY: -&lt;/div&gt;
+&lt;/button&gt;
+&lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-3 text-center shadow-sm&quot;&gt;
+  &lt;div class=&quot;text-[11px] font-black&quot;&gt;📊 MID 5&lt;/div&gt;
+  &lt;div id=&quot;midDelaySummary&quot; class=&quot;text-[11px] font-black mt-2&quot;&gt;DELAY: -&lt;/div&gt;
+&lt;/button&gt;
+&lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-3 text-center shadow-sm&quot;&gt;
+  &lt;div class=&quot;text-[11px] font-black&quot;&gt;⚡ RECENT 5&lt;/div&gt;
+  &lt;div id=&quot;recentDelaySummary&quot; class=&quot;text-[11px] font-black mt-2&quot;&gt;DELAY: -&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex justify-between items-center mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;15 FAMILY JODI GROUPS&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;groupGrid&quot; class=&quot;grid grid-cols-3 sm:grid-cols-5 gap-1.5&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;text-sm font-black mb-2&quot;&gt;DIGIT FILTER&lt;/div&gt;&lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-5 gap-2&quot;&gt;&lt;/div&gt;&lt;div class=&quot;mt-2 text-[9px] font-semibold text-slate-500&quot;&gt;Digit પર ક્લિક કરવાથી તે digit સાથે સંબંધિત Family Jodi Groups popupમાં દેખાશે.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;&lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[88vh] overflow-hidden&quot;&gt;&lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;&lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT&lt;/div&gt;&lt;div id=&quot;modalSub&quot; class=&quot;text-[9px] text-slate-500&quot;&gt;10 Jodi • TOP 3 • MID 4 • RECENT 3&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;p-3 pb-1&quot;&gt;&lt;div id=&quot;modalGroupBtns&quot; class=&quot;modalGroupBtns&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;modalBody&quot; class=&quot;px-3 pb-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
+import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
+
+const firebaseConfig = {
+  apiKey: &quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,
+  authDomain: &quot;m-record-f9c51.firebaseapp.com&quot;,
+  projectId: &quot;m-record-f9c51&quot;,
+  storageBucket: &quot;m-record-f9c51.firebasestorage.app&quot;,
+  messagingSenderId: &quot;479303152172&quot;,
+  appId: &quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+
+const el = {
+  market: document.getElementById(&quot;marketSelect&quot;),
+  status: document.getElementById(&quot;status&quot;),
+  refresh: document.getElementById(&quot;refreshBtn&quot;),
+  top: document.getElementById(&quot;topBtn&quot;),
+  mid: document.getElementById(&quot;midBtn&quot;),
+  recent: document.getElementById(&quot;recentBtn&quot;),
+  topDelaySummary: document.getElementById(&quot;topDelaySummary&quot;),
+  midDelaySummary: document.getElementById(&quot;midDelaySummary&quot;),
+  recentDelaySummary: document.getElementById(&quot;recentDelaySummary&quot;),
+  filterLabel: document.getElementById(&quot;filterLabel&quot;),
+  groupGrid: document.getElementById(&quot;groupGrid&quot;),
+  digitGrid: document.getElementById(&quot;digitGrid&quot;),
+  modal: document.getElementById(&quot;modal&quot;),
+  modalTitle: document.getElementById(&quot;modalTitle&quot;),
+  modalBody: document.getElementById(&quot;modalBody&quot;),
+  closeModal: document.getElementById(&quot;closeModal&quot;)
+};
+
+const FAMILY_JODI_GROUPS = {
+  &quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],
+  &quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],
+  &quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],
+  &quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],
+  &quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],
+  &quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],
+  &quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],
+  &quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],
+  &quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],
+  &quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],
+  &quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],
+  &quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],
+  &quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],
+  &quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],
+  &quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]
+};
+
+const groups = Object.keys(FAMILY_JODI_GROUPS);
+let allRows = [], stats = {}, top5 = [], mid5 = [], recent5 = [], modalHistoryCount = 0;
+
+function digit(v) {
+  if (v === undefined || v === null || v === &quot;&quot;) return null;
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) ? ((n % 10) + 10) % 10 : null;
+}
+
+function jodiOf(r) {
+  const o = digit(r.openAnk ?? r.openDigit ?? r.open);
+  const c = digit(r.closeAnk ?? r.closeDigit ?? r.close);
+  return o === null || c === null ? null : String(o) + String(c);
+}
+
+function timeMin(s) {
+  if (!s) return 1439;
+  const m = String(s).match(/(\\d{1,2}):(\\d{2})/);
+  return m ? parseInt(m[1],10) * 60 + parseInt(m[2],10) : 1439;
+}
+
+function dateValue(v) {
+  if (v &amp;&amp; typeof v.toDate === &quot;function&quot;) {
+    const d = v.toDate();
+    return d instanceof Date &amp;&amp; !isNaN(d) ? d.getTime() : 0;
+  }
+  if (v &amp;&amp; typeof v.seconds === &quot;number&quot;) return v.seconds * 1000;
+  const d = new Date(v);
+  return d instanceof Date &amp;&amp; !isNaN(d) ? d.getTime() : 0;
+}
+
+function sortRows(rows) {
+  return rows.slice().sort((a,b) =&gt;
+    dateValue(a.date) - dateValue(b.date) ||
+    timeMin(a.openTime) - timeMin(b.openTime)
+  );
+}
+
+function setStatus(text, error=false) {
+  el.status.textContent = text;
+  el.status.className = &quot;mt-2 text-[10px] font-bold &quot; +
+    (error ? &quot;text-red-600&quot; : &quot;text-slate-500&quot;);
+}
+
+async function load() {
+  setStatus(&quot;Loading Firebase data...&quot;);
+  try {
+    const [mSnap, rSnap] = await Promise.all([
+      getDocs(collection(db, &quot;markets&quot;)),
+      getDocs(collection(db, &quot;matka_records&quot;))
+    ]);
+
+    const markets = [];
+    mSnap.forEach(d =&gt; markets.push({id:d.id, ...d.data()}));
+    markets.sort((a,b) =&gt; timeMin(a.openTime) - timeMin(b.openTime));
+
+    const previous = el.market.value || &quot;ALL_MERGED&quot;;
+    el.market.innerHTML = &#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
+
+    markets.forEach(m =&gt; {
+      if (!m.name) return;
+      const opt = document.createElement(&quot;option&quot;);
+      opt.value = m.name;
+      opt.textContent = m.name;
+      el.market.appendChild(opt);
+    });
+
+    el.market.value = [...el.market.options].some(o =&gt; o.value === previous)
+      ? previous : &quot;ALL_MERGED&quot;;
+
+    allRows = [];
+    rSnap.forEach(d =&gt; {
+      const r = d.data();
+      if (r.date &amp;&amp; r.marketName) {
+        allRows.push({
+          ...r,
+          id:d.id,
+          openTime:r.openTime ||
+            markets.find(m =&gt; m.name === r.marketName)?.openTime || &quot;00:00&quot;
+        });
+      }
+    });
+
+    calculate();
+  } catch(e) {
+    console.error(e);
+    setStatus(&quot;ERROR: &quot; + (e?.message || String(e)), true);
+    el.groupGrid.innerHTML =
+      &#x27;&lt;div class=&quot;col-span-full text-center py-6 text-xs font-bold text-red-600&quot;&gt;&#x27; +
+      &#x27;Firebase data load failed.&lt;br&gt;&lt;span class=&quot;text-[10px] text-slate-500&quot;&gt;&#x27; +
+      &#x27;Check Firebase configuration / Firestore access.&lt;/span&gt;&lt;/div&gt;&#x27;;
+  }
+}
+
+function calculate() {
+  const selected = el.market.value || &quot;ALL_MERGED&quot;;
+
+  // Only completed Jodi results are counted.
+  // A completed game = Open + Close both available.
+  const rows = sortRows(
+    allRows
+      .filter(r =&gt; selected === &quot;ALL_MERGED&quot; || r.marketName === selected)
+      .filter(r =&gt; jodiOf(r) !== null)
+  );
+
+  const n = rows.length;
+  modalHistoryCount = n;
+
+  stats = Object.fromEntries(groups.map(g =&gt; [g, {
+    occurrences: [],
+    currentDelay: n,
+    maxDelay: n,
+    lastSeen: -1,
+    count: 0
+  }]));
+
+  /*
+    LOCKED FAMILY JODI DELAY RULE:
+
+    If the Jodi of a completed game belongs to a Family-Jodi group,
+    THAT GROUP is considered HIT for that game.
+
+    Example:
+      Group 12 contains 12,17,21,26,62,67,71,76.
+      If today&#x27;s complete Jodi is 67,
+      Group 12 HIT =&gt; Group 12 Delay = 0.
+
+    The next completed game without any Group-12 Jodi:
+      Delay = 1
+    next:
+      Delay = 2
+    next:
+      Delay = 3
+
+    So delay is ALWAYS reset by the latest Jodi hit of that group.
+  */
+
+  // Build a direct Jodi -&gt; Family Group map.
+  // Every Jodi belongs to exactly one locked Family Group.
+  const jodiToGroup = {};
+  groups.forEach(g =&gt; {
+    FAMILY_JODI_GROUPS[g].forEach(j =&gt; {
+      jodiToGroup[String(j).padStart(2, &quot;0&quot;)] = g;
+    });
+  });
+
+  // Record EVERY hit of each Family Group.
+  // A group is hit when ANY Jodi/member belonging to that group occurs.
+  rows.forEach((r, i) =&gt; {
+    const j = jodiOf(r);
+    const group = jodiToGroup[j];
+
+    if (group) {
+      stats[group].occurrences.push(i);
+      stats[group].lastSeen = i;
+      stats[group].count++;
+    }
+  });
+
+  groups.forEach(g =&gt; {
+    const s = stats[g];
+    const hits = s.occurrences;
+
+    // EXACT GROUP DELAY COUNT:
+    // Find the latest hit of ANY member Jodi in this Family Group.
+    // Group delay = completed games since that latest group hit.
+    s.currentDelay = hits.length
+      ? n - 1 - hits[hits.length - 1]
+      : n;
+
+    // Keep Max Delay only as informational data.
+    const gaps = hits.length ? [hits[0]] : [n];
+
+    for (let i = 1; i &lt; hits.length; i++) {
+      gaps.push(hits[i] - hits[i - 1] - 1);
+    }
+
+    if (hits.length) {
+      gaps.push(n - 1 - hits[hits.length - 1]);
+    }
+
+    s.maxDelay = Math.max(0, ...gaps);
+  });
+
+  const arr = groups.map(g =&gt; ({ group: g, ...stats[g] }));
+
+  // TOP/MID/RECENT are based ONLY on the 15 FAMILY GROUP names
+  // and their GROUP DELAY COUNT.
+  // Max Delay is NOT used for this classification.
+  const delaySorted = arr.slice().sort((a, b) =&gt;
+    b.currentDelay - a.currentDelay ||
+    a.group.localeCompare(b.group)
+  );
+
+  top5 = delaySorted.slice(0, 5);
+  mid5 = delaySorted.slice(5, 10);
+  recent5 = delaySorted.slice(10, 15);
+
+  // Category delay uses the latest hit of ANY member in the category,
+  // exactly like the uploaded Open Digit Analysis page.
+  function getGroupDelay(list) {
+    const lastSeen = list.reduce(
+      (mx, x) =&gt; Math.max(mx, Number.isFinite(x.lastSeen) ? x.lastSeen : -1),
+      -1
+    );
+    return lastSeen &gt;= 0 ? Math.max(0, n - 1 - lastSeen) : n;
+  }
+
+  el.topDelaySummary.textContent =
+    `DELAY: ${getGroupDelay(top5)}`;
+  el.midDelaySummary.textContent =
+    `DELAY: ${getGroupDelay(mid5)}`;
+  el.recentDelaySummary.textContent =
+    `DELAY: ${getGroupDelay(recent5)}`;
+
+  renderGroups(arr, &quot;ALL&quot;);
+
+  setStatus(
+    `${n} completed Jodi games • Group hit = any member Jodi occurred`
+  );
+}
+
+function badges() {
+  return {
+    top:new Set(top5.map(x=&gt;x.group)),
+    mid:new Set(mid5.map(x=&gt;x.group)),
+    recent:new Set(recent5.map(x=&gt;x.group))
+  };
+}
+
+function renderGroups(arr, mode) {
+  const b = badges();
+  let list = arr;
+  if (mode === &quot;TOP&quot;) list = top5;
+  if (mode === &quot;MID&quot;) list = mid5;
+  if (mode === &quot;RECENT&quot;) list = recent5;
+
+  el.filterLabel.textContent = mode;
+  el.groupGrid.innerHTML = &quot;&quot;;
+
+  list.forEach(x =&gt; {
+    const cls = b.top.has(x.group)
+      ? &quot;border-orange-400 bg-orange-50&quot;
+      : b.mid.has(x.group)
+      ? &quot;border-indigo-400 bg-indigo-50&quot;
+      : b.recent.has(x.group)
+      ? &quot;border-emerald-400 bg-emerald-50&quot;
+      : &quot;border-slate-200 bg-slate-50&quot;;
+
+    const card = document.createElement(&quot;div&quot;);
+    card.className = `rounded-lg border p-2 text-center ${cls}`;
+    card.innerHTML = `
+      &lt;div class=&quot;text-sm font-black&quot;&gt;${x.group}&lt;/div&gt;
+      &lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;
+      &lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;H ${x.count}&lt;/div&gt;`;
+    el.groupGrid.appendChild(card);
+  });
+}
+
+let modalDigitState={digit:null,groups:null,view:&#x27;ALL&#x27;};
+
+function analyzeDigitJodis(d){
+  const items=Array.from({length:10},(_,c)=&gt;String(d)+String(c));
+  const ranked=items.map(j=&gt;stats[j]).filter(Boolean).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi));
+  return {all:items.map(j=&gt;stats[j]).filter(Boolean),top:ranked.slice(0,3),mid:ranked.slice(3,7),recent:ranked.slice(7,10)};
+}
+
+function modalGroupDelay(list){
+  if(!list.length) return modalHistoryCount;
+  const last=list.reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x.lastSeen)?x.lastSeen:-1),-1);
+  return last&gt;=0 ? Math.max(0,modalHistoryCount-1-last) : modalHistoryCount;
+}
+
+function renderModalJodiGroup(group){
+  const body=document.getElementById(&#x27;modalBody&#x27;),a=modalDigitState.groups;
+  const list=group===&#x27;TOP&#x27;?a.top:group===&#x27;MID&#x27;?a.mid:group===&#x27;RECENT&#x27;?a.recent:a.all;
+  const cls=group===&#x27;TOP&#x27;?&#x27;top&#x27;:group===&#x27;MID&#x27;?&#x27;mid&#x27;:group===&#x27;RECENT&#x27;?&#x27;recent&#x27;:&#x27;&#x27;;
+  body.innerHTML=&#x27;&#x27;;
+  if(group!==&#x27;ALL&#x27;){
+    const head=document.createElement(&#x27;div&#x27;);
+    head.className=&#x27;rounded-xl border border-slate-200 bg-slate-50 p-2 mb-2 flex items-center justify-between&#x27;;
+    head.innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;${group} ${list.length} JODI&lt;/div&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700&quot;&gt;GROUP DELAY: ${modalGroupDelay(list)}&lt;/div&gt;`;
+    body.appendChild(head);
+  }
+  list.forEach(x=&gt;{
+    const row=document.createElement(&#x27;div&#x27;); row.className=`modalJodi ${cls}`;
+    row.innerHTML=`&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div class=&quot;flex items-center gap-2&quot;&gt;&lt;span class=&quot;text-lg font-black&quot;&gt;${x.jodi}&lt;/span&gt;&lt;span class=&quot;text-[7px] font-black ${cls===&#x27;top&#x27;?&#x27;text-orange-700&#x27;:cls===&#x27;mid&#x27;?&#x27;text-indigo-700&#x27;:cls===&#x27;recent&#x27;?&#x27;text-emerald-700&#x27;:&#x27;text-slate-500&#x27;}&quot;&gt;${group}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700&quot;&gt;DELAY: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;MAX DELAY: ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;HITS: ${x.count}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;
+    body.appendChild(row);
+  });
+}
+
+function showDigit(d){
+  modalDigitState={digit:d,groups:analyzeDigitJodis(d),view:&#x27;ALL&#x27;};
+  document.getElementById(&#x27;modalTitle&#x27;).textContent=`DIGIT ${d} • JODI FILTER`;
+  document.getElementById(&#x27;modalSub&#x27;).textContent=&#x27;10 Jodi • ranked by current delay • TOP 3 / MID 4 / RECENT 3&#x27;;
+  const a=modalDigitState.groups,box=document.getElementById(&#x27;modalGroupBtns&#x27;); box.innerHTML=&#x27;&#x27;;
+  [[&#x27;TOP&#x27;,a.top,&#x27;top&#x27;],[&#x27;MID&#x27;,a.mid,&#x27;mid&#x27;],[&#x27;RECENT&#x27;,a.recent,&#x27;recent&#x27;]].forEach(([name,list,cls])=&gt;{
+    const b=document.createElement(&#x27;button&#x27;); b.className=`modalGroupBtn ${cls}`;
+    b.innerHTML=`&lt;div&gt;${name} ${list.length}&lt;/div&gt;&lt;div class=&quot;modalGroupDelay&quot;&gt;DELAY: ${modalGroupDelay(list)}&lt;/div&gt;`;
+    b.onclick=()=&gt;{modalDigitState.view=name;box.querySelectorAll(&#x27;button&#x27;).forEach(x=&gt;x.classList.remove(&#x27;active&#x27;));b.classList.add(&#x27;active&#x27;);renderModalJodiGroup(name)};
+    box.appendChild(b);
+  });
+  renderModalJodiGroup(&#x27;ALL&#x27;);
+  document.getElementById(&#x27;modal&#x27;).classList.remove(&#x27;hidden&#x27;);
+}
+
+
+function initDigits() {
+  el.digitGrid.innerHTML = &quot;&quot;;
+  for (let d=0; d&lt;=9; d++) {
+    const btn = document.createElement(&quot;button&quot;);
+    btn.className =
+      &quot;py-2 rounded-xl bg-indigo-600 text-white font-black text-sm shadow-sm active:scale-95 transition&quot;;
+    btn.textContent = d;
+    btn.addEventListener(&quot;click&quot;, () =&gt; showDigit(d));
+    el.digitGrid.appendChild(btn);
+  }
+}
+
+el.market.addEventListener(&quot;change&quot;, calculate);
+el.refresh.addEventListener(&quot;click&quot;, load);
+el.top.addEventListener(&quot;click&quot;, () =&gt; renderGroups(top5, &quot;TOP&quot;));
+el.mid.addEventListener(&quot;click&quot;, () =&gt; renderGroups(mid5, &quot;MID&quot;));
+el.recent.addEventListener(&quot;click&quot;, () =&gt; renderGroups(recent5, &quot;RECENT&quot;));
+el.closeModal.addEventListener(&quot;click&quot;, () =&gt; el.modal.classList.add(&quot;hidden&quot;));
+el.modal.addEventListener(&quot;click&quot;, e =&gt; {
+  if (e.target === el.modal) el.modal.classList.add(&quot;hidden&quot;);
+});
+
+initDigits();
+load();
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;&quot;; const pannaSrc=&quot;&lt;!DOCTYPE html&gt;\n&lt;html lang=\&quot;en\&quot;&gt;&lt;head&gt;&lt;meta charset=\&quot;UTF-8\&quot;&gt;&lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width,initial-scale=1.0,viewport-fit=cover\&quot;&gt;&lt;title&gt;Family Panna Analysis&lt;/title&gt;&lt;script src=\&quot;https://cdn.tailwindcss.com\&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,\&quot;Segoe UI\&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;\n&lt;body class=\&quot;bg-slate-100 min-h-screen p-3 text-slate-800\&quot;&gt;&lt;div class=\&quot;max-w-3xl mx-auto space-y-3 pb-8\&quot;&gt;\n&lt;section class=\&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3\&quot;&gt;&lt;div class=\&quot;flex items-start justify-between gap-2\&quot;&gt;&lt;div&gt;&lt;div class=\&quot;text-xl font-black text-indigo-700\&quot;&gt;FAMILY PANNA&lt;/div&gt;&lt;div class=\&quot;text-[10px] font-semibold text-slate-500\&quot;&gt;35 GROUPS • Current Delay • Max Delay • Hits&lt;/div&gt;&lt;/div&gt;&lt;button id=\&quot;refreshBtn\&quot; class=\&quot;px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-black shadow-sm\&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;\n&lt;select id=\&quot;marketSelect\&quot; class=\&quot;mt-4 w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-white\&quot;&gt;&lt;option value=\&quot;ALL_MERGED\&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;\n&lt;div class=\&quot;grid grid-cols-3 gap-2 mt-2\&quot;&gt;&lt;button id=\&quot;openMode\&quot; class=\&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white\&quot;&gt;OPEN&lt;/button&gt;&lt;button id=\&quot;closeMode\&quot; class=\&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white\&quot;&gt;CLOSE&lt;/button&gt;&lt;button id=\&quot;mergedMode\&quot; class=\&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700\&quot;&gt;OPEN → CLOSE&lt;/button&gt;&lt;/div&gt;\n&lt;div id=\&quot;status\&quot; class=\&quot;mt-2 text-[10px] font-bold text-slate-500\&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;\n&lt;section class=\&quot;grid grid-cols-3 gap-2\&quot;&gt;&lt;button id=\&quot;topBtn\&quot; class=\&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm\&quot;&gt;&lt;div class=\&quot;text-[10px] font-black\&quot;&gt;🔥 TOP 10&lt;/div&gt;&lt;div id=\&quot;topDelay\&quot; class=\&quot;text-[9px] font-black mt-1\&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=\&quot;midBtn\&quot; class=\&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm\&quot;&gt;&lt;div class=\&quot;text-[10px] font-black\&quot;&gt;📊 MID 15&lt;/div&gt;&lt;div id=\&quot;midDelay\&quot; class=\&quot;text-[9px] font-black mt-1\&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=\&quot;recentBtn\&quot; class=\&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm\&quot;&gt;&lt;div class=\&quot;text-[10px] font-black\&quot;&gt;⚡ RECENT 10&lt;/div&gt;&lt;div id=\&quot;recentDelay\&quot; class=\&quot;text-[9px] font-black mt-1\&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/section&gt;\n&lt;section class=\&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3\&quot;&gt;&lt;div class=\&quot;flex items-center justify-between mb-2\&quot;&gt;&lt;div class=\&quot;font-black text-sm\&quot;&gt;35 FAMILY PANNA GROUPS&lt;/div&gt;&lt;div id=\&quot;filterLabel\&quot; class=\&quot;text-[9px] font-black text-indigo-600\&quot;&gt;ALL 35&lt;/div&gt;&lt;/div&gt;&lt;div id=\&quot;groupGrid\&quot; class=\&quot;grid grid-cols-3 sm:grid-cols-5 gap-1.5\&quot;&gt;&lt;/div&gt;&lt;/section&gt;&lt;/div&gt;\n&lt;script type=\&quot;module\&quot;&gt;\nimport {initializeApp} from \&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js\&quot;;import {getFirestore,collection,getDocs,doc,getDoc} from \&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js\&quot;;\nconst firebaseConfig={apiKey:\&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ\&quot;,authDomain:\&quot;m-record-f9c51.firebaseapp.com\&quot;,projectId:\&quot;m-record-f9c51\&quot;,storageBucket:\&quot;m-record-f9c51.firebasestorage.app\&quot;,messagingSenderId:\&quot;479303152172\&quot;,appId:\&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789\&quot;};const db=getFirestore(initializeApp(firebaseConfig));\nlet FAMILY_PANNA_GROUPS={\n  \&quot;222\&quot;:[\&quot;777\&quot;,\&quot;222\&quot;,\&quot;227\&quot;,\&quot;277\&quot;],\&quot;444\&quot;:[\&quot;444\&quot;,\&quot;999\&quot;,\&quot;499\&quot;,\&quot;449\&quot;],\&quot;666\&quot;:[\&quot;111\&quot;,\&quot;666\&quot;,\&quot;166\&quot;,\&quot;116\&quot;],\&quot;888\&quot;:[\&quot;888\&quot;,\&quot;333\&quot;,\&quot;338\&quot;,\&quot;388\&quot;],\&quot;000\&quot;:[\&quot;555\&quot;,\&quot;000\&quot;,\&quot;500\&quot;,\&quot;550\&quot;],\n  \&quot;123\&quot;:[\&quot;128\&quot;,\&quot;123\&quot;,\&quot;678\&quot;,\&quot;178\&quot;,\&quot;236\&quot;,\&quot;367\&quot;,\&quot;137\&quot;,\&quot;268\&quot;],\&quot;345\&quot;:[\&quot;345\&quot;,\&quot;890\&quot;,\&quot;390\&quot;,\&quot;340\&quot;,\&quot;480\&quot;,\&quot;458\&quot;,\&quot;589\&quot;,\&quot;359\&quot;],\&quot;567\&quot;:[\&quot;157\&quot;,\&quot;567\&quot;,\&quot;120\&quot;,\&quot;260\&quot;,\&quot;670\&quot;,\&quot;170\&quot;,\&quot;256\&quot;,\&quot;125\&quot;],\&quot;789\&quot;:[\&quot;789\&quot;,\&quot;234\&quot;,\&quot;248\&quot;,\&quot;478\&quot;,\&quot;239\&quot;,\&quot;289\&quot;,\&quot;347\&quot;,\&quot;379\&quot;],\&quot;456\&quot;:[\&quot;456\&quot;,\&quot;145\&quot;,\&quot;140\&quot;,\&quot;190\&quot;,\&quot;690\&quot;,\&quot;460\&quot;,\&quot;159\&quot;,\&quot;569\&quot;],\n  \&quot;470\&quot;:[\&quot;470\&quot;,\&quot;240\&quot;,\&quot;290\&quot;,\&quot;790\&quot;,\&quot;245\&quot;,\&quot;259\&quot;,\&quot;579\&quot;,\&quot;457\&quot;],\&quot;246\&quot;:[\&quot;246\&quot;,\&quot;269\&quot;,\&quot;129\&quot;,\&quot;124\&quot;,\&quot;147\&quot;,\&quot;179\&quot;,\&quot;679\&quot;,\&quot;467\&quot;],\&quot;369\&quot;:[\&quot;346\&quot;,\&quot;369\&quot;,\&quot;148\&quot;,\&quot;134\&quot;,\&quot;139\&quot;,\&quot;189\&quot;,\&quot;689\&quot;,\&quot;468\&quot;],\&quot;130\&quot;:[\&quot;130\&quot;,\&quot;180\&quot;,\&quot;680\&quot;,\&quot;360\&quot;,\&quot;356\&quot;,\&quot;568\&quot;,\&quot;158\&quot;,\&quot;135\&quot;],\&quot;230\&quot;:[\&quot;230\&quot;,\&quot;280\&quot;,\&quot;780\&quot;,\&quot;370\&quot;,\&quot;258\&quot;,\&quot;235\&quot;,\&quot;357\&quot;,\&quot;578\&quot;],\n  \&quot;100\&quot;:[\&quot;100\&quot;,\&quot;600\&quot;,\&quot;155\&quot;,\&quot;556\&quot;,\&quot;560\&quot;,\&quot;150\&quot;],\&quot;200\&quot;:[\&quot;200\&quot;,\&quot;700\&quot;,\&quot;255\&quot;,\&quot;557\&quot;,\&quot;570\&quot;,\&quot;250\&quot;],\&quot;300\&quot;:[\&quot;300\&quot;,\&quot;800\&quot;,\&quot;355\&quot;,\&quot;558\&quot;,\&quot;580\&quot;,\&quot;350\&quot;],\&quot;400\&quot;:[\&quot;400\&quot;,\&quot;900\&quot;,\&quot;455\&quot;,\&quot;559\&quot;,\&quot;590\&quot;,\&quot;450\&quot;],\n  \&quot;366\&quot;:[\&quot;366\&quot;,\&quot;668\&quot;,\&quot;113\&quot;,\&quot;118\&quot;,\&quot;168\&quot;,\&quot;136\&quot;],\&quot;330\&quot;:[\&quot;335\&quot;,\&quot;330\&quot;,\&quot;588\&quot;,\&quot;880\&quot;,\&quot;380\&quot;,\&quot;358\&quot;],\&quot;110\&quot;:[\&quot;110\&quot;,\&quot;115\&quot;,\&quot;660\&quot;,\&quot;566\&quot;,\&quot;156\&quot;,\&quot;160\&quot;],\&quot;440\&quot;:[\&quot;445\&quot;,\&quot;440\&quot;,\&quot;599\&quot;,\&quot;990\&quot;,\&quot;490\&quot;,\&quot;459\&quot;],\&quot;220\&quot;:[\&quot;220\&quot;,\&quot;225\&quot;,\&quot;770\&quot;,\&quot;577\&quot;,\&quot;257\&quot;,\&quot;270\&quot;],\&quot;334\&quot;:[\&quot;339\&quot;,\&quot;334\&quot;,\&quot;889\&quot;,\&quot;488\&quot;,\&quot;348\&quot;,\&quot;389\&quot;],\&quot;399\&quot;:[\&quot;399\&quot;,\&quot;899\&quot;,\&quot;344\&quot;,\&quot;448\&quot;,\&quot;489\&quot;,\&quot;349\&quot;],\&quot;377\&quot;:[\&quot;778\&quot;,\&quot;377\&quot;,\&quot;228\&quot;,\&quot;223\&quot;,\&quot;237\&quot;,\&quot;278\&quot;],\&quot;477\&quot;:[\&quot;779\&quot;,\&quot;477\&quot;,\&quot;229\&quot;,\&quot;224\&quot;,\&quot;247\&quot;,\&quot;279\&quot;],\&quot;144\&quot;:[\&quot;446\&quot;,\&quot;144\&quot;,\&quot;699\&quot;,\&quot;199\&quot;,\&quot;149\&quot;,\&quot;469\&quot;],\&quot;177\&quot;:[\&quot;177\&quot;,\&quot;677\&quot;,\&quot;122\&quot;,\&quot;226\&quot;,\&quot;267\&quot;,\&quot;127\&quot;],\&quot;114\&quot;:[\&quot;119\&quot;,\&quot;114\&quot;,\&quot;669\&quot;,\&quot;466\&quot;,\&quot;146\&quot;,\&quot;169\&quot;],\&quot;133\&quot;:[\&quot;336\&quot;,\&quot;133\&quot;,\&quot;688\&quot;,\&quot;188\&quot;,\&quot;138\&quot;,\&quot;368\&quot;],\&quot;233\&quot;:[\&quot;337\&quot;,\&quot;233\&quot;,\&quot;788\&quot;,\&quot;288\&quot;,\&quot;238\&quot;,\&quot;378\&quot;],\&quot;266\&quot;:[\&quot;266\&quot;,\&quot;667\&quot;,\&quot;112\&quot;,\&quot;117\&quot;,\&quot;167\&quot;,\&quot;126\&quot;],\&quot;244\&quot;:[\&quot;447\&quot;,\&quot;244\&quot;,\&quot;799\&quot;,\&quot;299\&quot;,\&quot;249\&quot;,\&quot;479\&quot;]\n};let PANNA_TO_GROUP={};let markets=[],allRows=[],mode=\&quot;MERGED\&quot;,view=\&quot;ALL\&quot;;\nconst el={market:document.getElementById('marketSelect'),status:document.getElementById('status'),grid:document.getElementById('groupGrid'),filterLabel:document.getElementById('filterLabel'),topDelay:document.getElementById('topDelay'),midDelay:document.getElementById('midDelay'),recentDelay:document.getElementById('recentDelay')};\nconst numP=v=&gt;{const s=String(v??\&quot;\&quot;).replace(/\\D/g,\&quot;\&quot;);return /^\\d{3}$/.test(s)?s:null};const timeMin=v=&gt;{const m=String(v??\&quot;\&quot;).match(/(\\d{1,2}):(\\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};\nfunction rebuild(){PANNA_TO_GROUP={};Object.entries(FAMILY_PANNA_GROUPS).forEach(([g,a])=&gt;a.forEach(p=&gt;PANNA_TO_GROUP[p]=g))}\nasync function loadMaster(){try{const s=await getDoc(doc(db,\&quot;masterData\&quot;,\&quot;familyPanna\&quot;));if(s.exists()&amp;&amp;s.data().groups)FAMILY_PANNA_GROUPS=s.data().groups}catch(e){console.warn(e)}rebuild()}\nasync function load(){el.status.textContent='Loading Firebase data...';const [ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);markets=[];ms.forEach(x=&gt;{const d=x.data();if(d?.name)markets.push({name:d.name,openTime:d.openTime})});markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime)||a.name.localeCompare(b.name));const selected=el.market.value||'ALL_MERGED';el.market.innerHTML='&lt;option value=\&quot;ALL_MERGED\&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.map(m=&gt;`&lt;option value=\&quot;${String(m.name).replace(/\&quot;/g,'&amp;quot;')}\&quot;&gt;${m.name}&lt;/option&gt;`).join('');if(selected!=='ALL_MERGED'&amp;&amp;markets.some(m=&gt;m.name===selected))el.market.value=selected;allRows=[];rs.forEach(x=&gt;{const d=x.data();if(d?.date&amp;&amp;d?.marketName)allRows.push({id:x.id,...d})});allRows.sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime??markets.find(m=&gt;m.name===a.marketName)?.openTime)-timeMin(b.openTime??markets.find(m=&gt;m.name===b.marketName)?.openTime));calculate()}\nfunction stream(rows){if(mode==='OPEN')return rows.map(r=&gt;({row:r,panna:numP(r.openPana),side:'OPEN'})).filter(x=&gt;x.panna);if(mode==='CLOSE')return rows.map(r=&gt;({row:r,panna:numP(r.closePana),side:'CLOSE'})).filter(x=&gt;x.panna);const a=[];rows.forEach(r=&gt;{const o=numP(r.openPana),c=numP(r.closePana);if(o)a.push({row:r,panna:o,side:'OPEN'});if(c)a.push({row:r,panna:c,side:'CLOSE'})});return a}\nfunction calculate(){\n  const selected=$(&quot;; const jf=document.getElementById('jodiFrame'),pf=document.getElementById('pannaFrame'); jf.srcdoc=jodiSrc; pf.srcdoc=pannaSrc; const jt=document.getElementById('jodiTab'),pt=document.getElementById('pannaTab'),jp=document.getElementById('jodiPanel'),pp=document.getElementById('pannaPanel'); function show(v){const j=v==='jodi';jt.classList.toggle('active',j);pt.classList.toggle('active',!j);jp.classList.toggle('active',j);pp.classList.toggle('active',!j);try{sessionStorage.setItem('familyMergedTab',v)}catch(e){}} jt.onclick=()=&gt;show('jodi');pt.onclick=()=&gt;show('panna');try{if(sessionStorage.getItem('familyMergedTab')==='panna')show('panna')}catch(e){}
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:block" title="Family Jodi + Family Panna"></iframe><iframe class="page-frame" id="page-2" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
@@ -253,7 +657,7 @@ const jodiSrc=&quot;&lt;!DOCTYPE html&gt;&lt;html lang=\&quot;gu\&quot;&gt;&lt;h
 &lt;style&gt;
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
-&lt;/style&gt;
+.modalGroupBtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.modalGroupBtn{border:0;border-radius:12px;padding:10px 6px;color:#fff;font-weight:900;text-align:center;cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,.08)}.modalGroupBtn.top{background:#f97316}.modalGroupBtn.mid{background:#4f46e5}.modalGroupBtn.recent{background:#059669}.modalGroupBtn.active{box-shadow:0 0 0 2px #111827 inset}.modalJodiBlock{border-radius:12px;border:1px solid #e2e8f0;background:#f8fafc;padding:9px;margin-bottom:6px}.modalJodiBlock.top{border-color:#fdba74;background:#fff7ed}.modalJodiBlock.mid{border-color:#a5b4fc;background:#eef2ff}.modalJodiBlock.recent{border-color:#6ee7b7;background:#ecfdf5}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-3xl mx-auto space-y-3&quot;&gt;
@@ -283,19 +687,11 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;
   &lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
     &lt;div class=&quot;text-sm font-black mb-2&quot;&gt;DIGIT FILTER&lt;/div&gt;
     &lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-5 gap-2&quot;&gt;&lt;/div&gt;
-    &lt;div class=&quot;mt-2 text-[9px] font-semibold text-slate-500&quot;&gt;Digit પર ક્લિક કરવાથી તે digitથી શરૂ થતી 10 Jodi popupમાં દેખાશે.&lt;/div&gt;
+    &lt;div class=&quot;mt-2 text-[9px] font-semibold text-slate-500&quot;&gt;Digit પર ક્લિક કરવાથી તે digitની બધી 10 Jodi popupમાં TOP 3 / MID 4 / RECENT 3 અને Group Delay સાથે દેખાશે.&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;
-  &lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[85vh] overflow-hidden&quot;&gt;
-    &lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;
-      &lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT 1&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-500&quot;&gt;Jodi • Delay • Max Delay&lt;/div&gt;&lt;/div&gt;
-      &lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;modalBody&quot; class=&quot;p-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
+&lt;div id=&quot;modal&quot; class=&quot;hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center&quot;&gt;&lt;div class=&quot;bg-white w-full max-w-md rounded-2xl shadow-xl max-h-[88vh] overflow-hidden&quot;&gt;&lt;div class=&quot;p-3 border-b flex items-center justify-between&quot;&gt;&lt;div&gt;&lt;div id=&quot;modalTitle&quot; class=&quot;font-black text-indigo-700&quot;&gt;DIGIT 1&lt;/div&gt;&lt;div id=&quot;modalSub&quot; class=&quot;text-[9px] text-slate-500&quot;&gt;10 JODI • TOP 3 • MID 4 • RECENT 3&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;closeModal&quot; class=&quot;w-8 h-8 rounded-full bg-slate-100 font-black&quot;&gt;×&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;p-3 pb-1&quot;&gt;&lt;div id=&quot;modalGroupBtns&quot; class=&quot;modalGroupBtns&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;modalBody&quot; class=&quot;px-3 pb-3 overflow-y-auto space-y-1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;script type=&quot;module&quot;&gt;
 import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;
@@ -310,66 +706,133 @@ const firebaseConfig={
  appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;
 };
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),jodiGrid=document.getElementById('jodiGrid'),digitGrid=document.getElementById('digitGrid'),statusEl=document.getElementById('status');
+const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),jodiGrid=document.getElementById(&#x27;jodiGrid&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
 let allRows=[], stats={}, top10=[], recent10=[];
 
-const digit=v=&gt;{ if(v===undefined||v===null||v==='') return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
+const digit=v=&gt;{ if(v===undefined||v===null||v===&#x27;&#x27;) return null; const n=parseInt(v,10); return Number.isFinite(n)?((n%10)+10)%10:null; };
 const jodiOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);return o===null||c===null?null:`${o}${c}`;};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
 function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime));}
 
 async function load(){
- statusEl.textContent='Loading Firebase data...';
- const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);
- marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';
+ statusEl.textContent=&#x27;Loading Firebase data...&#x27;;
+ const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);
+ marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;
  const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));
  markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));
- markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
- allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});
+ markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});
+ allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});
  statusEl.textContent=`${allRows.length} raw records loaded`;
  calculate();
 }
 
 function calculate(){
- const selected=marketSelect.value||'ALL_MERGED';
- const rows=sortRows(allRows.filter(r=&gt;selected==='ALL_MERGED'||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
- const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,'0'));
+ const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
+ const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected).filter(r=&gt;jodiOf(r)!==null));
+ const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));
  stats=Object.fromEntries(keys.map(k=&gt;[k,{occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
  rows.forEach((r,i)=&gt;{const j=jodiOf(r);stats[j].occ.push(i);stats[j].lastSeen=i;stats[j].count++;});
  keys.forEach(k=&gt;{const s=stats[k],o=s.occ,n=rows.length;s.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);s.maxDelay=Math.max(0,...gaps);});
  const arr=keys.map(j=&gt;({jodi:j,...stats[j]}));
  top10=arr.slice().sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||a.jodi.localeCompare(b.jodi)).slice(0,10);
  recent10=arr.slice().sort((a,b)=&gt;a.currentDelay-b.currentDelay||b.lastSeen-a.lastSeen||a.jodi.localeCompare(b.jodi)).slice(0,10);
- renderGrid(arr,'ALL');
+ renderGrid(arr,&#x27;ALL&#x27;);
  statusEl.textContent=`${rows.length} completed Jodi games • TOP 10 = highest delay • RECENT 10 = lowest delay`;
 }
 function badgeSet(){return {top:new Set(top10.map(x=&gt;x.jodi)),recent:new Set(recent10.map(x=&gt;x.jodi))};}
 function renderGrid(arr,mode){
  const bs=badgeSet();
  let list=arr;
- if(mode==='TOP')list=top10;
- if(mode==='RECENT')list=recent10;
- document.getElementById('filterLabel').textContent=mode;
- jodiGrid.innerHTML='';
+ if(mode===&#x27;TOP&#x27;)list=top10;
+ if(mode===&#x27;RECENT&#x27;)list=recent10;
+ document.getElementById(&#x27;filterLabel&#x27;).textContent=mode;
+ jodiGrid.innerHTML=&#x27;&#x27;;
  list.forEach(x=&gt;{
    const top=bs.top.has(x.jodi),recent=bs.recent.has(x.jodi);
-   const el=document.createElement('button');
-   el.className=`rounded-lg border p-2 text-center ${top?'border-orange-400 bg-orange-50':recent?'border-emerald-400 bg-emerald-50':'border-slate-200 bg-slate-50'} hover:shadow-sm`;
+   const el=document.createElement(&#x27;button&#x27;);
+   el.className=`rounded-lg border p-2 text-center ${top?&#x27;border-orange-400 bg-orange-50&#x27;:recent?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;} hover:shadow-sm`;
    el.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;`;
    el.title=`Jodi ${x.jodi} • Delay ${x.currentDelay} • Max ${x.maxDelay}`;
    jodiGrid.appendChild(el);
  });
 }
-function showDigit(d){
- const bs=badgeSet(),items=Array.from({length:10},(_,c)=&gt;`${d}${c}`),body=document.getElementById('modalBody');
- document.getElementById('modalTitle').textContent=`DIGIT ${d} • JODI ${d}0–${d}9`;
- body.innerHTML='';
- items.forEach(j=&gt;{const x=stats[j],top=bs.top.has(j),recent=bs.recent.has(j);const row=document.createElement('div');row.className=`flex items-center justify-between rounded-xl border p-2 ${top?'border-orange-300 bg-orange-50':recent?'border-emerald-300 bg-emerald-50':'border-slate-200 bg-slate-50'}`;row.innerHTML=`&lt;div&gt;&lt;span class=&quot;text-base font-black&quot;&gt;${j}&lt;/span&gt;${top?'&lt;span class=&quot;ml-1 text-[7px] font-black text-orange-700&quot;&gt;TOP&lt;/span&gt;':''}${recent?'&lt;span class=&quot;ml-1 text-[7px] font-black text-emerald-700&quot;&gt;RECENT&lt;/span&gt;':''}&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[10px] font-black text-indigo-700&quot;&gt;Delay: ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;Max Delay: ${x.maxDelay} • Hits: ${x.count}&lt;/div&gt;&lt;/div&gt;`;body.appendChild(row);});
- document.getElementById('modal').classList.remove('hidden');
+function analyzeDigitJodis(d){
+ const digitKey=String(d);
+ const items=Array.from({length:10},(_,c)=&gt;digitKey+String(c));
+ const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
+ const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)).filter(r=&gt;jodiOf(r)!==null));
+ const localStats=Object.fromEntries(items.map(j=&gt;[j,{jodi:j,occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
+ rows.forEach((r,i)=&gt;{
+   const j=jodiOf(r);
+   if(localStats[j]){localStats[j].occ.push(i);localStats[j].lastSeen=i;localStats[j].count++;}
+ });
+ items.forEach(j=&gt;{
+   const s=localStats[j],o=s.occ,n=rows.length;
+   s.currentDelay=o.length?n-1-o[o.length-1]:n;
+   let gaps=o.length?[o[0]]:[n];
+   for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
+   if(o.length)gaps.push(n-1-o[o.length-1]);
+   s.maxDelay=Math.max(0,...gaps);
+ });
+ const rank=items.map(j=&gt;localStats[j]).sort((a,b)=&gt;
+   b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi)
+ );
+ let top=rank.slice(0,3).map(x=&gt;x.jodi),mid=rank.slice(3,7).map(x=&gt;x.jodi),recent=rank.slice(7,10).map(x=&gt;x.jodi);
+ let td=0,md=0,rd=0;
+ rows.forEach(r=&gt;{
+   const hit=jodiOf(r);
+   if(!items.includes(hit)){td++;md++;rd++;return;}
+   const inTop=top.includes(hit),inMid=mid.includes(hit),inRecent=recent.includes(hit);
+   if(inTop){td=0;md++;rd++;}
+   else if(inMid){td++;md=0;rd++;}
+   else if(inRecent){td++;md++;rd=0;}
+   else{td++;md++;rd++;}
+ });
+ return {digit:d,items,stats:localStats,top,mid,recent,delay:{top:td,mid:md,recent:rd}};
 }
-function initDigits(){digitGrid.innerHTML='';for(let d=0;d&lt;=9;d++){const b=document.createElement('button');b.className='py-2 rounded-xl bg-indigo-600 text-white font-black text-sm shadow-sm';b.textContent=d;b.onclick=()=&gt;showDigit(d);digitGrid.appendChild(b);}}
-marketSelect.addEventListener('change',calculate);document.getElementById('refreshBtn').onclick=load;document.getElementById('topBtn').onclick=()=&gt;renderGrid(top10,'TOP');document.getElementById('recentBtn').onclick=()=&gt;renderGrid(recent10,'RECENT');document.getElementById('closeModal').onclick=()=&gt;document.getElementById('modal').classList.add('hidden');document.getElementById('modal').addEventListener('click',e=&gt;{if(e.target.id==='modal')e.currentTarget.classList.add('hidden');});
-initDigits();load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
+
+function renderDigitPopup(group){
+ const a=window.__digitPopupGroups;
+ const list=group===&#x27;TOP&#x27;?a.top:group===&#x27;MID&#x27;?a.mid:group===&#x27;RECENT&#x27;?a.recent:a.items;
+ const cls=group===&#x27;TOP&#x27;?&#x27;top&#x27;:group===&#x27;MID&#x27;?&#x27;mid&#x27;:group===&#x27;RECENT&#x27;?&#x27;recent&#x27;:&#x27;&#x27;;
+ const body=document.getElementById(&#x27;modalBody&#x27;);
+ body.innerHTML=&#x27;&#x27;;
+ const wrap=document.createElement(&#x27;div&#x27;);
+ wrap.className=&#x27;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&#x27;;
+ const topText=a.top.join(&#x27; • &#x27;),midText=a.mid.join(&#x27; • &#x27;),recentText=a.recent.join(&#x27; • &#x27;);
+ wrap.innerHTML=`&lt;div class=&quot;flex justify-between items-center mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;10 JODI&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;${group===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:group+&#x27; &#x27;+list.length}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500 mb-2&quot;&gt;TOP: ${topText} | MID: ${midText} | RECENT: ${recentText}&lt;/div&gt;&lt;div id=&quot;modalJodiGrid&quot; class=&quot;grid grid-cols-5 gap-2&quot;&gt;&lt;/div&gt;`;
+ body.appendChild(wrap);
+ const grid=wrap.querySelector(&#x27;#modalJodiGrid&#x27;);
+ list.forEach(j=&gt;{
+   const x=a.stats[String(j)];
+   if(!x)return;
+   const card=document.createElement(&#x27;div&#x27;);
+   card.className=`rounded-lg border p-2 text-center ${cls===&#x27;top&#x27;?&#x27;border-orange-400 bg-orange-50&#x27;:cls===&#x27;mid&#x27;?&#x27;border-indigo-400 bg-indigo-50&#x27;:cls===&#x27;recent&#x27;?&#x27;border-emerald-400 bg-emerald-50&#x27;:a.top.includes(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:a.mid.includes(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:a.recent.includes(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;}`;
+   card.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;
+   grid.appendChild(card);
+ });
+}
+
+function showDigit(d){
+ const a=analyzeDigitJodis(d);
+ window.__digitPopupGroups=a;
+ document.getElementById(&#x27;modalTitle&#x27;).textContent=`DIGIT ${d} • JODI FILTER`;
+ document.getElementById(&#x27;modalSub&#x27;).textContent=&#x27;10 JODI • TOP 3 / MID 4 / RECENT 3 • Individual Delay + Max Delay&#x27;;
+ const box=document.getElementById(&#x27;modalGroupBtns&#x27;);
+ box.innerHTML=&#x27;&#x27;;
+ [[&#x27;TOP&#x27;,a.top,&#x27;top&#x27;,&#x27;🔥&#x27;],[&#x27;MID&#x27;,a.mid,&#x27;mid&#x27;,&#x27;📊&#x27;],[&#x27;RECENT&#x27;,a.recent,&#x27;recent&#x27;,&#x27;⚡&#x27;]].forEach(([name,list,cls,icon])=&gt;{
+   const b=document.createElement(&#x27;button&#x27;);
+   b.className=`modalGroupBtn ${cls}`;
+   b.innerHTML=`&lt;div class=&quot;text-[10px] font-black&quot;&gt;${icon} ${name} ${list.length}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: ${a.delay[name.toLowerCase()]}&lt;/div&gt;`;
+   b.onclick=()=&gt;{box.querySelectorAll(&#x27;button&#x27;).forEach(x=&gt;x.classList.remove(&#x27;active&#x27;));b.classList.add(&#x27;active&#x27;);renderDigitPopup(name);};
+   box.appendChild(b);
+ });
+ renderDigitPopup(&#x27;ALL&#x27;);
+ document.getElementById(&#x27;modal&#x27;).classList.remove(&#x27;hidden&#x27;);
+}
+function initDigits(){digitGrid.innerHTML=&#x27;&#x27;;for(let d=0;d&lt;=9;d++){const b=document.createElement(&#x27;button&#x27;);b.className=&#x27;py-2 rounded-xl bg-indigo-600 text-white font-black text-sm shadow-sm&#x27;;b.textContent=d;b.onclick=()=&gt;showDigit(d);digitGrid.appendChild(b);}}
+marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;renderGrid(top10,&#x27;TOP&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;renderGrid(recent10,&#x27;RECENT&#x27;);document.getElementById(&#x27;closeModal&#x27;).onclick=()=&gt;document.getElementById(&#x27;modal&#x27;).classList.add(&#x27;hidden&#x27;);document.getElementById(&#x27;modal&#x27;).addEventListener(&#x27;click&#x27;,e=&gt;{if(e.target.id===&#x27;modal&#x27;)e.currentTarget.classList.add(&#x27;hidden&#x27;);});
+initDigits();load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
