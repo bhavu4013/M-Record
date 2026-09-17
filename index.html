@@ -214,7 +214,7 @@ async function load(){
    focusSub=&quot;Use the time-based market list to prepare the next entry.&quot;;
    focusCls=&quot;bg-indigo-50 border-indigo-200 text-indigo-800&quot;;
  }else if(complete.length){
-   focusTitle=&quot;✅ Today's entries are up to date&quot;;
+   focusTitle=&quot;✅ Today&#x27;s entries are up to date&quot;;
    focusSub=&quot;Open the analysis modules when you want to review the recorded data.&quot;;
    focusCls=&quot;bg-emerald-50 border-emerald-200 text-emerald-800&quot;;
  }else{
@@ -223,22 +223,31 @@ async function load(){
    focusCls=&quot;bg-indigo-50 border-indigo-200 text-indigo-800&quot;;
  }
  $(&quot;focus&quot;).className=&quot;rounded-xl border p-3 &quot;+focusCls;
- $(&quot;focus&quot;).innerHTML='&lt;div class=&quot;font-black text-sm&quot;&gt;'+focusTitle+'&lt;/div&gt;&lt;div class=&quot;text-[9px] font-semibold mt-1 opacity-80&quot;&gt;'+focusSub+'&lt;/div&gt;';
+ $(&quot;focus&quot;).innerHTML=&#x27;&lt;div class=&quot;font-black text-sm&quot;&gt;&#x27;+focusTitle+&#x27;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-semibold mt-1 opacity-80&quot;&gt;&#x27;+focusSub+&#x27;&lt;/div&gt;&#x27;;
 
  $(&quot;markets&quot;).innerHTML=markets.length?markets.map(m=&gt;{
    const rs=tr.filter(r=&gt;r.marketName===m.name);
    const r=rs[rs.length-1];
    const state=r?.openPana&amp;&amp;r?.closePana?&quot;COMPLETE&quot;:r?.openPana?&quot;OPEN ENTERED&quot;:r?.closePana?&quot;CLOSE ONLY&quot;:&quot;PENDING&quot;;
    const cls=state===&quot;COMPLETE&quot;?&quot;text-emerald-600&quot;:state===&quot;OPEN ENTERED&quot;?&quot;text-orange-500&quot;:state===&quot;CLOSE ONLY&quot;?&quot;text-rose-600&quot;:&quot;text-slate-400&quot;;
-   return '&lt;div class=&quot;flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3&quot;&gt;'+
-   '&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;'+String(m.name).replace(/[&amp;&lt;&gt;&quot;']/g,&quot;&quot;)+'&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-400&quot;&gt;OPEN '+timeText(m.openTime)+' • CLOSE '+timeText(m.closeTime)+'&lt;/div&gt;&lt;/div&gt;'+
-   '&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black '+cls+'&quot;&gt;'+state+'&lt;/div&gt;'+(r?.jodi?'&lt;div class=&quot;text-xs font-black&quot;&gt;JODI '+r.jodi+'&lt;/div&gt;':'')+'&lt;/div&gt;&lt;/div&gt;';
- }).join(&quot;&quot;):'&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;ADD MARKETS FROM LOGGER&lt;/div&gt;';
+   return &#x27;&lt;div class=&quot;flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3&quot;&gt;&#x27;+
+   &#x27;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;&#x27;+String(m.name).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,&quot;&quot;)+&#x27;&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-400&quot;&gt;OPEN &#x27;+timeText(m.openTime)+&#x27; • CLOSE &#x27;+timeText(m.closeTime)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;+
+   &#x27;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black &#x27;+cls+&#x27;&quot;&gt;&#x27;+state+&#x27;&lt;/div&gt;&#x27;+(r?.jodi?&#x27;&lt;div class=&quot;text-xs font-black&quot;&gt;JODI &#x27;+r.jodi+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;;
+ }).join(&quot;&quot;):&#x27;&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;ADD MARKETS FROM LOGGER&lt;/div&gt;&#x27;;
 }
 $(&quot;refresh&quot;).onclick=()=&gt;load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
 load().catch(e=&gt;$(&quot;error&quot;).textContent=&quot;ERROR: &quot;+(e.message||e));
 &lt;/script&gt;
-&lt;/body&gt;
+&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
+&lt;/script&gt;&lt;/body&gt;
 &lt;/html&gt;" style="display:none" title="Dashboard"></iframe><iframe class="page-frame" id="page-0" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,viewport-fit=cover&quot;&gt;&lt;title&gt;Family Jodi + Family Panna&lt;/title&gt;&lt;style&gt;
 *{box-sizing:border-box}body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.wrap{width:100%;height:100%;padding:10px 10px 18px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.tab{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:14px;padding:12px 8px;font-size:12px;font-weight:900;cursor:pointer}.tab.active{background:#4f46e5;color:#fff;border-color:#4f46e5}.panel{display:none;height:calc(100% - 58px)}.panel.active{display:block}.frame{width:100%;height:100%;min-height:0;border:0;background:#f1f5f9}.note{text-align:center;font-size:8px;font-weight:800;color:#64748b;margin:0 0 7px}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;tabs&quot;&gt;&lt;button class=&quot;tab active&quot; id=&quot;jodiTab&quot;&gt;👨‍👩‍👧‍👦 FAMILY JODI&lt;/button&gt;&lt;button class=&quot;tab&quot; id=&quot;pannaTab&quot;&gt;🔺 FAMILY PANNA&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;note&quot;&gt;FAMILY JODI + FAMILY PANNA • Existing calculation logic unchanged&lt;/div&gt;&lt;div id=&quot;jodiPanel&quot; class=&quot;panel active&quot;&gt;&lt;iframe class=&quot;frame&quot; id=&quot;jodiFrame&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;div id=&quot;pannaPanel&quot; class=&quot;panel&quot;&gt;&lt;iframe class=&quot;frame&quot; id=&quot;pannaFrame&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;&lt;script&gt;
@@ -579,8 +588,17 @@ function analyzeDigitJodis(d){
   // Same TOP/MID/RECENT movement + group-counter logic as Digit Analysis,
   // adapted from one Digit to the 10 Jodis belonging to that Digit.
   const digitKey=String(d);
-  const items=Array.from({length:10},(_,c)=>digitKey+String(c));
-  const selected=el.market.value||"ALL_MERGED";
+  const items=Array.from({length:10},(_,c)=&gt;digitKey+String(c));
+  const selected=el.market.value||&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
+&lt;/script&gt;"ALL_MERGED";
   const rows=sortRows(allRows.filter(r=>(selected==="ALL_MERGED"||r.marketName===selected)).filter(r=>jodiOf(r)!==null));
 
   const makeStats=history=>{
@@ -840,36 +858,36 @@ function renderGrid(arr,mode){
 }
 function analyzeDigitJodis(d){
  const digitKey=String(d);
- const items=Array.from({length:10},(_,c)=>digitKey+String(c));
- const selected=marketSelect.value||'ALL_MERGED';
- const rows=sortRows(allRows.filter(r=>(selected==='ALL_MERGED'||r.marketName===selected)).filter(r=>jodiOf(r)!==null));
+ const items=Array.from({length:10},(_,c)=&gt;digitKey+String(c));
+ const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
+ const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)).filter(r=&gt;jodiOf(r)!==null));
 
  // For a clicked digit, calculate individual Jodi delay only within
- // the selected digit's 10-Jodi event sequence.
- const events=rows.map(r=>jodiOf(r)).filter(j=>items.includes(j));
- const localStats=Object.fromEntries(items.map(j=>[j,{jodi:j,occ:[],currentDelay:events.length,maxDelay:events.length,lastSeen:-1,count:0}]));
- events.forEach((j,i)=>{
+ // the selected digit&#x27;s 10-Jodi event sequence.
+ const events=rows.map(r=&gt;jodiOf(r)).filter(j=&gt;items.includes(j));
+ const localStats=Object.fromEntries(items.map(j=&gt;[j,{jodi:j,occ:[],currentDelay:events.length,maxDelay:events.length,lastSeen:-1,count:0}]));
+ events.forEach((j,i)=&gt;{
    const s=localStats[j];
    s.occ.push(i);s.lastSeen=i;s.count++;
  });
- items.forEach(j=>{
+ items.forEach(j=&gt;{
    const s=localStats[j],o=s.occ,n=events.length;
    s.currentDelay=o.length?n-1-o[o.length-1]:n;
    let gaps=o.length?[o[0]]:[n];
-   for(let i=1;i<o.length;i++)gaps.push(o[i]-o[i-1]-1);
+   for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
    if(o.length)gaps.push(n-1-o[o.length-1]);
    s.maxDelay=Math.max(0,...gaps);
  });
 
- const rank=items.map(j=>localStats[j]).sort((a,b)=>
+ const rank=items.map(j=&gt;localStats[j]).sort((a,b)=&gt;
    b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi)
  );
- let top=rank.slice(0,3).map(x=>x.jodi),mid=rank.slice(3,7).map(x=>x.jodi),recent=rank.slice(7,10).map(x=>x.jodi);
+ let top=rank.slice(0,3).map(x=&gt;x.jodi),mid=rank.slice(3,7).map(x=&gt;x.jodi),recent=rank.slice(7,10).map(x=&gt;x.jodi);
  let td=0,md=0,rd=0;
 
  // Same group-counter logic as Digit Analysis, replayed only on
- // the selected digit's 10-Jodi sequence.
- events.forEach(hit=>{
+ // the selected digit&#x27;s 10-Jodi sequence.
+ events.forEach(hit=&gt;{
    const inTop=top.includes(hit),inMid=mid.includes(hit),inRecent=recent.includes(hit);
    if(inTop){td=0;md++;rd++;}
    else if(inMid){td++;md=0;rd++;}
@@ -922,7 +940,16 @@ function initDigits(){digitGrid.innerHTML=&#x27;&#x27;;for(let d=0;d&lt;=9;d++){
 marketSelect.addEventListener(&#x27;change&#x27;,calculate);document.getElementById(&#x27;refreshBtn&#x27;).onclick=load;document.getElementById(&#x27;topBtn&#x27;).onclick=()=&gt;renderGrid(top10,&#x27;TOP&#x27;);document.getElementById(&#x27;recentBtn&#x27;).onclick=()=&gt;renderGrid(recent10,&#x27;RECENT&#x27;);document.getElementById(&#x27;closeModal&#x27;).onclick=()=&gt;document.getElementById(&#x27;modal&#x27;).classList.add(&#x27;hidden&#x27;);document.getElementById(&#x27;modal&#x27;).addEventListener(&#x27;click&#x27;,e=&gt;{if(e.target.id===&#x27;modal&#x27;)e.currentTarget.classList.add(&#x27;hidden&#x27;);});
 initDigits();load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
 &lt;/script&gt;
-&lt;/body&gt;
+&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
+&lt;/script&gt;&lt;/body&gt;
 &lt;/html&gt;
 " style="display:none" title="Jodi 00–99"></iframe>
 <iframe class="page-frame" id="page-3" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;DIGIT ANALYSIS&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
@@ -936,21 +963,21 @@ const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;
 const db=getFirestore(initializeApp(firebaseConfig));
 const $=id=&gt;document.getElementById(id);let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&quot;ALL&quot;,mode=&quot;OPEN&quot;;
 function digit(v){
-  if(v===undefined||v===null||v==='')return null;
+  if(v===undefined||v===null||v===&#x27;&#x27;)return null;
   const m=String(v).match(/\d/g);
   if(!m||!m.length)return null;
   const sum=m.reduce((a,ch)=&gt;a+Number(ch),0);
   return sum%10;
 }
-function timeMin(v){const m=String(v||'').match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
-function dateValue(v){if(v&amp;&amp;typeof v.toDate==='function'){const d=v.toDate();return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}if(v&amp;&amp;typeof v.seconds==='number')return v.seconds*1000;const d=new Date(v);return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}
-function sortRows(a){return a.slice().sort((x,y)=&gt;dateValue(x.date)-dateValue(y.date)||timeMin(x.openTime)-timeMin(y.openTime)||String(x.marketName||'').localeCompare(String(y.marketName||'')))}
-function stream(rows){if(mode==='OPEN')return rows.map(r=&gt;({r,d:digit(r.openAnk)})).filter(x=&gt;x.d!==null);if(mode==='CLOSE')return rows.map(r=&gt;({r,d:digit(r.closeAnk)})).filter(x=&gt;x.d!==null);const out=[];rows.forEach(r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o!==null)out.push({r,d:o,side:'OPEN'});if(c!==null)out.push({r,d:c,side:'CLOSE'})});return out}
+function timeMin(v){const m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439}
+function dateValue(v){if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;){const d=v.toDate();return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}if(v&amp;&amp;typeof v.seconds===&#x27;number&#x27;)return v.seconds*1000;const d=new Date(v);return d instanceof Date&amp;&amp;!isNaN(d)?d.getTime():0}
+function sortRows(a){return a.slice().sort((x,y)=&gt;dateValue(x.date)-dateValue(y.date)||timeMin(x.openTime)-timeMin(y.openTime)||String(x.marketName||&#x27;&#x27;).localeCompare(String(y.marketName||&#x27;&#x27;)))}
+function stream(rows){if(mode===&#x27;OPEN&#x27;)return rows.map(r=&gt;({r,d:digit(r.openAnk)})).filter(x=&gt;x.d!==null);if(mode===&#x27;CLOSE&#x27;)return rows.map(r=&gt;({r,d:digit(r.closeAnk)})).filter(x=&gt;x.d!==null);const out=[];rows.forEach(r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o!==null)out.push({r,d:o,side:&#x27;OPEN&#x27;});if(c!==null)out.push({r,d:c,side:&#x27;CLOSE&#x27;})});return out}
 function makeStats(history){const n=history.length,a=Object.fromEntries(Array.from({length:10},(_,i)=&gt;[String(i),{jodi:String(i),occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((e,i)=&gt;{a[String(e.d)].occ.push(i);a[String(e.d)].lastSeen=i;a[String(e.d)].count++});Object.values(a).forEach(x=&gt;{const o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;const gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
 function rank(h){const st=makeStats(h);return Object.values(st).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi))}
 function calculate(){
   const selected=$(&quot;marketSelect&quot;).value||&quot;ALL_MERGED&quot;;
-  const rows=sortRows(allRows.filter(r=&gt;selected==='ALL_MERGED'||r.marketName===selected));
+  const rows=sortRows(allRows.filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));
   const st=stream(rows);
   stats=makeStats(st);
 
@@ -982,10 +1009,10 @@ function calculate(){
   const moveToRecent=(d,source)=&gt;{
     top=top.filter(x=&gt;x!==d); mid=mid.filter(x=&gt;x!==d); recent=recent.filter(x=&gt;x!==d);
     recent.unshift(d); recent=recent.slice(0,3);
-    if(source==='TOP'){
+    if(source===&#x27;TOP&#x27;){
       const promote=mid.shift(); if(promote)top.push(promote);
       const push=recent[3]; if(push)mid.push(push);
-    }else if(source==='MID'){
+    }else if(source===&#x27;MID&#x27;){
       const promote=recent[3]; if(promote)mid.push(promote);
     }
     while(top.length&lt;3||mid.length&lt;4||recent.length&lt;3){
@@ -999,19 +1026,28 @@ function calculate(){
   st.forEach(e=&gt;{
     const d=String(e.d);
     const inTop=top.includes(d),inMid=mid.includes(d),inRecent=recent.includes(d);
-    if(inTop){td=0;md++;rd++;moveToRecent(d,'TOP');}
-    else if(inMid){td++;md=0;rd++;moveToRecent(d,'MID');}
-    else if(inRecent){td++;md++;rd=0;moveToRecent(d,'RECENT');}
+    if(inTop){td=0;md++;rd++;moveToRecent(d,&#x27;TOP&#x27;);}
+    else if(inMid){td++;md=0;rd++;moveToRecent(d,&#x27;MID&#x27;);}
+    else if(inRecent){td++;md++;rd=0;moveToRecent(d,&#x27;RECENT&#x27;);}
     else{td++;md++;rd++;}
   });
   groupDelayState={top:td,mid:md,recent:rd};
   render();
-  $(&quot;status&quot;).textContent=`${st.length} ${mode==='OTC'?'OTC events':mode+' results'} • ${selected==='ALL_MERGED'?'ALL MARKETS':selected} • ANK DELAY + 3-GROUP COUNTER • TOP 3 / MID 4 / RECENT 3`;
+  $(&quot;status&quot;).textContent=`${st.length} ${mode===&#x27;OTC&#x27;?&#x27;OTC events&#x27;:mode+&#x27; results&#x27;} • ${selected===&#x27;ALL_MERGED&#x27;?&#x27;ALL MARKETS&#x27;:selected} • ANK DELAY + 3-GROUP COUNTER • TOP 3 / MID 4 / RECENT 3`;
 }
-function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view==='TOP')list=top10;if(view==='MID')list=mid10;if(view==='RECENT')list=recent10;$(&quot;filterLabel&quot;).textContent=view==='ALL'?'ALL 10':view+' '+list.length;$(&quot;topDelay&quot;).textContent='DELAY: '+groupDelayState.top;$(&quot;midDelay&quot;).textContent='DELAY: '+groupDelayState.mid;$(&quot;recentDelay&quot;).textContent='DELAY: '+groupDelayState.recent;$(&quot;groupMembers&quot;).textContent='TOP: '+top10.map(x=&gt;x.jodi).join(' • ')+'   |   MID: '+mid10.map(x=&gt;x.jodi).join(' • ')+'   |   RECENT: '+recent10.map(x=&gt;x.jodi).join(' • ');$(&quot;digitGrid&quot;).innerHTML='';list.forEach(x=&gt;{const k=x.jodi,cls=topSet.has(k)?'border-orange-400 bg-orange-50':midSet.has(k)?'border-indigo-400 bg-indigo-50':recentSet.has(k)?'border-emerald-400 bg-emerald-50':'border-slate-200 bg-slate-50';const b=document.createElement('div');b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;$(&quot;digitGrid&quot;).appendChild(b)})}
-function setMode(m){mode=m;view='ALL';[['openTab','OPEN'],['closeTab','CLOSE'],['otcTab','OTC']].forEach(([id,v])=&gt;$(id).className='rounded-xl border p-2.5 text-[10px] font-black '+(v===m?'bg-indigo-50 border-indigo-300 text-indigo-700':'bg-white'));$(&quot;title&quot;).textContent=m==='OTC'?'OTC DIGIT':m+' DIGIT';$(&quot;sub&quot;).textContent=m==='OTC'?'OTC • OPEN → CLOSE • TOP 3 / MID 4 / RECENT 3':' '+m+' DIGIT • TOP 3 / MID 4 / RECENT 3';$(&quot;gridTitle&quot;).textContent=m==='OTC'?'10 OTC DIGIT':'10 '+m+' DIGIT';calculate()}
-async function load(){$(&quot;status&quot;).textContent='Loading Firebase data...';const [ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);const markets=[];ms.forEach(d=&gt;{const x=d.data();if(x&amp;&amp;x.name)markets.push(x)});markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));const prev=$(&quot;marketSelect&quot;).value||'ALL_MERGED';$(&quot;marketSelect&quot;).innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';markets.forEach(m=&gt;{const o=document.createElement('option');o.value=m.name;o.textContent=m.name;$(&quot;marketSelect&quot;).appendChild(o)});if([...$(&quot;marketSelect&quot;).options].some(o=&gt;o.value===prev))$(&quot;marketSelect&quot;).value=prev;allRows=[];rs.forEach(d=&gt;{const r=d.data();if(r&amp;&amp;r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'})});calculate()}
-$(&quot;marketSelect&quot;).onchange=()=&gt;{view='ALL';calculate()};$(&quot;refreshBtn&quot;).onclick=async()=&gt;{view='ALL';await load()};$(&quot;topBtn&quot;).onclick=()=&gt;{view='TOP';render()};$(&quot;midBtn&quot;).onclick=()=&gt;{view='MID';render()};$(&quot;recentBtn&quot;).onclick=()=&gt;{view='RECENT';render()};$(&quot;openTab&quot;).onclick=()=&gt;setMode('OPEN');$(&quot;closeTab&quot;).onclick=()=&gt;setMode('CLOSE');$(&quot;otcTab&quot;).onclick=()=&gt;setMode('OTC');load().catch(e=&gt;{$(&quot;status&quot;).textContent='ERROR: '+(e.message||e);console.error(e)});
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;$(&quot;filterLabel&quot;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;$(&quot;topDelay&quot;).textContent=&#x27;DELAY: &#x27;+groupDelayState.top;$(&quot;midDelay&quot;).textContent=&#x27;DELAY: &#x27;+groupDelayState.mid;$(&quot;recentDelay&quot;).textContent=&#x27;DELAY: &#x27;+groupDelayState.recent;$(&quot;groupMembers&quot;).textContent=&#x27;TOP: &#x27;+top10.map(x=&gt;x.jodi).join(&#x27; • &#x27;)+&#x27;   |   MID: &#x27;+mid10.map(x=&gt;x.jodi).join(&#x27; • &#x27;)+&#x27;   |   RECENT: &#x27;+recent10.map(x=&gt;x.jodi).join(&#x27; • &#x27;);$(&quot;digitGrid&quot;).innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const k=x.jodi,cls=topSet.has(k)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(k)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(k)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;$(&quot;digitGrid&quot;).appendChild(b)})}
+function setMode(m){mode=m;view=&#x27;ALL&#x27;;[[&#x27;openTab&#x27;,&#x27;OPEN&#x27;],[&#x27;closeTab&#x27;,&#x27;CLOSE&#x27;],[&#x27;otcTab&#x27;,&#x27;OTC&#x27;]].forEach(([id,v])=&gt;$(id).className=&#x27;rounded-xl border p-2.5 text-[10px] font-black &#x27;+(v===m?&#x27;bg-indigo-50 border-indigo-300 text-indigo-700&#x27;:&#x27;bg-white&#x27;));$(&quot;title&quot;).textContent=m===&#x27;OTC&#x27;?&#x27;OTC DIGIT&#x27;:m+&#x27; DIGIT&#x27;;$(&quot;sub&quot;).textContent=m===&#x27;OTC&#x27;?&#x27;OTC • OPEN → CLOSE • TOP 3 / MID 4 / RECENT 3&#x27;:&#x27; &#x27;+m+&#x27; DIGIT • TOP 3 / MID 4 / RECENT 3&#x27;;$(&quot;gridTitle&quot;).textContent=m===&#x27;OTC&#x27;?&#x27;10 OTC DIGIT&#x27;:&#x27;10 &#x27;+m+&#x27; DIGIT&#x27;;calculate()}
+async function load(){$(&quot;status&quot;).textContent=&#x27;Loading Firebase data...&#x27;;const [ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];ms.forEach(d=&gt;{const x=d.data();if(x&amp;&amp;x.name)markets.push(x)});markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));const prev=$(&quot;marketSelect&quot;).value||&#x27;ALL_MERGED&#x27;;$(&quot;marketSelect&quot;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;$(&quot;marketSelect&quot;).appendChild(o)});if([...$(&quot;marketSelect&quot;).options].some(o=&gt;o.value===prev))$(&quot;marketSelect&quot;).value=prev;allRows=[];rs.forEach(d=&gt;{const r=d.data();if(r&amp;&amp;r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;})});calculate()}
+$(&quot;marketSelect&quot;).onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};$(&quot;refreshBtn&quot;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load()};$(&quot;topBtn&quot;).onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};$(&quot;midBtn&quot;).onclick=()=&gt;{view=&#x27;MID&#x27;;render()};$(&quot;recentBtn&quot;).onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};$(&quot;openTab&quot;).onclick=()=&gt;setMode(&#x27;OPEN&#x27;);$(&quot;closeTab&quot;).onclick=()=&gt;setMode(&#x27;CLOSE&#x27;);$(&quot;otcTab&quot;).onclick=()=&gt;setMode(&#x27;OTC&#x27;);load().catch(e=&gt;{$(&quot;status&quot;).textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e)});
+&lt;/script&gt;&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Digit Analysis"></iframe><iframe class="page-frame" id="page-4" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;TOTAL / DIFFERENCE DIGIT&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
 &lt;div class=&quot;bg-white rounded-2xl shadow-sm border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;TOTAL / DIFFERENCE DIGIT&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;TOTAL + DIFFERENCE • 10 DIGITS • Current Delay • Max Delay&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div class=&quot;grid grid-cols-2 gap-2 mt-2&quot;&gt;&lt;button id=&quot;totalMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-indigo-50 border-indigo-300 text-indigo-700&quot;&gt;➕ TOTAL&lt;/button&gt;&lt;button id=&quot;differenceMode&quot; class=&quot;modeBtn rounded-xl border p-2 text-[10px] font-black bg-white border-slate-300&quot;&gt;➖ DIFFERENCE&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;grid grid-cols-3 gap-2&quot;&gt;&lt;button id=&quot;topBtn&quot; class=&quot;rounded-xl bg-orange-500 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;🔥 TOP 3&lt;/div&gt;&lt;div id=&quot;topDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;midBtn&quot; class=&quot;rounded-xl bg-indigo-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;📊 MID 4&lt;/div&gt;&lt;div id=&quot;midDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;button id=&quot;recentBtn&quot; class=&quot;rounded-xl bg-emerald-600 text-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-[10px] font-black&quot;&gt;⚡ RECENT 3&lt;/div&gt;&lt;div id=&quot;recentDelay&quot; class=&quot;text-[9px] font-black mt-1&quot;&gt;DELAY: —&lt;/div&gt;&lt;/button&gt;&lt;/div&gt;
@@ -1021,13 +1057,13 @@ import { initializeApp } from &quot;https://www.gstatic.com/firebasejs/9.6.1/fir
 import { getFirestore, collection, getDocs } from &quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));
-const marketSelect=document.getElementById('marketSelect'),digitGrid=document.getElementById('digitGrid'),statusEl=document.getElementById('status');
-let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view='ALL';
-const digit=v=&gt;{if(v===undefined||v===null||v==='')return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
-let metricMode='TOTAL'; const metricOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return metricMode==='TOTAL'?((o+c)%10):((c-o+10)%10);};
+const marketSelect=document.getElementById(&#x27;marketSelect&#x27;),digitGrid=document.getElementById(&#x27;digitGrid&#x27;),statusEl=document.getElementById(&#x27;status&#x27;);
+let allRows=[],stats={},top10=[],mid10=[],recent10=[],groupDelayState={top:0,mid:0,recent:0},view=&#x27;ALL&#x27;;
+const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null;};
+let metricMode=&#x27;TOTAL&#x27;; const metricOf=r=&gt;{const o=digit(r.openAnk),c=digit(r.closeAnk);if(o===null||c===null)return null;return metricMode===&#x27;TOTAL&#x27;?((o+c)%10):((c-o+10)%10);};
 const timeMin=s=&gt;{if(!s)return 1439;const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1])*60+parseInt(m[2]):1439;};
-function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||'').localeCompare(String(b.marketName||'')));}
-async function load(){statusEl.textContent='Loading Firebase data...';const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;';markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement('option');o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'});});calculate();}
+function sortRows(rows){return rows.slice().sort((a,b)=&gt;new Date(a.date)-new Date(b.date)||timeMin(a.openTime)-timeMin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)));}
+async function load(){statusEl.textContent=&#x27;Loading Firebase data...&#x27;;const [mSnap,rSnap]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);const markets=[];mSnap.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;timeMin(a.openTime)-timeMin(b.openTime));marketSelect.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;;markets.forEach(m=&gt;{if(!m.name)return;const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;marketSelect.appendChild(o);});allRows=[];rSnap.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName)allRows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;});});calculate();}
 function makeStats(history){const n=history.length,keys=Array.from({length:10},(_,i)=&gt;String(i)),a=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));history.forEach((r,i)=&gt;{const d=metricOf(r);if(d!==null){a[d].occ.push(i);a[d].lastSeen=i;a[d].count++;}});keys.forEach(k=&gt;{const x=a[k],o=x.occ;x.currentDelay=o.length?n-1-o[o.length-1]:n;let gaps=o.length?[o[0]]:[n];for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);if(o.length)gaps.push(n-1-o[o.length-1]);x.maxDelay=Math.max(0,...gaps);});return a;}
 function calculate(){
  const selected=marketSelect.value||&quot;ALL_MERGED&quot;;
@@ -1111,9 +1147,18 @@ function calculate(){
  statusEl.textContent=`${rows.length} completed games • ${metricMode} • TOP 3 / MID 4 / RECENT 3 • DYNAMIC GROUP DELAY`;
 }
 
-function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view==='TOP')list=top10;if(view==='MID')list=mid10;if(view==='RECENT')list=recent10;document.getElementById('filterLabel').textContent=view==='ALL'?'ALL 10':view+' '+list.length;document.getElementById('topDelay').textContent=`DELAY: ${groupDelayState.top}`;document.getElementById('midDelay').textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById('recentDelay').textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML='';list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?'border-orange-400 bg-orange-50':midSet.has(x.jodi)?'border-indigo-400 bg-indigo-50':recentSet.has(x.jodi)?'border-emerald-400 bg-emerald-50':'border-slate-200 bg-slate-50';const b=document.createElement('div');b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
-function setMetricMode(m){metricMode=m;document.getElementById('totalMode').className='modeBtn rounded-xl border p-2 text-[10px] font-black '+(m==='TOTAL'?'bg-indigo-50 border-indigo-300 text-indigo-700':'bg-white border-slate-300');document.getElementById('differenceMode').className='modeBtn rounded-xl border p-2 text-[10px] font-black '+(m==='DIFFERENCE'?'bg-indigo-50 border-indigo-300 text-indigo-700':'bg-white border-slate-300');document.getElementById('metricTitle').textContent=m==='TOTAL'?'10 TOTAL DIGIT':'10 DIFFERENCE DIGIT';view='ALL';calculate()}document.getElementById('totalMode').onclick=()=&gt;setMetricMode('TOTAL');document.getElementById('differenceMode').onclick=()=&gt;setMetricMode('DIFFERENCE');
-marketSelect.onchange=()=&gt;{view='ALL';calculate()};document.getElementById('refreshBtn').onclick=async()=&gt;{view='ALL';await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view='TOP';render()};midBtn.onclick=()=&gt;{view='MID';render()};recentBtn.onclick=()=&gt;{view='RECENT';render()};load().catch(e=&gt;{statusEl.textContent='ERROR: '+(e.message||e);console.error(e);});
+function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;document.getElementById(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;document.getElementById(&#x27;topDelay&#x27;).textContent=`DELAY: ${groupDelayState.top}`;document.getElementById(&#x27;midDelay&#x27;).textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById(&#x27;recentDelay&#x27;).textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
+function setMetricMode(m){metricMode=m;document.getElementById(&#x27;totalMode&#x27;).className=&#x27;modeBtn rounded-xl border p-2 text-[10px] font-black &#x27;+(m===&#x27;TOTAL&#x27;?&#x27;bg-indigo-50 border-indigo-300 text-indigo-700&#x27;:&#x27;bg-white border-slate-300&#x27;);document.getElementById(&#x27;differenceMode&#x27;).className=&#x27;modeBtn rounded-xl border p-2 text-[10px] font-black &#x27;+(m===&#x27;DIFFERENCE&#x27;?&#x27;bg-indigo-50 border-indigo-300 text-indigo-700&#x27;:&#x27;bg-white border-slate-300&#x27;);document.getElementById(&#x27;metricTitle&#x27;).textContent=m===&#x27;TOTAL&#x27;?&#x27;10 TOTAL DIGIT&#x27;:&#x27;10 DIFFERENCE DIGIT&#x27;;view=&#x27;ALL&#x27;;calculate()}document.getElementById(&#x27;totalMode&#x27;).onclick=()=&gt;setMetricMode(&#x27;TOTAL&#x27;);document.getElementById(&#x27;differenceMode&#x27;).onclick=()=&gt;setMetricMode(&#x27;DIFFERENCE&#x27;);
+marketSelect.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};document.getElementById(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};midBtn.onclick=()=&gt;{view=&#x27;MID&#x27;;render()};recentBtn.onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
+&lt;/script&gt;&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" title="Total / Difference Digit"></iframe><iframe class="page-frame" id="page-5" srcdoc='&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
@@ -1369,15 +1414,15 @@ load();
 import{initializeApp}from&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js&quot;;import{getFirestore,collection,getDocs}from&quot;https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js&quot;;
 const firebaseConfig={apiKey:&quot;AIzaSyC7lVQlcPhEGv2V-UwlQ7d6Dq-eXb8boqQ&quot;,authDomain:&quot;m-record-f9c51.firebaseapp.com&quot;,projectId:&quot;m-record-f9c51&quot;,storageBucket:&quot;m-record-f9c51.firebasestorage.app&quot;,messagingSenderId:&quot;479303152172&quot;,appId:&quot;1:479303152172:web:3cc53dcecc9e8ce1ebd789&quot;};
 const db=getFirestore(initializeApp(firebaseConfig));const $=id=&gt;document.getElementById(id);let rows=[],markets=[],winner=null,selectedDigit=null;
-const dig=v=&gt;{if(v===undefined||v===null||v==='')return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
-const tmin=v=&gt;{let m=String(v||'').match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate==='function')return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
+const dig=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
+const tmin=v=&gt;{let m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
+const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
 function sort(a){return a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
 function completed(r){return dig(r.openAnk)!==null&amp;&amp;dig(r.closeAnk)!==null}
-function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side==='OPEN'?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side==='OPEN'?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
+function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
 function follow(h,side){
- const field=side==='OPEN'?'openAnk':'closeAnk';
- const digit=v=&gt;{if(v===undefined||v===null||v==='')return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null};
+ const field=side===&#x27;OPEN&#x27;?&#x27;openAnk&#x27;:&#x27;closeAnk&#x27;;
+ const digit=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null};
  const statsFor=history=&gt;{const n=history.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));history.forEach((r,i)=&gt;{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;x.delay=x.last&gt;=0?n-1-x.last:n);return a};
  const rank=history=&gt;statsFor(history).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
  const uniq=arr=&gt;{const out=[];for(const x of arr){if(x&amp;&amp;!out.some(y=&gt;y.d===x.d))out.push(x)}return out};
@@ -1385,12 +1430,12 @@ function follow(h,side){
  const previous=rank(h.slice(0,-1));
  let top=previous.slice(0,3), mid=previous.slice(3,7), recent=previous.slice(7,10);
  const hit=h.length?digit(h[h.length-1][field]):null;
- const source=hit!==null?(top.some(x=&gt;x.d===hit)?'TOP':mid.some(x=&gt;x.d===hit)?'MID':recent.some(x=&gt;x.d===hit)?'RECENT':'NONE'):'NONE';
+ const source=hit!==null?(top.some(x=&gt;x.d===hit)?&#x27;TOP&#x27;:mid.some(x=&gt;x.d===hit)?&#x27;MID&#x27;:recent.some(x=&gt;x.d===hit)?&#x27;RECENT&#x27;:&#x27;NONE&#x27;):&#x27;NONE&#x27;;
 
  // Sequence movement is independent from group counters.
  // TOP hit: TOP -&gt; RECENT, RECENT -&gt; MID, MID -&gt; TOP.
  // The hit digit is removed from TOP and inserted into RECENT.
- if(source==='TOP'){
+ if(source===&#x27;TOP&#x27;){
    const hitObj=top.find(x=&gt;x.d===hit);
    top=top.filter(x=&gt;x.d!==hit);
    const rToMid=most(recent,[hit]);
@@ -1402,7 +1447,7 @@ function follow(h,side){
    if(hitObj) recent=uniq([...recent,hitObj]);
  }
  // MID hit: hit goes to RECENT; the most-delayed RECENT digit goes to MID.
- else if(source==='MID'){
+ else if(source===&#x27;MID&#x27;){
    const hitObj=mid.find(x=&gt;x.d===hit);
    mid=mid.filter(x=&gt;x.d!==hit);
    const rToMid=most(recent,[hit]);
@@ -1411,7 +1456,7 @@ function follow(h,side){
    if(hitObj) recent=uniq([...recent,hitObj]);
  }
  // RECENT hit stays in RECENT. No duplicate insertion.
- else if(source==='RECENT'){
+ else if(source===&#x27;RECENT&#x27;){
    recent=uniq(recent);
  }
 
@@ -1424,18 +1469,18 @@ function follow(h,side){
  // Group delay counters are separate from individual digit delay.
  let delay={top:0,mid:0,recent:0};
  if(h.length&gt;1)delay=follow(h.slice(0,-1),side).delay;
- delay=source==='TOP'?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
-       source==='MID'?{top:delay.top+1,mid:0,recent:delay.recent+1}:
-       source==='RECENT'?{top:delay.top+1,mid:delay.mid+1,recent:0}:
+ delay=source===&#x27;TOP&#x27;?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
+       source===&#x27;MID&#x27;?{top:delay.top+1,mid:0,recent:delay.recent+1}:
+       source===&#x27;RECENT&#x27;?{top:delay.top+1,mid:delay.mid+1,recent:0}:
        {top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};
  return {top,mid,recent,delay};
 }
-function scopeGroups(h,side){let f=follow(h,side);return[{name:'TOP',digits:f.top,delay:f.delay.top},{name:'MID',digits:f.mid,delay:f.delay.mid},{name:'RECENT',digits:f.recent,delay:f.delay.recent}]}
+function scopeGroups(h,side){let f=follow(h,side);return[{name:&#x27;TOP&#x27;,digits:f.top,delay:f.delay.top},{name:&#x27;MID&#x27;,digits:f.mid,delay:f.delay.mid},{name:&#x27;RECENT&#x27;,digits:f.recent,delay:f.delay.recent}]}
 function familyKey(j){const G={&quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],&quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],&quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],&quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],&quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],&quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],&quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],&quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],&quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],&quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],&quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],&quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],&quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],&quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],&quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]};for(const [k,v] of Object.entries(G))if(v.includes(j))return k;return null}
 function mergedJodiStats(){
  let h=sort(rows.filter(completed)),n=h.length;
- const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,'0'));
- const j=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:'',oeDelay:n,fam:familyKey(k),famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,score:0,parts:{}}]));
+ const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));
+ const j=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:&#x27;&#x27;,oeDelay:n,fam:familyKey(k),famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,score:0,parts:{}}]));
  const totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),oeOcc={OO:[],OE:[],EO:[],EE:[]},famOcc={};
  const recentN=Math.min(30,n), recentStart=Math.max(0,n-recentN);
  const recentCounts=Object.fromEntries(keys.map(k=&gt;[k,0]));
@@ -1443,7 +1488,7 @@ function mergedJodiStats(){
    const o=dig(r.openAnk),c=dig(r.closeAnk); if(o===null||c===null)return;
    const jd=String(o)+String(c),s=j[jd]; s.last=i;s.hits++;
    if(i&gt;=recentStart)s.recentHits++;
-   const t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?'O':'E')+(c%2?'O':'E');
+   const t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?&#x27;O&#x27;:&#x27;E&#x27;)+(c%2?&#x27;O&#x27;:&#x27;E&#x27;);
    totalOcc[t].push(i);diffOcc[d].push(i);(oeOcc[oe]||(oeOcc[oe]=[])).push(i);
    const fk=familyKey(jd); if(fk){(famOcc[fk]||(famOcc[fk]=[])).push(i)}
  });
@@ -1464,7 +1509,7 @@ function mergedJodiStats(){
    s.avgGap=gaps.length?gaps.reduce((a,b)=&gt;a+b,0)/gaps.length:n;
    s.repeatGap=gaps.length?gaps[gaps.length-1]:n;
    const rk=k[1]+k[0];s.reverseDelay=j[rk]?.last&gt;=0?n-1-j[rk].last:n;
-   s.delay=s.last&gt;=0?n-1-s.last:n;s.total=(Number(k[0])+Number(k[1]))%10;s.totalDelay=td[s.total].delay;s.diff=(Number(k[1])-Number(k[0])+10)%10;s.diffDelay=dd[s.diff].delay;s.oe=(Number(k[0])%2?'O':'E')+(Number(k[1])%2?'O':'E');s.oeDelay=od[s.oe]?.delay??n;s.famDelay=fd[s.fam]??n;
+   s.delay=s.last&gt;=0?n-1-s.last:n;s.total=(Number(k[0])+Number(k[1]))%10;s.totalDelay=td[s.total].delay;s.diff=(Number(k[1])-Number(k[0])+10)%10;s.diffDelay=dd[s.diff].delay;s.oe=(Number(k[0])%2?&#x27;O&#x27;:&#x27;E&#x27;)+(Number(k[1])%2?&#x27;O&#x27;:&#x27;E&#x27;);s.oeDelay=od[s.oe]?.delay??n;s.famDelay=fd[s.fam]??n;
    let gaps2=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps2.push(occ[i]-occ[i-1]-1);if(occ.length)gaps2.push(n-1-occ[occ.length-1]);s.maxDelay=Math.max(0,...gaps2);
  }
  return j;
@@ -1479,8 +1524,8 @@ function scoreJodis(st){
  const nd=norm(arr.map(x=&gt;x.delay),true),nr=norm(arr.map(x=&gt;x.recentHits),true),nf=norm(arr.map(x=&gt;x.hits),true),no=norm(arr.map(x=&gt;x.delayOpen),true),nc=norm(arr.map(x=&gt;x.delayClose),true),nt=norm(arr.map(x=&gt;x.totalDelay),true),nq=norm(arr.map(x=&gt;x.diffDelay),true),nfa=norm(arr.map(x=&gt;x.famDelay),true),np=norm(arr.map(x=&gt;x.pairMetric),true);
  arr.forEach(x=&gt;{
    const openDigit=Number(x.jodi[0]),closeDigit=Number(x.jodi[1]);
-   x.delayOpen=st['00']?digitDelayFromHistory(openDigit,'OPEN'):x.delayOpen;
-   x.delayClose=st['00']?digitDelayFromHistory(closeDigit,'CLOSE'):x.delayClose;
+   x.delayOpen=st[&#x27;00&#x27;]?digitDelayFromHistory(openDigit,&#x27;OPEN&#x27;):x.delayOpen;
+   x.delayClose=st[&#x27;00&#x27;]?digitDelayFromHistory(closeDigit,&#x27;CLOSE&#x27;):x.delayClose;
  });
  // Rebuild normalizers after Open/Close delay values are attached.
  const oN=norm(arr.map(x=&gt;x.delayOpen),true),cN=norm(arr.map(x=&gt;x.delayClose),true),pN=norm(arr.map(x=&gt;x.pairMetric),true);
@@ -1494,7 +1539,7 @@ function scoreJodis(st){
  return arr;
 }
 function digitDelayFromHistory(d,side){
- const field=side==='OPEN'?'openAnk':'closeAnk',h=sort(rows.filter(completed));let last=-1;h.forEach((r,i)=&gt;{if(dig(r[field])===d)last=i});return last&gt;=0?h.length-1-last:h.length;
+ const field=side===&#x27;OPEN&#x27;?&#x27;openAnk&#x27;:&#x27;closeAnk&#x27;,h=sort(rows.filter(completed));let last=-1;h.forEach((r,i)=&gt;{if(dig(r[field])===d)last=i});return last&gt;=0?h.length-1-last:h.length;
 }
 function prepareJodiRanking(st){
  const arr=Object.values(st);
@@ -1503,38 +1548,47 @@ function prepareJodiRanking(st){
  return arr.sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||b.hits-a.hits||a.jodi.localeCompare(b.jodi));
 }
 function calculate(){
- let selected=$('marketSelect').value||'ALL_MERGED';
- // DIGIT PLAY uses only the selected market's own completed history.
+ let selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;
+ // DIGIT PLAY uses only the selected market&#x27;s own completed history.
  // ALL_MERGED is one merged dataset when manually selected.
  // Exactly 6 groups are compared: OPEN TOP/MID/RECENT + CLOSE TOP/MID/RECENT.
- let marketRows=sort(rows.filter(completed).filter(r=&gt;selected==='ALL_MERGED'||r.marketName===selected));
+ let marketRows=sort(rows.filter(completed).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));
  let candidates=[];
- for(const side of ['OPEN','CLOSE']){
+ for(const side of [&#x27;OPEN&#x27;,&#x27;CLOSE&#x27;]){
    const g=scopeGroups(marketRows,side);
-   for(const b of g)candidates.push({side,scope:selected==='ALL_MERGED'?'ALL_MERGED':'MARKET',name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&gt;x.maxDelay))});
+   for(const b of g)candidates.push({side,scope:selected===&#x27;ALL_MERGED&#x27;?&#x27;ALL_MERGED&#x27;:&#x27;MARKET&#x27;,name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&gt;x.maxDelay))});
  }
  winner=candidates.slice().sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||a.side.localeCompare(b.side)||a.name.localeCompare(b.name))[0]||null;
  renderWinner();renderJodi();
 }
 
 function renderWinner(){
- if(!winner){$('winnerSide').textContent='NO DATA';$('winnerCard').innerHTML='&lt;div class=&quot;py-5 text-center text-[10px] font-bold text-slate-400&quot;&gt;No completed data found&lt;/div&gt;';$('digitButtons').innerHTML='';return}
- let open=winner.side==='OPEN';$('winnerSide').textContent=open?'OPEN SIDE':'CLOSE SIDE';$('winnerSide').className='px-2.5 py-1 rounded-lg text-[9px] font-black '+(open?'bg-indigo-100 text-indigo-700':'bg-rose-100 text-rose-700');
- $('winnerCard').innerHTML=`&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black ${open?'text-indigo-600':'text-rose-600'}&quot;&gt;MAXIMUM DELAYED GROUP&lt;/div&gt;&lt;div class=&quot;text-xl font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${winner.name}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;${winner.scope==='MARKET'?'SELECTED MARKET':'ALL MARKETS'} • GROUP DELAY ${winner.delay} • MAX DELAY ${winner.maxDelay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;PLAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${open?'OPEN':'CLOSE'}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;
- $('digitButtons').innerHTML=winner.digits.map(x=&gt;`&lt;button data-d=&quot;${x.d}&quot; class=&quot;winDigit rounded-xl border-2 ${open?'border-indigo-200':'border-rose-200'} bg-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-xl font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${x.d}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-slate-600&quot;&gt;DELAY ${x.delay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;MAX ${x.maxDelay}&lt;/div&gt;&lt;/button&gt;`).join('');
- document.querySelectorAll('.winDigit').forEach(b=&gt;b.onclick=()=&gt;{selectedDigit=Number(b.dataset.d);document.querySelectorAll('.winDigit').forEach(x=&gt;x.classList.remove('ring-2','ring-indigo-500','ring-rose-500'));b.classList.add('ring-2',open?'ring-indigo-500':'ring-rose-500');renderJodi()});
+ if(!winner){$(&#x27;winnerSide&#x27;).textContent=&#x27;NO DATA&#x27;;$(&#x27;winnerCard&#x27;).innerHTML=&#x27;&lt;div class=&quot;py-5 text-center text-[10px] font-bold text-slate-400&quot;&gt;No completed data found&lt;/div&gt;&#x27;;$(&#x27;digitButtons&#x27;).innerHTML=&#x27;&#x27;;return}
+ let open=winner.side===&#x27;OPEN&#x27;;$(&#x27;winnerSide&#x27;).textContent=open?&#x27;OPEN SIDE&#x27;:&#x27;CLOSE SIDE&#x27;;$(&#x27;winnerSide&#x27;).className=&#x27;px-2.5 py-1 rounded-lg text-[9px] font-black &#x27;+(open?&#x27;bg-indigo-100 text-indigo-700&#x27;:&#x27;bg-rose-100 text-rose-700&#x27;);
+ $(&#x27;winnerCard&#x27;).innerHTML=`&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black ${open?&#x27;text-indigo-600&#x27;:&#x27;text-rose-600&#x27;}&quot;&gt;MAXIMUM DELAYED GROUP&lt;/div&gt;&lt;div class=&quot;text-xl font-black ${open?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${winner.name}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;${winner.scope===&#x27;MARKET&#x27;?&#x27;SELECTED MARKET&#x27;:&#x27;ALL MARKETS&#x27;} • GROUP DELAY ${winner.delay} • MAX DELAY ${winner.maxDelay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;PLAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black ${open?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${open?&#x27;OPEN&#x27;:&#x27;CLOSE&#x27;}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;
+ $(&#x27;digitButtons&#x27;).innerHTML=winner.digits.map(x=&gt;`&lt;button data-d=&quot;${x.d}&quot; class=&quot;winDigit rounded-xl border-2 ${open?&#x27;border-indigo-200&#x27;:&#x27;border-rose-200&#x27;} bg-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-xl font-black ${open?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${x.d}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-slate-600&quot;&gt;DELAY ${x.delay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;MAX ${x.maxDelay}&lt;/div&gt;&lt;/button&gt;`).join(&#x27;&#x27;);
+ document.querySelectorAll(&#x27;.winDigit&#x27;).forEach(b=&gt;b.onclick=()=&gt;{selectedDigit=Number(b.dataset.d);document.querySelectorAll(&#x27;.winDigit&#x27;).forEach(x=&gt;x.classList.remove(&#x27;ring-2&#x27;,&#x27;ring-indigo-500&#x27;,&#x27;ring-rose-500&#x27;));b.classList.add(&#x27;ring-2&#x27;,open?&#x27;ring-indigo-500&#x27;:&#x27;ring-rose-500&#x27;);renderJodi()});
 }
 function renderJodi(){
- if(!winner){$('jodiWindow').innerHTML='';return}
+ if(!winner){$(&#x27;jodiWindow&#x27;).innerHTML=&#x27;&#x27;;return}
  const st=mergedJodiStats();const ranked=prepareJodiRanking(st),digits=winner.digits.map(x=&gt;x.d),side=winner.side;
- const arr=ranked.filter(x=&gt;digits.includes(side==='OPEN'?Number(x.jodi[0]):Number(x.jodi[1])));
- const byDigit=new Map();for(const d of digits)byDigit.set(d,arr.filter(x=&gt;(side==='OPEN'?Number(x.jodi[0]):Number(x.jodi[1]))===d));
+ const arr=ranked.filter(x=&gt;digits.includes(side===&#x27;OPEN&#x27;?Number(x.jodi[0]):Number(x.jodi[1])));
+ const byDigit=new Map();for(const d of digits)byDigit.set(d,arr.filter(x=&gt;(side===&#x27;OPEN&#x27;?Number(x.jodi[0]):Number(x.jodi[1]))===d));
  let all=[];for(const d of digits)all.push(...(byDigit.get(d)||[]).slice(0,3));if(selectedDigit!==null)all=(byDigit.get(selectedDigit)||[]).slice(0,3);
- $('filterLabel').textContent=selectedDigit===null?'ALL WINNING-DIGIT JODI':`${side} DIGIT ${selectedDigit} • FILTERED JODI`;
- $('jodiWindow').innerHTML=all.length?`&lt;div class=&quot;grid grid-cols-3 sm:grid-cols-6 gap-1.5&quot;&gt;${all.map((x,i)=&gt;`&lt;div class=&quot;rounded-lg border ${side==='OPEN'?'border-indigo-200 bg-indigo-50':'border-rose-200 bg-rose-50'} p-2 text-center&quot;&gt;&lt;div class=&quot;flex items-center justify-between&quot;&gt;&lt;span class=&quot;text-[7px] font-black text-slate-400&quot;&gt;#${i+1}&lt;/span&gt;&lt;span class=&quot;text-[8px] font-black text-emerald-600&quot;&gt;${x.score.toFixed(1)}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-sm font-black ${side==='OPEN'?'text-indigo-700':'text-rose-700'}&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-500&quot;&gt;J ${x.delay} • F ${x.hits} • R ${x.recentHits}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;O ${x.delayOpen} • C ${x.delayClose}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;T ${x.totalDelay} • D ${x.diffDelay} • FAM ${x.famDelay}&lt;/div&gt;&lt;/div&gt;`).join('')}&lt;/div&gt;`:'&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;No filtered Jodi found&lt;/div&gt;';
+ $(&#x27;filterLabel&#x27;).textContent=selectedDigit===null?&#x27;ALL WINNING-DIGIT JODI&#x27;:`${side} DIGIT ${selectedDigit} • FILTERED JODI`;
+ $(&#x27;jodiWindow&#x27;).innerHTML=all.length?`&lt;div class=&quot;grid grid-cols-3 sm:grid-cols-6 gap-1.5&quot;&gt;${all.map((x,i)=&gt;`&lt;div class=&quot;rounded-lg border ${side===&#x27;OPEN&#x27;?&#x27;border-indigo-200 bg-indigo-50&#x27;:&#x27;border-rose-200 bg-rose-50&#x27;} p-2 text-center&quot;&gt;&lt;div class=&quot;flex items-center justify-between&quot;&gt;&lt;span class=&quot;text-[7px] font-black text-slate-400&quot;&gt;#${i+1}&lt;/span&gt;&lt;span class=&quot;text-[8px] font-black text-emerald-600&quot;&gt;${x.score.toFixed(1)}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-sm font-black ${side===&#x27;OPEN&#x27;?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-500&quot;&gt;J ${x.delay} • F ${x.hits} • R ${x.recentHits}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;O ${x.delayOpen} • C ${x.delayClose}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;T ${x.totalDelay} • D ${x.diffDelay} • FAM ${x.famDelay}&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;`:&#x27;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;No filtered Jodi found&lt;/div&gt;&#x27;;
 }
-async function load(){try{$('status').textContent='Loading Firebase data...';let[ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$('marketSelect').value||'ALL_MERGED';$('marketSelect').innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,'&amp;quot;')}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join('');if(markets.some(m=&gt;m.name===old))$('marketSelect').value=old;rows=[];rs.forEach(d=&gt;{let r=d.data();if(r.date&amp;&amp;r.marketName)rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'})});rows=sort(rows);selectedDigit=null;calculate();$('status').textContent=`${rows.filter(completed).length} completed games • 6 group comparison • MARKET-WISE DIGIT DELAY • MULTI-FACTOR JODI RANKING`;}catch(e){console.error(e);$('status').textContent='ERROR: '+(e.message||e)}}
-$('marketSelect').onchange=()=&gt;{selectedDigit=null;calculate()};$('refreshBtn').onclick=()=&gt;load();load();
+async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;let[ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;rows=[];rs.forEach(d=&gt;{let r=d.data();if(r.date&amp;&amp;r.marketName)rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;})});rows=sort(rows);selectedDigit=null;calculate();$(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed games • 6 group comparison • MARKET-WISE DIGIT DELAY • MULTI-FACTOR JODI RANKING`;}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e)}}
+$(&#x27;marketSelect&#x27;).onchange=()=&gt;{selectedDigit=null;calculate()};$(&#x27;refreshBtn&#x27;).onclick=()=&gt;load();load();
+&lt;/script&gt;&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Play Result Test"></iframe><iframe class="page-frame" id="page-9" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
@@ -1639,13 +1693,13 @@ function sortMarkets(){markets.sort((a,b)=&gt;String(a.openTime||&quot;23:59&quo
 function fillMarkets(){
  sortMarkets();
  let cur=$(&quot;market&quot;).value;
- $(&quot;market&quot;).innerHTML='&lt;option value=&quot;&quot;&gt;SELECT MARKET&lt;/option&gt;';
+ $(&quot;market&quot;).innerHTML=&#x27;&lt;option value=&quot;&quot;&gt;SELECT MARKET&lt;/option&gt;&#x27;;
  markets.forEach(m=&gt;{let o=document.createElement(&quot;option&quot;);o.value=m.name;o.textContent=(m.openTime||&quot;--:--&quot;)+&quot;  •  &quot;+m.name;$(&quot;market&quot;).appendChild(o)});
  if(markets.some(m=&gt;m.name===cur))$(&quot;market&quot;).value=cur;
  fillEdit();
 }
 function fillEdit(){
- $(&quot;editMarket&quot;).innerHTML='&lt;option value=&quot;&quot;&gt;NEW MARKET&lt;/option&gt;';
+ $(&quot;editMarket&quot;).innerHTML=&#x27;&lt;option value=&quot;&quot;&gt;NEW MARKET&lt;/option&gt;&#x27;;
  markets.forEach(m=&gt;{let o=document.createElement(&quot;option&quot;);o.value=m.id;o.textContent=(m.openTime||&quot;--:--&quot;)+&quot; • &quot;+m.name;$(&quot;editMarket&quot;).appendChild(o)});
 }
 async function loadMarkets(){
@@ -1667,8 +1721,8 @@ async function loadRecords(){
 }
 function render(){
  $(&quot;count&quot;).textContent=records.length+&quot; RECORDS&quot;;$(&quot;records&quot;).innerHTML=&quot;&quot;;if(records.length&gt;1){$(&quot;status&quot;).textContent=&quot;⚠ DUPLICATE ENTRIES FOUND — MODIFY CORRECT ONE OR DELETE WRONG ENTRY&quot;;$(&quot;status&quot;).className=&quot;text-center text-[10px] font-black min-h-4 text-red-600&quot;} 
- if(!records.length){$(&quot;records&quot;).innerHTML='&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;NO RECORDS&lt;/div&gt;';return}
- records.forEach(r=&gt;{let d=document.createElement(&quot;div&quot;);d.className=&quot;rounded-xl bg-slate-50 border border-slate-200 p-3&quot;;d.innerHTML='&lt;div class=&quot;flex justify-between items-start gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black&quot;&gt;&lt;span class=&quot;text-indigo-700&quot;&gt;'+(r.openPana||&quot;—&quot;)+'&lt;/span&gt; &lt;span class=&quot;text-slate-400&quot;&gt;→&lt;/span&gt; &lt;span class=&quot;text-rose-700&quot;&gt;'+(r.closePana||&quot;—&quot;)+'&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400&quot;&gt;Open Ank: '+(r.openAnk??&quot;—&quot;)+' • Close Ank: '+(r.closeAnk??&quot;—&quot;)+'&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;font-black text-xs&quot;&gt;JODI '+(r.jodi||&quot;—&quot;)+'&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 gap-2 mt-2&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;rounded-lg bg-indigo-600 text-white py-2 text-[10px] font-black&quot; data-edit=&quot;'+r.id+'&quot;&gt;✏ MODIFY&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rounded-lg bg-rose-600 text-white py-2 text-[10px] font-black&quot; data-delete=&quot;'+r.id+'&quot;&gt;🗑 DELETE&lt;/button&gt;&lt;/div&gt;';$(&quot;records&quot;).appendChild(d)});document.querySelectorAll(&quot;[data-edit]&quot;).forEach(b=&gt;b.onclick=()=&gt;editRecord(b.dataset.edit));document.querySelectorAll(&quot;[data-delete]&quot;).forEach(b=&gt;b.onclick=()=&gt;deleteRecord(b.dataset.delete));
+ if(!records.length){$(&quot;records&quot;).innerHTML=&#x27;&lt;div class=&quot;text-center text-[10px] text-slate-400 py-4&quot;&gt;NO RECORDS&lt;/div&gt;&#x27;;return}
+ records.forEach(r=&gt;{let d=document.createElement(&quot;div&quot;);d.className=&quot;rounded-xl bg-slate-50 border border-slate-200 p-3&quot;;d.innerHTML=&#x27;&lt;div class=&quot;flex justify-between items-start gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black&quot;&gt;&lt;span class=&quot;text-indigo-700&quot;&gt;&#x27;+(r.openPana||&quot;—&quot;)+&#x27;&lt;/span&gt; &lt;span class=&quot;text-slate-400&quot;&gt;→&lt;/span&gt; &lt;span class=&quot;text-rose-700&quot;&gt;&#x27;+(r.closePana||&quot;—&quot;)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400&quot;&gt;Open Ank: &#x27;+(r.openAnk??&quot;—&quot;)+&#x27; • Close Ank: &#x27;+(r.closeAnk??&quot;—&quot;)+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;font-black text-xs&quot;&gt;JODI &#x27;+(r.jodi||&quot;—&quot;)+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 gap-2 mt-2&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;rounded-lg bg-indigo-600 text-white py-2 text-[10px] font-black&quot; data-edit=&quot;&#x27;+r.id+&#x27;&quot;&gt;✏ MODIFY&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rounded-lg bg-rose-600 text-white py-2 text-[10px] font-black&quot; data-delete=&quot;&#x27;+r.id+&#x27;&quot;&gt;🗑 DELETE&lt;/button&gt;&lt;/div&gt;&#x27;;$(&quot;records&quot;).appendChild(d)});document.querySelectorAll(&quot;[data-edit]&quot;).forEach(b=&gt;b.onclick=()=&gt;editRecord(b.dataset.edit));document.querySelectorAll(&quot;[data-delete]&quot;).forEach(b=&gt;b.onclick=()=&gt;deleteRecord(b.dataset.delete));
 }
 function clearEdit(){editingId=null;$(&quot;saveOpen&quot;).textContent=&quot;SAVE OPEN&quot;;$(&quot;saveClose&quot;).textContent=&quot;SAVE CLOSE&quot;}
 function editRecord(id){const r=records.find(x=&gt;x.id===id);if(!r)return;editingId=id;$(&quot;date&quot;).value=r.date||$(&quot;date&quot;).value;$(&quot;market&quot;).value=r.marketName||$(&quot;market&quot;).value;$(&quot;openPanna&quot;).value=r.openPana||&quot;&quot;;$(&quot;closePanna&quot;).value=r.closePana||&quot;&quot;;updatePreview();$(&quot;saveOpen&quot;).textContent=&quot;UPDATE OPEN&quot;;$(&quot;saveClose&quot;).textContent=&quot;UPDATE CLOSE&quot;;switchMode(r.closePana?&quot;close&quot;:&quot;open&quot;);msg(&quot;✏ MODIFY MODE — WRONG ENTRY CORRECT કરો&quot;);window.scrollTo({top:0,behavior:&quot;smooth&quot;})}
@@ -1705,7 +1759,16 @@ $(&quot;deleteMarket&quot;).onclick=async()=&gt;{
 };
 try{await loadMarkets();await loadRecords();$(&quot;openPanna&quot;).focus()}catch(e){msg(&quot;ERROR: &quot;+(e.message||e),1)}
 &lt;/script&gt;
-&lt;/body&gt;
+&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
+&lt;/script&gt;&lt;/body&gt;
 &lt;/html&gt;" style="display:none" title="Panna Logger"></iframe></main>
 </div>
 <iframe class="page-frame" id="page-11" srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;BACKTEST&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
@@ -1734,6 +1797,15 @@ function formatDate(v){if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)retu
 function runBacktest(){const selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;let all=sort(rows.filter(completed));let targets=selected===&#x27;ALL_MERGED&#x27;?all:all.filter(r=&gt;r.marketName===selected);let limit=$(&#x27;windowSelect&#x27;).value;targets=limit===&#x27;ALL&#x27;?targets:targets.slice(-Number(limit));const out=[];for(const target of targets){const idx=all.indexOf(target);const history=all.slice(0,idx);const training=selected===&#x27;ALL_MERGED&#x27;?history:history.filter(r=&gt;r.marketName===selected);const play=playAt(training);if(!play)continue;const actual=String(dig(target.openAnk))+String(dig(target.closeAnk));const hit=play.shortlist.includes(actual);out.push({target,play,actual,hit})}const hits=out.filter(x=&gt;x.hit).length,miss=out.length-hits;$(&#x27;tests&#x27;).textContent=out.length;$(&#x27;hits&#x27;).textContent=hits;$(&#x27;misses&#x27;).textContent=miss;$(&#x27;rate&#x27;).textContent=out.length?((hits/out.length)*100).toFixed(1)+&#x27;%&#x27;:&#x27;-&#x27;;$(&#x27;resultLabel&#x27;).textContent=`${out.length} historical games checked`;$(&#x27;status&#x27;).textContent=`${all.length} completed games available • ${selected===&#x27;ALL_MERGED&#x27;?&#x27;merged history&#x27;:&#x27;selected-market history&#x27;} • Play logic replayed without target-game data`;if(!out.length){$(&#x27;results&#x27;).innerHTML=&#x27;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Not enough history to run the selected backtest.&lt;/div&gt;&#x27;;return}$(&#x27;results&#x27;).innerHTML=out.slice().reverse().map((x,i)=&gt;{const w=x.play.winner;const date=formatDate(x.target.date);const market=String(x.target.marketName||&#x27;&#x27;);const side=w.side;const cls=x.hit?&#x27;border-emerald-200 bg-emerald-50&#x27;:&#x27;border-rose-200 bg-rose-50&#x27;;const badge=x.hit?&#x27;HIT&#x27;:&#x27;MISS&#x27;;const color=x.hit?&#x27;text-emerald-700&#x27;:&#x27;text-rose-700&#x27;;return `&lt;div class=&quot;rounded-xl border ${cls} p-2.5&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-500&quot;&gt;${date} • ${market}&lt;/div&gt;&lt;div class=&quot;px-2 py-1 rounded-lg bg-white ${color} text-[8px] font-black&quot;&gt;${badge}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-1 grid grid-cols-2 gap-1 text-[8px] font-bold&quot;&gt;&lt;div&gt;PLAY: &lt;b class=&quot;${side===&#x27;OPEN&#x27;?&#x27;text-indigo-700&#x27;:&#x27;text-rose-700&#x27;}&quot;&gt;${side}&lt;/b&gt; • GROUP &lt;b&gt;${w.name}&lt;/b&gt; • DELAY &lt;b&gt;${w.delay}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;ACTUAL JODI: &lt;b class=&quot;text-slate-900 text-sm&quot;&gt;${x.actual}&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-1 text-[8px] font-bold text-slate-500&quot;&gt;PLAY DIGITS: ${x.play.digits.join(&#x27; , &#x27;)} • SHORTLIST: ${x.play.shortlist.join(&#x27; , &#x27;)}&lt;/div&gt;&lt;/div&gt;`}).join(&#x27;&#x27;)}
 async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading Firebase data...&#x27;;const[ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;rows=rs.docs.map(d=&gt;{const r=d.data();return{...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;}}).filter(r=&gt;r.date&amp;&amp;r.marketName);rows=sort(rows);$(&#x27;marketSelect&#x27;).onchange=runBacktest;$(&#x27;windowSelect&#x27;).onchange=runBacktest;runBacktest()}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e);$(&#x27;results&#x27;).innerHTML=`&lt;div class=&quot;rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-600&quot;&gt;${e.message||e}&lt;/div&gt;`}}
 $(&#x27;refreshBtn&#x27;).onclick=load;load();
+&lt;/script&gt;&lt;script data-pull-refresh=&quot;1&quot;&gt;
+(function(){
+  if(window.__pullRefreshInstalled)return; window.__pullRefreshInstalled=true;
+  var startY=0, pulling=false, reloading=false;
+  function top(){return Math.max(document.documentElement.scrollTop||0,document.body&amp;&amp;document.body.scrollTop||0)&lt;=1;}
+  document.addEventListener(&quot;touchstart&quot;,function(e){if(!e.touches||e.touches.length!==1)return; startY=e.touches[0].clientY; pulling=false;},{passive:true});
+  document.addEventListener(&quot;touchmove&quot;,function(e){if(!e.touches||e.touches.length!==1||reloading)return; var dy=e.touches[0].clientY-startY; if(dy&gt;10&amp;&amp;top()){pulling=true; if(dy&gt;70)e.preventDefault();} else if(dy&lt;=0) pulling=false;},{passive:false});
+  document.addEventListener(&quot;touchend&quot;,function(e){if(pulling&amp;&amp;!reloading){var endY=e.changedTouches&amp;&amp;e.changedTouches[0]?e.changedTouches[0].clientY:startY; if(endY-startY&gt;=70){reloading=true; setTimeout(function(){location.reload();},20);}} pulling=false;},{passive:true});
+})();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="display:none" title="Backtest"></iframe> <nav class="bottom-nav">
 <button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
 <button type="button" class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
