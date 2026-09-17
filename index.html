@@ -1289,19 +1289,53 @@ function calculate(){
  stats=makeStats(rows);
  const ranked=Object.values(stats).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||Number(a.jodi)-Number(b.jodi));
  top10=ranked.slice(0,3); mid10=ranked.slice(3,7); recent10=ranked.slice(7,10);
- let top=top10.map(x=&gt;x.jodi),mid=mid10.map(x=&gt;x.jodi),recent=recent10.map(x=&gt;x.jodi);
+ let top=top10.map(x=&gt;String(x.jodi)),mid=mid10.map(x=&gt;String(x.jodi)),recent=recent10.map(x=&gt;String(x.jodi));
  let td=0,md=0,rd=0;
+ const normalize=()=&gt;{
+   const used=new Set([...top,...mid,...recent]);
+   const missing=Array.from({length:10},(_,i)=&gt;String(i)).filter(x=&gt;!used.has(x));
+   while(top.length&lt;3&amp;&amp;missing.length)top.push(missing.shift());
+   while(mid.length&lt;4&amp;&amp;missing.length)mid.push(missing.shift());
+   while(recent.length&lt;3&amp;&amp;missing.length)recent.push(missing.shift());
+ };
+ const moveToRecent=(d,source)=&gt;{
+   const oldTop=top.slice(),oldMid=mid.slice(),oldRecent=recent.slice();
+   if(source===&#x27;TOP&#x27;){
+     const promote=oldMid[0];
+     const push=oldRecent[oldRecent.length-1];
+     top=oldTop.filter(x=&gt;x!==d);
+     if(promote)top.push(promote);
+     mid=oldMid.filter(x=&gt;x!==promote);
+     if(push)mid.push(push);
+     recent=oldRecent.filter(x=&gt;x!==d);
+     recent.unshift(d);
+   }else if(source===&#x27;MID&#x27;){
+     const push=oldRecent[oldRecent.length-1];
+     top=oldTop.filter(x=&gt;x!==d);
+     mid=oldMid.filter(x=&gt;x!==d);
+     if(push&amp;&amp;push!==d)mid.push(push);
+     recent=oldRecent.filter(x=&gt;x!==d);
+     recent.unshift(d);
+   }else{
+     top=oldTop.filter(x=&gt;x!==d);
+     mid=oldMid.filter(x=&gt;x!==d);
+     recent=oldRecent.filter(x=&gt;x!==d);
+     recent.unshift(d);
+   }
+   recent=recent.slice(0,3);
+   normalize();
+ };
  st.forEach(e=&gt;{
    const d=String(e.d);
    const inTop=top.includes(d),inMid=mid.includes(d),inRecent=recent.includes(d);
-   if(inTop){td=0;md++;rd++;}
-   else if(inMid){td++;md=0;rd++;}
-   else if(inRecent){td++;md++;rd=0;}
+   if(inTop){td=0;md++;rd++;moveToRecent(d,&#x27;TOP&#x27;);}
+   else if(inMid){td++;md=0;rd++;moveToRecent(d,&#x27;MID&#x27;);}
+   else if(inRecent){td++;md++;rd=0;moveToRecent(d,&#x27;RECENT&#x27;);}
    else{td++;md++;rd++;}
  });
  groupDelayState={top:td,mid:md,recent:rd};
  render();
- statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3 • 3-GROUP COUNTER`;
+ statusEl.textContent=`${rows.length} completed games • TOP 3 / MID 4 / RECENT 3 • DYNAMIC 3-GROUP COUNTER`;
 }
 function render(){const topSet=new Set(top10.map(x=&gt;x.jodi)),midSet=new Set(mid10.map(x=&gt;x.jodi)),recentSet=new Set(recent10.map(x=&gt;x.jodi));let list=Object.values(stats).sort((a,b)=&gt;Number(a.jodi)-Number(b.jodi));if(view===&#x27;TOP&#x27;)list=top10;if(view===&#x27;MID&#x27;)list=mid10;if(view===&#x27;RECENT&#x27;)list=recent10;document.getElementById(&#x27;filterLabel&#x27;).textContent=view===&#x27;ALL&#x27;?&#x27;ALL 10&#x27;:view+&#x27; &#x27;+list.length;document.getElementById(&#x27;topDelay&#x27;).textContent=`DELAY: ${groupDelayState.top}`;document.getElementById(&#x27;midDelay&#x27;).textContent=`DELAY: ${groupDelayState.mid}`;document.getElementById(&#x27;recentDelay&#x27;).textContent=`DELAY: ${groupDelayState.recent}`;digitGrid.innerHTML=&#x27;&#x27;;list.forEach(x=&gt;{const cls=topSet.has(x.jodi)?&#x27;border-orange-400 bg-orange-50&#x27;:midSet.has(x.jodi)?&#x27;border-indigo-400 bg-indigo-50&#x27;:recentSet.has(x.jodi)?&#x27;border-emerald-400 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-slate-50&#x27;;const b=document.createElement(&#x27;div&#x27;);b.className=`rounded-lg border p-2 text-center ${cls}`;b.innerHTML=`&lt;div class=&quot;text-sm font-black&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-indigo-700&quot;&gt;D ${x.currentDelay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-500&quot;&gt;M ${x.maxDelay}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;H ${x.count}&lt;/div&gt;`;digitGrid.appendChild(b);});}
 marketSelect.onchange=()=&gt;{view=&#x27;ALL&#x27;;calculate()};document.getElementById(&#x27;refreshBtn&#x27;).onclick=async()=&gt;{view=&#x27;ALL&#x27;;await load();window.scrollTo(0,0)};topBtn.onclick=()=&gt;{view=&#x27;TOP&#x27;;render()};midBtn.onclick=()=&gt;{view=&#x27;MID&#x27;;render()};recentBtn.onclick=()=&gt;{view=&#x27;RECENT&#x27;;render()};load().catch(e=&gt;{statusEl.textContent=&#x27;ERROR: &#x27;+(e.message||e);console.error(e);});
