@@ -576,15 +576,97 @@ function renderGroups(arr, mode) {
 let modalDigitState={digit:null,groups:null,view:&#x27;ALL&#x27;};
 
 function analyzeDigitJodis(d){
-  const items=Array.from({length:10},(_,c)=&gt;String(d)+String(c));
-  const ranked=items.map(j=&gt;stats[j]).filter(Boolean).sort((a,b)=&gt;b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi));
-  return {all:items.map(j=&gt;stats[j]).filter(Boolean),top:ranked.slice(0,3),mid:ranked.slice(3,7),recent:ranked.slice(7,10)};
+  // Same TOP/MID/RECENT movement + group-counter logic as Digit Analysis,
+  // adapted from one Digit to the 10 Jodis belonging to that Digit.
+  const digitKey=String(d);
+  const items=Array.from({length:10},(_,c)=>digitKey+String(c));
+  const selected=el.market.value||"ALL_MERGED";
+  const rows=sortRows(allRows.filter(r=>(selected==="ALL_MERGED"||r.marketName===selected)).filter(r=>jodiOf(r)!==null));
+
+  const makeStats=history=>{
+    const n=history.length;
+    const a=Object.fromEntries(items.map(j=>[j,{jodi:j,occ:[],lastSeen:-1,count:0,currentDelay:n,maxDelay:0}]));
+    history.forEach((r,i)=>{const j=jodiOf(r);if(a[j]){a[j].occ.push(i);a[j].lastSeen=i;a[j].count++;}});
+    items.forEach(j=>{
+      const x=a[j],o=x.occ;
+      x.currentDelay=o.length?n-1-o[o.length-1]:n;
+      const gaps=o.length?[o[0]]:[n];
+      for(let i=1;i<o.length;i++)gaps.push(o[i]-o[i-1]-1);
+      if(o.length)gaps.push(n-1-o[o.length-1]);
+      x.maxDelay=Math.max(0,...gaps);
+    });
+    return a;
+  };
+
+  const rank=history=>Object.values(makeStats(history)).sort((a,b)=>
+    b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi)
+  );
+  const uniq=arr=>{const out=[];for(const x of arr){if(x&&!out.some(y=>y.jodi===x.jodi))out.push(x);}return out;};
+  const most=(arr,exclude=[])=>arr.filter(x=>x&&!exclude.includes(x.jodi)).slice().sort((a,b)=>
+    b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi)
+  )[0]||null;
+
+  const previous=rows.slice(0,-1);
+  const ranked=rank(previous);
+  let top=ranked.slice(0,3),mid=ranked.slice(3,7),recent=ranked.slice(7,10);
+
+  const bucketDelay=list=>{
+    const last=(list||[]).reduce((mx,x)=>Math.max(mx,Number.isFinite(x?.lastSeen)?x.lastSeen:-1),-1);
+    return last>=0?Math.max(0,previous.length-1-last):previous.length;
+  };
+  let delay={top:bucketDelay(top),mid:bucketDelay(mid),recent:bucketDelay(recent)};
+
+  const hit=rows.length?jodiOf(rows[rows.length-1]):null;
+  const source=hit!==null&&items.includes(hit)
+    ?(top.some(x=>x.jodi===hit)?"TOP":mid.some(x=>x.jodi===hit)?"MID":recent.some(x=>x.jodi===hit)?"RECENT":"NONE")
+    :"NONE";
+
+  // EXACT Digit Analysis movement rules.
+  if(source==='TOP'){
+    const hitObj=top.find(x=>x.jodi===hit);
+    top=top.filter(x=>x.jodi!==hit);
+    const rToMid=most(recent,[hit]);
+    if(rToMid)recent=recent.filter(x=>x.jodi!==rToMid.jodi);
+    if(rToMid)mid=uniq([...mid,rToMid]);
+    const mToTop=most(mid,[hit]);
+    if(mToTop)mid=mid.filter(x=>x.jodi!==mToTop.jodi);
+    if(mToTop)top=uniq([...top,mToTop]);
+    if(hitObj)recent=uniq([...recent,hitObj]);
+  }else if(source==='MID'){
+    const hitObj=mid.find(x=>x.jodi===hit);
+    mid=mid.filter(x=>x.jodi!==hit);
+    const rToMid=most(recent,[hit]);
+    if(rToMid)recent=recent.filter(x=>x.jodi!==rToMid.jodi);
+    if(rToMid)mid=uniq([...mid,rToMid]);
+    if(hitObj)recent=uniq([...recent,hitObj]);
+  }else if(source==='RECENT'){
+    recent=uniq(recent);
+  }
+
+  const used=new Set([...top,...mid,...recent].map(x=>x.jodi));
+  const fill=(bucket,size)=>{for(const x of ranked){if(bucket.length>=size)break;if(!used.has(x.jodi)){bucket.push(x);used.add(x.jodi);}}return bucket;};
+  top=fill(uniq(top),3);mid=fill(uniq(mid),4);recent=fill(uniq(recent),3);
+
+  // Group counters are independent from individual Jodi delay.
+  delay=source==='TOP'
+    ?{top:0,mid:delay.mid+1,recent:delay.recent+1}
+    :source==='MID'
+    ?{top:delay.top+1,mid:0,recent:delay.recent+1}
+    :source==='RECENT'
+    ?{top:delay.top+1,mid:delay.mid+1,recent:0}
+    :{top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};
+
+  const currentStats=makeStats(rows);
+  return {digit:d,items,all:items.map(j=>currentStats[j]),stats:currentStats,top,mid,recent,delay,historyCount:rows.length};
 }
 
 function modalGroupDelay(list){
-  if(!list.length) return modalHistoryCount;
-  const last=list.reduce((mx,x)=&gt;Math.max(mx,Number.isFinite(x.lastSeen)?x.lastSeen:-1),-1);
-  return last&gt;=0 ? Math.max(0,modalHistoryCount-1-last) : modalHistoryCount;
+  const a=modalDigitState.groups;
+  if(!a)return 0;
+  if(list===a.top)return Number(a.delay?.top||0);
+  if(list===a.mid)return Number(a.delay?.mid||0);
+  if(list===a.recent)return Number(a.delay?.recent||0);
+  return Number(a.historyCount||0);
 }
 
 function renderModalJodiGroup(group){
@@ -680,14 +762,14 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;
   &lt;/div&gt;
 
   &lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
-    &lt;div class=&quot;flex justify-between items-center mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;100 JODI FILTER&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL&lt;/div&gt;&lt;/div&gt;
-    &lt;div id=&quot;jodiGrid&quot; class=&quot;grid grid-cols-5 sm:grid-cols-10 gap-1.5&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
     &lt;div class=&quot;text-sm font-black mb-2&quot;&gt;DIGIT FILTER&lt;/div&gt;
     &lt;div id=&quot;digitGrid&quot; class=&quot;grid grid-cols-5 gap-2&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;mt-2 text-[9px] font-semibold text-slate-500&quot;&gt;Digit પર ક્લિક કરવાથી તે digitની બધી 10 Jodi popupમાં TOP 3 / MID 4 / RECENT 3 અને Group Delay સાથે દેખાશે.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+    &lt;div class=&quot;flex justify-between items-center mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;100 JODI FILTER&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL&lt;/div&gt;&lt;/div&gt;
+    &lt;div id=&quot;jodiGrid&quot; class=&quot;grid grid-cols-5 sm:grid-cols-10 gap-1.5&quot;&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
@@ -758,37 +840,43 @@ function renderGrid(arr,mode){
 }
 function analyzeDigitJodis(d){
  const digitKey=String(d);
- const items=Array.from({length:10},(_,c)=&gt;digitKey+String(c));
- const selected=marketSelect.value||&#x27;ALL_MERGED&#x27;;
- const rows=sortRows(allRows.filter(r=&gt;(selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected)).filter(r=&gt;jodiOf(r)!==null));
- const localStats=Object.fromEntries(items.map(j=&gt;[j,{jodi:j,occ:[],currentDelay:rows.length,maxDelay:rows.length,lastSeen:-1,count:0}]));
- rows.forEach((r,i)=&gt;{
-   const j=jodiOf(r);
-   if(localStats[j]){localStats[j].occ.push(i);localStats[j].lastSeen=i;localStats[j].count++;}
+ const items=Array.from({length:10},(_,c)=>digitKey+String(c));
+ const selected=marketSelect.value||'ALL_MERGED';
+ const rows=sortRows(allRows.filter(r=>(selected==='ALL_MERGED'||r.marketName===selected)).filter(r=>jodiOf(r)!==null));
+
+ // For a clicked digit, calculate individual Jodi delay only within
+ // the selected digit's 10-Jodi event sequence.
+ const events=rows.map(r=>jodiOf(r)).filter(j=>items.includes(j));
+ const localStats=Object.fromEntries(items.map(j=>[j,{jodi:j,occ:[],currentDelay:events.length,maxDelay:events.length,lastSeen:-1,count:0}]));
+ events.forEach((j,i)=>{
+   const s=localStats[j];
+   s.occ.push(i);s.lastSeen=i;s.count++;
  });
- items.forEach(j=&gt;{
-   const s=localStats[j],o=s.occ,n=rows.length;
+ items.forEach(j=>{
+   const s=localStats[j],o=s.occ,n=events.length;
    s.currentDelay=o.length?n-1-o[o.length-1]:n;
    let gaps=o.length?[o[0]]:[n];
-   for(let i=1;i&lt;o.length;i++)gaps.push(o[i]-o[i-1]-1);
+   for(let i=1;i<o.length;i++)gaps.push(o[i]-o[i-1]-1);
    if(o.length)gaps.push(n-1-o[o.length-1]);
    s.maxDelay=Math.max(0,...gaps);
  });
- const rank=items.map(j=&gt;localStats[j]).sort((a,b)=&gt;
+
+ const rank=items.map(j=>localStats[j]).sort((a,b)=>
    b.currentDelay-a.currentDelay||b.maxDelay-a.maxDelay||b.count-a.count||a.jodi.localeCompare(b.jodi)
  );
- let top=rank.slice(0,3).map(x=&gt;x.jodi),mid=rank.slice(3,7).map(x=&gt;x.jodi),recent=rank.slice(7,10).map(x=&gt;x.jodi);
+ let top=rank.slice(0,3).map(x=>x.jodi),mid=rank.slice(3,7).map(x=>x.jodi),recent=rank.slice(7,10).map(x=>x.jodi);
  let td=0,md=0,rd=0;
- rows.forEach(r=&gt;{
-   const hit=jodiOf(r);
-   if(!items.includes(hit)){td++;md++;rd++;return;}
+
+ // Same group-counter logic as Digit Analysis, replayed only on
+ // the selected digit's 10-Jodi sequence.
+ events.forEach(hit=>{
    const inTop=top.includes(hit),inMid=mid.includes(hit),inRecent=recent.includes(hit);
    if(inTop){td=0;md++;rd++;}
    else if(inMid){td++;md=0;rd++;}
    else if(inRecent){td++;md++;rd=0;}
    else{td++;md++;rd++;}
  });
- return {digit:d,items,stats:localStats,top,mid,recent,delay:{top:td,mid:md,recent:rd}};
+ return {digit:d,items,stats:localStats,top,mid,recent,delay:{top:td,mid:md,recent:rd},eventCount:events.length};
 }
 
 function renderDigitPopup(group){
@@ -1768,8 +1856,6 @@ $('marketSelect').onchange=()=&gt;{selectedDigit=null;lastWinner=null;renderAll(
 </nav>
 <div class="more-panel" id="morePanel">
 <button class="nav-btn" data-page="0"><span>👨‍👩‍👧‍👦</span><span>Family Jodi + Panna</span></button>
-<button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
-
 <button class="nav-btn" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
 <button class="nav-btn" data-page="3"><span>🔢</span><span>Digit</span></button>
 <button class="nav-btn" data-page="4"><span class="total-diff-icon">＋−</span><span>Total / Difference</span></button>
