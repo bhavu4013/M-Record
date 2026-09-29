@@ -5,10 +5,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport"/>
 <title>Matka Analysis Platform</title>
-<link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#4f46e5">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<link href="./manifest.webmanifest" rel="manifest"/>
+<meta content="#4f46e5" name="theme-color"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f1f5f9;color:#0f172a;overflow:hidden}
@@ -1284,66 +1284,77 @@ async function load(){
 load();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" id="page-5" style="display:none" title="Odd / Even"></iframe><iframe class="page-frame" data-srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;SHORTLIST&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&lt;/style&gt;&lt;script&gt;
+&lt;/html&gt;" id="page-5" style="display:none" title="Odd / Even"></iframe><iframe class="page-frame" data-srcdoc="&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;/&amp;gt;&amp;lt;meta content=&amp;quot;width=device-width,initial-scale=1.0&amp;quot; name=&amp;quot;viewport&amp;quot;/&amp;gt;&amp;lt;title&amp;gt;SHORTLIST&amp;lt;/title&amp;gt;&amp;lt;script src=&amp;quot;https://cdn.tailwindcss.com&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;style&amp;gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&amp;quot;Segoe UI&amp;quot;,sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}&amp;lt;/style&amp;gt;&amp;lt;script&amp;gt;
 /* LOCALDB iframe bridge — use the already initialized parent engine directly.
    This avoids a timing race where the iframe proxy could be unavailable on
    content://downloads/all and also removes an extra RPC layer. */
 (function(){
   function install(){
-    const api=parent &amp;&amp; parent.LocalDB;
-    if(!api) throw new Error('Parent LocalDB is not initialized');
+    const api=parent &amp;amp;&amp;amp; parent.LocalDB;
+    if(!api) throw new Error(&amp;#x27;Parent LocalDB is not initialized&amp;#x27;);
     window.__LocalDBProxy=api;
     window.LocalDB=api;
   }
   try{ install(); }
   catch(e){
-    if(parent &amp;&amp; parent.LocalDBReady){
-      parent.LocalDBReady.then(install).catch(()=&gt;{});
+    if(parent &amp;amp;&amp;amp; parent.LocalDBReady){
+      parent.LocalDBReady.then(install).catch(()=&amp;gt;{});
     }else{
-      setTimeout(()=&gt;{try{install()}catch(_){}},50);
+      setTimeout(()=&amp;gt;{try{install()}catch(_){}},50);
     }
   }
 })();
-&lt;/script&gt;
-&lt;/head&gt;&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;&lt;div class=&quot;max-w-3xl mx-auto space-y-3 pb-8&quot;&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;SHORTLIST&lt;/div&gt;&lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;MAXIMUM DELAYED GROUP → PLAY DIGIT → FILTERED JODI&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;REFRESH&lt;/button&gt;&lt;/div&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;WINNING GROUP&lt;/div&gt;&lt;div id=&quot;winnerSide&quot; class=&quot;px-2.5 py-1 rounded-lg text-[9px] font-black bg-slate-100 text-slate-600&quot;&gt;WAITING&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;winnerCard&quot; class=&quot;rounded-2xl border-2 border-slate-200 bg-slate-50 p-3&quot;&gt;&lt;div class=&quot;text-center text-[10px] font-bold text-slate-400 py-4&quot;&gt;Calculating maximum delayed group...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;PLAY DIGIT&lt;/div&gt;&lt;div id=&quot;digitLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;WINNING GROUP DIGITS&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;digitButtons&quot; class=&quot;grid grid-cols-3 sm:grid-cols-4 gap-2&quot;&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FILTERED JODI&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;ALL WINNING-DIGIT JODI&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;jodiWindow&quot; class=&quot;min-h-[110px] rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Calculating...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;RANKING FACTORS&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;MULTI-FACTOR&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[8px] font-black&quot;&gt;&lt;div class=&quot;rounded-lg bg-indigo-50 p-2&quot;&gt;JODI DELAY &lt;b&gt;25%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;RECENT HITS &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;FREQUENCY / HITS &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;OPEN DIGIT DELAY &lt;b&gt;7.5%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;CLOSE DIGIT DELAY &lt;b&gt;7.5%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;TOTAL DIGIT DELAY &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;DIFFERENCE DIGIT DELAY &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;FAMILY DELAY &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;PAIR METRIC &lt;b&gt;10%&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-semibold text-slate-500&quot;&gt;Score is a historical ranking aid: every factor is normalized within the current dataset/window. It does not establish a future outcome. Total weighting = 100%.&lt;/div&gt;&lt;/section&gt;
-&lt;/div&gt;&lt;script type=&quot;module&quot;&gt;
+&amp;lt;/script&amp;gt;
+&amp;lt;style&amp;gt;
+.playTopTab{border:0;border-radius:12px;padding:11px 6px;font-size:11px;font-weight:950;background:#f8fafc;color:#475569;transition:.15s}
+.playTopTab.active{background:#4f46e5;color:#fff;box-shadow:0 3px 10px rgba(79,70,229,.18)}
+.playTopPanel{display:none}
+.playTopPanel.active{display:block}
+.playComing{min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 4px 16px rgba(15,23,42,.05);padding:24px}
+&amp;lt;/style&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body class=&amp;quot;bg-slate-100 min-h-screen p-3 text-slate-800&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;max-w-3xl mx-auto space-y-3 pb-8&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;sticky top-0 z-30 bg-slate-100 pt-1 pb-2&amp;quot; id=&amp;quot;playTopTabs&amp;quot; style=&amp;quot;padding-top:4px&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;grid grid-cols-3 gap-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-1.5&amp;quot;&amp;gt;
+&amp;lt;button class=&amp;quot;playTopTab active&amp;quot; id=&amp;quot;playTabDigit&amp;quot; type=&amp;quot;button&amp;quot;&amp;gt;🔢 DIGIT&amp;lt;/button&amp;gt;
+&amp;lt;button class=&amp;quot;playTopTab&amp;quot; id=&amp;quot;playTabJodi&amp;quot; type=&amp;quot;button&amp;quot;&amp;gt;🔗 JODI&amp;lt;/button&amp;gt;
+&amp;lt;button class=&amp;quot;playTopTab&amp;quot; id=&amp;quot;playTabPana&amp;quot; type=&amp;quot;button&amp;quot;&amp;gt;🔺 PANA&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;playTopPanel active&amp;quot; id=&amp;quot;playDigitPanel&amp;quot;&amp;gt;
+&amp;lt;section class=&amp;quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;flex items-center justify-between gap-2&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div class=&amp;quot;text-lg font-black text-indigo-700&amp;quot;&amp;gt;SHORTLIST&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[10px] font-semibold text-slate-500&amp;quot;&amp;gt;MAXIMUM DELAYED GROUP → PLAY DIGIT → FILTERED JODI&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;button class=&amp;quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&amp;quot; id=&amp;quot;refreshBtn&amp;quot;&amp;gt;REFRESH&amp;lt;/button&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;select class=&amp;quot;mt-3 w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&amp;quot; id=&amp;quot;marketSelect&amp;quot;&amp;gt;&amp;lt;option value=&amp;quot;ALL_MERGED&amp;quot;&amp;gt;ALL MARKETS (MERGED)&amp;lt;/option&amp;gt;&amp;lt;/select&amp;gt;&amp;lt;div class=&amp;quot;mt-2 text-[10px] font-bold text-slate-500&amp;quot; id=&amp;quot;status&amp;quot;&amp;gt;Loading...&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;
+&amp;lt;section class=&amp;quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;flex items-center justify-between mb-2&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;font-black text-sm&amp;quot;&amp;gt;WINNING GROUP&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;px-2.5 py-1 rounded-lg text-[9px] font-black bg-slate-100 text-slate-600&amp;quot; id=&amp;quot;winnerSide&amp;quot;&amp;gt;WAITING&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-2xl border-2 border-slate-200 bg-slate-50 p-3&amp;quot; id=&amp;quot;winnerCard&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;text-center text-[10px] font-bold text-slate-400 py-4&amp;quot;&amp;gt;Calculating maximum delayed group...&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;
+&amp;lt;section class=&amp;quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;flex items-center justify-between mb-2&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;font-black text-sm&amp;quot;&amp;gt;PLAY DIGIT&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[9px] font-black text-indigo-600&amp;quot; id=&amp;quot;digitLabel&amp;quot;&amp;gt;WINNING GROUP DIGITS&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;grid grid-cols-3 sm:grid-cols-4 gap-2&amp;quot; id=&amp;quot;digitButtons&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;
+&amp;lt;section class=&amp;quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;flex items-center justify-between mb-2&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;font-black text-sm&amp;quot;&amp;gt;FILTERED JODI&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[9px] font-black text-indigo-600&amp;quot; id=&amp;quot;filterLabel&amp;quot;&amp;gt;ALL WINNING-DIGIT JODI&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;min-h-[110px] rounded-xl bg-slate-50 border border-slate-200 p-2&amp;quot; id=&amp;quot;jodiWindow&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;py-8 text-center text-[10px] font-bold text-slate-400&amp;quot;&amp;gt;Calculating...&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;
+&amp;lt;section class=&amp;quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;flex items-center justify-between mb-2&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;font-black text-sm&amp;quot;&amp;gt;RANKING FACTORS&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[9px] font-black text-slate-400&amp;quot;&amp;gt;MULTI-FACTOR&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[8px] font-black&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-indigo-50 p-2&amp;quot;&amp;gt;JODI DELAY &amp;lt;b&amp;gt;25%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;RECENT HITS &amp;lt;b&amp;gt;10%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;FREQUENCY / HITS &amp;lt;b&amp;gt;10%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;OPEN DIGIT DELAY &amp;lt;b&amp;gt;7.5%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;CLOSE DIGIT DELAY &amp;lt;b&amp;gt;7.5%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;TOTAL DIGIT DELAY &amp;lt;b&amp;gt;10%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;DIFFERENCE DIGIT DELAY &amp;lt;b&amp;gt;10%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;FAMILY DELAY &amp;lt;b&amp;gt;10%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;rounded-lg bg-slate-50 p-2&amp;quot;&amp;gt;PAIR METRIC &amp;lt;b&amp;gt;10%&amp;lt;/b&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;mt-2 text-[8px] font-semibold text-slate-500&amp;quot;&amp;gt;Score is a historical ranking aid: every factor is normalized within the current dataset/window. It does not establish a future outcome. Total weighting = 100%.&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;
+&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;playTopPanel&amp;quot; id=&amp;quot;playJodiPanel&amp;quot;&amp;gt;&amp;lt;section class=&amp;quot;playComing&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div class=&amp;quot;text-lg font-black text-indigo-700&amp;quot;&amp;gt;JODI&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;mt-1 text-xs font-bold text-slate-500&amp;quot;&amp;gt;Jodi page structure will be prepared next.&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;playTopPanel&amp;quot; id=&amp;quot;playPanaPanel&amp;quot;&amp;gt;&amp;lt;section class=&amp;quot;playComing&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div class=&amp;quot;text-lg font-black text-indigo-700&amp;quot;&amp;gt;PANA&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;mt-1 text-xs font-bold text-slate-500&amp;quot;&amp;gt;Pana page structure will be prepared next.&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/section&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;script type=&amp;quot;module&amp;quot;&amp;gt;
 
 const {collection,where,query,doc,getDocs,addDoc,updateDoc,deleteDoc}=window.__LocalDBProxy;
-const db=window.__LocalDBProxy;const $=id=&gt;document.getElementById(id);let rows=[],markets=[],winner=null,selectedDigit=null,jodiScopeRows=null;
-const dig=v=&gt;{if(v===undefined||v===null||v==='')return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
-const tmin=v=&gt;{let m=String(v||'').match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate==='function')return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
-function sort(a){return a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
-function completed(r){return dig(r.openAnk)!==null&amp;&amp;dig(r.closeAnk)!==null}
-function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side==='OPEN'?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side==='OPEN'?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
+const db=window.__LocalDBProxy;const $=id=&amp;gt;document.getElementById(id);let rows=[],markets=[],winner=null,selectedDigit=null,jodiScopeRows=null;
+const dig=v=&amp;gt;{if(v===undefined||v===null||v===&amp;#x27;&amp;#x27;)return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
+const tmin=v=&amp;gt;{let m=String(v||&amp;#x27;&amp;#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
+const dt=v=&amp;gt;{if(v&amp;amp;&amp;amp;typeof v.toDate===&amp;#x27;function&amp;#x27;)return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
+function sort(a){return a.slice().sort((a,b)=&amp;gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
+function completed(r){return dig(r.openAnk)!==null&amp;amp;&amp;amp;dig(r.closeAnk)!==null}
+function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&amp;gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&amp;gt;{let d=dig(side===&amp;#x27;OPEN&amp;#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&amp;gt;{x.delay=x.last&amp;gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&amp;gt;{let d=dig(side===&amp;#x27;OPEN&amp;#x27;?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&amp;lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
 function follow(h,side){
- const field=side==='OPEN'?'openAnk':'closeAnk';
- const digit=v=&gt;{if(v===undefined||v===null||v==='')return null;const m=String(v).match(/\d/g);return m&amp;&amp;m.length?Number(m[m.length-1]):null};
- const statsFor=history=&gt;{const n=history.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));history.forEach((r,i)=&gt;{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;x.delay=x.last&gt;=0?n-1-x.last:n);return a};
- const rank=history=&gt;statsFor(history).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
- const uniq=arr=&gt;{const out=[];for(const x of arr){if(x&amp;&amp;!out.some(y=&gt;y.d===x.d))out.push(x)}return out};
- const most=(arr,exclude=[])=&gt;arr.filter(x=&gt;x&amp;&amp;!exclude.includes(x.d)).slice().sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d)[0]||null;
+ const field=side===&amp;#x27;OPEN&amp;#x27;?&amp;#x27;openAnk&amp;#x27;:&amp;#x27;closeAnk&amp;#x27;;
+ const digit=v=&amp;gt;{if(v===undefined||v===null||v===&amp;#x27;&amp;#x27;)return null;const m=String(v).match(/\d/g);return m&amp;amp;&amp;amp;m.length?Number(m[m.length-1]):null};
+ const statsFor=history=&amp;gt;{const n=history.length,a=Array.from({length:10},(_,d)=&amp;gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));history.forEach((r,i)=&amp;gt;{const d=digit(r[field]);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&amp;gt;x.delay=x.last&amp;gt;=0?n-1-x.last:n);return a};
+ const rank=history=&amp;gt;statsFor(history).slice().sort((a,b)=&amp;gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
+ const uniq=arr=&amp;gt;{const out=[];for(const x of arr){if(x&amp;amp;&amp;amp;!out.some(y=&amp;gt;y.d===x.d))out.push(x)}return out};
+ const most=(arr,exclude=[])=&amp;gt;arr.filter(x=&amp;gt;x&amp;amp;&amp;amp;!exclude.includes(x.d)).slice().sort((a,b)=&amp;gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d)[0]||null;
  const previous=rank(h.slice(0,-1));
  let top=previous.slice(0,3), mid=previous.slice(3,7), recent=previous.slice(7,10);
  const hit=h.length?digit(h[h.length-1][field]):null;
- const source=hit!==null?(top.some(x=&gt;x.d===hit)?'TOP':mid.some(x=&gt;x.d===hit)?'MID':recent.some(x=&gt;x.d===hit)?'RECENT':'NONE'):'NONE';
- if(source==='TOP'){
-   const hitObj=top.find(x=&gt;x.d===hit); top=top.filter(x=&gt;x.d!==hit);
-   const rToMid=most(recent,[hit]); if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d); if(rToMid) mid=uniq([...mid,rToMid]);
-   const mToTop=most(mid,[hit]); if(mToTop) mid=mid.filter(x=&gt;x.d!==mToTop.d); if(mToTop) top=uniq([...top,mToTop]);
+ const source=hit!==null?(top.some(x=&amp;gt;x.d===hit)?&amp;#x27;TOP&amp;#x27;:mid.some(x=&amp;gt;x.d===hit)?&amp;#x27;MID&amp;#x27;:recent.some(x=&amp;gt;x.d===hit)?&amp;#x27;RECENT&amp;#x27;:&amp;#x27;NONE&amp;#x27;):&amp;#x27;NONE&amp;#x27;;
+ if(source===&amp;#x27;TOP&amp;#x27;){
+   const hitObj=top.find(x=&amp;gt;x.d===hit); top=top.filter(x=&amp;gt;x.d!==hit);
+   const rToMid=most(recent,[hit]); if(rToMid) recent=recent.filter(x=&amp;gt;x.d!==rToMid.d); if(rToMid) mid=uniq([...mid,rToMid]);
+   const mToTop=most(mid,[hit]); if(mToTop) mid=mid.filter(x=&amp;gt;x.d!==mToTop.d); if(mToTop) top=uniq([...top,mToTop]);
    if(hitObj) recent=uniq([...recent,hitObj]);
- } else if(source==='MID'){
-   const hitObj=mid.find(x=&gt;x.d===hit); mid=mid.filter(x=&gt;x.d!==hit);
-   const rToMid=most(recent,[hit]); if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d); if(rToMid) mid=uniq([...mid,rToMid]);
+ } else if(source===&amp;#x27;MID&amp;#x27;){
+   const hitObj=mid.find(x=&amp;gt;x.d===hit); mid=mid.filter(x=&amp;gt;x.d!==hit);
+   const rToMid=most(recent,[hit]); if(rToMid) recent=recent.filter(x=&amp;gt;x.d!==rToMid.d); if(rToMid) mid=uniq([...mid,rToMid]);
    if(hitObj) recent=uniq([...recent,hitObj]);
- } else if(source==='RECENT') recent=uniq(recent);
- const used=new Set([...top,...mid,...recent].map(x=&gt;x.d));
- const fill=(bucket,size)=&gt;{for(const x of previous){if(bucket.length&gt;=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};
+ } else if(source===&amp;#x27;RECENT&amp;#x27;) recent=uniq(recent);
+ const used=new Set([...top,...mid,...recent].map(x=&amp;gt;x.d));
+ const fill=(bucket,size)=&amp;gt;{for(const x of previous){if(bucket.length&amp;gt;=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};
  top=fill(uniq(top),3);mid=fill(uniq(mid),4);recent=fill(uniq(recent),3);
 
  // Calculate group-delay counters iteratively. The old implementation called
@@ -1351,44 +1362,44 @@ function follow(h,side){
  // overflows the JavaScript call stack on large local databases. This loop
  // produces the same TOP/MID/RECENT group-delay progression without recursion.
  let delay={top:0,mid:0,recent:0};
- const stat=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0}));
- for(let i=0;i&lt;h.length;i++){
-   const ranked=stat.map(x=&gt;({d:x.d,hits:x.hits,delay:x.last&gt;=0?i-1-x.last:i}))
-     .sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
+ const stat=Array.from({length:10},(_,d)=&amp;gt;({d,last:-1,hits:0}));
+ for(let i=0;i&amp;lt;h.length;i++){
+   const ranked=stat.map(x=&amp;gt;({d:x.d,hits:x.hits,delay:x.last&amp;gt;=0?i-1-x.last:i}))
+     .sort((a,b)=&amp;gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
    const t=ranked.slice(0,3),m=ranked.slice(3,7),r=ranked.slice(7,10);
    const hd=digit(h[i][field]);
-   const src=hd!==null?(t.some(x=&gt;x.d===hd)?'TOP':m.some(x=&gt;x.d===hd)?'MID':r.some(x=&gt;x.d===hd)?'RECENT':'NONE'):'NONE';
-   delay=src==='TOP'?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
-         src==='MID'?{top:delay.top+1,mid:0,recent:delay.recent+1}:
-         src==='RECENT'?{top:delay.top+1,mid:delay.mid+1,recent:0}:
+   const src=hd!==null?(t.some(x=&amp;gt;x.d===hd)?&amp;#x27;TOP&amp;#x27;:m.some(x=&amp;gt;x.d===hd)?&amp;#x27;MID&amp;#x27;:r.some(x=&amp;gt;x.d===hd)?&amp;#x27;RECENT&amp;#x27;:&amp;#x27;NONE&amp;#x27;):&amp;#x27;NONE&amp;#x27;;
+   delay=src===&amp;#x27;TOP&amp;#x27;?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
+         src===&amp;#x27;MID&amp;#x27;?{top:delay.top+1,mid:0,recent:delay.recent+1}:
+         src===&amp;#x27;RECENT&amp;#x27;?{top:delay.top+1,mid:delay.mid+1,recent:0}:
          {top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};
    if(hd!==null){stat[hd].last=i;stat[hd].hits++;}
  }
  return {top,mid,recent,delay};
 }
-function scopeGroups(h,side){let f=follow(h,side);return[{name:'TOP',digits:f.top,delay:f.delay.top},{name:'MID',digits:f.mid,delay:f.delay.mid},{name:'RECENT',digits:f.recent,delay:f.delay.recent}]}
-function familyKey(j){const G={&quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],&quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],&quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],&quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],&quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],&quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],&quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],&quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],&quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],&quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],&quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],&quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],&quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],&quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],&quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]};for(const [k,v] of Object.entries(G))if(v.includes(j))return k;return null}
+function scopeGroups(h,side){let f=follow(h,side);return[{name:&amp;#x27;TOP&amp;#x27;,digits:f.top,delay:f.delay.top},{name:&amp;#x27;MID&amp;#x27;,digits:f.mid,delay:f.delay.mid},{name:&amp;#x27;RECENT&amp;#x27;,digits:f.recent,delay:f.delay.recent}]}
+function familyKey(j){const G={&amp;quot;11&amp;quot;:[&amp;quot;11&amp;quot;,&amp;quot;16&amp;quot;,&amp;quot;61&amp;quot;,&amp;quot;66&amp;quot;],&amp;quot;12&amp;quot;:[&amp;quot;12&amp;quot;,&amp;quot;17&amp;quot;,&amp;quot;21&amp;quot;,&amp;quot;26&amp;quot;,&amp;quot;62&amp;quot;,&amp;quot;67&amp;quot;,&amp;quot;71&amp;quot;,&amp;quot;76&amp;quot;],&amp;quot;13&amp;quot;:[&amp;quot;13&amp;quot;,&amp;quot;18&amp;quot;,&amp;quot;31&amp;quot;,&amp;quot;36&amp;quot;,&amp;quot;63&amp;quot;,&amp;quot;68&amp;quot;,&amp;quot;81&amp;quot;,&amp;quot;86&amp;quot;],&amp;quot;14&amp;quot;:[&amp;quot;14&amp;quot;,&amp;quot;19&amp;quot;,&amp;quot;41&amp;quot;,&amp;quot;46&amp;quot;,&amp;quot;64&amp;quot;,&amp;quot;69&amp;quot;,&amp;quot;91&amp;quot;,&amp;quot;96&amp;quot;],&amp;quot;15&amp;quot;:[&amp;quot;10&amp;quot;,&amp;quot;15&amp;quot;,&amp;quot;60&amp;quot;,&amp;quot;65&amp;quot;,&amp;quot;01&amp;quot;,&amp;quot;06&amp;quot;,&amp;quot;51&amp;quot;,&amp;quot;56&amp;quot;],&amp;quot;22&amp;quot;:[&amp;quot;22&amp;quot;,&amp;quot;27&amp;quot;,&amp;quot;72&amp;quot;,&amp;quot;77&amp;quot;],&amp;quot;23&amp;quot;:[&amp;quot;23&amp;quot;,&amp;quot;28&amp;quot;,&amp;quot;32&amp;quot;,&amp;quot;37&amp;quot;,&amp;quot;73&amp;quot;,&amp;quot;78&amp;quot;,&amp;quot;82&amp;quot;,&amp;quot;87&amp;quot;],&amp;quot;24&amp;quot;:[&amp;quot;24&amp;quot;,&amp;quot;29&amp;quot;,&amp;quot;42&amp;quot;,&amp;quot;47&amp;quot;,&amp;quot;74&amp;quot;,&amp;quot;79&amp;quot;,&amp;quot;92&amp;quot;,&amp;quot;97&amp;quot;],&amp;quot;25&amp;quot;:[&amp;quot;20&amp;quot;,&amp;quot;25&amp;quot;,&amp;quot;52&amp;quot;,&amp;quot;57&amp;quot;,&amp;quot;70&amp;quot;,&amp;quot;75&amp;quot;,&amp;quot;02&amp;quot;,&amp;quot;07&amp;quot;],&amp;quot;33&amp;quot;:[&amp;quot;33&amp;quot;,&amp;quot;38&amp;quot;,&amp;quot;83&amp;quot;,&amp;quot;88&amp;quot;],&amp;quot;34&amp;quot;:[&amp;quot;34&amp;quot;,&amp;quot;39&amp;quot;,&amp;quot;43&amp;quot;,&amp;quot;48&amp;quot;,&amp;quot;84&amp;quot;,&amp;quot;89&amp;quot;,&amp;quot;93&amp;quot;,&amp;quot;98&amp;quot;],&amp;quot;35&amp;quot;:[&amp;quot;30&amp;quot;,&amp;quot;35&amp;quot;,&amp;quot;53&amp;quot;,&amp;quot;58&amp;quot;,&amp;quot;80&amp;quot;,&amp;quot;85&amp;quot;,&amp;quot;03&amp;quot;,&amp;quot;08&amp;quot;],&amp;quot;44&amp;quot;:[&amp;quot;44&amp;quot;,&amp;quot;49&amp;quot;,&amp;quot;94&amp;quot;,&amp;quot;99&amp;quot;],&amp;quot;45&amp;quot;:[&amp;quot;40&amp;quot;,&amp;quot;45&amp;quot;,&amp;quot;54&amp;quot;,&amp;quot;59&amp;quot;,&amp;quot;90&amp;quot;,&amp;quot;95&amp;quot;,&amp;quot;04&amp;quot;,&amp;quot;09&amp;quot;],&amp;quot;55&amp;quot;:[&amp;quot;00&amp;quot;,&amp;quot;05&amp;quot;,&amp;quot;50&amp;quot;,&amp;quot;55&amp;quot;]};for(const [k,v] of Object.entries(G))if(v.includes(j))return k;return null}
 function mergedJodiStats(){
  // JODI ranking must use the exact same market scope as the selected Play calculation.
- // ALL_MERGED =&gt; all completed markets; specific market =&gt; only that market.
+ // ALL_MERGED =&amp;gt; all completed markets; specific market =&amp;gt; only that market.
  let h=sort((jodiScopeRows!==null?jodiScopeRows:rows.filter(completed)).filter(completed)),n=h.length;
- const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,'0'));
- const j=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:'',oeDelay:n,fam:familyKey(k),famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,score:0,parts:{}}]));
- const totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),oeOcc={OO:[],OE:[],EO:[],EE:[]},famOcc={};
+ const keys=Array.from({length:100},(_,i)=&amp;gt;String(i).padStart(2,&amp;#x27;0&amp;#x27;));
+ const j=Object.fromEntries(keys.map(k=&amp;gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,total:-1,totalDelay:n,diff:-1,diffDelay:n,oe:&amp;#x27;&amp;#x27;,oeDelay:n,fam:familyKey(k),famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,score:0,parts:{}}]));
+ const totalOcc=Array.from({length:10},()=&amp;gt;[]),diffOcc=Array.from({length:10},()=&amp;gt;[]),oeOcc={OO:[],OE:[],EO:[],EE:[]},famOcc={};
  const recentN=Math.min(30,n), recentStart=Math.max(0,n-recentN);
- const recentCounts=Object.fromEntries(keys.map(k=&gt;[k,0]));
- h.forEach((r,i)=&gt;{
+ const recentCounts=Object.fromEntries(keys.map(k=&amp;gt;[k,0]));
+ h.forEach((r,i)=&amp;gt;{
    const o=dig(r.openAnk),c=dig(r.closeAnk); if(o===null||c===null)return;
    const jd=String(o)+String(c),s=j[jd]; s.last=i;s.hits++;
-   if(i&gt;=recentStart)s.recentHits++;
-   const t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?'O':'E')+(c%2?'O':'E');
+   if(i&amp;gt;=recentStart)s.recentHits++;
+   const t=(o+c)%10,d=(c-o+10)%10,oe=(o%2?&amp;#x27;O&amp;#x27;:&amp;#x27;E&amp;#x27;)+(c%2?&amp;#x27;O&amp;#x27;:&amp;#x27;E&amp;#x27;);
    totalOcc[t].push(i);diffOcc[d].push(i);(oeOcc[oe]||(oeOcc[oe]=[])).push(i);
    const fk=familyKey(jd); if(fk){(famOcc[fk]||(famOcc[fk]=[])).push(i)}
  });
  function metricOcc(occ){
-   const out=[]; for(let d=0;d&lt;occ.length;d++){
+   const out=[]; for(let d=0;d&amp;lt;occ.length;d++){
      const a=occ[d]||[],delay=a.length?n-1-a[a.length-1]:n;
-     let gaps=a.length?[a[0]]:[n]; for(let i=1;i&lt;a.length;i++)gaps.push(a[i]-a[i-1]-1); if(a.length)gaps.push(n-1-a[a.length-1]);
+     let gaps=a.length?[a[0]]:[n]; for(let i=1;i&amp;lt;a.length;i++)gaps.push(a[i]-a[i-1]-1); if(a.length)gaps.push(n-1-a[a.length-1]);
      out[d]={delay,max:Math.max(0,...gaps)};
    } return out;
  }
@@ -1397,32 +1408,32 @@ function mergedJodiStats(){
  const fd={}; for(const k of Object.keys(famOcc)){const a=famOcc[k]||[];fd[k]=a.length?n-1-a[a.length-1]:n;}
  // Repeat-gap and reverse-pair metrics.
  for(const k of keys){
-   const s=j[k],occ=[];h.forEach((r,i)=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);if(o!==null&amp;&amp;c!==null&amp;&amp;String(o)+String(c)===k)occ.push(i)});
-   let gaps=[];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);
-   s.avgGap=gaps.length?gaps.reduce((a,b)=&gt;a+b,0)/gaps.length:n;
+   const s=j[k],occ=[];h.forEach((r,i)=&amp;gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);if(o!==null&amp;amp;&amp;amp;c!==null&amp;amp;&amp;amp;String(o)+String(c)===k)occ.push(i)});
+   let gaps=[];for(let i=1;i&amp;lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);
+   s.avgGap=gaps.length?gaps.reduce((a,b)=&amp;gt;a+b,0)/gaps.length:n;
    s.repeatGap=gaps.length?gaps[gaps.length-1]:n;
-   const rk=k[1]+k[0];s.reverseDelay=j[rk]?.last&gt;=0?n-1-j[rk].last:n;
-   s.delay=s.last&gt;=0?n-1-s.last:n;s.total=(Number(k[0])+Number(k[1]))%10;s.totalDelay=td[s.total].delay;s.diff=(Number(k[1])-Number(k[0])+10)%10;s.diffDelay=dd[s.diff].delay;s.oe=(Number(k[0])%2?'O':'E')+(Number(k[1])%2?'O':'E');s.oeDelay=od[s.oe]?.delay??n;s.famDelay=fd[s.fam]??n;
-   let gaps2=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps2.push(occ[i]-occ[i-1]-1);if(occ.length)gaps2.push(n-1-occ[occ.length-1]);s.maxDelay=Math.max(0,...gaps2);
+   const rk=k[1]+k[0];s.reverseDelay=j[rk]?.last&amp;gt;=0?n-1-j[rk].last:n;
+   s.delay=s.last&amp;gt;=0?n-1-s.last:n;s.total=(Number(k[0])+Number(k[1]))%10;s.totalDelay=td[s.total].delay;s.diff=(Number(k[1])-Number(k[0])+10)%10;s.diffDelay=dd[s.diff].delay;s.oe=(Number(k[0])%2?&amp;#x27;O&amp;#x27;:&amp;#x27;E&amp;#x27;)+(Number(k[1])%2?&amp;#x27;O&amp;#x27;:&amp;#x27;E&amp;#x27;);s.oeDelay=od[s.oe]?.delay??n;s.famDelay=fd[s.fam]??n;
+   let gaps2=occ.length?[occ[0]]:[n];for(let i=1;i&amp;lt;occ.length;i++)gaps2.push(occ[i]-occ[i-1]-1);if(occ.length)gaps2.push(n-1-occ[occ.length-1]);s.maxDelay=Math.max(0,...gaps2);
  }
  return j;
 }
 function norm(values,high=true){
- const finite=values.filter(v=&gt;Number.isFinite(v)); if(!finite.length)return ()=&gt;50;
- const lo=Math.min(...finite),hi=Math.max(...finite); if(hi===lo)return ()=&gt;50;
- return v=&gt;{const x=(Number(v)-lo)/(hi-lo);return Math.round((high?x:1-x)*1000)/10};
+ const finite=values.filter(v=&amp;gt;Number.isFinite(v)); if(!finite.length)return ()=&amp;gt;50;
+ const lo=Math.min(...finite),hi=Math.max(...finite); if(hi===lo)return ()=&amp;gt;50;
+ return v=&amp;gt;{const x=(Number(v)-lo)/(hi-lo);return Math.round((high?x:1-x)*1000)/10};
 }
 function scoreJodis(st){
  const arr=Object.values(st);
- const nd=norm(arr.map(x=&gt;x.delay),true),no=norm(arr.map(x=&gt;x.delayOpen),true),nc=norm(arr.map(x=&gt;x.delayClose),true),nt=norm(arr.map(x=&gt;x.totalDelay),true),nq=norm(arr.map(x=&gt;x.diffDelay),true),nfa=norm(arr.map(x=&gt;x.famDelay),true);
- arr.forEach(x=&gt;{
+ const nd=norm(arr.map(x=&amp;gt;x.delay),true),no=norm(arr.map(x=&amp;gt;x.delayOpen),true),nc=norm(arr.map(x=&amp;gt;x.delayClose),true),nt=norm(arr.map(x=&amp;gt;x.totalDelay),true),nq=norm(arr.map(x=&amp;gt;x.diffDelay),true),nfa=norm(arr.map(x=&amp;gt;x.famDelay),true);
+ arr.forEach(x=&amp;gt;{
    const openDigit=Number(x.jodi[0]),closeDigit=Number(x.jodi[1]);
-   x.delayOpen=st['00']?digitDelayFromHistory(openDigit,'OPEN'):x.delayOpen;
-   x.delayClose=st['00']?digitDelayFromHistory(closeDigit,'CLOSE'):x.delayClose;
+   x.delayOpen=st[&amp;#x27;00&amp;#x27;]?digitDelayFromHistory(openDigit,&amp;#x27;OPEN&amp;#x27;):x.delayOpen;
+   x.delayClose=st[&amp;#x27;00&amp;#x27;]?digitDelayFromHistory(closeDigit,&amp;#x27;CLOSE&amp;#x27;):x.delayClose;
  });
  // Rebuild normalizers after Open/Close delay values are attached.
- const oN=norm(arr.map(x=&gt;x.delayOpen),true),cN=norm(arr.map(x=&gt;x.delayClose),true),nr=norm(arr.map(x=&gt;x.recentHits),true),nf=norm(arr.map(x=&gt;x.hits),true),np=norm(arr.map(x=&gt;x.pairMetric),true);
- arr.forEach(x=&gt;{
+ const oN=norm(arr.map(x=&amp;gt;x.delayOpen),true),cN=norm(arr.map(x=&amp;gt;x.delayClose),true),nr=norm(arr.map(x=&amp;gt;x.recentHits),true),nf=norm(arr.map(x=&amp;gt;x.hits),true),np=norm(arr.map(x=&amp;gt;x.pairMetric),true);
+ arr.forEach(x=&amp;gt;{
    const parts={
      jDelay:nd(x.delay)*0.25,
      recent:nr(x.recentHits)*0.10,
@@ -1434,55 +1445,62 @@ function scoreJodis(st){
      family:nfa(x.famDelay)*0.10,
      pair:np(x.pairMetric)*0.10
    };
-   x.parts=parts;x.score=Object.values(parts).reduce((a,b)=&gt;a+b,0);
+   x.parts=parts;x.score=Object.values(parts).reduce((a,b)=&amp;gt;a+b,0);
  });
  return arr;
 }
 function digitDelayFromHistory(d,side){
- const field=side==='OPEN'?'openAnk':'closeAnk',h=sort((jodiScopeRows!==null?jodiScopeRows:rows.filter(completed)).filter(completed));let last=-1;h.forEach((r,i)=&gt;{if(dig(r[field])===d)last=i});return last&gt;=0?h.length-1-last:h.length;
+ const field=side===&amp;#x27;OPEN&amp;#x27;?&amp;#x27;openAnk&amp;#x27;:&amp;#x27;closeAnk&amp;#x27;,h=sort((jodiScopeRows!==null?jodiScopeRows:rows.filter(completed)).filter(completed));let last=-1;h.forEach((r,i)=&amp;gt;{if(dig(r[field])===d)last=i});return last&amp;gt;=0?h.length-1-last:h.length;
 }
 function prepareJodiRanking(st){
  const arr=Object.values(st);
- arr.forEach(x=&gt;{const rev=st[x.jodi[1]+x.jodi[0]];x.pairMetric=(rev&amp;&amp;rev.hits?Math.max(0,100-rev.delay*2):0)+(x.repeatGap&lt;=x.avgGap&amp;&amp;x.avgGap&gt;0?50:0);});
+ arr.forEach(x=&amp;gt;{const rev=st[x.jodi[1]+x.jodi[0]];x.pairMetric=(rev&amp;amp;&amp;amp;rev.hits?Math.max(0,100-rev.delay*2):0)+(x.repeatGap&amp;lt;=x.avgGap&amp;amp;&amp;amp;x.avgGap&amp;gt;0?50:0);});
  scoreJodis(st);
- return arr.sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||b.hits-a.hits||a.jodi.localeCompare(b.jodi));
+ return arr.sort((a,b)=&amp;gt;b.score-a.score||b.delay-a.delay||b.hits-a.hits||a.jodi.localeCompare(b.jodi));
 }
 function calculate(){
- let selected=$('marketSelect').value||'ALL_MERGED';
- // DIGIT PLAY uses only the selected market's own completed history.
+ let selected=$(&amp;#x27;marketSelect&amp;#x27;).value||&amp;#x27;ALL_MERGED&amp;#x27;;
+ // DIGIT PLAY uses only the selected market&amp;#x27;s own completed history.
  // ALL_MERGED is one merged dataset when manually selected.
  // Exactly 6 groups are compared: OPEN TOP/MID/RECENT + CLOSE TOP/MID/RECENT.
- let marketRows=sort(rows.filter(completed).filter(r=&gt;selected==='ALL_MERGED'||r.marketName===selected));
+ let marketRows=sort(rows.filter(completed).filter(r=&amp;gt;selected===&amp;#x27;ALL_MERGED&amp;#x27;||r.marketName===selected));
  // Keep Jodi ranking in the exact same market scope as the winning-group calculation.
  jodiScopeRows=marketRows.slice();
  let candidates=[];
- for(const side of ['OPEN','CLOSE']){
+ for(const side of [&amp;#x27;OPEN&amp;#x27;,&amp;#x27;CLOSE&amp;#x27;]){
    const g=scopeGroups(marketRows,side);
-   for(const b of g)candidates.push({side,scope:selected==='ALL_MERGED'?'ALL_MERGED':'MARKET',name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&gt;x.maxDelay))});
+   for(const b of g)candidates.push({side,scope:selected===&amp;#x27;ALL_MERGED&amp;#x27;?&amp;#x27;ALL_MERGED&amp;#x27;:&amp;#x27;MARKET&amp;#x27;,name:b.name,digits:b.digits,delay:b.delay,maxDelay:Math.max(0,...b.digits.map(x=&amp;gt;x.maxDelay))});
  }
- winner=candidates.slice().sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||a.side.localeCompare(b.side)||a.name.localeCompare(b.name))[0]||null;
+ winner=candidates.slice().sort((a,b)=&amp;gt;b.delay-a.delay||b.maxDelay-a.maxDelay||a.side.localeCompare(b.side)||a.name.localeCompare(b.name))[0]||null;
  renderWinner();renderJodi();
 }
 
 function renderWinner(){
- if(!winner){$('winnerSide').textContent='NO DATA';$('winnerCard').innerHTML='&lt;div class=&quot;py-5 text-center text-[10px] font-bold text-slate-400&quot;&gt;No completed data found&lt;/div&gt;';$('digitButtons').innerHTML='';return}
- let open=winner.side==='OPEN';$('winnerSide').textContent=open?'OPEN SIDE':'CLOSE SIDE';$('winnerSide').className='px-2.5 py-1 rounded-lg text-[9px] font-black '+(open?'bg-indigo-100 text-indigo-700':'bg-rose-100 text-rose-700');
- $('winnerCard').innerHTML=`&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-[9px] font-black ${open?'text-indigo-600':'text-rose-600'}&quot;&gt;MAXIMUM DELAYED GROUP&lt;/div&gt;&lt;div class=&quot;text-xl font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${winner.name}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;${winner.scope==='MARKET'?'SELECTED MARKET':'ALL MARKETS'} • GROUP DELAY ${winner.delay} • MAX DELAY ${winner.maxDelay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;text-right&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;PLAY&lt;/div&gt;&lt;div class=&quot;text-lg font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${open?'OPEN':'CLOSE'}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;
- $('digitButtons').innerHTML=winner.digits.map(x=&gt;`&lt;button data-d=&quot;${x.d}&quot; class=&quot;winDigit rounded-xl border-2 ${open?'border-indigo-200':'border-rose-200'} bg-white p-2.5 text-center shadow-sm&quot;&gt;&lt;div class=&quot;text-xl font-black ${open?'text-indigo-700':'text-rose-700'}&quot;&gt;${x.d}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-black text-slate-600&quot;&gt;DELAY ${x.delay}&lt;/div&gt;&lt;div class=&quot;text-[8px] font-bold text-slate-400&quot;&gt;MAX ${x.maxDelay}&lt;/div&gt;&lt;/button&gt;`).join('');
- document.querySelectorAll('.winDigit').forEach(b=&gt;b.onclick=()=&gt;{selectedDigit=Number(b.dataset.d);document.querySelectorAll('.winDigit').forEach(x=&gt;x.classList.remove('ring-2','ring-indigo-500','ring-rose-500'));b.classList.add('ring-2',open?'ring-indigo-500':'ring-rose-500');renderJodi()});
+ if(!winner){$(&amp;#x27;winnerSide&amp;#x27;).textContent=&amp;#x27;NO DATA&amp;#x27;;$(&amp;#x27;winnerCard&amp;#x27;).innerHTML=&amp;#x27;&amp;lt;div class=&amp;quot;py-5 text-center text-[10px] font-bold text-slate-400&amp;quot;&amp;gt;No completed data found&amp;lt;/div&amp;gt;&amp;#x27;;$(&amp;#x27;digitButtons&amp;#x27;).innerHTML=&amp;#x27;&amp;#x27;;return}
+ let open=winner.side===&amp;#x27;OPEN&amp;#x27;;$(&amp;#x27;winnerSide&amp;#x27;).textContent=open?&amp;#x27;OPEN SIDE&amp;#x27;:&amp;#x27;CLOSE SIDE&amp;#x27;;$(&amp;#x27;winnerSide&amp;#x27;).className=&amp;#x27;px-2.5 py-1 rounded-lg text-[9px] font-black &amp;#x27;+(open?&amp;#x27;bg-indigo-100 text-indigo-700&amp;#x27;:&amp;#x27;bg-rose-100 text-rose-700&amp;#x27;);
+ $(&amp;#x27;winnerCard&amp;#x27;).innerHTML=`&amp;lt;div class=&amp;quot;flex items-center justify-between gap-2&amp;quot;&amp;gt;&amp;lt;div&amp;gt;&amp;lt;div class=&amp;quot;text-[9px] font-black ${open?&amp;#x27;text-indigo-600&amp;#x27;:&amp;#x27;text-rose-600&amp;#x27;}&amp;quot;&amp;gt;MAXIMUM DELAYED GROUP&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-xl font-black ${open?&amp;#x27;text-indigo-700&amp;#x27;:&amp;#x27;text-rose-700&amp;#x27;}&amp;quot;&amp;gt;${winner.name}&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[9px] font-bold text-slate-500&amp;quot;&amp;gt;${winner.scope===&amp;#x27;MARKET&amp;#x27;?&amp;#x27;SELECTED MARKET&amp;#x27;:&amp;#x27;ALL MARKETS&amp;#x27;} • GROUP DELAY ${winner.delay} • MAX DELAY ${winner.maxDelay}&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-right&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;text-[9px] font-black text-slate-400&amp;quot;&amp;gt;PLAY&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-lg font-black ${open?&amp;#x27;text-indigo-700&amp;#x27;:&amp;#x27;text-rose-700&amp;#x27;}&amp;quot;&amp;gt;${open?&amp;#x27;OPEN&amp;#x27;:&amp;#x27;CLOSE&amp;#x27;}&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;`;
+ $(&amp;#x27;digitButtons&amp;#x27;).innerHTML=winner.digits.map(x=&amp;gt;`&amp;lt;button data-d=&amp;quot;${x.d}&amp;quot; class=&amp;quot;winDigit rounded-xl border-2 ${open?&amp;#x27;border-indigo-200&amp;#x27;:&amp;#x27;border-rose-200&amp;#x27;} bg-white p-2.5 text-center shadow-sm&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;text-xl font-black ${open?&amp;#x27;text-indigo-700&amp;#x27;:&amp;#x27;text-rose-700&amp;#x27;}&amp;quot;&amp;gt;${x.d}&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[8px] font-black text-slate-600&amp;quot;&amp;gt;DELAY ${x.delay}&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[8px] font-bold text-slate-400&amp;quot;&amp;gt;MAX ${x.maxDelay}&amp;lt;/div&amp;gt;&amp;lt;/button&amp;gt;`).join(&amp;#x27;&amp;#x27;);
+ document.querySelectorAll(&amp;#x27;.winDigit&amp;#x27;).forEach(b=&amp;gt;b.onclick=()=&amp;gt;{selectedDigit=Number(b.dataset.d);document.querySelectorAll(&amp;#x27;.winDigit&amp;#x27;).forEach(x=&amp;gt;x.classList.remove(&amp;#x27;ring-2&amp;#x27;,&amp;#x27;ring-indigo-500&amp;#x27;,&amp;#x27;ring-rose-500&amp;#x27;));b.classList.add(&amp;#x27;ring-2&amp;#x27;,open?&amp;#x27;ring-indigo-500&amp;#x27;:&amp;#x27;ring-rose-500&amp;#x27;);renderJodi()});
 }
 function renderJodi(){
- if(!winner){$('jodiWindow').innerHTML='';return}
- const st=mergedJodiStats();const ranked=prepareJodiRanking(st),digits=winner.digits.map(x=&gt;x.d),side=winner.side;
- const arr=ranked.filter(x=&gt;digits.includes(side==='OPEN'?Number(x.jodi[0]):Number(x.jodi[1])));
- const byDigit=new Map();for(const d of digits)byDigit.set(d,arr.filter(x=&gt;(side==='OPEN'?Number(x.jodi[0]):Number(x.jodi[1]))===d));
+ if(!winner){$(&amp;#x27;jodiWindow&amp;#x27;).innerHTML=&amp;#x27;&amp;#x27;;return}
+ const st=mergedJodiStats();const ranked=prepareJodiRanking(st),digits=winner.digits.map(x=&amp;gt;x.d),side=winner.side;
+ const arr=ranked.filter(x=&amp;gt;digits.includes(side===&amp;#x27;OPEN&amp;#x27;?Number(x.jodi[0]):Number(x.jodi[1])));
+ const byDigit=new Map();for(const d of digits)byDigit.set(d,arr.filter(x=&amp;gt;(side===&amp;#x27;OPEN&amp;#x27;?Number(x.jodi[0]):Number(x.jodi[1]))===d));
  let all=[];for(const d of digits)all.push(...(byDigit.get(d)||[]).slice(0,3));if(selectedDigit!==null)all=(byDigit.get(selectedDigit)||[]).slice(0,3);
- $('filterLabel').textContent=selectedDigit===null?'ALL WINNING-DIGIT JODI':`${side} DIGIT ${selectedDigit} • FILTERED JODI`;
- $('jodiWindow').innerHTML=all.length?`&lt;div class=&quot;grid grid-cols-3 sm:grid-cols-6 gap-1.5&quot;&gt;${all.map((x,i)=&gt;`&lt;div class=&quot;rounded-lg border ${side==='OPEN'?'border-indigo-200 bg-indigo-50':'border-rose-200 bg-rose-50'} p-2 text-center&quot;&gt;&lt;div class=&quot;flex items-center justify-between&quot;&gt;&lt;span class=&quot;text-[7px] font-black text-slate-400&quot;&gt;#${i+1}&lt;/span&gt;&lt;span class=&quot;text-[8px] font-black text-emerald-600&quot;&gt;${x.score.toFixed(1)}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-sm font-black ${side==='OPEN'?'text-indigo-700':'text-rose-700'}&quot;&gt;${x.jodi}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-500&quot;&gt;J ${x.delay} • F ${x.hits} • R ${x.recentHits}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;O ${x.delayOpen} • C ${x.delayClose}&lt;/div&gt;&lt;div class=&quot;text-[7px] font-bold text-slate-400&quot;&gt;T ${x.totalDelay} • D ${x.diffDelay} • FAM ${x.famDelay}&lt;/div&gt;&lt;/div&gt;`).join('')}&lt;/div&gt;`:'&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;No filtered Jodi found&lt;/div&gt;';
+ $(&amp;#x27;filterLabel&amp;#x27;).textContent=selectedDigit===null?&amp;#x27;ALL WINNING-DIGIT JODI&amp;#x27;:`${side} DIGIT ${selectedDigit} • FILTERED JODI`;
+ $(&amp;#x27;jodiWindow&amp;#x27;).innerHTML=all.length?`&amp;lt;div class=&amp;quot;grid grid-cols-3 sm:grid-cols-6 gap-1.5&amp;quot;&amp;gt;${all.map((x,i)=&amp;gt;`&amp;lt;div class=&amp;quot;rounded-lg border ${side===&amp;#x27;OPEN&amp;#x27;?&amp;#x27;border-indigo-200 bg-indigo-50&amp;#x27;:&amp;#x27;border-rose-200 bg-rose-50&amp;#x27;} p-2 text-center&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;flex items-center justify-between&amp;quot;&amp;gt;&amp;lt;span class=&amp;quot;text-[7px] font-black text-slate-400&amp;quot;&amp;gt;#${i+1}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;text-[8px] font-black text-emerald-600&amp;quot;&amp;gt;${x.score.toFixed(1)}&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-sm font-black ${side===&amp;#x27;OPEN&amp;#x27;?&amp;#x27;text-indigo-700&amp;#x27;:&amp;#x27;text-rose-700&amp;#x27;}&amp;quot;&amp;gt;${x.jodi}&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[7px] font-bold text-slate-500&amp;quot;&amp;gt;J ${x.delay} • F ${x.hits} • R ${x.recentHits}&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[7px] font-bold text-slate-400&amp;quot;&amp;gt;O ${x.delayOpen} • C ${x.delayClose}&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;text-[7px] font-bold text-slate-400&amp;quot;&amp;gt;T ${x.totalDelay} • D ${x.diffDelay} • FAM ${x.famDelay}&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;`).join(&amp;#x27;&amp;#x27;)}&amp;lt;/div&amp;gt;`:&amp;#x27;&amp;lt;div class=&amp;quot;py-8 text-center text-[10px] font-bold text-slate-400&amp;quot;&amp;gt;No filtered Jodi found&amp;lt;/div&amp;gt;&amp;#x27;;
 }
-async function load(){try{$('status').textContent='Loading local database...';let[ms,rs]=await Promise.all([getDocs(collection(db,'markets')),getDocs(collection(db,'matka_records'))]);markets=[];ms.forEach(d=&gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));let old=$('marketSelect').value||'ALL_MERGED';$('marketSelect').innerHTML='&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;'+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,'&amp;quot;')}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join('');if(markets.some(m=&gt;m.name===old))$('marketSelect').value=old;rows=[];rs.forEach(d=&gt;{let r=d.data();if(r.date&amp;&amp;r.marketName)rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||'00:00'})});rows=sort(rows);selectedDigit=null;calculate();$('status').textContent=`${rows.filter(completed).length} completed games • 6 group comparison • MARKET-WISE DIGIT DELAY • MULTI-FACTOR JODI RANKING`;}catch(e){console.error(e);$('status').textContent='ERROR: '+(e.message||e)}}
-$('marketSelect').onchange=()=&gt;{selectedDigit=null;calculate()};$('refreshBtn').onclick=()=&gt;load();load();
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" id="page-8" style="display:none" title="Play Result Test"></iframe><iframe class="page-frame" data-srcdoc="&lt;!DOCTYPE html&gt;
+async function load(){try{$(&amp;#x27;status&amp;#x27;).textContent=&amp;#x27;Loading local database...&amp;#x27;;let[ms,rs]=await Promise.all([getDocs(collection(db,&amp;#x27;markets&amp;#x27;)),getDocs(collection(db,&amp;#x27;matka_records&amp;#x27;))]);markets=[];ms.forEach(d=&amp;gt;markets.push({id:d.id,...d.data()}));markets.sort((a,b)=&amp;gt;tmin(a.openTime)-tmin(b.openTime));let old=$(&amp;#x27;marketSelect&amp;#x27;).value||&amp;#x27;ALL_MERGED&amp;#x27;;$(&amp;#x27;marketSelect&amp;#x27;).innerHTML=&amp;#x27;&amp;lt;option value=&amp;quot;ALL_MERGED&amp;quot;&amp;gt;ALL MARKETS (MERGED)&amp;lt;/option&amp;gt;&amp;#x27;+markets.filter(m=&amp;gt;m.name).map(m=&amp;gt;`&amp;lt;option value=&amp;quot;${String(m.name).replace(/&amp;quot;/g,&amp;#x27;&amp;quot;&amp;#x27;)}&amp;quot;&amp;gt;${String(m.name)}&amp;lt;/option&amp;gt;`).join(&amp;#x27;&amp;#x27;);if(markets.some(m=&amp;gt;m.name===old))$(&amp;#x27;marketSelect&amp;#x27;).value=old;rows=[];rs.forEach(d=&amp;gt;{let r=d.data();if(r.date&amp;amp;&amp;amp;r.marketName)rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&amp;gt;m.name===r.marketName)?.openTime||&amp;#x27;00:00&amp;#x27;})});rows=sort(rows);selectedDigit=null;calculate();$(&amp;#x27;status&amp;#x27;).textContent=`${rows.filter(completed).length} completed games • 6 group comparison • MARKET-WISE DIGIT DELAY • MULTI-FACTOR JODI RANKING`;}catch(e){console.error(e);$(&amp;#x27;status&amp;#x27;).textContent=&amp;#x27;ERROR: &amp;#x27;+(e.message||e)}}
+$(&amp;#x27;marketSelect&amp;#x27;).onchange=()=&amp;gt;{selectedDigit=null;calculate()};$(&amp;#x27;refreshBtn&amp;#x27;).onclick=()=&amp;gt;load();load();
+&amp;lt;/script&amp;gt;&amp;lt;script&amp;gt;
+(function(){
+ const tabs={digit:document.getElementById(&amp;#x27;playTabDigit&amp;#x27;),jodi:document.getElementById(&amp;#x27;playTabJodi&amp;#x27;),pana:document.getElementById(&amp;#x27;playTabPana&amp;#x27;)};
+ const panels={digit:document.getElementById(&amp;#x27;playDigitPanel&amp;#x27;),jodi:document.getElementById(&amp;#x27;playJodiPanel&amp;#x27;),pana:document.getElementById(&amp;#x27;playPanaPanel&amp;#x27;)};
+ function show(k){Object.keys(tabs).forEach(x=&amp;gt;{tabs[x].classList.toggle(&amp;#x27;active&amp;#x27;,x===k);panels[x].classList.toggle(&amp;#x27;active&amp;#x27;,x===k)});}
+ tabs.digit.onclick=()=&amp;gt;show(&amp;#x27;digit&amp;#x27;); tabs.jodi.onclick=()=&amp;gt;show(&amp;#x27;jodi&amp;#x27;); tabs.pana.onclick=()=&amp;gt;show(&amp;#x27;pana&amp;#x27;);
+})();
+&amp;lt;/script&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;" id="page-8" style="display:none" title="Play Result Test"></iframe><iframe class="page-frame" data-srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;gu&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
