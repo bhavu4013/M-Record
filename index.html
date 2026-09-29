@@ -97,6 +97,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
     font-size:17px!important;
   }
 }
+
 </style>
 </head>
 <body>
@@ -1457,6 +1458,7 @@ $(&#x27;marketSelect&#x27;).onchange=()=&gt;calculate();$(&#x27;refreshBtn&#x27;
 &lt;style&gt;
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
 input,select{outline:none}input:focus,select:focus{box-shadow:0 0 0 3px rgba(79,70,229,.12);border-color:#6366f1}
+.market-quick-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #e5e7eb}.market-quick-row:last-child{border-bottom:0}.market-quick-row input{width:22px;height:22px;accent-color:#06b6d4}.market-quick-name{font-weight:800}.market-quick-state{font-size:10px;font-weight:800;margin-right:8px}
 &lt;/style&gt;
 &lt;script&gt;
 /* LOCALDB iframe bridge — use the already initialized parent engine directly.
@@ -1550,7 +1552,7 @@ input,select{outline:none}input:focus,select:focus{box-shadow:0 0 0 3px rgba(79,
  &lt;div class=&quot;bg-white w-full max-w-xl rounded-3xl shadow-2xl max-h-[94vh] overflow-hidden flex flex-col&quot;&gt;
   &lt;div class=&quot;p-5 border-b border-slate-200 flex items-center justify-between&quot;&gt;
    &lt;div&gt;&lt;div class=&quot;font-black text-2xl text-slate-800&quot;&gt;Market Management&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-400 font-bold mt-1&quot;&gt;ADD • EDIT • DELETE • TIMING • WORKING DAYS&lt;/div&gt;&lt;/div&gt;
-   &lt;button id=&quot;marketEnableDisableBtn&quot; type=&quot;button&quot; class=&quot;px-3 py-2 rounded-xl bg-cyan-500 text-white text-xs font-black shadow mr-2&quot;&gt;ENABLE / DISABLE&lt;/button&gt;&lt;button id=&quot;closeMarket&quot; class=&quot;w-10 h-10 rounded-full bg-slate-100 text-slate-600 font-black text-xl&quot;&gt;×&lt;/button&gt;
+   &lt;div class=&quot;flex items-center gap-2&quot;&gt;&lt;button id=&quot;marketEnableDisableBtn&quot; type=&quot;button&quot; class=&quot;px-3 py-2 rounded-xl bg-cyan-500 text-white text-xs font-black shadow&quot;&gt;ENABLE / DISABLE&lt;/button&gt;&lt;button id=&quot;closeMarket&quot; class=&quot;w-10 h-10 rounded-full bg-slate-100 text-slate-600 font-black text-xl&quot;&gt;×&lt;/button&gt;&lt;/div&gt;
   &lt;/div&gt;
 
   &lt;div class=&quot;overflow-y-auto p-5 space-y-4&quot;&gt;
@@ -1561,7 +1563,7 @@ input,select{outline:none}input:focus,select:focus{box-shadow:0 0 0 3px rgba(79,
    &lt;/div&gt;
 
    &lt;div id=&quot;marketEnableDisablePanel&quot; class=&quot;hidden rounded-2xl border border-cyan-200 bg-cyan-50 p-3&quot;&gt;
-    &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-slate-800&quot;&gt;MARKET ENABLE / DISABLE&lt;/div&gt;&lt;button id=&quot;closeMarketEnableDisable&quot; type=&quot;button&quot; class=&quot;text-slate-500 font-black px-2&quot;&gt;×&lt;/button&gt;&lt;/div&gt;
+    &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-slate-800&quot;&gt;MARKET ENABLE / DISABLE&lt;/div&gt;&lt;button id=&quot;closeMarketEnableDisable&quot; type=&quot;button&quot; class=&quot;text-slate-500 font-black&quot;&gt;×&lt;/button&gt;&lt;/div&gt;
     &lt;div id=&quot;marketEnableDisableList&quot; class=&quot;bg-white rounded-xl border border-slate-200 overflow-hidden&quot;&gt;&lt;/div&gt;
    &lt;/div&gt;
 
@@ -1760,26 +1762,6 @@ $(&quot;closeMarket&quot;).onclick=()=&gt;$(&quot;marketModal&quot;).classList.a
 $(&quot;marketTabAdd&quot;).onclick=()=&gt;setMarketTab('add');$(&quot;marketTabEdit&quot;).onclick=()=&gt;setMarketTab('edit');$(&quot;marketTabDelete&quot;).onclick=()=&gt;setMarketTab('delete');
 $(&quot;marketSearch&quot;).oninput=renderMarketList;$(&quot;deleteMarketSelect&quot;).onchange=updateDeleteInfo;
 $(&quot;newMarket&quot;).onclick=clearMarketForm;
-function renderMarketEnableDisableList(){
- const box=$(&quot;marketEnableDisableList&quot;);if(!box)return;
- const list=markets.slice().sort((a,b)=&gt;timeToMin(a.openTime)-timeToMin(b.openTime));box.innerHTML=&quot;&quot;;
- if(!list.length){box.innerHTML='&lt;div class=&quot;p-4 text-center text-[10px] font-bold text-slate-400&quot;&gt;NO MARKETS FOUND&lt;/div&gt;';return}
- list.forEach(m=&gt;{
-  const row=document.createElement(&quot;div&quot;);row.className=&quot;flex items-center justify-between gap-3 px-3 py-3 border-b border-slate-100&quot;;
-  const left=document.createElement(&quot;div&quot;);left.className=&quot;min-w-0&quot;;
-  const name=document.createElement(&quot;div&quot;);name.className=&quot;font-black text-sm truncate&quot;;name.textContent=m.name||&quot;Unnamed Market&quot;;
-  const info=document.createElement(&quot;div&quot;);info.className=&quot;text-[9px] font-bold text-slate-400 mt-0.5&quot;;
-  left.append(name,info);
-  const label=document.createElement(&quot;label&quot;);label.className=&quot;flex items-center gap-2 shrink-0 cursor-pointer&quot;;
-  const state=document.createElement(&quot;span&quot;);state.className=&quot;text-[9px] font-black&quot;;
-  const cb=document.createElement(&quot;input&quot;);cb.type=&quot;checkbox&quot;;cb.className=&quot;w-6 h-6 accent-cyan-500&quot;;
-  const paint=()=&gt;{const on=m.enabled!==false;cb.checked=on;state.textContent=on?&quot;ON&quot;:&quot;OFF&quot;;state.className=&quot;text-[9px] font-black &quot;+(on?&quot;text-cyan-700&quot;:&quot;text-slate-500&quot;);info.textContent=(m.openTime||&quot;--:--&quot;)+&quot; • &quot;+(on?&quot;ENABLED FOR ANALYSIS&quot;:&quot;DISABLED FROM ANALYSIS&quot;)};paint();
-  cb.onchange=async()=&gt;{cb.disabled=true;const next=cb.checked;try{await updateDoc(doc(db,&quot;markets&quot;,m.id),{enabled:next,updatedAt:new Date().toISOString()});m.enabled=next;paint();await loadMarkets();renderMarketEnableDisableList();renderMarketList();fillDeleteMarkets();setMarketStatus((next?&quot;✓ ENABLED: &quot;:&quot;✓ DISABLED FROM ANALYSIS: &quot;)+m.name)}catch(e){cb.checked=!next;setMarketStatus(&quot;UPDATE ERROR: &quot;+(e.message||e),true)}finally{cb.disabled=false}};
-  label.append(state,cb);row.append(left,label);box.appendChild(row);
- });
-}
-$(&quot;marketEnableDisableBtn&quot;).onclick=async()=&gt;{const p=$(&quot;marketEnableDisablePanel&quot;);p.classList.toggle(&quot;hidden&quot;);if(!p.classList.contains(&quot;hidden&quot;)){await loadMarkets();renderMarketEnableDisableList()}};
-$(&quot;closeMarketEnableDisable&quot;).onclick=()=&gt;$(&quot;marketEnableDisablePanel&quot;).classList.add(&quot;hidden&quot;);
 $(&quot;saveMarket&quot;).onclick=async()=&gt;{
  const id=$(&quot;editMarket&quot;).value.trim(),name=$(&quot;marketName&quot;).value.trim(),ot=$(&quot;marketOpen&quot;).value,ct=$(&quot;marketClose&quot;).value,workingDays=marketDays(),enabled=$(&quot;marketEnabled&quot;).checked;
  if(!name||!ot||!ct){setMarketStatus('Market name, Open Time and Close Time are required.',true);return}
@@ -1818,7 +1800,7 @@ initMarketTimeOptions();
 
 $(&quot;successOk&quot;).onclick=hideSuccess;$(&quot;successModal&quot;).onclick=e=&gt;{if(e.target===$(&quot;successModal&quot;))hideSuccess()};
 try{await loadMarkets();if($(&quot;market&quot;).value)await loadRecords();chooseAutomaticMarket();await loadRecords()}catch(e){msg(&quot;ERROR: &quot;+(e.message||e),1)}
-&lt;/script&gt;
+\n\n$('marketEnableDisableBtn').onclick=async()=&gt;{\n const panel=$('marketEnableDisablePanel');\n panel.classList.toggle('hidden');\n if(!panel.classList.contains('hidden')) renderMarketEnableDisableList();\n};\n$('closeMarketEnableDisable').onclick=()=&gt;$('marketEnableDisablePanel').classList.add('hidden');\nasync function renderMarketEnableDisableList(){\n const box=$('marketEnableDisableList');\n box.innerHTML='&lt;div class=&quot;p-3 text-sm font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;';\n try{\n  await loadMarkets();\n  if(!markets.length){box.innerHTML='&lt;div class=&quot;p-3 text-sm font-bold text-slate-500&quot;&gt;NO MARKET FOUND&lt;/div&gt;';return}\n  box.innerHTML='';\n  markets.forEach(m=&gt;{\n   const row=document.createElement('div');row.className='market-quick-row';\n   const name=document.createElement('span');name.className='market-quick-name';name.textContent=m.name;\n   const right=document.createElement('span');\n   const state=document.createElement('span');state.className='market-quick-state';state.textContent=m.enabled!==false?'Enabled':'Disabled';\n   const cb=document.createElement('input');cb.type='checkbox';cb.checked=m.enabled!==false;\n   cb.onchange=async()=&gt;{\n    cb.disabled=true;\n    try{\n     const enabled=cb.checked;\n     await updateDoc(doc(db,'markets',m.id),{enabled,updatedAt:new Date().toISOString()});\n     m.enabled=enabled;state.textContent=enabled?'Enabled':'Disabled';\n     await loadMarkets();renderMarketList();fillDeleteMarkets();\n    }catch(e){cb.checked=!cb.checked;state.textContent=cb.checked?'Enabled':'Disabled';setMarketStatus('UPDATE ERROR: '+(e.message||e),true)}\n    cb.disabled=false;\n   };\n   right.append(state,cb);row.append(name,right);box.appendChild(row);\n  });\n }catch(e){box.innerHTML='&lt;div class=&quot;p-3 text-sm font-bold text-red-600&quot;&gt;ERROR: '+(e.message||e)+'&lt;/div&gt;'}\n}\n&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;" id="page-9" style="display:none" title="Panna Logger"></iframe></main>
 </div>
@@ -2237,5 +2219,19 @@ document.getElementById('clearLocalDb').onclick=async()=>{if(!confirm('DELETE AL
 <script>
 (()=>{if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}})();
 </script>
+
+<div class="market-toggle-wrap" style="margin:12px">
+  <button type="button" class="market-toggle-btn" onclick="openMarketTogglePanel()">ENABLE / DISABLE MARKETS</button>
+</div>
+<div id="marketToggleOverlay" class="market-toggle-overlay" onclick="if(event.target===this)closeMarketTogglePanel()">
+  <div class="market-toggle-modal">
+    <div class="market-toggle-head"><h3>Market Enable / Disable</h3><button type="button" class="market-toggle-close" onclick="closeMarketTogglePanel()">✕</button></div>
+    <div id="marketToggleList" class="market-toggle-list"></div>
+  </div>
+</div>
+
+
+
+
 </body>
 </html>
