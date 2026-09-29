@@ -5,6 +5,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport"/>
 <title>Matka Analysis Platform</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f1f5f9;color:#0f172a;overflow:hidden}
@@ -275,70 +279,51 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
     },
     async addMany(ref,items){
       const input=Array.isArray(items)?items:[];
-      if(!input.length) return {added:0,ids:[]};
+      if(!input.length) return {added:0,updated:0,ids:[]};
       const name=ref.name;
-      const objs=input.map(data=>{
-        const obj={...clone(data)};
-        if(name==='matka_records'&&obj.date&&obj.marketName)obj.date_market=obj.date+'__'+obj.marketName;
-        obj.id=makeId(name==='markets'?'m':'r');
-        return obj;
-      });
-
+      const objs=input.map(data=>{const obj={...clone(data)};if(name==='matka_records'&&obj.date&&obj.marketName)obj.date_market=obj.date+'__'+obj.marketName;obj.id=makeId(name==='markets'?'m':'r');return obj;});
       if(name==='matka_records'){
-        // IMPORT RULE: incoming rows are corrections. If Date + Market already exists, replace it.
-        // If the same key appears more than once in the import, the LAST incoming row wins.
-        const existing=await all('matka_records');
-        const existingByKey=new Map(existing.map(x=>x&&x.date&&x.marketName?[x.date+'__'+x.marketName,x]:null).filter(Boolean));
-        const latestByKey=new Map();
-        for(const obj of objs){
-          if(obj.date&&obj.marketName) latestByKey.set(obj.date+'__'+obj.marketName,obj);
-        }
-        const finalObjs=[];
-        for(const obj of objs){
-          if(!obj.date||!obj.marketName){ finalObjs.push(obj); continue; }
-          const key=obj.date+'__'+obj.marketName;
-          if(latestByKey.get(key)!==obj) continue;
-          const old=existingByKey.get(key);
-          if(old) obj.id=old.id;
-          finalObjs.push(obj);
-        }
-        objs.length=0; objs.push(...finalObjs);
+        // Fast correction import: last row for the same Date + Market wins.
+        const latest=new Map();
+        for(const obj of objs) if(obj.date&&obj.marketName) latest.set(obj.date+'__'+obj.marketName,obj);
+        const filtered=[]; const seen=new Set();
+        for(let i=objs.length-1;i>=0;i--){const obj=objs[i];const key=obj.date&&obj.marketName?obj.date+'__'+obj.marketName:'';if(key){if(seen.has(key))continue;seen.add(key);}filtered.unshift(obj);}
+        objs.length=0;objs.push(...filtered);
       }
-
+      let added=0,updated=0;
       if(mode==='local'){
         const arr=memory[name]||[];
-        if(name==='matka_records'){
-          const incoming=new Map(objs.filter(x=>x.date&&x.marketName).map(x=>[x.date+'__'+x.marketName,x]));
-          for(let i=arr.length-1;i>=0;i--){ const x=arr[i]; const key=x&&x.date&&x.marketName?x.date+'__'+x.marketName:''; if(key&&incoming.has(key)) arr.splice(i,1); }
+        const map=name==='matka_records'?new Map(arr.filter(x=>x&&x.date&&x.marketName).map(x=>[x.date+'__'+x.marketName,x])):new Map();
+        for(const obj of objs){
+          if(name==='matka_records'&&obj.date&&obj.marketName){const old=map.get(obj.date+'__'+obj.marketName);if(old){obj.id=old.id;const i=arr.findIndex(x=>x.id===old.id);if(i>=0)arr[i]=clone(obj);else arr.push(clone(obj));updated++;}else{arr.push(clone(obj));added++;}map.set(obj.date+'__'+obj.marketName,obj);}
+          else{arr.push(clone(obj));added++;}
         }
-        for(const obj of objs) arr.push(clone(obj));
-        memory[name]=arr;
-        if(!lsWrite()) throw new Error('Device local storage is unavailable');
+        memory[name]=arr;if(!lsWrite())throw new Error('Device local storage is unavailable');
       }else{
         try{
           const db=await openDB();
           await new Promise((resolve,reject)=>{
-            const tx=db.transaction(name,'readwrite');
-            const store=tx.objectStore(name);
-            for(const obj of objs) store.put(obj);
-            tx.oncomplete=resolve;
-            tx.onerror=()=>reject(tx.error||new Error('Local DB bulk write failed'));
-            tx.onabort=()=>reject(tx.error||new Error('Local DB bulk write aborted'));
+            const tx=db.transaction(name,'readwrite'),store=tx.objectStore(name);
+            let pending=objs.length;
+            if(!pending){resolve();return;}
+            for(const obj of objs){
+              if(name==='matka_records'&&obj.date_market&&store.indexNames.contains('date_market')){
+                const req=store.index('date_market').get(obj.date_market);
+                req.onsuccess=()=>{const old=req.result;if(old){obj.id=old.id;updated++;}else added++;store.put(obj);if(--pending===0){} };
+                req.onerror=()=>{try{store.put(obj);added++;}catch(e){reject(e)} if(--pending===0){}};
+              }else{store.put(obj);added++;pending--;}
+            }
+            tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||new Error('Local DB bulk write failed'));tx.onabort=()=>reject(tx.error||new Error('Local DB bulk write aborted'));
           });
         }catch(e){
           switchToLocal();
-          const arr=memory[name]||[];
-          for(const obj of objs) arr.push(clone(obj));
-          memory[name]=arr;
-          if(!lsWrite()) throw new Error('Device local storage is unavailable');
+          const arr=memory[name]||[];const map=name==='matka_records'?new Map(arr.filter(x=>x&&x.date&&x.marketName).map(x=>[x.date+'__'+x.marketName,x])):new Map();
+          for(const obj of objs){if(name==='matka_records'&&obj.date&&obj.marketName){const old=map.get(obj.date+'__'+obj.marketName);if(old){obj.id=old.id;const i=arr.findIndex(x=>x.id===old.id);if(i>=0)arr[i]=clone(obj);updated++;}else{arr.push(clone(obj));added++;}map.set(obj.date+'__'+obj.marketName,obj);}else{arr.push(clone(obj));added++;}}
+          memory[name]=arr;if(!lsWrite())throw new Error('Device local storage is unavailable');
         }
       }
-
-      // Update cache once after the whole batch, instead of invalidating it per row.
-      if(Array.isArray(dataCache[name])) dataCache[name]=dataCache[name].concat(objs.map(clone));
-      else dataCache[name]=clone(name==='markets'?memory.markets:memory.matka_records);
-      clearPageCaches();
-      return {added:objs.length,ids:objs.map(x=>x.id)};
+      dataCache[name]=clone(memory[name]||[]);clearPageCaches();
+      return {added,updated,total:added+updated,ids:objs.map(x=>x.id)};
     },
     async updateDoc(ref,data){
       const rows=await all(ref.name),old=rows.find(x=>x.id===ref.id);
@@ -1347,48 +1332,38 @@ function follow(h,side){
  let top=previous.slice(0,3), mid=previous.slice(3,7), recent=previous.slice(7,10);
  const hit=h.length?digit(h[h.length-1][field]):null;
  const source=hit!==null?(top.some(x=&gt;x.d===hit)?'TOP':mid.some(x=&gt;x.d===hit)?'MID':recent.some(x=&gt;x.d===hit)?'RECENT':'NONE'):'NONE';
-
- // Sequence movement is independent from group counters.
- // TOP hit: TOP -&gt; RECENT, RECENT -&gt; MID, MID -&gt; TOP.
- // The hit digit is removed from TOP and inserted into RECENT.
  if(source==='TOP'){
-   const hitObj=top.find(x=&gt;x.d===hit);
-   top=top.filter(x=&gt;x.d!==hit);
-   const rToMid=most(recent,[hit]);
-   if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d);
-   if(rToMid) mid=uniq([...mid,rToMid]);
-   const mToTop=most(mid,[hit]);
-   if(mToTop) mid=mid.filter(x=&gt;x.d!==mToTop.d);
-   if(mToTop) top=uniq([...top,mToTop]);
+   const hitObj=top.find(x=&gt;x.d===hit); top=top.filter(x=&gt;x.d!==hit);
+   const rToMid=most(recent,[hit]); if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d); if(rToMid) mid=uniq([...mid,rToMid]);
+   const mToTop=most(mid,[hit]); if(mToTop) mid=mid.filter(x=&gt;x.d!==mToTop.d); if(mToTop) top=uniq([...top,mToTop]);
    if(hitObj) recent=uniq([...recent,hitObj]);
- }
- // MID hit: hit goes to RECENT; the most-delayed RECENT digit goes to MID.
- else if(source==='MID'){
-   const hitObj=mid.find(x=&gt;x.d===hit);
-   mid=mid.filter(x=&gt;x.d!==hit);
-   const rToMid=most(recent,[hit]);
-   if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d);
-   if(rToMid) mid=uniq([...mid,rToMid]);
+ } else if(source==='MID'){
+   const hitObj=mid.find(x=&gt;x.d===hit); mid=mid.filter(x=&gt;x.d!==hit);
+   const rToMid=most(recent,[hit]); if(rToMid) recent=recent.filter(x=&gt;x.d!==rToMid.d); if(rToMid) mid=uniq([...mid,rToMid]);
    if(hitObj) recent=uniq([...recent,hitObj]);
- }
- // RECENT hit stays in RECENT. No duplicate insertion.
- else if(source==='RECENT'){
-   recent=uniq(recent);
- }
-
- // Safety: always return exactly 3 / 4 / 3 unique digits.
- // If a bucket is short, fill from the remaining ranked digits by individual delay.
+ } else if(source==='RECENT') recent=uniq(recent);
  const used=new Set([...top,...mid,...recent].map(x=&gt;x.d));
- const fill=(bucket,size)=&gt;{for(const x of rank(h.slice(0,-1))){if(bucket.length&gt;=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};
+ const fill=(bucket,size)=&gt;{for(const x of previous){if(bucket.length&gt;=size)break;if(!used.has(x.d)){bucket.push(x);used.add(x.d)}}return bucket};
  top=fill(uniq(top),3);mid=fill(uniq(mid),4);recent=fill(uniq(recent),3);
 
- // Group delay counters are separate from individual digit delay.
+ // Calculate group-delay counters iteratively. The old implementation called
+ // follow(h.slice(0,-1), side) recursively once per historical row, which
+ // overflows the JavaScript call stack on large local databases. This loop
+ // produces the same TOP/MID/RECENT group-delay progression without recursion.
  let delay={top:0,mid:0,recent:0};
- if(h.length&gt;1)delay=follow(h.slice(0,-1),side).delay;
- delay=source==='TOP'?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
-       source==='MID'?{top:delay.top+1,mid:0,recent:delay.recent+1}:
-       source==='RECENT'?{top:delay.top+1,mid:delay.mid+1,recent:0}:
-       {top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};
+ const stat=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0}));
+ for(let i=0;i&lt;h.length;i++){
+   const ranked=stat.map(x=&gt;({d:x.d,hits:x.hits,delay:x.last&gt;=0?i-1-x.last:i}))
+     .sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d);
+   const t=ranked.slice(0,3),m=ranked.slice(3,7),r=ranked.slice(7,10);
+   const hd=digit(h[i][field]);
+   const src=hd!==null?(t.some(x=&gt;x.d===hd)?'TOP':m.some(x=&gt;x.d===hd)?'MID':r.some(x=&gt;x.d===hd)?'RECENT':'NONE'):'NONE';
+   delay=src==='TOP'?{top:0,mid:delay.mid+1,recent:delay.recent+1}:
+         src==='MID'?{top:delay.top+1,mid:0,recent:delay.recent+1}:
+         src==='RECENT'?{top:delay.top+1,mid:delay.mid+1,recent:0}:
+         {top:delay.top+1,mid:delay.mid+1,recent:delay.recent+1};
+   if(hd!==null){stat[hd].last=i;stat[hd].hits++;}
+ }
  return {top,mid,recent,delay};
 }
 function scopeGroups(h,side){let f=follow(h,side);return[{name:'TOP',digits:f.top,delay:f.delay.top},{name:'MID',digits:f.mid,delay:f.delay.mid},{name:'RECENT',digits:f.recent,delay:f.delay.recent}]}
@@ -2261,6 +2236,9 @@ const show=async()=>{modal.style.display='flex';try{const c=await LocalDB.counts
 document.getElementById('exportLocalDb').onclick=async()=>{try{const data=await LocalDB.exportData(),blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='matka-local-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);status.textContent='✓ Backup file created';}catch(e){status.textContent='BACKUP ERROR: '+e.message}};
 document.getElementById('importLocalDb').onclick=()=>file.click();file.onchange=async()=>{const f=file.files?.[0];if(!f)return;if(!confirm('Restore this backup? Current local data will be replaced.')){file.value='';return}try{await LocalDB.importData(JSON.parse(await f.text()));status.textContent='✓ Restored. Reloading...';setTimeout(()=>location.reload(),500)}catch(e){status.textContent='RESTORE ERROR: '+e.message}file.value=''};
 document.getElementById('clearLocalDb').onclick=async()=>{if(!confirm('DELETE ALL MARKETS AND ALL RECORDS FROM THIS DEVICE?'))return;try{await LocalDB.clearAll();status.textContent='✓ Deleted. Reloading...';setTimeout(()=>location.reload(),500)}catch(e){status.textContent='DELETE ERROR: '+e.message}}})();
+</script>
+<script>
+(()=>{if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}})();
 </script>
 </body>
 </html>
