@@ -2013,7 +2013,27 @@ window.addEventListener('message',e=&gt;{if(e.data&amp;&amp;e.data.type==='BACKT
 <script>
 const buttons=[...document.querySelectorAll('.nav-btn')],frames=[...document.querySelectorAll('.page-frame')];
 const moreNav=document.getElementById('moreNav'),morePanel=document.getElementById('morePanel'),morePages=[0,1,2,3,4,5,6];
-function activateFrame(f){if(!f)return;if(!f.srcdoc&&f.dataset.srcdoc){f.srcdoc=f.dataset.srcdoc;f.dataset.loaded='1';}f.style.display='block';}
+function decodeFrameSrcdoc(v){
+  if(!v) return '';
+  // dataset may contain an HTML-entity encoded srcdoc on some Android/WebView/GitHub paths.
+  // Decode repeatedly only when entity markers are still present.
+  let out=String(v);
+  for(let i=0;i<2 && /&(?:lt|gt|quot|amp|#39|#x27);/i.test(out);i++){
+    const ta=document.createElement('textarea');
+    ta.innerHTML=out;
+    out=ta.value;
+  }
+  return out;
+}
+function activateFrame(f){
+  if(!f)return;
+  if(!f.srcdoc && f.dataset.srcdoc){
+    const html=decodeFrameSrcdoc(f.dataset.srcdoc);
+    f.srcdoc=html;
+    f.dataset.loaded='1';
+  }
+  f.style.display='block';
+}
 function openPage(index){buttons.forEach(b=>b.classList.toggle('active',Number(b.dataset.page)===index));if(moreNav)moreNav.classList.toggle('active',morePages.includes(index));if(morePanel)morePanel.classList.remove('show');frames.forEach(f=>{const a=Number((f.id||'').replace('page-',''))===index;if(a)activateFrame(f);else f.style.display='none';});try{localStorage.setItem('analysisPlatformPageV8',String(index));}catch(e){}}
 buttons.forEach(b=>b.addEventListener('click',()=>openPage(Number(b.dataset.page))));
 if(moreNav)moreNav.addEventListener('click',e=>{e.stopPropagation();morePanel.classList.toggle('show');});
