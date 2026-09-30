@@ -2143,13 +2143,59 @@ function parseMarkets(text){
 }
 async function getMarkets(){const s=await LocalDB.getDocs(LocalDB.collection(null,'markets'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
 async function getRecords(){const s=await LocalDB.getDocs(LocalDB.collection(null,'matka_records'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
-async function fetchHtml(){const api=$('sourceUrl').value.trim();let errs=[];
- try{const url=api+(api.includes('?')?'&':'?')+'action=fetch';const r=await fetch(url,{cache:'no-store',headers:{'Accept':'application/json'}});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');if(!Array.isArray(data.markets))throw new Error('API response has no markets array');return {data,url}}catch(e){errs.push('Apps Script: '+(e.message||e))}
- throw new Error(errs.join(' | '));}
+const FETCH_CACHE_TTL=30000;
+let memoryFetchCache=null;
+function readFetchCache(api){
+ try{const x=JSON.parse(localStorage.getItem('sara777_fetch_cache_v1')||'null');if(x&&x.api===api&&Date.now()-x.ts<FETCH_CACHE_TTL&&x.data&&Array.isArray(x.data.markets))return x}catch(_){}
+ return null;
+}
+function writeFetchCache(api,data){
+ try{localStorage.setItem('sara777_fetch_cache_v1',JSON.stringify({api,ts:Date.now(),data}))}catch(_){}
+ memoryFetchCache={api,ts:Date.now(),data};
+}
+function fetchJsonp(api){
+ return new Promise((resolve,reject)=>{
+  const cb='__sara777_cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+  const script=document.createElement('script');
+  const url=api+(api.includes('?')?'&':'?')+'action=fetch&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+  let done=false;
+  const finish=(fn,v)=>{if(done)return;done=true;try{delete window[cb]}catch(_){window[cb]=undefined}if(script.parentNode)script.parentNode.removeChild(script);fn(v)};
+  window[cb]=(data)=>finish(resolve,{data,url});
+  script.onerror=()=>finish(reject,new Error('JSONP request failed'));
+  setTimeout(()=>finish(reject,new Error('JSONP timeout (8s)')),8000);
+  script.src=url;
+  document.head.appendChild(script);
+ });
+}
+async function fetchHtml(force=false){
+ const api=$('sourceUrl').value.trim();
+ if(!api)throw new Error('Apps Script URL missing');
+ const cached=(!force&&memoryFetchCache&&memoryFetchCache.api===api&&Date.now()-memoryFetchCache.ts<FETCH_CACHE_TTL)?memoryFetchCache.data:(!force?readFetchCache(api):null);
+ if(cached)return {data:cached,url:'LOCAL CACHE',cached:true};
+ let last='';
+ try{
+  const r=await fetchJsonp(api);
+  const data=r.data;
+  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
+  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
+  writeFetchCache(api,data);
+  return r;
+ }catch(e){last=e.message||String(e)}
+ try{
+  const url=api+(api.includes('?')?'&':'?')+'action=fetch&_='+Date.now();
+  const r=await fetch(url,{cache:'no-store',redirect:'follow'});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const data=await r.json();
+  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
+  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
+  writeFetchCache(api,data);
+  return {data,url};
+ }catch(e){throw new Error('Apps Script: '+last+' | Direct: '+(e.message||e))}
+}
 function render(rows){$('count').textContent=rows.length+' RESULTS';$('rows').innerHTML=rows.map(x=&gt;`&lt;tr class=&quot;border-b&quot;&gt;&lt;td class=&quot;p-2 font-black&quot;&gt;${esc(x.market)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.open||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.jodi||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.close||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center font-black ${x.ok?'text-emerald-600':'text-amber-600'}&quot;&gt;${esc(x.status)}&lt;/td&gt;&lt;/tr&gt;`).join('')}
-async function run(testOnly=false){
+async function run(testOnly=false,force=true){
  $('fetchBtn').disabled=true;$('fetchBtn').textContent='FETCHING...';$('status').textContent='Fetching Sara777...';let out=[];
- try{const {data,url}=await fetchHtml();const parsed=(data.markets||[]).map(x=>({name:x.market||x.name||'',open:x.openPanna||x.open||'',jodi:x.jodi||'',close:x.closePanna||x.close||'',complete:x.complete!==false}));if(testOnly){$('status').textContent='✓ Source reachable • '+parsed.length+' market results detected • '+url;render(parsed.map(x=&gt;({...x,market:x.name,status:x.complete?'DETECTED':'INCOMPLETE',ok:!!x.complete})));return}
+ try{const {data,url,cached}=await fetchHtml(force);const parsed=(data.markets||[]).map(x=>({name:x.market||x.name||'',open:x.openPanna||x.open||'',jodi:x.jodi||'',close:x.closePanna||x.close||'',complete:x.complete!==false}));if(testOnly){$('status').textContent='✓ Source reachable • '+parsed.length+' market results detected'+(cached?' • CACHE':'')+' • '+url;render(parsed.map(x=&gt;({...x,market:x.name,status:x.complete?'DETECTED':'INCOMPLETE',ok:!!x.complete})));return}
  const markets=await getMarkets(), records=await getRecords(), todayDate=today();
  const configured=new Map(markets.map(m=&gt;[norm(m.name),m]));
  for(const x of parsed){const market=configured.get(norm(x.name));if(!market){continue}
@@ -2163,7 +2209,7 @@ async function run(testOnly=false){
    }catch(e){row.status='ERROR';row.error=e.message}
    out.push(row);
  }
- render(out);const good=out.filter(x=&gt;x.ok).length,inc=out.filter(x=&gt;x.status==='INCOMPLETE').length;$('status').textContent=`✓ ${good} saved/updated • ${inc} incomplete • ${out.length} configured results checked • ${todayDate}`;
+ render(out);const good=out.filter(x=&gt;x.ok).length,inc=out.filter(x=&gt;x.status==='INCOMPLETE').length;$('status').textContent=`✓ ${good} saved/updated • ${inc} incomplete • ${out.length} configured results checked • ${todayDate}`+(cached?' • CACHE':'');
  }catch(e){$('status').textContent='✕ FETCH ERROR: '+(e.message||e);render([])}finally{$('fetchBtn').disabled=false;$('fetchBtn').textContent='FETCH NOW'}
 }
 $('fetchBtn').onclick=()=&gt;run(false);$('testBtn').onclick=()=&gt;run(true);
