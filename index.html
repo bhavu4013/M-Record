@@ -400,6 +400,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;font-family:system-ui,-apple
 <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
 <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
 <button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+<button class="nav-btn" data-page="12"><span>🌐</span><span>Auto Result</span></button>
 <div class="nav-more-title">MORE</div>
 <button class="nav-btn more-nav" data-page="2"><span>🔢</span><span>Jodi 00–99</span></button>
 <button class="nav-btn more-nav" data-page="3"><span>🔢</span><span>Digit</span></button>
@@ -1822,52 +1823,391 @@ try{await loadMarkets();if($(&quot;market&quot;).value)await loadRecords();choos
 &lt;/body&gt;
 &lt;/html&gt;" id="page-9" style="display:none" title="Panna Logger"></iframe></main>
 </div>
-<iframe class="page-frame" data-srcdoc="&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;&lt;title&gt;PLAY LOGIC BACKTEST&lt;/title&gt;&lt;script&gt;
+<iframe class="page-frame" data-srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&lt;title&gt;BACKTEST&lt;/title&gt;
+&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+&lt;style&gt;
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}
+.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
+.badge{font-size:9px;font-weight:900;padding:4px 7px;border-radius:7px}
+&lt;/style&gt;
+&lt;script&gt;
 (function(){
   function install(){
-    const api=parent &amp;&amp; parent.LocalDB;
+    const api=parent&amp;&amp;parent.LocalDB;
     if(!api) throw new Error(&#x27;Parent LocalDB is not initialized&#x27;);
     window.__LocalDBProxy=api; window.LocalDB=api;
   }
-  try{install();}catch(e){
-    if(parent &amp;&amp; parent.LocalDBReady) parent.LocalDBReady.then(install).catch(()=&gt;{});
+  try{install()}catch(e){
+    if(parent&amp;&amp;parent.LocalDBReady) parent.LocalDBReady.then(install).catch(()=&gt;{});
     else setTimeout(()=&gt;{try{install()}catch(_){}},50);
   }
 })();
-&lt;/script&gt;&lt;style&gt;
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif;background:#f1f5f9;color:#1e293b}.wrap{max-width:900px;margin:0 auto;padding:12px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(15,23,42,.04)}.head{display:flex;align-items:center;justify-content:space-between;gap:8px}.title{font-size:18px;font-weight:950;color:#4338ca}.sub{font-size:10px;font-weight:700;color:#64748b;margin-top:2px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}select,button{font:inherit}.select{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:#fff;font-size:12px;font-weight:800}.run{border:0;border-radius:10px;padding:10px 14px;background:#4f46e5;color:#fff;font-size:12px;font-weight:900}.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.stat{border-radius:12px;padding:9px;text-align:center;border:1px solid #e2e8f0;background:#f8fafc}.stat b{display:block;font-size:8px;color:#64748b}.stat strong{display:block;font-size:19px;margin-top:2px}.hit{background:#ecfdf5;border-color:#a7f3d0}.hit strong{color:#047857}.miss{background:#fff1f2;border-color:#fecdd3}.miss strong{color:#be123c}.rate{background:#eef2ff;border-color:#c7d2fe}.rate strong{color:#4338ca}.method{font-size:9px;font-weight:700;color:#64748b;line-height:1.45;margin-top:8px}.row{border:1px solid #e2e8f0;border-radius:13px;padding:10px;margin-bottom:7px}.row.hitrow{background:#f0fdf4;border-color:#bbf7d0}.row.missrow{background:#fff7f7;border-color:#fecaca}.rhead{display:flex;justify-content:space-between;gap:8px}.date{font-size:9px;font-weight:900;color:#64748b}.badge{font-size:8px;font-weight:950;padding:5px 7px;border-radius:7px;background:#fff;border:1px solid #cbd5e1}.badge.ok{color:#047857;border-color:#a7f3d0}.badge.no{color:#be123c;border-color:#fecaca}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px;font-size:9px;font-weight:800}.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.chip{padding:5px 7px;border-radius:7px;background:#eef2ff;color:#4338ca;font-size:9px;font-weight:950;border:1px solid #c7d2fe}.jchip{background:#f0fdf4;color:#047857;border-color:#bbf7d0}.empty{text-align:center;padding:30px 10px;color:#94a3b8;font-size:10px;font-weight:800}@media(max-width:650px){.controls{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}.summary .stat:last-child{grid-column:span 2}.grid2{grid-template-columns:1fr}}
-&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;wrap&quot;&gt;
-&lt;section class=&quot;card&quot;&gt;&lt;div class=&quot;head&quot;&gt;&lt;div&gt;&lt;div class=&quot;title&quot;&gt;PLAY LOGIC BACKTEST&lt;/div&gt;&lt;div class=&quot;sub&quot;&gt;DIGIT + JODI • EXACT CURRENT PLAY LOGIC&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;runBtn&quot; class=&quot;run&quot;&gt;↻ RUN BACKTEST&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;controls&quot;&gt;&lt;select id=&quot;marketSelect&quot; class=&quot;select&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;&lt;select id=&quot;windowSelect&quot; class=&quot;select&quot;&gt;&lt;option value=&quot;30&quot;&gt;LAST 30 TARGET GAMES&lt;/option&gt;&lt;option value=&quot;60&quot;&gt;LAST 60 TARGET GAMES&lt;/option&gt;&lt;option value=&quot;90&quot;&gt;LAST 90 TARGET GAMES&lt;/option&gt;&lt;option value=&quot;ALL&quot;&gt;ALL AVAILABLE TARGET GAMES&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div id=&quot;status&quot; class=&quot;sub&quot; style=&quot;margin-top:8px&quot;&gt;Loading...&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;card&quot;&gt;&lt;div style=&quot;font-size:13px;font-weight:950;margin-bottom:8px&quot;&gt;BACKTEST SUMMARY&lt;/div&gt;&lt;div class=&quot;summary&quot;&gt;&lt;div class=&quot;stat&quot;&gt;&lt;b&gt;TESTS&lt;/b&gt;&lt;strong id=&quot;tests&quot;&gt;-&lt;/strong&gt;&lt;/div&gt;&lt;div class=&quot;stat hit&quot;&gt;&lt;b&gt;DIGIT HIT&lt;/b&gt;&lt;strong id=&quot;digitHits&quot;&gt;-&lt;/strong&gt;&lt;/div&gt;&lt;div class=&quot;stat miss&quot;&gt;&lt;b&gt;DIGIT MISS&lt;/b&gt;&lt;strong id=&quot;digitMisses&quot;&gt;-&lt;/strong&gt;&lt;/div&gt;&lt;div class=&quot;stat hit&quot;&gt;&lt;b&gt;JODI HIT&lt;/b&gt;&lt;strong id=&quot;jodiHits&quot;&gt;-&lt;/strong&gt;&lt;/div&gt;&lt;div class=&quot;stat rate&quot;&gt;&lt;b&gt;JODI HIT RATE&lt;/b&gt;&lt;strong id=&quot;jodiRate&quot;&gt;-&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;method&quot;&gt;&lt;b&gt;Method:&lt;/b&gt; દરેક target game માટે targetના resultને calculationમાંથી સંપૂર્ણપણે બહાર રાખવામાં આવે છે. History = target પહેલાંના completed records. Current Play પ્રમાણે OPENના Top 3 delayed digits કાઢવામાં આવે છે. દરેક Top-3 digit માટે 10 Jodiમાંથી 5 factors (Jodi Delay, Close Digit Delay, Total Digit Delay, Difference Digit Delay, Family Delay) ને 20%-20% weight આપી Top 3 Jodi લેવામાં આવે છે. કુલ 9 Jodi. Disabled market data analysisમાં સામેલ નથી.&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;card&quot;&gt;&lt;div class=&quot;head&quot;&gt;&lt;div style=&quot;font-size:13px;font-weight:950&quot;&gt;HISTORICAL TESTS&lt;/div&gt;&lt;div id=&quot;resultLabel&quot; class=&quot;sub&quot;&gt;-&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;results&quot; style=&quot;margin-top:8px&quot;&gt;&lt;div class=&quot;empty&quot;&gt;Run backtest...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;/div&gt;&lt;script type=&quot;module&quot;&gt;
-const api=window.__LocalDBProxy; if(!api) throw new Error(&#x27;LocalDB bridge unavailable&#x27;);
-const {collection,getDocs}=api; const db=api; const $=id=&gt;document.getElementById(id);
-let rows=[],markets=[],results=[],dataReady=false,loadingPromise=null,runToken=0;
-const dig=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;const n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
-const tmin=v=&gt;{const m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
-const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().getTime();const x=new Date(v);return isNaN(x)?0:x.getTime()};
-const sort=a=&gt;a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)));
+&lt;/script&gt;&lt;/head&gt;
+&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
+&lt;div class=&quot;max-w-4xl mx-auto space-y-3 pb-10&quot;&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+ &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
+  &lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;DEEP JODI BACKTEST&lt;/div&gt;
+  &lt;div class=&quot;text-[10px] font-semibold text-slate-500&quot;&gt;OPEN TOP-3 → JODI RANKING → HISTORICAL HIT CHECK&lt;/div&gt;&lt;/div&gt;
+  &lt;button id=&quot;refreshBtn&quot; class=&quot;px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-black&quot;&gt;↻ RUN&lt;/button&gt;
+ &lt;/div&gt;
+ &lt;div class=&quot;grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3&quot;&gt;
+  &lt;select id=&quot;marketSelect&quot; class=&quot;w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL ENABLED MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
+  &lt;select id=&quot;windowSelect&quot; class=&quot;w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;
+   &lt;option value=&quot;30&quot;&gt;LAST 30 TARGET GAMES&lt;/option&gt;&lt;option value=&quot;60&quot;&gt;LAST 60 TARGET GAMES&lt;/option&gt;
+   &lt;option value=&quot;90&quot;&gt;LAST 90 TARGET GAMES&lt;/option&gt;&lt;option value=&quot;ALL&quot;&gt;ALL AVAILABLE TARGET GAMES&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;select id=&quot;recentWindow&quot; class=&quot;w-full border border-slate-300 rounded-lg p-2.5 text-sm font-bold bg-white&quot;&gt;
+   &lt;option value=&quot;10&quot;&gt;RECENT 10&lt;/option&gt;&lt;option value=&quot;20&quot;&gt;RECENT 20&lt;/option&gt;&lt;option value=&quot;30&quot; selected&gt;RECENT 30&lt;/option&gt;
+  &lt;/select&gt;
+ &lt;/div&gt;
+ &lt;div id=&quot;status&quot; class=&quot;mt-2 text-[10px] font-bold text-slate-500&quot;&gt;Loading...&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+ &lt;div class=&quot;font-black text-sm mb-2&quot;&gt;BACKTEST SUMMARY&lt;/div&gt;
+ &lt;div class=&quot;grid grid-cols-2 sm:grid-cols-6 gap-2&quot;&gt;
+  &lt;div class=&quot;rounded-xl bg-slate-50 border p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-slate-400&quot;&gt;TARGETS&lt;/div&gt;&lt;div id=&quot;tests&quot; class=&quot;text-xl font-black&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;rounded-xl bg-blue-50 border border-blue-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-blue-600&quot;&gt;OPEN QUALIFIED&lt;/div&gt;&lt;div id=&quot;qualified&quot; class=&quot;text-xl font-black text-blue-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;rounded-xl bg-emerald-50 border border-emerald-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-emerald-600&quot;&gt;9-JODI HIT&lt;/div&gt;&lt;div id=&quot;nineHit&quot; class=&quot;text-xl font-black text-emerald-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;rounded-xl bg-indigo-50 border border-indigo-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-indigo-600&quot;&gt;TOP-1 HIT&lt;/div&gt;&lt;div id=&quot;top1&quot; class=&quot;text-xl font-black text-indigo-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;rounded-xl bg-violet-50 border border-violet-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-violet-600&quot;&gt;TOP-2 HIT&lt;/div&gt;&lt;div id=&quot;top2&quot; class=&quot;text-xl font-black text-violet-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;rounded-xl bg-rose-50 border border-rose-200 p-2 text-center&quot;&gt;&lt;div class=&quot;text-[8px] font-black text-rose-600&quot;&gt;TOP-3 HIT&lt;/div&gt;&lt;div id=&quot;top3&quot; class=&quot;text-xl font-black text-rose-700&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div class=&quot;mt-2 text-[8px] font-semibold text-slate-500&quot;&gt;Each target is predicted using only records before that target. Disabled markets are excluded from calculation but remain eligible for data entry.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+ &lt;div class=&quot;font-black text-sm mb-2&quot;&gt;FACTOR PERFORMANCE — OPEN-QUALIFIED TARGETS&lt;/div&gt;
+ &lt;div class=&quot;overflow-auto&quot;&gt;
+  &lt;table class=&quot;w-full text-[9px]&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;bg-slate-100&quot;&gt;
+   &lt;th class=&quot;p-2 text-left&quot;&gt;FACTOR&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;TOP 1&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;TOP 2&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;TOP 3&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;9-JODI&lt;/th&gt;
+  &lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;factorRows&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;
+ &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+ &lt;div class=&quot;font-black text-sm mb-2&quot;&gt;WEIGHTED MODEL COMPARISON&lt;/div&gt;
+ &lt;div class=&quot;grid grid-cols-2 sm:grid-cols-4 gap-2&quot;&gt;
+  &lt;label class=&quot;rounded-xl border p-2 text-[9px] font-bold&quot;&gt;JODI DELAY %&lt;input id=&quot;wDelay&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;20&quot; class=&quot;mt-1 w-full border rounded p-1.5 font-black&quot;&gt;&lt;/label&gt;
+  &lt;label class=&quot;rounded-xl border p-2 text-[9px] font-bold&quot;&gt;CLOSE DELAY %&lt;input id=&quot;wClose&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;20&quot; class=&quot;mt-1 w-full border rounded p-1.5 font-black&quot;&gt;&lt;/label&gt;
+  &lt;label class=&quot;rounded-xl border p-2 text-[9px] font-bold&quot;&gt;TOTAL / DIFF %&lt;input id=&quot;wTotal&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;20&quot; class=&quot;mt-1 w-full border rounded p-1.5 font-black&quot;&gt;&lt;/label&gt;
+  &lt;label class=&quot;rounded-xl border p-2 text-[9px] font-bold&quot;&gt;FAMILY / RECENT %&lt;input id=&quot;wFamily&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;20&quot; class=&quot;mt-1 w-full border rounded p-1.5 font-black&quot;&gt;&lt;/label&gt;
+ &lt;/div&gt;
+ &lt;div class=&quot;mt-2 text-[8px] text-slate-500&quot;&gt;These controls are for historical comparison only; they do not alter the Play page.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+ &lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;HISTORICAL TARGETS&lt;/div&gt;&lt;div id=&quot;resultLabel&quot; class=&quot;text-[9px] font-black text-slate-400&quot;&gt;-&lt;/div&gt;&lt;/div&gt;
+ &lt;div id=&quot;results&quot; class=&quot;space-y-2&quot;&gt;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Run backtest...&lt;/div&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+const db=window.__LocalDBProxy;
+const $=id=&gt;document.getElementById(id);
+let rows=[],markets=[],dataReady=false,loadingPromise=null;
+
+const dig=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
+const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
+const tmin=v=&gt;{let m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
+const sort=a=&gt;a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName||&#x27;&#x27;).localeCompare(String(b.marketName||&#x27;&#x27;)));
 const completed=r=&gt;dig(r.openAnk)!==null&amp;&amp;dig(r.closeAnk)!==null;
-const jodiOf=r=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);return o===null||c===null?null:`${o}${c}`};
-function digitStats(h,side){const n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{const d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;const occ=[];h.forEach((r,i)=&gt;{const d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});const gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
-function familyKey(j){const G={&quot;11&quot;:[&quot;11&quot;,&quot;16&quot;,&quot;61&quot;,&quot;66&quot;],&quot;12&quot;:[&quot;12&quot;,&quot;17&quot;,&quot;21&quot;,&quot;26&quot;,&quot;62&quot;,&quot;67&quot;,&quot;71&quot;,&quot;76&quot;],&quot;13&quot;:[&quot;13&quot;,&quot;18&quot;,&quot;31&quot;,&quot;36&quot;,&quot;63&quot;,&quot;68&quot;,&quot;81&quot;,&quot;86&quot;],&quot;14&quot;:[&quot;14&quot;,&quot;19&quot;,&quot;41&quot;,&quot;46&quot;,&quot;64&quot;,&quot;69&quot;,&quot;91&quot;,&quot;96&quot;],&quot;15&quot;:[&quot;10&quot;,&quot;15&quot;,&quot;60&quot;,&quot;65&quot;,&quot;01&quot;,&quot;06&quot;,&quot;51&quot;,&quot;56&quot;],&quot;22&quot;:[&quot;22&quot;,&quot;27&quot;,&quot;72&quot;,&quot;77&quot;],&quot;23&quot;:[&quot;23&quot;,&quot;28&quot;,&quot;32&quot;,&quot;37&quot;,&quot;73&quot;,&quot;78&quot;,&quot;82&quot;,&quot;87&quot;],&quot;24&quot;:[&quot;24&quot;,&quot;29&quot;,&quot;42&quot;,&quot;47&quot;,&quot;74&quot;,&quot;79&quot;,&quot;92&quot;,&quot;97&quot;],&quot;25&quot;:[&quot;20&quot;,&quot;25&quot;,&quot;52&quot;,&quot;57&quot;,&quot;70&quot;,&quot;75&quot;,&quot;02&quot;,&quot;07&quot;],&quot;33&quot;:[&quot;33&quot;,&quot;38&quot;,&quot;83&quot;,&quot;88&quot;],&quot;34&quot;:[&quot;34&quot;,&quot;39&quot;,&quot;43&quot;,&quot;48&quot;,&quot;84&quot;,&quot;89&quot;,&quot;93&quot;,&quot;98&quot;],&quot;35&quot;:[&quot;30&quot;,&quot;35&quot;,&quot;53&quot;,&quot;58&quot;,&quot;80&quot;,&quot;85&quot;,&quot;03&quot;,&quot;08&quot;],&quot;44&quot;:[&quot;44&quot;,&quot;49&quot;,&quot;94&quot;,&quot;99&quot;],&quot;45&quot;:[&quot;40&quot;,&quot;45&quot;,&quot;54&quot;,&quot;59&quot;,&quot;90&quot;,&quot;95&quot;,&quot;04&quot;,&quot;09&quot;],&quot;55&quot;:[&quot;00&quot;,&quot;05&quot;,&quot;50&quot;,&quot;55&quot;]};for(const[k,v]of Object.entries(G))if(v.includes(j))return k;return null}
-const metricDelay=(occ,n)=&gt;occ&amp;&amp;occ.length?n-1-occ[occ.length-1]:n;
-function mergedJodiStats(h){const n=h.length,keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));const j=Object.fromEntries(keys.map(k=&gt;[k,{jodi:k,last:-1,hits:0,delay:n,maxDelay:0,totalDelay:n,diffDelay:n,fam:familyKey(k),famDelay:n}]));const totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),famOcc={},openOcc=Array.from({length:10},()=&gt;[]),closeOcc=Array.from({length:10},()=&gt;[]);h.forEach((r,i)=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);if(o===null||c===null)return;const jd=`${o}${c}`,s=j[jd];s.last=i;s.hits++;openOcc[o].push(i);closeOcc[c].push(i);totalOcc[(o+c)%10].push(i);diffOcc[(c-o+10)%10].push(i);const fk=familyKey(jd);if(fk)(famOcc[fk]||(famOcc[fk]=[])).push(i)});const td=totalOcc.map(a=&gt;metricDelay(a,n)),dd=diffOcc.map(a=&gt;metricDelay(a,n)),od=openOcc.map(a=&gt;metricDelay(a,n)),cd=closeOcc.map(a=&gt;metricDelay(a,n)),fd={};for(const[k,a]of Object.entries(famOcc))fd[k]=metricDelay(a,n);for(const k of keys){const s=j[k],o=Number(k[0]),c=Number(k[1]),occ=[];h.forEach((r,i)=&gt;{if(dig(r.openAnk)===o&amp;&amp;dig(r.closeAnk)===c)occ.push(i)});const gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);s.delay=s.last&gt;=0?n-1-s.last:n;s.maxDelay=Math.max(0,...gaps);s.delayOpen=od[o];s.delayClose=cd[c];s.totalDelay=td[(o+c)%10];s.diffDelay=dd[(c-o+10)%10];s.famDelay=fd[s.fam]??n}return j}
-function norm(values){const f=values.filter(Number.isFinite);if(!f.length)return()=&gt;50;const lo=Math.min(...f),hi=Math.max(...f);if(hi===lo)return()=&gt;50;return v=&gt;((Number(v)-lo)/(hi-lo))*100}
-function rankFilteredJodiByOpenDigits(st,openTop3){const out=[];for(const d of openTop3){const arr=Object.values(st).filter(x=&gt;Number(x.jodi[0])===Number(d));const nJ=norm(arr.map(x=&gt;x.delay)),nC=norm(arr.map(x=&gt;x.delayClose)),nT=norm(arr.map(x=&gt;x.totalDelay)),nD=norm(arr.map(x=&gt;x.diffDelay)),nF=norm(arr.map(x=&gt;x.famDelay));arr.forEach(x=&gt;x.score=nJ(x.delay)*.20+nC(x.delayClose)*.20+nT(x.totalDelay)*.20+nD(x.diffDelay)*.20+nF(x.famDelay)*.20);arr.sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||b.hits-a.hits||a.jodi.localeCompare(b.jodi));out.push(...arr.slice(0,3).map((x,i)=&gt;({...x,openDigit:Number(d),rank:i+1})))}return out}
-function getPrediction(history){const h=sort(history.filter(completed));if(!h.length)return null;const top3=digitStats(h,&#x27;OPEN&#x27;).sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||b.hits-a.hits||a.d-b.d).slice(0,3);const st=mergedJodiStats(h);const jodis=rankFilteredJodiByOpenDigits(st,top3.map(x=&gt;x.d));return{top3:top3.map(x=&gt;x.d),jodis:jodis.map(x=&gt;x.jodi),jodiDetail:jodis}}
-function fmtDate(v){if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().toLocaleDateString();const d=new Date(v);return isNaN(d)?String(v||&#x27;&#x27;):d.toLocaleDateString()}
-async function load(){if(dataReady)return;if(loadingPromise)return loadingPromise;loadingPromise=(async()=&gt;{try{$(&#x27;status&#x27;).textContent=&#x27;Loading local database...&#x27;;const[ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;{const m={id:d.id,...d.data()};if(m.enabled!==false)markets.push(m)});markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));const old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;const enabled=new Set(markets.map(m=&gt;m.name));rows=rs.docs.map(d=&gt;{const r=d.data();return{...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;}}).filter(r=&gt;r.date&amp;&amp;r.marketName&amp;&amp;enabled.has(r.marketName));rows=sort(rows);dataReady=true;$(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed games loaded • current Play logic ready`;}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e);throw e}finally{loadingPromise=null}})();return loadingPromise}
-async function runBacktest(){const token=++runToken;if(!dataReady)try{await load()}catch(e){return}if(token!==runToken)return;const selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;const all=sort(rows.filter(completed));const targetsBase=selected===&#x27;ALL_MERGED&#x27;?all:all.filter(r=&gt;r.marketName===selected);const lim=$(&#x27;windowSelect&#x27;).value;const targets=lim===&#x27;ALL&#x27;?targetsBase:targetsBase.slice(-Number(lim));results=[];$(&#x27;tests&#x27;).textContent=&#x27;0&#x27;;$(&#x27;digitHits&#x27;).textContent=&#x27;0&#x27;;$(&#x27;digitMisses&#x27;).textContent=&#x27;0&#x27;;$(&#x27;jodiHits&#x27;).textContent=&#x27;0&#x27;;$(&#x27;jodiRate&#x27;).textContent=&#x27;-&#x27;;$(&#x27;resultLabel&#x27;).textContent=&#x27;Running...&#x27;;$(&#x27;results&#x27;).innerHTML=&#x27;&lt;div class=&quot;empty&quot;&gt;Running exact Play-logic backtest...&lt;/div&gt;&#x27;;for(let i=0;i&lt;targets.length;i++){if(token!==runToken)return;const target=targets[i],idx=all.indexOf(target);const history=all.slice(0,idx).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected);const p=getPrediction(history);if(p){const actualDigit=dig(target.openAnk),actualJodi=jodiOf(target),digitHit=actualDigit!==null&amp;&amp;p.top3.includes(actualDigit),jodiHit=actualJodi!==null&amp;&amp;p.jodis.includes(actualJodi);results.push({target,p,actualDigit,actualJodi,digitHit,jodiHit})}if(i%10===0||i===targets.length-1){const dh=results.filter(x=&gt;x.digitHit).length,jh=results.filter(x=&gt;x.jodiHit).length;$(&#x27;tests&#x27;).textContent=results.length;$(&#x27;digitHits&#x27;).textContent=dh;$(&#x27;digitMisses&#x27;).textContent=results.length-dh;$(&#x27;jodiHits&#x27;).textContent=jh;$(&#x27;jodiRate&#x27;).textContent=results.length?((jh/results.length)*100).toFixed(1)+&#x27;%&#x27;:&#x27;-&#x27;;$(&#x27;resultLabel&#x27;).textContent=`${i+1}/${targets.length}`;await new Promise(r=&gt;setTimeout(r,0))}}if(token!==runToken) return;render()}
-function render(){const n=results.length,dh=results.filter(x=&gt;x.digitHit).length,jh=results.filter(x=&gt;x.jodiHit).length;$(&#x27;tests&#x27;).textContent=n;$(&#x27;digitHits&#x27;).textContent=dh;$(&#x27;digitMisses&#x27;).textContent=n-dh;$(&#x27;jodiHits&#x27;).textContent=jh;$(&#x27;jodiRate&#x27;).textContent=n?((jh/n)*100).toFixed(1)+&#x27;%&#x27;:&#x27;-&#x27;;$(&#x27;resultLabel&#x27;).textContent=`${n} historical games checked`;$(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed games available • target excluded from every calculation`;if(!n){$(&#x27;results&#x27;).innerHTML=&#x27;&lt;div class=&quot;empty&quot;&gt;Not enough history to run the selected backtest.&lt;/div&gt;&#x27;;return}$(&#x27;results&#x27;).innerHTML=results.slice().reverse().map(x=&gt;{const d=x.target.date,market=String(x.target.marketName||&#x27;&#x27;),dc=x.digitHit?&#x27;ok&#x27;:&#x27;no&#x27;,jc=x.jodiHit?&#x27;ok&#x27;:&#x27;no&#x27;,rc=x.jodiHit?&#x27;hitrow&#x27;:&#x27;missrow&#x27;;return `&lt;div class=&quot;row ${rc}&quot;&gt;&lt;div class=&quot;rhead&quot;&gt;&lt;div class=&quot;date&quot;&gt;${fmtDate(d)} • ${market}&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;badge ${dc}&quot;&gt;DIGIT ${x.digitHit?&#x27;HIT&#x27;:&#x27;MISS&#x27;}&lt;/span&gt; &lt;span class=&quot;badge ${jc}&quot;&gt;JODI ${x.jodiHit?&#x27;HIT&#x27;:&#x27;MISS&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid2&quot;&gt;&lt;div&gt;PLAY OPEN TOP 3: &lt;b&gt;${x.p.top3.join(&#x27; • &#x27;)}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;ACTUAL OPEN: &lt;b&gt;${x.actualDigit??&#x27;—&#x27;}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;ACTUAL JODI: &lt;b&gt;${x.actualJodi??&#x27;—&#x27;}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;JODI SET: &lt;b&gt;${x.p.jodis.length}&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;chips&quot;&gt;${x.p.jodis.map(j=&gt;`&lt;span class=&quot;chip jchip&quot;&gt;${j}&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`}).join(&#x27;&#x27;)}
-$(&#x27;runBtn&#x27;).onclick=runBacktest;$(&#x27;marketSelect&#x27;).onchange=()=&gt;dataReady&amp;&amp;runBacktest();$(&#x27;windowSelect&#x27;).onchange=()=&gt;dataReady&amp;&amp;runBacktest();window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.type===&#x27;BACKTEST_ACTIVATE&#x27;)runBacktest()});load().catch(()=&gt;{});
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
-" id="page-11" style="display:none" title="Shortlist"></iframe> <nav class="bottom-nav">
+const enabledMarket=m=&gt;!(m&amp;&amp;((Object.prototype.hasOwnProperty.call(m,&#x27;isEnabled&#x27;)&amp;&amp;m.isEnabled===false)||(Object.prototype.hasOwnProperty.call(m,&#x27;enabled&#x27;)&amp;&amp;m.enabled===false)||(Object.prototype.hasOwnProperty.call(m,&#x27;active&#x27;)&amp;&amp;m.active===false)));
+const norm=(arr,inverse=false)=&gt;{const a=arr.filter(Number.isFinite),lo=a.length?Math.min(...a):0,hi=a.length?Math.max(...a):0;return v=&gt;{if(!Number.isFinite(v))return 0;if(hi===lo)return .5;const z=(v-lo)/(hi-lo);return inverse?1-z:z}};
+const familyKey=j=&gt;{
+ const a=Number(j[0]),b=Number(j[1]); if(!Number.isFinite(a)||!Number.isFinite(b))return &#x27;&#x27;;
+ const s=[a,b].sort((x,y)=&gt;x-y).join(&#x27;&#x27;);
+ const map={&#x27;00&#x27;:&#x27;00&#x27;,&#x27;11&#x27;:&#x27;11&#x27;,&#x27;22&#x27;:&#x27;22&#x27;,&#x27;33&#x27;:&#x27;33&#x27;,&#x27;44&#x27;:&#x27;44&#x27;,&#x27;55&#x27;:&#x27;55&#x27;,&#x27;66&#x27;:&#x27;66&#x27;,&#x27;77&#x27;:&#x27;77&#x27;,&#x27;88&#x27;:&#x27;88&#x27;,&#x27;99&#x27;:&#x27;99&#x27;,
+ &#x27;01&#x27;:&#x27;01-16&#x27;,&#x27;12&#x27;:&#x27;12-27&#x27;,&#x27;23&#x27;:&#x27;23-38&#x27;,&#x27;34&#x27;:&#x27;34-49&#x27;,&#x27;45&#x27;:&#x27;45-50&#x27;,&#x27;56&#x27;:&#x27;56-61&#x27;,&#x27;67&#x27;:&#x27;67-72&#x27;,&#x27;78&#x27;:&#x27;78-83&#x27;,&#x27;89&#x27;:&#x27;89-94&#x27;};
+ return map[s]||s;
+};
+
+function jodiStats(history){
+ const h=sort(history.filter(completed)), n=h.length;
+ const keys=Array.from({length:100},(_,i)=&gt;String(i).padStart(2,&#x27;0&#x27;));
+ const s=Object.fromEntries(keys.map(k=&gt;({jodi:k,last:-1,hits:0,delay:n,maxDelay:0,closeDelay:n,totalDelay:n,diffDelay:n,famDelay:n,recentHits:0,avgGap:n,repeatGap:n,reverseDelay:n,openCondHits:0,openCondDelay:n})).map(x=&gt;[x.jodi,x]));
+ const totalOcc=Array.from({length:10},()=&gt;[]),diffOcc=Array.from({length:10},()=&gt;[]),famOcc={};
+ const recentN=Math.min(Number($(&#x27;recentWindow&#x27;).value)||30,n), recentStart=Math.max(0,n-recentN);
+ h.forEach((r,i)=&gt;{
+   const o=dig(r.openAnk),c=dig(r.closeAnk); if(o===null||c===null)return;
+   const jd=String(o)+String(c),x=s[jd]; x.last=i;x.hits++;if(i&gt;=recentStart)x.recentHits++;
+   totalOcc[(o+c)%10].push(i);diffOcc[(c-o+10)%10].push(i);
+   const fk=familyKey(jd);if(fk)(famOcc[fk]??=[]).push(i);
+ });
+ const metric=occ=&gt;Array.from({length:occ.length},(_,d)=&gt;{
+   const a=occ[d]||[],delay=a.length?n-1-a[a.length-1]:n;
+   let gaps=a.length?[a[0]]:[n];for(let i=1;i&lt;a.length;i++)gaps.push(a[i]-a[i-1]-1);if(a.length)gaps.push(n-1-a[a.length-1]);
+   return {delay,max:Math.max(0,...gaps)};
+ });
+ const td=metric(totalOcc),dd=metric(diffOcc);
+ const fd={};for(const k of Object.keys(famOcc)){const a=famOcc[k];fd[k]=a.length?n-1-a[a.length-1]:n}
+ const closeLast=Array.from({length:10},()=&gt;-1);
+ h.forEach((r,i)=&gt;{const c=dig(r.closeAnk);if(c!==null)closeLast[c]=i});
+ const openCond={}; // populated from the same historical scope
+ h.forEach((r,i)=&gt;{
+   const o=dig(r.openAnk),c=dig(r.closeAnk);if(o===null||c===null)return;
+   const jd=String(o)+String(c);
+   (openCond[o]??=[]).push({i,jd});
+ });
+ for(const k of keys){
+   const x=s[k], o=Number(k[0]), c=Number(k[1]);
+   x.closeDelay=closeLast[c]&gt;=0?n-1-closeLast[c]:n;
+   x.totalDelay=td[(o+c)%10].delay;
+   x.diffDelay=dd[(c-o+10)%10].delay;
+   x.famDelay=fd[familyKey(k)]??n;
+   const arr=(openCond[o]||[]), occ=arr.filter(z=&gt;z.jd===k).map(z=&gt;z.i);
+   x.openCondHits=occ.length;
+   x.openCondDelay=occ.length?n-1-occ[occ.length-1]:n;
+   let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);
+   x.avgGap=occ.length?(occ.length&gt;1?occ.slice(1).reduce((a,v,i)=&gt;a+v-occ[i]-1,0)/(occ.length-1):n):n;
+   x.repeatGap=occ.length?n-1-occ[occ.length-1]:n;
+   const rev=s[String(c)+String(o)];x.reverseDelay=rev?rev.delay:n;
+ }
+ return s;
+}
+
+function top3Open(history){
+ const h=sort(history.filter(completed)),n=h.length,last=Array(10).fill(-1),hits=Array(10).fill(0);
+ h.forEach((r,i)=&gt;{const d=dig(r.openAnk);if(d!==null){last[d]=i;hits[d]++}});
+ return Array.from({length:10},(_,d)=&gt;({d,delay:last[d]&gt;=0?n-1-last[d]:n,hits:d===d?hits[d]:0}))
+   .sort((a,b)=&gt;b.delay-a.delay||b.hits-a.hits||a.d-b.d).slice(0,3).map(x=&gt;x.d);
+}
+
+function rankForOpenDigit(history,d){
+ const st=jodiStats(history);
+ const arr=Object.values(st).filter(x=&gt;Number(x.jodi[0])===Number(d));
+ const nJ=norm(arr.map(x=&gt;x.delay),false), nC=norm(arr.map(x=&gt;x.closeDelay),false),
+       nT=norm(arr.map(x=&gt;x.totalDelay),false), nD=norm(arr.map(x=&gt;x.diffDelay),false),
+       nF=norm(arr.map(x=&gt;x.famDelay),false), nR=norm(arr.map(x=&gt;x.recentHits),false),
+       nO=norm(arr.map(x=&gt;x.openCondDelay),false), nOC=norm(arr.map(x=&gt;x.openCondHits),true),
+       nRev=norm(arr.map(x=&gt;x.reverseDelay),false), nGap=norm(arr.map(x=&gt;x.repeatGap),false);
+ const W={j:.20,c:.20,t:.10,d:.10,f:.10,r:.10,o:.10,oc:.10,rev:0,gap:0};
+ arr.forEach(x=&gt;{
+   x.score=nJ(x.delay)*W.j+nC(x.closeDelay)*W.c+nT(x.totalDelay)*W.t+nD(x.diffDelay)*W.d+
+           nF(x.famDelay)*W.f+nR(x.recentHits)*W.r+nO(x.openCondDelay)*W.o+nOC(x.openCondHits)*W.oc+
+           nRev(x.reverseDelay)*W.rev+nGap(x.repeatGap)*W.gap;
+ });
+ arr.sort((a,b)=&gt;b.score-a.score||b.openCondHits-a.openCondHits||b.delay-a.delay||a.jodi.localeCompare(b.jodi));
+ return arr.slice(0,3);
+}
+
+function rankSingleFactor(history,d,factor){
+ const st=jodiStats(history),arr=Object.values(st).filter(x=&gt;Number(x.jodi[0])===Number(d));
+ const get=x=&gt;({delay:x.delay,closeDelay:x.closeDelay,totalDelay:x.totalDelay,diffDelay:x.diffDelay,famDelay:x.famDelay,
+ recentHits:x.recentHits,openCondDelay:x.openCondDelay,openCondHits:x.openCondHits,reverseDelay:x.reverseDelay,repeatGap:x.repeatGap}[factor]);
+ const higher=[&#x27;recentHits&#x27;,&#x27;openCondHits&#x27;].includes(factor);
+ arr.sort((a,b)=&gt;(higher?get(b)-get(a):get(b)-get(a))||b.hits-a.hits||a.jodi.localeCompare(b.jodi));
+ return arr.slice(0,3);
+}
+
+function pct(a,b){return b?((a/b)*100).toFixed(1)+&#x27;%&#x27;:&#x27;—&#x27;}
+function esc(v){return String(v??&#x27;&#x27;).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]))}
+
+function evaluate(history,target){
+ const open=dig(target.openAnk), close=dig(target.closeAnk);
+ if(open===null||close===null)return null;
+ const qualified=top3Open(history).includes(open), actual=String(open)+String(close);
+ const top3=qualified?rankForOpenDigit(history,open):[];
+ const hit9=top3.some(x=&gt;x.jodi===actual);
+ const r={date:target.date,market:target.marketName,open,actual,qualified,top3,hit9,top1:top3[0]?.jodi===actual,top2:top3.slice(0,2).some(x=&gt;x.jodi===actual),top3hit:hit9};
+ if(qualified){
+   r.factor={};
+   for(const f of [&#x27;delay&#x27;,&#x27;closeDelay&#x27;,&#x27;totalDelay&#x27;,&#x27;diffDelay&#x27;,&#x27;famDelay&#x27;,&#x27;recentHits&#x27;,&#x27;openCondDelay&#x27;,&#x27;openCondHits&#x27;,&#x27;reverseDelay&#x27;,&#x27;repeatGap&#x27;]){
+     const list=rankSingleFactor(history,open,f);
+     r.factor[f]={top1:list[0]?.jodi===actual,top2:list.slice(0,2).some(x=&gt;x.jodi===actual),top3:list.some(x=&gt;x.jodi===actual),list};
+   }
+ }
+ return r;
+}
+
+function rowsForScope(selected){
+ const enabledNames=new Set(markets.filter(enabledMarket).map(m=&gt;String(m.name)));
+ return sort(rows.filter(completed).filter(r=&gt;enabledNames.has(String(r.marketName))).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));
+}
+
+function renderSummary(res){
+ const q=res.filter(x=&gt;x.qualified),n=q.length;
+ $(&#x27;tests&#x27;).textContent=res.length;$(&#x27;qualified&#x27;).textContent=n;
+ $(&#x27;nineHit&#x27;).textContent=pct(q.filter(x=&gt;x.hit9).length,n);
+ $(&#x27;top1&#x27;).textContent=pct(q.filter(x=&gt;x.top1).length,n);
+ $(&#x27;top2&#x27;).textContent=pct(q.filter(x=&gt;x.top2).length,n);
+ $(&#x27;top3&#x27;).textContent=pct(q.filter(x=&gt;x.top3hit).length,n);
+ const factors=[&#x27;delay&#x27;,&#x27;closeDelay&#x27;,&#x27;totalDelay&#x27;,&#x27;diffDelay&#x27;,&#x27;famDelay&#x27;,&#x27;recentHits&#x27;,&#x27;openCondDelay&#x27;,&#x27;openCondHits&#x27;,&#x27;reverseDelay&#x27;,&#x27;repeatGap&#x27;];
+ const names={delay:&#x27;JODI DELAY&#x27;,closeDelay:&#x27;CLOSE DIGIT DELAY&#x27;,totalDelay:&#x27;TOTAL DIGIT DELAY&#x27;,diffDelay:&#x27;DIFFERENCE DELAY&#x27;,famDelay:&#x27;FAMILY DELAY&#x27;,recentHits:&#x27;RECENT HITS&#x27;,openCondDelay:&#x27;OPEN-CONDITIONAL DELAY&#x27;,openCondHits:&#x27;OPEN-CONDITIONAL HITS&#x27;,reverseDelay:&#x27;REVERSE JODI DELAY&#x27;,repeatGap:&#x27;OPEN-CONDITIONAL GAP&#x27;};
+ $(&#x27;factorRows&#x27;).innerHTML=factors.map(f=&gt;{
+   const a=q.map(x=&gt;x.factor?.[f]).filter(Boolean);
+   return `&lt;tr class=&quot;border-t&quot;&gt;&lt;td class=&quot;p-2 font-black&quot;&gt;${names[f]}&lt;/td&gt;&lt;td class=&quot;p-2 text-center&quot;&gt;${pct(a.filter(x=&gt;x.top1).length,a.length)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center&quot;&gt;${pct(a.filter(x=&gt;x.top2).length,a.length)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center&quot;&gt;${pct(a.filter(x=&gt;x.top3).length,a.length)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center&quot;&gt;${pct(a.filter(x=&gt;x.top3).length,a.length)}&lt;/td&gt;&lt;/tr&gt;`;
+ }).join(&#x27;&#x27;);
+}
+
+function renderResults(res){
+ const q=res.filter(x=&gt;x.qualified).slice().reverse();
+ $(&#x27;resultLabel&#x27;).textContent=`${res.length} TARGETS • ${q.length} OPEN-QUALIFIED`;
+ $(&#x27;results&#x27;).innerHTML=q.map((x,i)=&gt;`
+ &lt;div class=&quot;rounded-xl border ${x.hit9?&#x27;border-emerald-300 bg-emerald-50&#x27;:&#x27;border-slate-200 bg-white&#x27;} p-2&quot;&gt;
+  &lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;
+   &lt;div class=&quot;text-[9px] font-black&quot;&gt;${esc(x.date)} • ${esc(x.market)}&lt;/div&gt;
+   &lt;span class=&quot;badge ${x.hit9?&#x27;bg-emerald-600 text-white&#x27;:&#x27;bg-rose-100 text-rose-700&#x27;}&quot;&gt;${x.hit9?&#x27;JODI HIT&#x27;:&#x27;JODI MISS&#x27;}&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;grid grid-cols-3 gap-1 mt-2 text-center&quot;&gt;
+   &lt;div class=&quot;rounded-lg bg-white border p-1&quot;&gt;&lt;div class=&quot;text-[7px] text-slate-400&quot;&gt;OPEN&lt;/div&gt;&lt;b&gt;${x.open}&lt;/b&gt;&lt;/div&gt;
+   &lt;div class=&quot;rounded-lg bg-white border p-1&quot;&gt;&lt;div class=&quot;text-[7px] text-slate-400&quot;&gt;ACTUAL JODI&lt;/div&gt;&lt;b&gt;${x.actual}&lt;/b&gt;&lt;/div&gt;
+   &lt;div class=&quot;rounded-lg bg-white border p-1&quot;&gt;&lt;div class=&quot;text-[7px] text-slate-400&quot;&gt;TOP 3 JODI&lt;/div&gt;&lt;b&gt;${x.top3.map(z=&gt;z.jodi).join(&#x27; • &#x27;)}&lt;/b&gt;&lt;/div&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;`).join(&#x27;&#x27;)||&#x27;&lt;div class=&quot;py-8 text-center text-[10px] text-slate-400&quot;&gt;No OPEN-qualified targets.&lt;/div&gt;&#x27;;
+}
+
+async function load(){
+ if(loadingPromise)return loadingPromise;
+ loadingPromise=(async()=&gt;{
+  $(&#x27;status&#x27;).textContent=&#x27;Loading local database...&#x27;;
+  const [ms,rs]=await Promise.all([
+   db.getDocs(db.collection(db,&#x27;markets&#x27;)),
+   db.getDocs(db.collection(db,&#x27;matka_records&#x27;))
+  ]);
+  markets=(ms.docs||[]).map(d=&gt;d.data());
+  rows=(rs.docs||[]).map(d=&gt;d.data());
+  const sel=$(&#x27;marketSelect&#x27;),old=sel.value;
+  sel.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL ENABLED MARKETS (MERGED)&lt;/option&gt;&#x27;;
+  markets.filter(enabledMarket).sort((a,b)=&gt;String(a.name).localeCompare(String(b.name))).forEach(m=&gt;{
+   const o=document.createElement(&#x27;option&#x27;);o.value=m.name;o.textContent=m.name;sel.appendChild(o);
+  });
+  if([...sel.options].some(o=&gt;o.value===old))sel.value=old;
+  dataReady=true;
+  $(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed records loaded • disabled markets excluded`;
+  runBacktest();
+ })().catch(e=&gt;{$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e);throw e}).finally(()=&gt;{loadingPromise=null});
+ return loadingPromise;
+}
+
+function runBacktest(){
+ if(!dataReady)return;
+ const selected=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;
+ let h=rowsForScope(selected);
+ const win=$(&#x27;windowSelect&#x27;).value;
+ let targets=h;
+ if(win!==&#x27;ALL&#x27;)targets=h.slice(-Number(win));
+ const results=[];
+ for(const target of targets){
+   const idx=h.indexOf(target);
+   if(idx&lt;=0)continue;
+   const history=h.slice(0,idx);
+   const r=evaluate(history,target);if(r)results.push(r);
+ }
+ renderSummary(results);renderResults(results);
+ $(&#x27;status&#x27;).textContent=`${results.length} target games tested • ${results.filter(x=&gt;x.qualified).length} OPEN-qualified • ${selected===&#x27;ALL_MERGED&#x27;?&#x27;ALL ENABLED MARKETS&#x27;:selected}`;
+}
+
+$(&#x27;refreshBtn&#x27;).onclick=()=&gt;load().catch(()=&gt;{});
+$(&#x27;marketSelect&#x27;).onchange=()=&gt;{if(dataReady)runBacktest()};
+$(&#x27;windowSelect&#x27;).onchange=()=&gt;{if(dataReady)runBacktest()};
+$(&#x27;recentWindow&#x27;).onchange=()=&gt;{if(dataReady)runBacktest()};
+window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.type===&#x27;BACKTEST_ACTIVATE&#x27;)load().catch(()=&gt;{})});
+load().catch(()=&gt;{});
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" id="page-11" style="display:none" title="Backtest"></iframe> <iframe class="page-frame" data-srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;gu&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&lt;title&gt;Auto Result Fetch&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+&lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}&lt;/style&gt;
+&lt;script&gt;
+(function(){function install(){const api=parent&amp;&amp;parent.LocalDB;if(!api)throw new Error('Parent LocalDB is not initialized');window.__LocalDBProxy=api;window.LocalDB=api;}try{install()}catch(e){if(parent&amp;&amp;parent.LocalDBReady)parent.LocalDBReady.then(install).catch(()=&gt;{});else setTimeout(()=&gt;{try{install()}catch(_){}},80)}})();
+&lt;/script&gt;&lt;/head&gt;
+&lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
+&lt;div class=&quot;max-w-4xl mx-auto space-y-3 pb-12&quot;&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;
+&lt;div class=&quot;flex items-center justify-between gap-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-lg font-black text-indigo-700&quot;&gt;🌐 AUTO RESULT FETCH&lt;/div&gt;&lt;div class=&quot;text-[10px] font-bold text-slate-500&quot;&gt;Sara777 → Market Result → LocalDB&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;fetchBtn&quot; class=&quot;px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-black&quot;&gt;FETCH NOW&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-1 gap-2 mt-3&quot;&gt;&lt;label class=&quot;text-[10px] font-black text-slate-500&quot;&gt;SOURCE URL&lt;input id=&quot;sourceUrl&quot; class=&quot;mt-1 w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold&quot; value=&quot;https://script.google.com/macros/s/AKfycbxL_siCB_lu31gzfMcxKHWRclTh0I76-liybBOrKfyDFUX6BxTwwPLQKh9cZC85ugGsog/exec&quot;&gt;&lt;/label&gt;
+&lt;label class=&quot;text-[10px] font-black text-slate-500&quot;&gt;CORS PROXY&lt;input id=&quot;proxyUrl&quot; class=&quot;mt-1 w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold&quot; value=&quot;&quot;&gt;&lt;/label&gt;&lt;/div&gt;
+&lt;div class=&quot;mt-2 flex items-center gap-3&quot;&gt;&lt;label class=&quot;flex items-center gap-2 text-xs font-black&quot;&gt;&lt;input id=&quot;autoRefresh&quot; type=&quot;checkbox&quot; class=&quot;w-5 h-5&quot;&gt; AUTO REFRESH&lt;/label&gt;&lt;select id=&quot;interval&quot; class=&quot;border border-slate-300 rounded-lg p-2 text-xs font-bold&quot;&gt;&lt;option value=&quot;5&quot;&gt;5 MIN&lt;/option&gt;&lt;option value=&quot;10&quot;&gt;10 MIN&lt;/option&gt;&lt;option value=&quot;15&quot;&gt;15 MIN&lt;/option&gt;&lt;option value=&quot;30&quot;&gt;30 MIN&lt;/option&gt;&lt;/select&gt;&lt;button id=&quot;testBtn&quot; class=&quot;px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs font-black&quot;&gt;TEST SOURCE&lt;/button&gt;&lt;/div&gt;
+&lt;div id=&quot;status&quot; class=&quot;mt-2 rounded-xl bg-slate-50 border border-slate-200 p-2 text-[10px] font-bold text-slate-600&quot;&gt;Ready.&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FETCH RESULT&lt;/div&gt;&lt;div id=&quot;count&quot; class=&quot;text-[10px] font-black text-slate-500&quot;&gt;0&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;overflow-auto&quot;&gt;&lt;table class=&quot;w-full text-[9px]&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;bg-slate-100&quot;&gt;&lt;th class=&quot;p-2 text-left&quot;&gt;MARKET&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;OPEN&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;JODI&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;CLOSE&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;STATUS&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;rows&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;bg-amber-50 rounded-2xl border border-amber-200 p-3 text-[10px] font-semibold text-amber-900&quot;&gt;&lt;b&gt;NOTE:&lt;/b&gt; Browser CORS restriction હોય તો proxy URL જરૂરી રહેશે. Existing Date + Market record duplicate નહીં બને. Complete existing record skip થશે; incomplete existing record હોય તો missing Open/Close fields update થશે.&lt;/section&gt;
+&lt;/div&gt;
+&lt;script&gt;
+const $=id=&gt;document.getElementById(id); let timer=null;
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function norm(s){return String(s||'').replace(/&amp;amp;/g,'&amp;').replace(/&amp;#39;/g,&quot;'&quot;).replace(/&amp;quot;/g,'&quot;').replace(/&amp;nbsp;/g,' ').replace(/&lt;[^&gt;]*&gt;/g,' ').replace(/\s+/g,' ').trim().toUpperCase()}
+function esc(s){return String(s||'').replace(/[&amp;&lt;&gt;&quot;']/g,m=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','&quot;':'&amp;quot;',&quot;'&quot;:'&amp;#39;'}[m]))}
+function ank(p){if(!/^\d{3}$/.test(p))return null;return (Number(p[0])+Number(p[1])+Number(p[2]))%10}
+function parseMarkets(text){
+ const clean=text.replace(/<[^>]+>/g,' ').replace(/\r/g,'').replace(/\t/g,' ');
+ const names=[];
+ const rx=/([A-Z][A-Z0-9]*(?:\s+[A-Z0-9]+){0,3})\s+(\d{3})-(\d{2}|\*\*)-(\d{3}|\*{3})/g;
+ let m; while((m=rx.exec(clean))){let name=norm(m[1]); if(!names.some(x=&gt;name===x.name)){names.push({name,open:m[2],jodi:m[3],close:m[4]})}}
+ return names;
+}
+async function getMarkets(){const s=await LocalDB.getDocs(LocalDB.collection(null,'markets'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
+async function getRecords(){const s=await LocalDB.getDocs(LocalDB.collection(null,'matka_records'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
+function fetchJsonp(api){
+ return new Promise((resolve,reject)=>{
+  const cb='__sara777_cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+  const script=document.createElement('script');
+  const url=api+(api.includes('?')?'&':'?')+'action=fetch&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+  let done=false;
+  const finish=(fn,v)=>{if(done)return;done=true;try{delete window[cb]}catch(_){window[cb]=undefined}if(script.parentNode)script.parentNode.removeChild(script);fn(v)};
+  window[cb]=(data)=>finish(resolve,{data,url});
+  script.onerror=()=>finish(reject,new Error('JSONP request failed'));
+  setTimeout(()=>finish(reject,new Error('JSONP timeout (20s)')),20000);
+  script.src=url;
+  document.head.appendChild(script);
+ });
+}
+async function fetchHtml(){
+ const api=$('sourceUrl').value.trim();
+ if(!api)throw new Error('Apps Script URL missing');
+ let last='';
+ try{
+  const r=await fetchJsonp(api);
+  const data=r.data;
+  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
+  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
+  return r;
+ }catch(e){last=e.message||String(e)}
+ try{
+  const url=api+(api.includes('?')?'&':'?')+'action=fetch&_='+Date.now();
+  const r=await fetch(url,{cache:'no-store',redirect:'follow'});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const data=await r.json();
+  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
+  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
+  return {data,url};
+ }catch(e){throw new Error('Apps Script: '+last+' | Direct: '+(e.message||e))}
+}
+function render(rows){$('count').textContent=rows.length+' RESULTS';$('rows').innerHTML=rows.map(x=&gt;`&lt;tr class=&quot;border-b&quot;&gt;&lt;td class=&quot;p-2 font-black&quot;&gt;${esc(x.market)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.open||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.jodi||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.close||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center font-black ${x.ok?'text-emerald-600':'text-amber-600'}&quot;&gt;${esc(x.status)}&lt;/td&gt;&lt;/tr&gt;`).join('')}
+async function run(testOnly=false){
+ $('fetchBtn').disabled=true;$('fetchBtn').textContent='FETCHING...';$('status').textContent='Fetching Sara777...';let out=[];
+ try{const {data,url}=await fetchHtml();const parsed=(data.markets||[]).map(x=>({name:x.market||x.name||'',open:x.openPanna||x.open||'',jodi:x.jodi||'',close:x.closePanna||x.close||'',complete:x.complete!==false}));if(testOnly){$('status').textContent='✓ Source reachable • '+parsed.length+' market results detected • '+url;render(parsed.map(x=&gt;({...x,market:x.name,status:x.complete?'DETECTED':'INCOMPLETE',ok:!!x.complete})));return}
+ const markets=await getMarkets(), records=await getRecords(), todayDate=today();
+ const configured=new Map(markets.map(m=&gt;[norm(m.name),m]));
+ for(const x of parsed){const market=configured.get(norm(x.name));if(!market){continue}
+   const row={market:market.name,open:x.open,jodi:x.jodi,close:x.close,ok:false,status:'SKIPPED'};
+   if(!/^\d{3}$/.test(x.open)||!/^\d{3}$/.test(x.close)){row.status='INCOMPLETE';out.push(row);continue}
+   const oa=ank(x.open),ca=ank(x.close), j=String(oa)+String(ca), diff=(ca-oa+10)%10;
+   const found=records.find(r=&gt;r.date===todayDate&amp;&amp;norm(r.marketName)===norm(market.name));
+   try{
+    if(found){const patch={date:todayDate,marketName:market.name,openPana:x.open,openAnk:oa,closePana:x.close,closeAnk:ca,jodi:j,difference:diff,openTime:market.openTime||found.openTime||'00:00',closeTime:market.closeTime||found.closeTime||'',updatedAt:new Date().toISOString(),source:'Sara777 Auto Fetch'};await LocalDB.updateDoc(LocalDB.doc(null,'matka_records',found.id),patch);row.status='UPDATED';row.ok=true}
+    else {await LocalDB.addDoc(LocalDB.collection(null,'matka_records'),{date:todayDate,marketName:market.name,openPana:x.open,openAnk:oa,closePana:x.close,closeAnk:ca,jodi:j,difference:diff,openTime:market.openTime||'00:00',closeTime:market.closeTime||'',updatedAt:new Date().toISOString(),source:'Sara777 Auto Fetch'});row.status='SAVED';row.ok=true}
+   }catch(e){row.status='ERROR';row.error=e.message}
+   out.push(row);
+ }
+ render(out);const good=out.filter(x=&gt;x.ok).length,inc=out.filter(x=&gt;x.status==='INCOMPLETE').length;$('status').textContent=`✓ ${good} saved/updated • ${inc} incomplete • ${out.length} configured results checked • ${todayDate}`;
+ }catch(e){$('status').textContent='✕ FETCH ERROR: '+(e.message||e);render([])}finally{$('fetchBtn').disabled=false;$('fetchBtn').textContent='FETCH NOW'}
+}
+$('fetchBtn').onclick=()=&gt;run(false);$('testBtn').onclick=()=&gt;run(true);
+$('autoRefresh').onchange=()=&gt;{clearInterval(timer);timer=null;if($('autoRefresh').checked){timer=setInterval(()=&gt;run(false),Number($('interval').value)*60000);$('status').textContent='AUTO REFRESH ON • every '+$('interval').value+' min'}};
+$('interval').onchange=()=&gt;{if($('autoRefresh').checked){clearInterval(timer);timer=setInterval(()=&gt;run(false),Number($('interval').value)*60000)}};
+window.addEventListener('message',e=&gt;{if(e.data&amp;&amp;e.data.type==='AUTO_RESULT_ACTIVATE')run(false).catch(()=&gt;{})});
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" id="page-12" style="display:none" title="Auto Result Fetch"></iframe> <nav class="bottom-nav">
 <button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
 <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
 <button class="nav-btn" data-page="8"><span>🎯</span><span>Play</span></button>
 <button class="nav-btn" data-page="11"><span>📌</span><span>Shortlist</span></button>
+<button class="nav-btn" data-page="12"><span>🌐</span><span>Auto Result</span></button>
 <button class="nav-more" id="moreNav"><span>☰</span><span>More</span></button>
 </nav>
 <div class="more-panel" id="morePanel">
@@ -1924,7 +2264,7 @@ const originalOpenPage=openPage;
 openPage=function(index){originalOpenPage(index);setTimeout(()=>updateEmptyState(index),80);};
 document.getElementById('goLoggerEmpty')?.addEventListener('click',()=>openPage(9));
 let saved=10;try{saved=Number(localStorage.getItem('analysisPlatformPageV8')||10);}catch(e){}
-if(![0,2,3,4,5,8,9,10,11].includes(saved))saved=10;openPage(saved);
+if(![0,2,3,4,5,8,9,10,11,12].includes(saved))saved=10;openPage(saved);
 </script>
 <script>
 (function(){
