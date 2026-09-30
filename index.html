@@ -2143,41 +2143,9 @@ function parseMarkets(text){
 }
 async function getMarkets(){const s=await LocalDB.getDocs(LocalDB.collection(null,'markets'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
 async function getRecords(){const s=await LocalDB.getDocs(LocalDB.collection(null,'matka_records'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
-function fetchJsonp(api){
- return new Promise((resolve,reject)=>{
-  const cb='__sara777_cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
-  const script=document.createElement('script');
-  const url=api+(api.includes('?')?'&':'?')+'action=fetch&callback='+encodeURIComponent(cb)+'&_='+Date.now();
-  let done=false;
-  const finish=(fn,v)=>{if(done)return;done=true;try{delete window[cb]}catch(_){window[cb]=undefined}if(script.parentNode)script.parentNode.removeChild(script);fn(v)};
-  window[cb]=(data)=>finish(resolve,{data,url});
-  script.onerror=()=>finish(reject,new Error('JSONP request failed'));
-  setTimeout(()=>finish(reject,new Error('JSONP timeout (20s)')),20000);
-  script.src=url;
-  document.head.appendChild(script);
- });
-}
-async function fetchHtml(){
- const api=$('sourceUrl').value.trim();
- if(!api)throw new Error('Apps Script URL missing');
- let last='';
- try{
-  const r=await fetchJsonp(api);
-  const data=r.data;
-  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
-  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
-  return r;
- }catch(e){last=e.message||String(e)}
- try{
-  const url=api+(api.includes('?')?'&':'?')+'action=fetch&_='+Date.now();
-  const r=await fetch(url,{cache:'no-store',redirect:'follow'});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  const data=await r.json();
-  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
-  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
-  return {data,url};
- }catch(e){throw new Error('Apps Script: '+last+' | Direct: '+(e.message||e))}
-}
+async function fetchHtml(){const api=$('sourceUrl').value.trim();let errs=[];
+ try{const url=api+(api.includes('?')?'&':'?')+'action=fetch';const r=await fetch(url,{cache:'no-store',headers:{'Accept':'application/json'}});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');if(!Array.isArray(data.markets))throw new Error('API response has no markets array');return {data,url}}catch(e){errs.push('Apps Script: '+(e.message||e))}
+ throw new Error(errs.join(' | '));}
 function render(rows){$('count').textContent=rows.length+' RESULTS';$('rows').innerHTML=rows.map(x=&gt;`&lt;tr class=&quot;border-b&quot;&gt;&lt;td class=&quot;p-2 font-black&quot;&gt;${esc(x.market)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.open||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.jodi||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.close||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center font-black ${x.ok?'text-emerald-600':'text-amber-600'}&quot;&gt;${esc(x.status)}&lt;/td&gt;&lt;/tr&gt;`).join('')}
 async function run(testOnly=false){
  $('fetchBtn').disabled=true;$('fetchBtn').textContent='FETCHING...';$('status').textContent='Fetching Sara777...';let out=[];
