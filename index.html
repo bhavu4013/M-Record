@@ -1324,13 +1324,26 @@ load();
 &lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FILTERED JODI&lt;/div&gt;&lt;div id=&quot;filterLabel&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;OPEN TOP 3 DIGITS → TOP 3 JODI EACH&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;jodiWindow&quot; class=&quot;min-h-[110px] rounded-xl bg-slate-50 border border-slate-200 p-2&quot;&gt;&lt;div class=&quot;py-8 text-center text-[10px] font-bold text-slate-400&quot;&gt;Calculating...&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section id=&quot;filteredJodiPassingSection&quot; class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FILTERED JODI • LAST 30 PASSING RECORD&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-400&quot;&gt;ACTUAL JODI vs CURRENT 9 FILTERED JODI&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;filteredJodiPassingSummary&quot; class=&quot;text-[9px] font-black text-indigo-600&quot;&gt;PASS 0/0 • 0%&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;filteredJodiList&quot; class=&quot;mb-2 text-[9px] font-black text-slate-500&quot;&gt;FILTERED: —&lt;/div&gt;&lt;div class=&quot;overflow-x-auto&quot;&gt;&lt;table class=&quot;w-full text-[9px]&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;border-b border-slate-200 text-slate-400 font-black&quot;&gt;&lt;th class=&quot;py-2 text-left&quot;&gt;#&lt;/th&gt;&lt;th class=&quot;py-2 text-left&quot;&gt;DATE&lt;/th&gt;&lt;th class=&quot;py-2 text-left&quot;&gt;MARKET&lt;/th&gt;&lt;th class=&quot;py-2 text-center&quot;&gt;JODI&lt;/th&gt;&lt;th class=&quot;py-2 text-center&quot;&gt;FILTERED 9&lt;/th&gt;&lt;th class=&quot;py-2 text-right&quot;&gt;RESULT&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;filteredJodiPassingRows&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;RANKING FACTORS&lt;/div&gt;&lt;div class=&quot;text-[9px] font-black text-slate-400&quot;&gt;5-FACTOR • 20% EACH&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[8px] font-black&quot;&gt;&lt;div class=&quot;rounded-lg bg-indigo-50 p-2&quot;&gt;JODI DELAY &lt;b&gt;20%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;CLOSE DIGIT DELAY &lt;b&gt;20%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;TOTAL DIGIT DELAY &lt;b&gt;20%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;DIFFERENCE DIGIT DELAY &lt;b&gt;20%&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rounded-lg bg-slate-50 p-2&quot;&gt;FAMILY DELAY &lt;b&gt;20%&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mt-2 text-[8px] font-semibold text-slate-500&quot;&gt;Each OPEN TOP 3 digit is ranked only within its own 10 Jodis. The top 3 Jodis from each digit are shown.&lt;/div&gt;&lt;/section&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;playJodiPanel&quot; class=&quot;play-placeholder&quot;&gt;JODI PAGE&lt;br&gt;&lt;span style=&quot;font-weight:600&quot;&gt;Structure will be added next.&lt;/span&gt;&lt;/div&gt;&lt;div id=&quot;playPanaPanel&quot; class=&quot;play-placeholder&quot;&gt;PANA PAGE&lt;br&gt;&lt;span style=&quot;font-weight:600&quot;&gt;Structure will be added next.&lt;/span&gt;&lt;/div&gt;&lt;script type=&quot;module&quot;&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;playJodiPanel&quot; class=&quot;play-placeholder&quot; style=&quot;text-align:left;padding:12px&quot;&gt;
+&lt;div class=&quot;bg-white rounded-2xl border border-slate-200 p-3 shadow-sm&quot;&gt;
+&lt;div class=&quot;flex items-center justify-between gap-2 mb-2&quot;&gt;&lt;div&gt;&lt;div class=&quot;text-base font-black text-slate-800&quot;&gt;JODI RESEARCH ENGINE&lt;/div&gt;&lt;div class=&quot;text-[10px] font-bold text-slate-500&quot;&gt;TOP 4 OTC DELAYED DIGITS • 2 JODI EACH&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;jodiRefresh&quot; class=&quot;rounded-xl bg-indigo-600 text-white text-xs font-black px-3 py-2&quot;&gt;↻ Refresh&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;text-[10px] font-black text-slate-500 mb-1&quot;&gt;MARKET SELECTION&lt;/div&gt;
+&lt;select id=&quot;jodiMarketSelect&quot; class=&quot;w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-bold text-slate-800 mb-3&quot;&gt;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&lt;/select&gt;
+&lt;div class=&quot;text-[10px] font-black text-slate-500 mb-1&quot;&gt;DIGIT → JODI MAPPING MODE&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-3 gap-1.5 mb-2&quot;&gt;&lt;button type=&quot;button&quot; data-jmode=&quot;first&quot; class=&quot;jmode rounded-xl border-2 border-indigo-600 bg-indigo-50 p-2 text-[10px] font-black text-indigo-700&quot;&gt;1st Digit&lt;/button&gt;&lt;button type=&quot;button&quot; data-jmode=&quot;either&quot; class=&quot;jmode rounded-xl border-2 border-slate-200 bg-white p-2 text-[10px] font-black&quot;&gt;Either Side&lt;/button&gt;&lt;button type=&quot;button&quot; data-jmode=&quot;otc&quot; class=&quot;jmode rounded-xl border-2 border-slate-200 bg-white p-2 text-[10px] font-black&quot;&gt;OTC Mode&lt;/button&gt;&lt;/div&gt;
+&lt;div id=&quot;jodiModeHelp&quot; class=&quot;rounded-lg bg-slate-50 p-2 text-[10px] text-slate-600 mb-3&quot;&gt;Digit Jodi ના પહેલા અંકમાં જ હોવો જોઈએ.&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-2 gap-2 mb-3&quot;&gt;&lt;div class=&quot;rounded-xl bg-indigo-50 p-2&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-indigo-700&quot;&gt;TOP 4 DELAYED OTC DIGITS&lt;/div&gt;&lt;div id=&quot;jodiTopDigits&quot; class=&quot;text-sm font-black mt-1&quot;&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rounded-xl bg-emerald-50 p-2&quot;&gt;&lt;div class=&quot;text-[9px] font-black text-emerald-700&quot;&gt;FINAL SHORTLIST&lt;/div&gt;&lt;div id=&quot;jodiTotalCount&quot; class=&quot;text-sm font-black mt-1&quot;&gt;0 Jodi&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;jodiResults&quot; class=&quot;space-y-2&quot;&gt;&lt;div class=&quot;text-center text-xs text-slate-400 py-6&quot;&gt;Loading local records…&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;jodiBacktest&quot; class=&quot;mt-3 rounded-xl border border-slate-200 p-3&quot;&gt;&lt;div class=&quot;text-xs font-black&quot;&gt;BACKTEST • LAST 30 RECORDS&lt;/div&gt;&lt;div class=&quot;text-[10px] text-slate-500 mt-1&quot;&gt;Historical hit-rate is descriptive, not a prediction guarantee.&lt;/div&gt;&lt;div id=&quot;jodiBacktestSummary&quot; class=&quot;text-sm font-black mt-2&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;mt-2 text-[9px] text-slate-400&quot;&gt;Ranking uses current delay, max gap, historical hits and recent frequency. Historical patterns do not guarantee future outcomes.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;playPanaPanel&quot; class=&quot;play-placeholder&quot;&gt;PANA PAGE&lt;br&gt;&lt;span style=&quot;font-weight:600&quot;&gt;Structure will be added next.&lt;/span&gt;&lt;/div&gt;&lt;script type=&quot;module&quot;&gt;
 const {collection,getDocs}=window.__LocalDBProxy; const db=window.__LocalDBProxy; const $=id=&gt;document.getElementById(id);
 let rows=[],markets=[],jodiScopeRows=null;
 const dig=v=&gt;{if(v===undefined||v===null||v===&#x27;&#x27;)return null;let n=parseInt(v,10);return Number.isFinite(n)?((n%10)+10)%10:null};
 const tmin=v=&gt;{let m=String(v||&#x27;&#x27;).match(/(\d{1,2})\s*[:.]\s*(\d{2})/);return m?Number(m[1])*60+Number(m[2]):1439};
 const dt=v=&gt;{if(v&amp;&amp;typeof v.toDate===&#x27;function&#x27;)return v.toDate().getTime();let x=new Date(v);return isNaN(x)?0:x.getTime()};
-function sort(a){return a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||tmin(a.openTime)-tmin(b.openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
+function marketFor(name){return markets.find(m=&gt;String(m.name)===String(name))||{}}
+function marketResultTime(r){const m=marketFor(r.marketName);return tmin(r.closeTime||r.closeBitTime||r.closeBit||m.closeTime||m.closeBitTime||m.closeBit||r.openTime||m.openTime)}
+function sort(a){return a.slice().sort((a,b)=&gt;dt(a.date)-dt(b.date)||marketResultTime(a)-marketResultTime(b)||tmin(a.openTime||marketFor(a.marketName).openTime)-tmin(b.openTime||marketFor(b.marketName).openTime)||String(a.marketName).localeCompare(String(b.marketName)))}
 function completed(r){return dig(r.openAnk)!==null&amp;&amp;dig(r.closeAnk)!==null}
 const jodiOf=r=&gt;{const o=dig(r.openAnk),c=dig(r.closeAnk);return o===null||c===null?null:`${o}${c}`};
 function digitStats(h,side){let n=h.length,a=Array.from({length:10},(_,d)=&gt;({d,last:-1,hits:0,delay:n,maxDelay:0}));h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d!==null){a[d].last=i;a[d].hits++}});a.forEach(x=&gt;{x.delay=x.last&gt;=0?n-1-x.last:n;let occ=[];h.forEach((r,i)=&gt;{let d=dig(side===&#x27;OPEN&#x27;?r.openAnk:r.closeAnk);if(d===x.d)occ.push(i)});let gaps=occ.length?[occ[0]]:[n];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);if(occ.length)gaps.push(n-1-occ[occ.length-1]);x.maxDelay=Math.max(0,...gaps)});return a}
@@ -1353,9 +1366,9 @@ function buildDynamicOpenTop3Passing(h,lastCount=30){
   let recent=seedStats.slice(7,10).map(x=&gt;x.d);
   const normalize=()=&gt;{
     const used=new Set();
-    top=top.filter(d=&gt;d!==null&&!used.has(d)&&(used.add(d),true));
-    mid=mid.filter(d=&gt;d!==null&&!used.has(d)&&(used.add(d),true));
-    recent=recent.filter(d=&gt;d!==null&&!used.has(d)&&(used.add(d),true));
+    top=top.filter(d=&gt;d!==null&amp;&amp;!used.has(d)&amp;&amp;(used.add(d),true));
+    mid=mid.filter(d=&gt;d!==null&amp;&amp;!used.has(d)&amp;&amp;(used.add(d),true));
+    recent=recent.filter(d=&gt;d!==null&amp;&amp;!used.has(d)&amp;&amp;(used.add(d),true));
     for(let d=0;d&lt;=9;d++)if(!used.has(d)){recent.push(d);used.add(d);}
     top=top.slice(0,3);mid=mid.slice(0,4);recent=recent.slice(0,3);
   };
@@ -1430,8 +1443,44 @@ function renderFilteredJodiPassing(filtered){
   const pct=last30.length?(pass/last30.length*100):0;
   $(&quot;filteredJodiPassingSummary&quot;).innerHTML=`&lt;span class=&quot;text-emerald-600&quot;&gt;PASS ${pass}&lt;/span&gt; / ${last30.length} • &lt;span class=&quot;text-indigo-600&quot;&gt;${pct.toFixed(1)}%&lt;/span&gt;`;
 }
-function calculate(){const selected=$(&quot;marketSelect&quot;).value||&#x27;ALL_MERGED&#x27;;const marketRows=sort(rows.filter(completed).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));jodiScopeRows=marketRows.slice();const top3=digitStats(marketRows,&#x27;OPEN&#x27;).sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||b.hits-a.hits||a.d-b.d).slice(0,3);renderOpenDelayAndPassing();const filtered=renderJodi(top3);renderFilteredJodiPassing(filtered)}
-async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading local database...&#x27;;const [ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;{const m={id:d.id,...d.data()};if(m.enabled!==false)markets.push(m)});markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));const old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;rows=[];rs.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName&amp;&amp;markets.some(m=&gt;m.name===r.marketName))rows.push({...r,id:d.id,openTime:r.openTime||markets.find(m=&gt;m.name===r.marketName)?.openTime||&#x27;00:00&#x27;})});rows=sort(rows);calculate();$(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed games • OPEN TOP 3 DIGITS • 3 JODI EACH • 5 FACTORS × 20%`}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e)}}
+let jodiMode=&#x27;first&#x27;;
+const jodiModeHelp={first:&#x27;Digit Jodi ના પહેલા અંકમાં જ હોવો જોઈએ. ઉદાહરણ: 4 → 40–49.&#x27;,either:&#x27;Digit Jodi ના પહેલા અથવા છેલ્લા અંકમાં હોઈ શકે. ઉદાહરણ: 4 → 04, 14, 40, 45.&#x27;,otc:&#x27;OTC modeમાં digit = (Open digit + Close digit) mod 10; આ digit માટે Jodi rank થાય છે.&#x27;};
+function rankJodiForDigit(h,d,mode){
+ const eligible=[];
+ for(let n=0;n&lt;100;n++){
+  const j=String(n).padStart(2,&#x27;0&#x27;),a=Number(j[0]),b=Number(j[1]);
+  if(mode===&#x27;first&#x27;&amp;&amp;a!==d)continue;
+  if(mode===&#x27;either&#x27;&amp;&amp;a!==d&amp;&amp;b!==d)continue;
+  if(mode===&#x27;otc&#x27;&amp;&amp;((a+b)%10)!==d)continue;
+  const occ=[],recentOcc=[];h.forEach((r,i)=&gt;{if(jodiOf(r)===j){occ.push(i);if(i&gt;=Math.max(0,h.length-20))recentOcc.push(i)}});
+  const delay=occ.length?h.length-1-occ[occ.length-1]:h.length;
+  let maxGap=h.length;if(occ.length){const gaps=[occ[0]];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);gaps.push(h.length-1-occ[occ.length-1]);maxGap=Math.max(...gaps)}
+  const hits=occ.length,recentHits=recentOcc.length,norm=(v,m)=&gt;m?Math.min(1,v/m):0;
+  const score=100*(.35*norm(delay,h.length)+.25*norm(maxGap,h.length)+.25*(1-norm(hits,Math.max(1,h.length)))+.15*(1-norm(recentHits,20)));
+  eligible.push({jodi:j,delay,maxGap,hits,recentHits,score});
+ }
+ return eligible.sort((a,b)=&gt;b.score-a.score||b.delay-a.delay||a.hits-b.hits||a.jodi.localeCompare(b.jodi)).slice(0,2);
+}
+function renderJodiResearch(){
+ const selected=$(&#x27;jodiMarketSelect&#x27;)?.value||&#x27;ALL_MERGED&#x27;;
+ const h=sort(rows.filter(completed).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));
+ const n=h.length;
+ const ds=Array.from({length:10},(_,d)=&gt;{const occ=[];h.forEach((r,i)=&gt;{if((dig(r.openAnk)+dig(r.closeAnk))%10===d)occ.push(i)});const delay=occ.length?n-1-occ[occ.length-1]:n;let maxGap=n;if(occ.length){const gaps=[occ[0]];for(let i=1;i&lt;occ.length;i++)gaps.push(occ[i]-occ[i-1]-1);gaps.push(n-1-occ[occ[occ.length-1]]);maxGap=Math.max(...gaps)}return {d,delay,maxGap,hits:occ.length}});
+ const top=ds.sort((a,b)=&gt;b.delay-a.delay||b.maxGap-a.maxGap||a.hits-b.hits||a.d-b.d).slice(0,4);
+ $(&#x27;jodiTopDigits&#x27;).textContent=top.map(x=&gt;`${x.d} (${x.delay})`).join(&#x27; • &#x27;)||&#x27;—&#x27;;
+ const result=top.map(x=&gt;({digit:x.d,delay:x.delay,picks:rankJodiForDigit(h,x.d,jodiMode)}));
+ $(&#x27;jodiTotalCount&#x27;).textContent=`${result.reduce((s,x)=&gt;s+x.picks.length,0)} Jodi`;
+ $(&#x27;jodiModeHelp&#x27;).textContent=jodiModeHelp[jodiMode];
+ document.querySelectorAll(&#x27;[data-jmode]&#x27;).forEach(b=&gt;{const a=b.dataset.jmode===jodiMode;b.className=&#x27;jmode rounded-xl border-2 p-2 text-[10px] font-black &#x27;+(a?&#x27;border-indigo-600 bg-indigo-50 text-indigo-700&#x27;:&#x27;border-slate-200 bg-white text-slate-700&#x27;)});
+ $(&#x27;jodiResults&#x27;).innerHTML=result.map(x=&gt;`&lt;div class=&quot;rounded-xl border border-slate-200 bg-white p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;text-sm font-black&quot;&gt;DIGIT ${x.digit}&lt;/div&gt;&lt;div class=&quot;text-[9px] font-bold text-slate-500&quot;&gt;OTC DELAY: ${x.delay}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;grid grid-cols-2 gap-2&quot;&gt;${x.picks.map((p,i)=&gt;`&lt;div class=&quot;rounded-lg ${i===0?&#x27;bg-indigo-50 border-indigo-200&#x27;:&#x27;bg-slate-50 border-slate-200&#x27;} border p-2&quot;&gt;&lt;div class=&quot;flex items-center justify-between&quot;&gt;&lt;span class=&quot;text-xl font-black&quot;&gt;${p.jodi}&lt;/span&gt;&lt;span class=&quot;text-[9px] font-black&quot;&gt;#${i+1}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-600 mt-1&quot;&gt;Score ${p.score.toFixed(1)} • Delay ${p.delay}&lt;/div&gt;&lt;div class=&quot;text-[9px] text-slate-500&quot;&gt;Max gap ${p.maxGap} • Hits ${p.hits} • Recent 20: ${p.recentHits}&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)||&#x27;&lt;div class=&quot;text-center text-xs text-slate-400 py-6&quot;&gt;No completed records found&lt;/div&gt;&#x27;;
+ const last=h.slice(-30);let hits=0,checked=0;
+ last.forEach((r,i)=&gt;{if(i===0)return;const idx=h.indexOf(r),past=h.slice(0,idx);if(!past.length)return;const pd=Array.from({length:10},(_,d)=&gt;{const occ=[];past.forEach((q,k)=&gt;{if((dig(q.openAnk)+dig(q.closeAnk))%10===d)occ.push(k)});return {d,delay:occ.length?past.length-1-occ[occ.length-1]:past.length}}).sort((a,b)=&gt;b.delay-a.delay).slice(0,4);const pred=new Set(pd.flatMap(x=&gt;rankJodiForDigit(past,x.d,jodiMode).map(p=&gt;p.jodi)));checked++;if(pred.has(jodiOf(r)))hits++});
+ $(&#x27;jodiBacktestSummary&#x27;).textContent=checked?`${hits}/${checked} records matched (${(hits/checked*100).toFixed(1)}%) • historical sample only`:&#x27;Not enough history to backtest&#x27;;
+}
+document.querySelectorAll(&#x27;[data-jmode]&#x27;).forEach(b=&gt;b.addEventListener(&#x27;click&#x27;,()=&gt;{jodiMode=b.dataset.jmode;renderJodiResearch()}));
+$(&#x27;jodiRefresh&#x27;)?.addEventListener(&#x27;click&#x27;,renderJodiResearch);
+function calculate(){const selected=$(&quot;marketSelect&quot;).value||&#x27;ALL_MERGED&#x27;;const marketRows=sort(rows.filter(completed).filter(r=&gt;selected===&#x27;ALL_MERGED&#x27;||r.marketName===selected));jodiScopeRows=marketRows.slice();const top3=digitStats(marketRows,&#x27;OPEN&#x27;).sort((a,b)=&gt;b.delay-a.delay||b.maxDelay-a.maxDelay||b.hits-a.hits||a.d-b.d).slice(0,3);renderOpenDelayAndPassing();const filtered=renderJodi(top3);renderFilteredJodiPassing(filtered);renderJodiResearch()}
+async function load(){try{$(&#x27;status&#x27;).textContent=&#x27;Loading local database...&#x27;;const [ms,rs]=await Promise.all([getDocs(collection(db,&#x27;markets&#x27;)),getDocs(collection(db,&#x27;matka_records&#x27;))]);markets=[];ms.forEach(d=&gt;{const m={id:d.id,...d.data()};if(m.enabled!==false)markets.push(m)});markets.sort((a,b)=&gt;tmin(a.openTime)-tmin(b.openTime));const jsel=$(&#x27;jodiMarketSelect&#x27;);if(jsel){const jold=jsel.value||&#x27;ALL_MERGED&#x27;;jsel.innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if([...jsel.options].some(o=&gt;o.value===jold))jsel.value=jold;jsel.onchange=()=&gt;renderJodiResearch()}const old=$(&#x27;marketSelect&#x27;).value||&#x27;ALL_MERGED&#x27;;$(&#x27;marketSelect&#x27;).innerHTML=&#x27;&lt;option value=&quot;ALL_MERGED&quot;&gt;ALL MARKETS (MERGED)&lt;/option&gt;&#x27;+markets.filter(m=&gt;m.name).map(m=&gt;`&lt;option value=&quot;${String(m.name).replace(/&quot;/g,&#x27;&amp;quot;&#x27;)}&quot;&gt;${String(m.name)}&lt;/option&gt;`).join(&#x27;&#x27;);if(markets.some(m=&gt;m.name===old))$(&#x27;marketSelect&#x27;).value=old;rows=[];rs.forEach(d=&gt;{const r=d.data();if(r.date&amp;&amp;r.marketName&amp;&amp;markets.some(m=&gt;m.name===r.marketName)){const m=markets.find(m=&gt;m.name===r.marketName)||{};rows.push({...r,id:d.id,openTime:r.openTime||m.openTime||&#x27;00:00&#x27;,closeTime:r.closeTime||r.closeBitTime||r.closeBit||m.closeTime||m.closeBitTime||m.closeBit||m.openTime||&#x27;23:59&#x27;})}});rows=sort(rows);calculate();$(&#x27;status&#x27;).textContent=`${rows.filter(completed).length} completed games • OPEN TOP 3 DIGITS • 3 JODI EACH • 5 FACTORS × 20%`}catch(e){console.error(e);$(&#x27;status&#x27;).textContent=&#x27;ERROR: &#x27;+(e.message||e)}}
 $(&#x27;marketSelect&#x27;).onchange=()=&gt;calculate();$(&#x27;refreshBtn&#x27;).onclick=()=&gt;load();load();
 &lt;/script&gt;
 &lt;script&gt;
@@ -2114,7 +2163,7 @@ load().catch(()=&gt;{});
 &lt;title&gt;Auto Result Fetch&lt;/title&gt;&lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
 &lt;style&gt;body{font-family:system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif}.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}&lt;/style&gt;
 &lt;script&gt;
-(function(){function install(){const api=parent&amp;&amp;parent.LocalDB;if(!api)throw new Error('Parent LocalDB is not initialized');window.__LocalDBProxy=api;window.LocalDB=api;}try{install()}catch(e){if(parent&amp;&amp;parent.LocalDBReady)parent.LocalDBReady.then(install).catch(()=&gt;{});else setTimeout(()=&gt;{try{install()}catch(_){}},80)}})();
+(function(){function install(){const api=parent&amp;&amp;parent.LocalDB;if(!api)throw new Error(&#x27;Parent LocalDB is not initialized&#x27;);window.__LocalDBProxy=api;window.LocalDB=api;}try{install()}catch(e){if(parent&amp;&amp;parent.LocalDBReady)parent.LocalDBReady.then(install).catch(()=&gt;{});else setTimeout(()=&gt;{try{install()}catch(_){}},80)}})();
 &lt;/script&gt;&lt;/head&gt;
 &lt;body class=&quot;bg-slate-100 min-h-screen p-3 text-slate-800&quot;&gt;
 &lt;div class=&quot;max-w-4xl mx-auto space-y-3 pb-12&quot;&gt;
@@ -2125,97 +2174,130 @@ load().catch(()=&gt;{});
 &lt;div class=&quot;mt-2 flex items-center gap-3&quot;&gt;&lt;label class=&quot;flex items-center gap-2 text-xs font-black&quot;&gt;&lt;input id=&quot;autoRefresh&quot; type=&quot;checkbox&quot; class=&quot;w-5 h-5&quot;&gt; AUTO REFRESH&lt;/label&gt;&lt;select id=&quot;interval&quot; class=&quot;border border-slate-300 rounded-lg p-2 text-xs font-bold&quot;&gt;&lt;option value=&quot;5&quot;&gt;5 MIN&lt;/option&gt;&lt;option value=&quot;10&quot;&gt;10 MIN&lt;/option&gt;&lt;option value=&quot;15&quot;&gt;15 MIN&lt;/option&gt;&lt;option value=&quot;30&quot;&gt;30 MIN&lt;/option&gt;&lt;/select&gt;&lt;button id=&quot;testBtn&quot; class=&quot;px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs font-black&quot;&gt;TEST SOURCE&lt;/button&gt;&lt;/div&gt;
 &lt;div id=&quot;status&quot; class=&quot;mt-2 rounded-xl bg-slate-50 border border-slate-200 p-2 text-[10px] font-bold text-slate-600&quot;&gt;Ready.&lt;/div&gt;
 &lt;/section&gt;
-&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FETCH RESULT&lt;/div&gt;&lt;div id=&quot;count&quot; class=&quot;text-[10px] font-black text-slate-500&quot;&gt;0&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;overflow-auto&quot;&gt;&lt;table class=&quot;w-full text-[9px]&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;bg-slate-100&quot;&gt;&lt;th class=&quot;p-2 text-left&quot;&gt;MARKET&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;OPEN&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;JODI&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;CLOSE&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;STATUS&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;rows&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class=&quot;bg-amber-50 rounded-2xl border border-amber-200 p-3 text-[10px] font-semibold text-amber-900&quot;&gt;&lt;b&gt;NOTE:&lt;/b&gt; Browser CORS restriction હોય તો proxy URL જરૂરી રહેશે. Existing Date + Market record duplicate નહીં બને. Complete existing record skip થશે; incomplete existing record હોય તો missing Open/Close fields update થશે.&lt;/section&gt;
+&lt;section class=&quot;bg-white rounded-2xl border border-slate-200 shadow-sm p-3&quot;&gt;&lt;div class=&quot;flex items-center justify-between mb-2&quot;&gt;&lt;div class=&quot;font-black text-sm&quot;&gt;FETCH RESULT&lt;/div&gt;&lt;div id=&quot;count&quot; class=&quot;text-[10px] font-black text-slate-500&quot;&gt;0&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;overflow-auto&quot;&gt;&lt;table class=&quot;w-full text-[9px]&quot;&gt;&lt;thead&gt;&lt;tr class=&quot;bg-slate-100&quot;&gt;&lt;th class=&quot;p-2 text-left&quot;&gt;MARKET&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;DATE&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;OPEN&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;JODI&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;CLOSE&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;STATUS&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;rows&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class=&quot;bg-amber-50 rounded-2xl border border-amber-200 p-3 text-[10px] font-semibold text-amber-900&quot;&gt;&lt;b&gt;NOTE:&lt;/b&gt; Open result alone પણ save થશે. Close પછી એ જ Date + Market recordમાં update થશે. MAIN BAZARનો 12:10 AM close result આવતો હોય તો તેને previous calendar date સાથે link કરવામાં આવશે. Existing Date + Market duplicate નહીં બને.&lt;/section&gt;
 &lt;/div&gt;
 &lt;script&gt;
 const $=id=&gt;document.getElementById(id); let timer=null;
-function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function norm(s){return String(s||'').replace(/&amp;amp;/g,'&amp;').replace(/&amp;#39;/g,&quot;'&quot;).replace(/&amp;quot;/g,'&quot;').replace(/&amp;nbsp;/g,' ').replace(/&lt;[^&gt;]*&gt;/g,' ').replace(/\s+/g,' ').trim().toUpperCase()}
-function esc(s){return String(s||'').replace(/[&amp;&lt;&gt;&quot;']/g,m=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','&quot;':'&amp;quot;',&quot;'&quot;:'&amp;#39;'}[m]))}
+function today(){const d=new Date();return d.getFullYear()+&#x27;-&#x27;+String(d.getMonth()+1).padStart(2,&#x27;0&#x27;)+&#x27;-&#x27;+String(d.getDate()).padStart(2,&#x27;0&#x27;)}
+function dateShift(base,n){const d=new Date(base+&#x27;T12:00:00&#x27;);d.setDate(d.getDate()+n);return d.getFullYear()+&#x27;-&#x27;+String(d.getMonth()+1).padStart(2,&#x27;0&#x27;)+&#x27;-&#x27;+String(d.getDate()).padStart(2,&#x27;0&#x27;)}
+function targetDateForMarket(market,hasClose){
+ const now=new Date();
+ const closeTime=String(market.closeTime||&#x27;&#x27;).trim();
+ const isMidnightClose=/^0[0-2]:[0-5]\d$/.test(closeTime);
+ // A result arriving after midnight belongs to the previous market day.
+ // MAIN BAZAR is explicitly handled because its close is around 12:10 AM.
+ if((norm(market.name)===&#x27;MAIN BAZAR&#x27; || (hasClose &amp;&amp; isMidnightClose)) &amp;&amp; now.getHours()&lt;6){
+   return dateShift(today(),-1);
+ }
+ return today();
+}
+function mergeResultParts(existing,x,market,targetDate){
+ const patch={date:targetDate,marketName:market.name,updatedAt:new Date().toISOString(),source:&#x27;Sara777 Auto Fetch&#x27;};
+ if(/^\d{3}$/.test(x.open)){
+   patch.openPana=x.open;
+   patch.openAnk=ank(x.open);
+ }
+ if(/^\d{3}$/.test(x.close)){
+   patch.closePana=x.close;
+   patch.closeAnk=ank(x.close);
+ }
+ const openAnk=patch.openAnk!=null?patch.openAnk:(existing&amp;&amp;existing.openAnk!=null?Number(existing.openAnk):null);
+ const closeAnk=patch.closeAnk!=null?patch.closeAnk:(existing&amp;&amp;existing.closeAnk!=null?Number(existing.closeAnk):null);
+ if(openAnk!=null &amp;&amp; closeAnk!=null){
+   patch.jodi=String(openAnk)+String(closeAnk);
+   patch.difference=(closeAnk-openAnk+10)%10;
+ }
+ patch.openTime=market.openTime||existing&amp;&amp;existing.openTime||&#x27;00:00&#x27;;
+ patch.closeTime=market.closeTime||existing&amp;&amp;existing.closeTime||&#x27;&#x27;;
+ return patch;
+}
+function norm(s){return String(s||&#x27;&#x27;).replace(/&amp;amp;/g,&#x27;&amp;&#x27;).replace(/&amp;#39;/g,&quot;&#x27;&quot;).replace(/&amp;quot;/g,&#x27;&quot;&#x27;).replace(/&amp;nbsp;/g,&#x27; &#x27;).replace(/&lt;[^&gt;]*&gt;/g,&#x27; &#x27;).replace(/\s+/g,&#x27; &#x27;).trim().toUpperCase()}
+function esc(s){return String(s||&#x27;&#x27;).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,m=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[m]))}
 function ank(p){if(!/^\d{3}$/.test(p))return null;return (Number(p[0])+Number(p[1])+Number(p[2]))%10}
 function parseMarkets(text){
- const clean=text.replace(/<[^>]+>/g,' ').replace(/\r/g,'').replace(/\t/g,' ');
+ const clean=text.replace(/&lt;[^&gt;]+&gt;/g,&#x27; &#x27;).replace(/\r/g,&#x27;&#x27;).replace(/\t/g,&#x27; &#x27;);
  const names=[];
  const rx=/([A-Z][A-Z0-9]*(?:\s+[A-Z0-9]+){0,3})\s+(\d{3})-(\d{2}|\*\*)-(\d{3}|\*{3})/g;
  let m; while((m=rx.exec(clean))){let name=norm(m[1]); if(!names.some(x=&gt;name===x.name)){names.push({name,open:m[2],jodi:m[3],close:m[4]})}}
  return names;
 }
-async function getMarkets(){const s=await LocalDB.getDocs(LocalDB.collection(null,'markets'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
-async function getRecords(){const s=await LocalDB.getDocs(LocalDB.collection(null,'matka_records'));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
-const FETCH_CACHE_TTL=30000;
-let memoryFetchCache=null;
-function readFetchCache(api){
- try{const x=JSON.parse(localStorage.getItem('sara777_fetch_cache_v1')||'null');if(x&&x.api===api&&Date.now()-x.ts<FETCH_CACHE_TTL&&x.data&&Array.isArray(x.data.markets))return x}catch(_){}
- return null;
-}
-function writeFetchCache(api,data){
- try{localStorage.setItem('sara777_fetch_cache_v1',JSON.stringify({api,ts:Date.now(),data}))}catch(_){}
- memoryFetchCache={api,ts:Date.now(),data};
-}
+async function getMarkets(){const s=await LocalDB.getDocs(LocalDB.collection(null,&#x27;markets&#x27;));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
+async function getRecords(){const s=await LocalDB.getDocs(LocalDB.collection(null,&#x27;matka_records&#x27;));const a=[];s.forEach(d=&gt;a.push({id:d.id,...d.data()}));return a}
 function fetchJsonp(api){
- return new Promise((resolve,reject)=>{
-  const cb='__sara777_cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
-  const script=document.createElement('script');
-  const url=api+(api.includes('?')?'&':'?')+'action=fetch&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+ return new Promise((resolve,reject)=&gt;{
+  const cb=&#x27;__sara777_cb_&#x27;+Date.now()+&#x27;_&#x27;+Math.floor(Math.random()*100000);
+  const script=document.createElement(&#x27;script&#x27;);
+  const url=api+(api.includes(&#x27;?&#x27;)?&#x27;&amp;&#x27;:&#x27;?&#x27;)+&#x27;action=fetch&amp;callback=&#x27;+encodeURIComponent(cb)+&#x27;&amp;_=&#x27;+Date.now();
   let done=false;
-  const finish=(fn,v)=>{if(done)return;done=true;try{delete window[cb]}catch(_){window[cb]=undefined}if(script.parentNode)script.parentNode.removeChild(script);fn(v)};
-  window[cb]=(data)=>finish(resolve,{data,url});
-  script.onerror=()=>finish(reject,new Error('JSONP request failed'));
-  setTimeout(()=>finish(reject,new Error('JSONP timeout (8s)')),8000);
+  const finish=(fn,v)=&gt;{if(done)return;done=true;try{delete window[cb]}catch(_){window[cb]=undefined}if(script.parentNode)script.parentNode.removeChild(script);fn(v)};
+  window[cb]=(data)=&gt;finish(resolve,{data,url});
+  script.onerror=()=&gt;finish(reject,new Error(&#x27;JSONP request failed&#x27;));
+  setTimeout(()=&gt;finish(reject,new Error(&#x27;JSONP timeout (20s)&#x27;)),20000);
   script.src=url;
   document.head.appendChild(script);
  });
 }
-async function fetchHtml(force=false){
- const api=$('sourceUrl').value.trim();
- if(!api)throw new Error('Apps Script URL missing');
- const cached=(!force&&memoryFetchCache&&memoryFetchCache.api===api&&Date.now()-memoryFetchCache.ts<FETCH_CACHE_TTL)?memoryFetchCache.data:(!force?readFetchCache(api):null);
- if(cached)return {data:cached,url:'LOCAL CACHE',cached:true};
- let last='';
+async function fetchHtml(){
+ const api=$(&#x27;sourceUrl&#x27;).value.trim();
+ if(!api)throw new Error(&#x27;Apps Script URL missing&#x27;);
+ let last=&#x27;&#x27;;
  try{
   const r=await fetchJsonp(api);
   const data=r.data;
-  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
-  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
-  writeFetchCache(api,data);
+  if(!data||data.ok!==true)throw new Error(data&amp;&amp;data.error?data.error:&#x27;Invalid API response&#x27;);
+  if(!Array.isArray(data.markets))throw new Error(&#x27;API response has no markets array&#x27;);
   return r;
  }catch(e){last=e.message||String(e)}
  try{
-  const url=api+(api.includes('?')?'&':'?')+'action=fetch&_='+Date.now();
-  const r=await fetch(url,{cache:'no-store',redirect:'follow'});
-  if(!r.ok)throw new Error('HTTP '+r.status);
+  const url=api+(api.includes(&#x27;?&#x27;)?&#x27;&amp;&#x27;:&#x27;?&#x27;)+&#x27;action=fetch&amp;_=&#x27;+Date.now();
+  const r=await fetch(url,{cache:&#x27;no-store&#x27;,redirect:&#x27;follow&#x27;});
+  if(!r.ok)throw new Error(&#x27;HTTP &#x27;+r.status);
   const data=await r.json();
-  if(!data||data.ok!==true)throw new Error(data&&data.error?data.error:'Invalid API response');
-  if(!Array.isArray(data.markets))throw new Error('API response has no markets array');
-  writeFetchCache(api,data);
+  if(!data||data.ok!==true)throw new Error(data&amp;&amp;data.error?data.error:&#x27;Invalid API response&#x27;);
+  if(!Array.isArray(data.markets))throw new Error(&#x27;API response has no markets array&#x27;);
   return {data,url};
- }catch(e){throw new Error('Apps Script: '+last+' | Direct: '+(e.message||e))}
+ }catch(e){throw new Error(&#x27;Apps Script: &#x27;+last+&#x27; | Direct: &#x27;+(e.message||e))}
 }
-function render(rows){$('count').textContent=rows.length+' RESULTS';$('rows').innerHTML=rows.map(x=&gt;`&lt;tr class=&quot;border-b&quot;&gt;&lt;td class=&quot;p-2 font-black&quot;&gt;${esc(x.market)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.open||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.jodi||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.close||'--')}&lt;/td&gt;&lt;td class=&quot;p-2 text-center font-black ${x.ok?'text-emerald-600':'text-amber-600'}&quot;&gt;${esc(x.status)}&lt;/td&gt;&lt;/tr&gt;`).join('')}
-async function run(testOnly=false,force=true){
- $('fetchBtn').disabled=true;$('fetchBtn').textContent='FETCHING...';$('status').textContent='Fetching Sara777...';let out=[];
- try{const {data,url,cached}=await fetchHtml(force);const parsed=(data.markets||[]).map(x=>({name:x.market||x.name||'',open:x.openPanna||x.open||'',jodi:x.jodi||'',close:x.closePanna||x.close||'',complete:x.complete!==false}));if(testOnly){$('status').textContent='✓ Source reachable • '+parsed.length+' market results detected'+(cached?' • CACHE':'')+' • '+url;render(parsed.map(x=&gt;({...x,market:x.name,status:x.complete?'DETECTED':'INCOMPLETE',ok:!!x.complete})));return}
- const markets=await getMarkets(), records=await getRecords(), todayDate=today();
+function render(rows){$(&#x27;count&#x27;).textContent=rows.length+&#x27; RESULTS&#x27;;$(&#x27;rows&#x27;).innerHTML=rows.map(x=&gt;`&lt;tr class=&quot;border-b&quot;&gt;&lt;td class=&quot;p-2 font-black&quot;&gt;${esc(x.market)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.date||&#x27;--&#x27;)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.open||&#x27;--&#x27;)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.jodi||&#x27;--&#x27;)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center mono&quot;&gt;${esc(x.close||&#x27;--&#x27;)}&lt;/td&gt;&lt;td class=&quot;p-2 text-center font-black ${x.ok?&#x27;text-emerald-600&#x27;:&#x27;text-amber-600&#x27;}&quot;&gt;${esc(x.status)}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}
+async function run(testOnly=false){
+ $(&#x27;fetchBtn&#x27;).disabled=true;$(&#x27;fetchBtn&#x27;).textContent=&#x27;FETCHING...&#x27;;$(&#x27;status&#x27;).textContent=&#x27;Fetching Sara777...&#x27;;let out=[];
+ try{const {data,url}=await fetchHtml();const parsed=(data.markets||[]).map(x=&gt;({name:x.market||x.name||&#x27;&#x27;,open:x.openPanna||x.open||&#x27;&#x27;,jodi:x.jodi||&#x27;&#x27;,close:x.closePanna||x.close||&#x27;&#x27;,complete:x.complete!==false}));if(testOnly){$(&#x27;status&#x27;).textContent=&#x27;✓ Source reachable • &#x27;+parsed.length+&#x27; market results detected • &#x27;+url;render(parsed.map(x=&gt;({...x,market:x.name,status:x.complete?&#x27;DETECTED&#x27;:&#x27;INCOMPLETE&#x27;,ok:!!x.complete})));return}
+ const markets=await getMarkets(), records=await getRecords();
  const configured=new Map(markets.map(m=&gt;[norm(m.name),m]));
- for(const x of parsed){const market=configured.get(norm(x.name));if(!market){continue}
-   const row={market:market.name,open:x.open,jodi:x.jodi,close:x.close,ok:false,status:'SKIPPED'};
-   if(!/^\d{3}$/.test(x.open)||!/^\d{3}$/.test(x.close)){row.status='INCOMPLETE';out.push(row);continue}
-   const oa=ank(x.open),ca=ank(x.close), j=String(oa)+String(ca), diff=(ca-oa+10)%10;
-   const found=records.find(r=&gt;r.date===todayDate&amp;&amp;norm(r.marketName)===norm(market.name));
+ for(const x of parsed){
+   const market=configured.get(norm(x.name));
+   if(!market){continue}
+   const hasOpen=/^\d{3}$/.test(x.open||&#x27;&#x27;);
+   const hasClose=/^\d{3}$/.test(x.close||&#x27;&#x27;);
+   const hasAny=hasOpen||hasClose;
+   const row={market:market.name,open:x.open||&#x27;&#x27;,jodi:x.jodi||&#x27;&#x27;,close:x.close||&#x27;&#x27;,ok:false,status:&#x27;SKIPPED&#x27;,date:&#x27;&#x27;};
+   if(!hasAny){row.status=&#x27;NO RESULT&#x27;;out.push(row);continue}
+   const targetDate=targetDateForMarket(market,hasClose);
+   row.date=targetDate;
+   const found=records.find(r=&gt;r.date===targetDate&amp;&amp;norm(r.marketName)===norm(market.name));
    try{
-    if(found){const patch={date:todayDate,marketName:market.name,openPana:x.open,openAnk:oa,closePana:x.close,closeAnk:ca,jodi:j,difference:diff,openTime:market.openTime||found.openTime||'00:00',closeTime:market.closeTime||found.closeTime||'',updatedAt:new Date().toISOString(),source:'Sara777 Auto Fetch'};await LocalDB.updateDoc(LocalDB.doc(null,'matka_records',found.id),patch);row.status='UPDATED';row.ok=true}
-    else {await LocalDB.addDoc(LocalDB.collection(null,'matka_records'),{date:todayDate,marketName:market.name,openPana:x.open,openAnk:oa,closePana:x.close,closeAnk:ca,jodi:j,difference:diff,openTime:market.openTime||'00:00',closeTime:market.closeTime||'',updatedAt:new Date().toISOString(),source:'Sara777 Auto Fetch'});row.status='SAVED';row.ok=true}
-   }catch(e){row.status='ERROR';row.error=e.message}
+     const patch=mergeResultParts(found,x,market,targetDate);
+     if(found){
+       await LocalDB.updateDoc(LocalDB.doc(null,&#x27;matka_records&#x27;,found.id),patch);
+       row.status=hasOpen&amp;&amp;hasClose?&#x27;UPDATED&#x27;:&#x27;PARTIAL UPDATED&#x27;;
+       row.ok=true;
+     }else{
+       await LocalDB.addDoc(LocalDB.collection(null,&#x27;matka_records&#x27;),patch);
+       row.status=hasOpen&amp;&amp;hasClose?&#x27;SAVED&#x27;:&#x27;OPEN SAVED&#x27;;
+       row.ok=true;
+     }
+     row.detail=(hasOpen&amp;&amp;hasClose)?&#x27;OPEN + CLOSE&#x27;:(hasOpen?&#x27;OPEN ONLY&#x27;:&#x27;CLOSE ONLY&#x27;);
+   }catch(e){row.status=&#x27;ERROR&#x27;;row.error=e.message}
    out.push(row);
  }
- render(out);const good=out.filter(x=&gt;x.ok).length,inc=out.filter(x=&gt;x.status==='INCOMPLETE').length;$('status').textContent=`✓ ${good} saved/updated • ${inc} incomplete • ${out.length} configured results checked • ${todayDate}`+(cached?' • CACHE':'');
- }catch(e){$('status').textContent='✕ FETCH ERROR: '+(e.message||e);render([])}finally{$('fetchBtn').disabled=false;$('fetchBtn').textContent='FETCH NOW'}
+ render(out);const good=out.filter(x=&gt;x.ok).length,partial=out.filter(x=&gt;x.ok&amp;&amp;x.status.includes(&#x27;PARTIAL&#x27;)||x.status===&#x27;OPEN SAVED&#x27;).length;const dates=[...new Set(out.filter(x=&gt;x.date).map(x=&gt;x.date))];$(&#x27;status&#x27;).textContent=`✓ ${good} saved/updated • ${partial} partial • ${out.length} configured results checked • ${dates.join(&#x27;, &#x27;)||today()}`;
+ }catch(e){$(&#x27;status&#x27;).textContent=&#x27;✕ FETCH ERROR: &#x27;+(e.message||e);render([])}finally{$(&#x27;fetchBtn&#x27;).disabled=false;$(&#x27;fetchBtn&#x27;).textContent=&#x27;FETCH NOW&#x27;}
 }
-$('fetchBtn').onclick=()=&gt;run(false);$('testBtn').onclick=()=&gt;run(true);
-$('autoRefresh').onchange=()=&gt;{clearInterval(timer);timer=null;if($('autoRefresh').checked){timer=setInterval(()=&gt;run(false),Number($('interval').value)*60000);$('status').textContent='AUTO REFRESH ON • every '+$('interval').value+' min'}};
-$('interval').onchange=()=&gt;{if($('autoRefresh').checked){clearInterval(timer);timer=setInterval(()=&gt;run(false),Number($('interval').value)*60000)}};
-window.addEventListener('message',e=&gt;{if(e.data&amp;&amp;e.data.type==='AUTO_RESULT_ACTIVATE')run(false).catch(()=&gt;{})});
+$(&#x27;fetchBtn&#x27;).onclick=()=&gt;run(false);$(&#x27;testBtn&#x27;).onclick=()=&gt;run(true);
+$(&#x27;autoRefresh&#x27;).onchange=()=&gt;{clearInterval(timer);timer=null;if($(&#x27;autoRefresh&#x27;).checked){timer=setInterval(()=&gt;run(false),Number($(&#x27;interval&#x27;).value)*60000);$(&#x27;status&#x27;).textContent=&#x27;AUTO REFRESH ON • every &#x27;+$(&#x27;interval&#x27;).value+&#x27; min&#x27;}};
+$(&#x27;interval&#x27;).onchange=()=&gt;{if($(&#x27;autoRefresh&#x27;).checked){clearInterval(timer);timer=setInterval(()=&gt;run(false),Number($(&#x27;interval&#x27;).value)*60000)}};
+window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.type===&#x27;AUTO_RESULT_ACTIVATE&#x27;)run(false).catch(()=&gt;{})});
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" id="page-12" style="display:none" title="Auto Result Fetch"></iframe> <nav class="bottom-nav">
 <button class="nav-btn active" data-page="10"><span>🏠</span><span>Dashboard</span></button>
 <button class="nav-btn" data-page="9"><span>📝</span><span>Logger</span></button>
