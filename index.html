@@ -2370,6 +2370,8 @@ window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.typ
  const ank=(r,side)=&gt;{const direct=r[side+&#x27;Ank&#x27;];if(direct!==undefined&amp;&amp;direct!==null&amp;&amp;String(direct).trim()!==&#x27;&#x27;&amp;&amp;Number.isFinite(Number(direct))&amp;&amp;Number(direct)&gt;=0&amp;&amp;Number(direct)&lt;=9)return Number(direct);return sumDigit(r[side===&#x27;open&#x27;?&#x27;openPana&#x27;:&#x27;closePana&#x27;]??r[side===&#x27;open&#x27;?&#x27;openPanna&#x27;:&#x27;closePanna&#x27;]);};
  const getJodi=r=&gt;{let j=String(r.jodi??&#x27;&#x27;).trim();if(/^\d{2}$/.test(j))return j;const o=ank(r,&#x27;open&#x27;),c=ank(r,&#x27;close&#x27;);return o!==null&amp;&amp;c!==null?String(o)+String(c):null;};
  const cutting=d=&gt;(Number(d)+5)%10;
+ // Red Jodi: both digits belong to the same digit/cutting pair (e.g. 11, 16, 61, 66).
+ function isRedJodi(j){if(!/^\d{2}$/.test(String(j||&#x27;&#x27;)))return false;const a=Number(j[0]),b=Number(j[1]);return b===a||b===cutting(a)||a===cutting(b);}
  function digitsFor(j){const skip=new Set([Number(j[0]),Number(j[1]),cutting(j[0]),cutting(j[1])]);return {skip:[...skip].sort((a,b)=&gt;a-b),play:[0,1,2,3,4,5,6,7,8,9].filter(d=&gt;!skip.has(d))};}
  async function load(){
    $(&#x27;status&#x27;).textContent=&#x27;Local database વાંચી રહ્યા છીએ…&#x27;;await parent.LocalDBReady;
@@ -2392,7 +2394,8 @@ window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.typ
   results=[];let skipped=0;
   for(const target of scoped){const day=weekday(target.date),rows=grouped.get(target.marketName)||[];
    const sourceCandidates=rows.filter(r=&gt;r.date&lt;target.date&amp;&amp;weekday(r.date)===day&amp;&amp;getJodi(r)!==null).sort((a,b)=&gt;b.date.localeCompare(a.date));
-   const source=sourceCandidates[0];const open=ank(target,&#x27;open&#x27;);
+   const source=sourceCandidates[0];const open=ank(target,&#x27;open&#x27;);const targetJodi=getJodi(target);
+   if(targetJodi&&isRedJodi(targetJodi)){results.push({target,day,source,open,jodi:source?getJodi(source):null,targetJodi,status:&#x27;SKIP&#x27;,reason:`Target result is Red Jodi (${targetJodi})`});skipped++;continue;}
    if(!source||open===null){results.push({target,day,source,open,status:&#x27;SKIP&#x27;,reason:!source?&#x27;No previous valid same-weekday Jodi&#x27;:&#x27;Open ANK missing&#x27;});skipped++;continue;}
    const jodi=getJodi(source),sets=digitsFor(jodi),pass=sets.play.includes(open);
    results.push({target,day,source,open,jodi,sets,status:pass?&#x27;PASS&#x27;:&#x27;FAIL&#x27;});
