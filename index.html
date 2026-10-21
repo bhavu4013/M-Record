@@ -2398,10 +2398,11 @@ window.addEventListener(&#x27;message&#x27;,e=&gt;{if(e.data&amp;&amp;e.data.typ
   results=[];let skipped=0;
   for(const target of scoped){const day=weekday(target.date),rows=grouped.get(target.marketName)||[];
    const sourceCandidates=rows.filter(r=&gt;r.date&lt;target.date&amp;&amp;weekday(r.date)===day&amp;&amp;getJodi(r)!==null).sort((a,b)=&gt;b.date.localeCompare(a.date));
-   const source=sourceCandidates[0];const open=ank(target,&#x27;open&#x27;);const targetJodi=getJodi(target);
-   if(targetJodi&&isRedJodi(targetJodi)){results.push({target,day,source,open,jodi:source?getJodi(source):null,targetJodi,status:&#x27;SKIP&#x27;,reason:`Target result is Red Jodi (${targetJodi})`});skipped++;continue;}
-   if(!source||open===null){results.push({target,day,source,open,status:&#x27;SKIP&#x27;,reason:!source?&#x27;No previous valid same-weekday Jodi&#x27;:&#x27;Open ANK missing&#x27;});skipped++;continue;}
-   const jodi=getJodi(source),sets=digitsFor(jodi),actualPanel=pannaType(target),digitHit=sets.play.includes(open),panelHit=actualPanel===selectedPanel,pass=panelHit&amp;&amp;digitHit;
+   const source=sourceCandidates[0];const open=ank(target,&#x27;open&#x27;);const targetJodi=getJodi(target);const sourceJodi=source?getJodi(source):null;
+   if(!source||open===null){results.push({target,day,source,open,jodi:sourceJodi,targetJodi,status:&#x27;SKIP&#x27;,reason:!source?&#x27;No previous valid same-weekday Jodi&#x27;:&#x27;Open ANK missing&#x27;});skipped++;continue;}
+   // IMPORTANT: Red Jodi rule applies ONLY to the source Jodi (previous valid same weekday). Never inspect target/current-week Jodi for skipping. Example: source Jodi 49 is red because 4 and 9 are a cutting pair, so skip this target game before generating playable digits.
+   if(isRedJodi(sourceJodi)){results.push({target,day,source,open,jodi:sourceJodi,targetJodi,status:&#x27;SKIP&#x27;,reason:`Source Jodi is Red Jodi (${sourceJodi})`});skipped++;continue;}
+   const jodi=sourceJodi,sets=digitsFor(jodi),actualPanel=pannaType(target),digitHit=sets.play.includes(open),panelHit=actualPanel===selectedPanel,pass=panelHit&amp;&amp;digitHit;
    results.push({target,day,source,open,jodi,sets,actualPanel,digitHit,panelHit,status:pass?&#x27;PASS&#x27;:&#x27;FAIL&#x27;,reason:!panelHit?`Panel mismatch: ${actualPanel||&#x27;unknown&#x27;} (wanted ${selectedPanel})`:(!digitHit?`Open ANK ${open} is not in playable digits`:&#x27;&#x27;)});
   }
   const pass=results.filter(r=&gt;r.status===&#x27;PASS&#x27;).length,fail=results.filter(r=&gt;r.status===&#x27;FAIL&#x27;).length,tested=pass+fail;
